@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Resource {
+  id  String  @default(uuid()) @id
+  name  String
+  description String?
+  priority  Int @default(1)
+  icon String?
+  resourceWorkflow WorkflowResource[]  @relation("resourceWorkflow")
+  @@map("resources")
+}
+
+model Node {
+  id  String  @default(uuid()) @id
+  name  String
+  priority  Int @default(1)
+  icon String?
+  startNode Workflow[]  @relation("startNode")
+  endNode Workflow[]  @relation("endNode")
+  startWorkflow WorkflowResource[]  @relation("startWorkflow")
+  endWorkflow WorkflowResource[]  @relation("endWorkflow")
+  @@map("nodes")
+}
+
+model Workflow {
+  id  String  @default(uuid()) @id
+  start Node  @relation(name: "startNode", fields: [start_node], references: [id])
+  start_node String
+  end Node  @relation(name: "endNode", fields: [end_node], references: [id])
+  end_node String
+  endpoint String
+  name String @default("")
+  description String @default("")
+  priority  Int @default(1)
+  type  String
+  icon  String?
+  counter Int @default(0)
+  workflowResources WorkflowResource[]  @relation("workflowResources")
+  @@map("workflows")
+}
+
+model WorkflowResource {
+  start Node  @relation(name: "startWorkflow", fields: [start_node], references: [id])
+  start_node String
+  end Node  @relation(name: "endWorkflow", fields: [end_node], references: [id])
+  end_node String
+  resouceWorkflow Resource  @relation(name: "resourceWorkflow", fields: [resource], references: [id])
+  resource  String
+  workflowObject Workflow  @relation(name: "workflowResources", fields: [workflow], references: [id])
+  workflow  String
+  endpoint String
+  @@unique([start_node, end_node, resource, workflow])
+  @@map("workflowresources")
+}
