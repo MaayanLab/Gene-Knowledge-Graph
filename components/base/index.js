@@ -15,7 +15,7 @@ const Base = ({children, ...pageProps}) => (
     <Head>
         <meta charSet="utf-8" />
         <title>CFDE KnowledgeXchange</title>
-        <link rel="shortcut icon" type="image/x-icon" alt={"CFDE Knowledge Exchange"} href={`${process.env.NEXT_PUBLIC_PREFIX}/static/kx-logo.png`} />
+        <link rel="shortcut icon" type="image/x-icon" alt={"CFDE Knowledge Exchange"} href={`${process.env.NEXT_PUBLIC_PREFIX}/static/icons/kx-logo.png`} />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css" rel="stylesheet" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
