@@ -7,7 +7,6 @@ const Button = dynamic(async () => (await import('@mui/material')).Button);
 
 
 const Header = ({resources, nodes}) => { // add resources props
-	console.log(nodes)
 	return (
 		<Grid container spacing={3} justifyContent="center" alignItems="center" style={{margin:10}}>
 			<Grid item xs={12} align="center">
