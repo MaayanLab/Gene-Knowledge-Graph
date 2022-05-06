@@ -53,7 +53,7 @@ resources = resources.set_index("name")
 nodes = nodes.reset_index()
 nodes = nodes.set_index("name")
 workflows_resources = pd.DataFrame(columns=["workflow", "start", "end", "resource", "endpoint"])
-
+index = 0
 if "id" not in workflows.columns:
 	workflows["id"] = ""
 for i in workflows.index:
@@ -68,10 +68,11 @@ for i in workflows.index:
 	workflows.at[i, "start"] = start
 	workflows.at[i, "end"] = end
 	
-	index = 0
+	
 	for r in json.loads(workflows.at[i, "resources"]):
 		resource = resources.at[r, "id"]
-		workflows_resources.loc[i] = [uid, start, end, resource, endpoint]
+		workflows_resources.loc[index] = [uid, start, end, resource, endpoint]
+		index += 1
 
 workflows = workflows.set_index("id")
 workflows[[i for i in workflows.columns if not i == "resources"]].to_csv("output/workflows.psql.tsv", sep="\t", header=False)
