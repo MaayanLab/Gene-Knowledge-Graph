@@ -5,7 +5,7 @@ const Base = dynamic(import('../components/base'));
 
 function MyApp({ Component, pageProps }) {
   return (
-      <Base>
+      <Base {...pageProps}>
         <Component {...pageProps} />
       </Base>
   )
