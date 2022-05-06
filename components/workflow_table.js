@@ -121,6 +121,7 @@ const WorkFlowTable = ({workflows}) => {
 							style={{
 								textTransform: 'none'
 							}}
+							color="default"
 						>
 							<Typography variant="caption">Launch</Typography>
 						</Button>
@@ -134,6 +135,7 @@ const WorkFlowTable = ({workflows}) => {
 								style={{
 									textTransform: 'none'
 								}}
+								color="default"
 							>
 								<Typography variant="caption">Launch</Typography>
 							</Button>

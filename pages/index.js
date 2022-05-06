@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import prisma from '../lib/prisma'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { fetch_workflow_of_node } from '../utils/search';
+import { fetch_workflow_of_node, fetch_resource_of_node } from '../utils/search';
 const Grid = dynamic(import('@mui/material/Grid'));
 const Typography = dynamic(import('@mui/material/Typography'));
 const Button = dynamic(async () => (await import('@mui/material')).Button);
@@ -24,7 +24,7 @@ const buttonStyles = {
 	}
 }
 
-export default function Home({nodes, start, end, setStart, setEnd}) {
+export default function Home({nodes, start, end, setStart, setEnd, setActiveResource,}) {
   const [colored, setColored] = useState(null)
   const [workflows, setWorkflows] = useState(null)
   const router = useRouter()
@@ -34,6 +34,8 @@ export default function Home({nodes, start, end, setStart, setEnd}) {
 			if (start) params.start = start
 			if (end) params.end = end
 			const {workflows, ...colored} = await fetch_workflow_of_node(params)
+      const resources = await fetch_resource_of_node(params)
+      setActiveResource(resources)
 			setColored(colored)
 			setWorkflows(workflows)
 		} 
