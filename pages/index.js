@@ -89,9 +89,9 @@ export default function Home({nodes, start, end, setStart, setEnd, active, setAc
 											textTransform: "none",
 											width: 160,
 											height: 80,
+											...buttonStyle
 										}}
-                    color={buttonType}
-                    style={buttonStyle}
+                    					color={buttonType}
 										startIcon={<Image src={`${process.env.NEXT_PUBLIC_PREFIX}${b.icon}`} height={36} width={36}/>}
                     onClick={()=>{
 											if (start !== null && start === b.id) {
@@ -135,10 +135,10 @@ export default function Home({nodes, start, end, setStart, setEnd, active, setAc
 											textTransform: "none",
 											width: 160,
 											height: 80,
+											...buttonStyle
 										}} 
-                    color={buttonType}
-                    style={buttonStyle}
-                    onClick={()=>{
+										color={buttonType}
+										onClick={()=>{
 											if (end !== null && end === b.id) {
 												setEnd(null)
 											} else {
