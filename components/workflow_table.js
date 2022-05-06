@@ -6,7 +6,7 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import { DataGrid } from '@mui/x-data-grid';
-
+import { update_counter } from '../utils/search';
 
 
 const WorkFlowTable = ({workflows}) => {
@@ -19,6 +19,15 @@ const WorkFlowTable = ({workflows}) => {
 		}
 		setRows(rows)
 	},[workflows])
+
+	const update_rows = async ({start, end, endpoint, id}) => {
+		if (endpoint && start && end && id) {
+			const workflow = await update_counter({endpoint, start, end, id})
+			const r = {...rows}
+			r[id] = {id, ...workflow}
+			setRows(r)
+		}
+	}
 	
 	const headers = [
 		{
@@ -122,6 +131,18 @@ const WorkFlowTable = ({workflows}) => {
 								textTransform: 'none'
 							}}
 							color="default"
+							onClick={async ()=>{
+								await update_rows({
+									start: params.row.start.id,
+									end: params.row.end.id,
+									endpoint: params.row.endpoint,
+									id: params.row.id
+								})
+								router.push(params.value)
+							}}
+							style={{
+								textTransform: 'none'
+							}}
 						>
 							<Typography variant="caption">Launch</Typography>
 						</Button>
@@ -136,6 +157,14 @@ const WorkFlowTable = ({workflows}) => {
 									textTransform: 'none'
 								}}
 								color="default"
+								onClick={async ()=>{
+									await update_rows({
+										start: params.row.start.id,
+										end: params.row.end.id,
+										endpoint: params.row.endpoint,
+										id: params.row.id
+									})
+								}}
 							>
 								<Typography variant="caption">Launch</Typography>
 							</Button>

@@ -28,6 +28,7 @@ const Base = dynamic(import('../components/base'));
 function MyApp({ Component, pageProps }) {
   const [start, setStart] = useState(null)
   const [end, setEnd] = useState(null)
+  const [active, setActive] = useState(null)
   const [activeResource, setActiveResource] = useState(null)
   return (
       <ThemeProvider theme={theme}>
@@ -36,6 +37,7 @@ function MyApp({ Component, pageProps }) {
           setStart={setStart}
           end={end}
           setEnd={setEnd}
+          setActive={setActive}
           activeResource={activeResource}
           setActiveResource={setActiveResource}
           {...pageProps}
@@ -45,6 +47,8 @@ function MyApp({ Component, pageProps }) {
             setStart={setStart}
             end={end}
             setEnd={setEnd}
+            active={active}
+            setActive={setActive}
             setActiveResource={setActiveResource}
             activeResource={activeResource}
             {...pageProps}

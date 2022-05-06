@@ -24,6 +24,5 @@ export default async function handler(req, res) {
 		},
 		distinct: ["resource"],
 	})
-	console.log(workflows)
 	res.status(200).json(workflows.map(i=>i.resouceWorkflow.id))
   }

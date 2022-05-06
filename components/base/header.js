@@ -2,6 +2,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { fetch_nodes_of_resource } from "../../utils/search";
 const Grid = dynamic(import('@mui/material/Grid'));
 const Typography = dynamic(import('@mui/material/Typography'));
 const Button = dynamic(async () => (await import('@mui/material')).Button);
@@ -22,10 +23,27 @@ const styles = {
 	}
   }
 
-const Header = ({resources, activeResource, start, end}) => {
+const Header = ({resources, activeResource, start, end, setActive, setActiveResource}) => {
 	const [clicked, setClicked] = useState(null)
 	const router = useRouter()
-	console.log(activeResource)
+	const respondClick = async (c) => {
+		if (c !== clicked) {
+			const response = await fetch_nodes_of_resource(c)
+			const active = {}
+			if (response.start) active.start = response.start.map(i=>i.id)
+			if (response.end) active.end = response.end.map(i=>i.id)
+			setClicked(c)
+			console.log(active)
+			setActive(active)
+			setActiveResource(null)
+			// setStart(null)
+			// setEnd(null)
+		} else {
+			setClicked(null)
+			setActive(null)
+			// setStart(null)
+		}
+	}
 	return (
 		<Grid container spacing={3} justifyContent="center" alignItems="center" style={{margin:10}}>
 			<Grid item xs={12} align="center">
@@ -57,7 +75,6 @@ const Header = ({resources, activeResource, start, end}) => {
 			</Grid>
 			{resources.map((val)=>{
 				let buttonStyle = styles.disabled
-				console.log(activeResource.indexOf(val.id))
 				if (start===null && end===null && router.pathname === "/") {
 					if (clicked !==null &&  clicked === val.id) buttonStyle = styles.active
 					else if (clicked === null) buttonStyle = styles.enabled
@@ -67,7 +84,10 @@ const Header = ({resources, activeResource, start, end}) => {
 				if (val.name === "LINCS") minWidth=120
 				return(
 					<Grid item xs={2} key={val.id}>
-						<Button style={buttonStyle}>
+						<Button 
+							style={buttonStyle}
+							onClick={()=>respondClick(val.id)}
+						>
 							<div style={{height: 70, minWidth}}>
 								<Image
 									// loader={()=>`/birth-defect-drugs${val.icon}`} 

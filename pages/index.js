@@ -24,7 +24,7 @@ const buttonStyles = {
 	}
 }
 
-export default function Home({nodes, start, end, setStart, setEnd, setActiveResource,}) {
+export default function Home({nodes, start, end, setStart, setEnd, active, setActiveResource,}) {
   const [colored, setColored] = useState(null)
   const [workflows, setWorkflows] = useState(null)
   const router = useRouter()
@@ -50,6 +50,13 @@ export default function Home({nodes, start, end, setStart, setEnd, setActiveReso
 	}, [start, end])
 
   useEffect(()=> {
+		if (active !== null) {
+			if (start !== null) setStart(null)
+			if (end !== null) setEnd(null)
+		}
+	},[active])
+
+  useEffect(()=> {
 		setColored(null)
 	},[router.pathname])
 
@@ -71,7 +78,9 @@ export default function Home({nodes, start, end, setStart, setEnd, setActiveReso
 								if ((colored || {}).start && colored.start.indexOf(b.id) > -1) {
 									buttonType = "secondary"
 								} else buttonStyle = buttonStyles.disabled 
-							} 
+							} else if (active !== null) {
+								if (active.start.indexOf(b.id) === -1) buttonStyle = buttonStyles.disabled 
+							}
 							return (
 								<Grid item xs={4} key={`start-${b.id}`}>
 									<Button variant="contained"
@@ -115,6 +124,8 @@ export default function Home({nodes, start, end, setStart, setEnd, setActiveReso
 								if ((colored || {}).end && colored.end.indexOf(b.id) > -1) {
 									buttonType = "secondary"
 								} else buttonStyle = buttonStyles.disabled 
+							} else if (active !== null) {
+								if (active.end.indexOf(b.id) === -1) buttonStyle = buttonStyles.disabled 
 							}
 							return(
 								<Grid item xs={4} key={`end-${b.id}`}>
