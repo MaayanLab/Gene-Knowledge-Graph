@@ -6,7 +6,10 @@
     "dev": "NODE_ENV=development next dev",
     "build": "NODE_ENV=production next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "version:major": "npm version --no-git-tag-version major",
+    "version:minor": "npm version --no-git-tag-version minor",
+    "version:patch": "npm version --no-git-tag-version patch"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
