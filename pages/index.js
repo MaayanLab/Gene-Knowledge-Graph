@@ -418,7 +418,7 @@ function KnowledgeGraphViz(props) {
               </Select>
             </FormControl>
           </Grid>
-          {schema.order && <Grid item><Typography variant="subtitle2"><b>Order by:</b></Typography></Grid>}
+          {/* {schema.order && <Grid item><Typography variant="subtitle2"><b>Order by:</b></Typography></Grid>}
           {schema.order && <Grid item>
             <FormControl>
               <Select
@@ -444,7 +444,7 @@ function KnowledgeGraphViz(props) {
               </Select>
             </FormControl>
           </Grid>
-          }
+          } */}
           <Grid item>
             <Typography variant="subtitle2"><b>Edge labels:</b><Switch
                 color="blues"
@@ -460,7 +460,7 @@ function KnowledgeGraphViz(props) {
           <Grid item>
             <Typography variant="subtitle2"><b>Size:</b></Typography>
           </Grid>
-          <Grid item xs={schema.order ? 1:2}>
+          <Grid item xs={2}>
             <Slider 
               value={limit}
               color="blues"
