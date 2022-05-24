@@ -132,7 +132,6 @@ export default function KnowledgeGraph({entries, examples=default_examples, sche
 		setAllEndTerms(entries[end])
 	}
   }, [end])
-  
   return (
     <Grid container justifyContent="space-around">
       <Grid item xs={3}>
@@ -164,18 +163,21 @@ export default function KnowledgeGraph({entries, examples=default_examples, sche
                     onChange={(evt, value) => {
                       if (value === null) value = ''
                       setStartTermInput(value)
-                      const query = {
-                        start,
-                        start_term: value,
-                        limit
+                      if (value !== '') {
+                        const query = {
+                          start,
+                          start_term: value,
+                          limit
+                        }
+                        if (end) {
+                          query.end = end
+                        }
+                        router.push({
+                          pathname: `/`,
+                          query
+                        }, undefined, { shallow: true })
                       }
-                      if (end) {
-                        query.end = end
-                      }
-                      router.push({
-                        pathname: `/`,
-                        query
-                      }, undefined, { shallow: true })
+                      
                     }}
                     style={{ width: 220}}
                     renderInput={(params) => (

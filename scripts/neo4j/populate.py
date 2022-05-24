@@ -1,17 +1,10 @@
-import pandas as pd
+import json
 import os
-
-df = pd.read_csv(os.environ['NEO4J_TSV'], sep="\t")
-human_df = df[(df["Taxid Interactor A"] == 'taxid:9606') & (df["Taxid Interactor B"] == 'taxid:9606')]
-human_df = human_df[(human_df["Interaction Types"] == 'psi-mi:"MI:0407"(direct interaction)') | (human_df["Interaction Types"] ==  'psi-mi:"MI:0915"(physical association)')]
-human_df = human_df[~(human_df["Confidence Values"] == "-")]
-for i in human_df.index:
-    human_df.at[i, "Confidence Values"] = float(human_df.at[i, "Confidence Values"].replace("score:", ""))
-human_df = human_df.sort_values("Confidence Values", ascending=False)
-human_df = human_df.head(150000)
-
 from py2neo import Graph, Node, Relationship
 from tqdm import tqdm
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class GraphEx:
   ''' A convenient wrapper around Graph which regularly
@@ -59,40 +52,25 @@ class GraphEx:
 
 neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']))
 
-for i in tqdm(human_df.index):
-    gene_id_a = human_df.at[i, "#ID Interactor A"].split(":")[1]
-    gene_name_a = human_df.at[i, "Alt IDs Interactor A"].split("|")[1].split(":")[1]
-    gene_a_property = {
-        "id": gene_id_a,
-        "label": gene_name_a,
-        "Alt_IDs" : human_df.at[i, "Alt IDs Interactor A"],
-        "Aliases" : human_df.at[i, "Aliases Interactor A"],
-        "Taxon": human_df.at[i, "Taxid Interactor A"]
-    }
-    node_a = Node("Gene", **gene_a_property)
-    neo4graph.merge(node_a)
+
+with open("data/serialized.json") as o:
+	serialized = json.loads(o.read())
+
+for i in tqdm(serialized["edges"]):
+	source = i["source"]
+	node_a_props = serialized["nodes"][source]
+	node_a_properties = node_a_props["properties"]
+	node_a_type = node_a_props["type"]
+	node_a = Node(node_a_type, **node_a_properties)
+	neo4graph.merge(node_a)
     
-    gene_name_b = human_df.at[i, "Alt IDs Interactor B"].split("|")[1].split(":")[1]
-    gene_id_b = human_df.at[i, "ID Interactor B"].split(":")[1]
-    gene_b_property = {
-        "id": gene_id_b,
-        "label": gene_name_b,
-        "Alt_IDs" : human_df.at[i, "Alt IDs Interactor B"],
-        "Aliases" : human_df.at[i, "Aliases Interactor B"],
-        "Taxon": human_df.at[i, "Taxid Interactor B"]
-    }
-    node_b = Node("Gene", **gene_b_property)
-    neo4graph.merge(node_b)
-    relation_id = human_df.at[i, "Interaction Types"].split('"')[1].split(":")[1]
-    relation = human_df.at[i, "Interaction Types"].split('(')[1].replace(")", "")
-    relation_property_dict = {
-        "id": human_df.at[i, "Interaction Identifiers"],
-        "label": relation,
-        "Publication_Identifiers": human_df.at[i, "Publication Identifiers"],
-        "Interaction_Detection_Method": human_df.at[i, "Interaction Detection Method"],
-        "Publication_1st_Author": human_df.at[i, "Publication 1st Author"],
-        "Source_Database": human_df.at[i, "Source Database"],
-        "Relation_ID": relation_id,
-        "Confidence_Values": human_df.at[i, "Confidence Values"]
-    }
-    neo4graph.merge(Relationship(node_a, relation, node_b, **relation_property_dict))
+	target = i["target"]
+	node_b_props = serialized["nodes"][source]
+	node_b_properties = node_b_props["properties"]
+	node_b_type = node_b_props["type"]
+	node_b = Node(node_b_type, **node_b_properties)
+	neo4graph.merge(node_b)
+
+	relation = i["relation"]
+	relation_properties_dict = i["properties"]
+	neo4graph.merge(Relationship(node_a, relation, node_b, **relation_properties_dict))
