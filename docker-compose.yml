@@ -5,7 +5,7 @@ services:
     image: maayanlab/knowledge_graph:0.1.0
     env_file: .env
     ports:
-      - 3000:3000
+      - 3001:3000
 
   neo4j:
     image: neo4j
@@ -18,3 +18,10 @@ services:
       - 7687:7687
     volumes:
       - ./data/neo4j:/data
+    networks:
+      internal:
+        aliases:
+          - neo4j-api
+# Internal docker networks
+networks:
+  internal:

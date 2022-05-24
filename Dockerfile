@@ -32,6 +32,7 @@ COPY --from=builder /app/package.json ./package.json
 
 # Automatically leverage output traces to reduce image size 
 # https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/lib/prisma.ts ./lib/prisma.ts
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
@@ -40,6 +41,7 @@ COPY ./scripts ./scripts
  
 ENV PYTHONUNBUFFERED=1
 RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
+RUN apk add make automake gcc g++ subversion python3-dev
 RUN python3 -m ensurepip
 RUN pip3 install --no-cache --upgrade pip setuptools
 RUN pip3 install -r ./scripts/neo4j/requirements.txt
@@ -48,8 +50,8 @@ USER nextjs
 
 ENV NEXT_PUBLIC_DATA_API="https://maayanlab.cloud/sigcom-lincs/data-api"
 ENV NEXT_PUBLIC_METADATA_API="https://maayanlab.cloud/sigcom-lincs/metadata-api"
-ENV PREFIX=/birthdefects
-ENV NEXT_PUBLIC_PREFIX=/birthdefects
+ENV PREFIX=/
+ENV NEXT_PUBLIC_PREFIX=/
 ENV PORT=3000
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
