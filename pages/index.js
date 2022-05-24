@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import useAsyncEffect from 'use-async-effect'
 import { useRouter } from 'next/router'
-import { precise } from '../utils/helper';
+import { precise, makeTemplate } from '../utils/helper';
 import fileDownload from 'js-file-download'
 import fetch from 'isomorphic-unfetch'
 import get_terms, { fetch_schema } from '../utils/initialize';
@@ -66,20 +66,29 @@ const default_examples = {
   } 
 }
 
-const TooltipCard = ({node}) => (
-  <Card>
-    <CardContent>
-      <Typography variant="h6">
-        <b>{node.label}</b>
-      </Typography>
-	  {Object.entries(node.properties).map(([k,v])=>(
-		<Typography variant="subtitle2">
-			<b>{k}</b> {precise(v)}
-		</Typography>  
-	  ))}
-    </CardContent>
-  </Card>
-)
+const TooltipCard = ({node, schema}) => {
+  const elements = []
+  for (const i of schema.tooltip[node.kind]) {
+    const e = makeTemplate(i.text, node.properties)
+    if (e !== 'undefined') {
+      elements.push(
+        <Typography key={i.label} variant="subtitle2">
+          <b>{i.label}</b> {precise(e)}
+        </Typography>  
+      )
+    }
+  }
+  return(
+    <Card>
+      <CardContent>
+        <Typography variant="h6">
+          <b>{node.label}</b>
+        </Typography>
+        {elements}
+      </CardContent>
+    </Card>
+  )
+}
 
 export default function KnowledgeGraph({entries, examples=default_examples, schema}) {
   const router = useRouter()
@@ -279,7 +288,7 @@ export default function KnowledgeGraph({entries, examples=default_examples, sche
             </Grid>
           }
           <Grid item xs={12} style={{minHeight: 300}}>
-            {node && <TooltipCard node={node}/>}
+            {node && <TooltipCard node={node} schema={schema}/>}
           </Grid>
         </Grid>
       </Grid>

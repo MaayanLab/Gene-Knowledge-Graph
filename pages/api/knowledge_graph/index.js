@@ -99,6 +99,7 @@ const resolve_results = ({results, start_term, end_term, term, schema, order, sc
 				data: {
 					source: start_node.properties.id,
 					target: end_node.properties.id,
+					kind: "Relation",
 					label: relation_type,
 					properties: {
 						source_label: start_node.properties.label,
