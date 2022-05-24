@@ -1,3 +1,0 @@
-pandas
-python-dotenv
-psycopg2

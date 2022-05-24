@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "NODE_ENV=development next dev",
+    "build": "NODE_ENV=production next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -16,9 +16,19 @@
     "@mui/styles": "^5.6.2",
     "@mui/x-data-grid": "^5.10.0",
     "@prisma/client": "^3.13.0",
+    "color": "^4.2.3",
+    "cytoscape": "^3.21.0",
+    "cytoscape-avsdf": "^1.0.0",
+    "cytoscape-fcose": "^2.1.0",
+    "cytoscape-popper": "^2.0.0",
+    "isomorphic-unfetch": "^3.1.0",
+    "js-file-download": "^0.4.12",
+    "neo4j-driver": "^4.4.5",
     "next": "^12.1.0",
     "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react-cytoscapejs": "^1.2.1",
+    "react-dom": "18.1.0",
+    "use-async-effect": "^2.2.5"
   },
   "devDependencies": {
     "@types/node": "^17.0.31",

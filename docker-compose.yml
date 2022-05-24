@@ -1,0 +1,20 @@
+version: '2'
+services:
+  kg:
+    build: .
+    image: maayanlab/knowledge_graph:0.1.0
+    env_file: .env
+    ports:
+      - 3000:3000
+
+  neo4j:
+    image: neo4j
+    user: "${UID}:${GID}"
+    environment:
+      NEO4JLABS_PLUGINS: '["apoc", "graph-data-science", "n10s"]'
+      NEO4J_AUTH: ${NEO4J_USER}/${NEO4J_PASSWORD}
+    ports:
+      - 7474:7474
+      - 7687:7687
+    volumes:
+      - ./data/neo4j:/data

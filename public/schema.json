@@ -1,0 +1,25 @@
+{
+	"nodes": [
+		{
+			"node": "Gene",
+			"route": "/genes",
+			"example": {
+				"href": {
+					"pathname": "/",
+					"query": {
+						"start": "Gene",
+						"start_term": "GCC2"
+					}
+				}, 
+				"palette": "greens"
+			},
+			"node_color": "#aed581"
+		}
+	],
+	"order": {
+		"Confidence_Values": {
+			"on": "edge",
+			"field": ["Confidence_Values", "DESC"]
+		}
+	}
+}

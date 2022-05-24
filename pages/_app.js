@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import '../styles/globals.css'
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+const Container = dynamic(() => import('@mui/material/Container'));
 
 const theme = createTheme({
   palette: {
@@ -11,49 +11,61 @@ const theme = createTheme({
       light: "#eeeeee"
     },
     primary: {
-      main: "#c5e1a5",
-      dark: "#8bc34a",
-      light: "#f1f8e9"
+      main: "#3f51b5",
+      dark: "#303f9f",
+      light: "#7986cb",
+      contrastText: "#FFF"
     },
     secondary: {
       main: "#ffb74d",
       dark: "#fb8c00",
       light: "#ffe0b2"
+    },
+    blues: {
+      main: "#3f51b5",
+      dark: "#303f9f",
+      light: "#7986cb",
+      contrastText: "#FFF"
+    },
+    blacks: {
+      main: "#000",
+      dark: "#000",
+      light: "#000",
+      contrastText: "#FFF"
+    },
+    greens: {
+      main: "#aed581",
+      dark: "#33691e",
+      light: "#33691e"
+    },
+    oranges: {
+      main: "#ffb74d",
+      dark: "#f57c00",
+      light: "#ffcc80"
+    },
+    pinks: {
+      main: "#ec407a",
+      dark: "#c2185b",
+      light: "#f8bbd0"
+    }
+  },
+  typography: {
+    button: {
+      textTransform: "none"
     }
   }
 });
 
-const Base = dynamic(import('../components/base'));
+
 
 function MyApp({ Component, pageProps }) {
-  const [start, setStart] = useState(null)
-  const [end, setEnd] = useState(null)
-  const [active, setActive] = useState(null)
-  const [activeResource, setActiveResource] = useState(null)
   return (
       <ThemeProvider theme={theme}>
-        <Base 
-          start={start}
-          setStart={setStart}
-          end={end}
-          setEnd={setEnd}
-          setActive={setActive}
-          activeResource={activeResource}
-          setActiveResource={setActiveResource}
-          {...pageProps}
-        >
+        <Container style={{marginTop: 50}}>
           <Component 
-            start={start}
-            setStart={setStart}
-            end={end}
-            setEnd={setEnd}
-            active={active}
-            setActive={setActive}
-            setActiveResource={setActiveResource}
-            activeResource={activeResource}
             {...pageProps}
           />
-        </Base>
+        </Container>
       </ThemeProvider>
   )
 }
