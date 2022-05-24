@@ -65,7 +65,7 @@ for i in tqdm(serialized["edges"]):
 	neo4graph.merge(node_a)
     
 	target = i["target"]
-	node_b_props = serialized["nodes"][source]
+	node_b_props = serialized["nodes"][target]
 	node_b_properties = node_b_props["properties"]
 	node_b_type = node_b_props["type"]
 	node_b = Node(node_b_type, **node_b_properties)
