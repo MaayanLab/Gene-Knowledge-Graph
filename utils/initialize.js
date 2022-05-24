@@ -4,20 +4,46 @@ import fetch from 'isomorphic-unfetch'
 
 export default async function get_terms(node) {
   try {
+	console.log(`Connecting to ${process.env.NEO4J_URL}`)
     const session = neo4jDriver.session({
       defaultAccessMode: neo4j.session.READ
     })
 	let query = `MATCH (g: ${node}) RETURN *`
 	if (process.env.NODE_ENV==="development") {
 		console.log("Dev mode")
-		query = `${query} LIMIT 500`
+		let entries = {}
+		let skip = 0
+		const limit = 500
+		while (skip < 1000) {
+			const results = await session.readTransaction(txc => txc.run(`${query} SKIP ${skip} LIMIT ${limit}`))
+			entries = results.records.reduce((acc, record) => {
+				const g = record.get('g')
+					return {...acc, [g.properties.label]: g.properties}
+				}, entries)
+			skip = skip + limit	
+		}
+		return entries
+	} else {
+		console.log("Starting...")
+		console.log(`MATCH (g: ${node}) RETURN count(g) as count`)
+		const count_r = await session.readTransaction(txc => txc.run(`MATCH (g: ${node}) RETURN count(g) as count`))
+		// const count = count_r.get('count')
+		const count = count_r.records[0].get('count')["low"]
+		console.log("Total:",count)
+		let entries = {}
+		let skip = 0
+		const limit = 500
+		while (skip < count) {
+			const results = await session.readTransaction(txc => txc.run(`${query} SKIP ${skip} LIMIT ${limit}`))
+			entries = results.records.reduce((acc, record) => {
+				const g = record.get('g')
+					return {...acc, [g.properties.label]: g.properties}
+				}, entries)
+			skip = skip + limit	
+		}
+		return entries
 	}
-    const results = await session.readTransaction(txc => txc.run(query))
-	const entries = results.records.reduce((acc, record) => {
-	const g = record.get('g')
-		return {...acc, [g.properties.label]: g.properties}
-	}, {})
-	return entries
+	
   } catch (e) {
     console.error(e)
   }
