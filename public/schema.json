@@ -79,15 +79,15 @@
 	"header": [
 		{
 			"label": "BioGRID",
-			"icon": "${PREFIX}/static/biogrid.jpg"
+			"icon": "${PREFIX}/static/resources/biogrid.jpg"
 		},
 		{
 			"label": "ARCHS4",
-			"icon": "${PREFIX}/static/archs.png"
+			"icon": "${PREFIX}/static/resources/archs.png"
 		},
 		{
 			"label": "LINCS",
-			"icon": "${PREFIX}/static/lincslogo.svg"
+			"icon": "${PREFIX}/static/resources/lincslogo.svg"
 		}
 	]
 }
