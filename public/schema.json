@@ -75,5 +75,19 @@
 				"text": "${Confidence_Values}"
 			}
 		]
-	}
+	},
+	"header": [
+		{
+			"label": "BioGRID",
+			"icon": "${PREFIX}/static/biogrid.jpg"
+		},
+		{
+			"label": "ARCHS4",
+			"icon": "${PREFIX}/static/archs.png"
+		},
+		{
+			"label": "LINCS",
+			"icon": "${PREFIX}/static/lincslogo.svg"
+		}
+	]
 }
