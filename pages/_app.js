@@ -2,6 +2,7 @@ import '../styles/globals.css'
 import dynamic from 'next/dynamic';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 const Container = dynamic(() => import('@mui/material/Container'));
+const Header = dynamic(() => import('../components/header'));
 
 const theme = createTheme({
   palette: {
@@ -61,7 +62,8 @@ const theme = createTheme({
 function MyApp({ Component, pageProps }) {
   return (
       <ThemeProvider theme={theme}>
-        <Container style={{marginTop: 50}}>
+        <Container style={{marginTop: 20}}>
+          <Header {...pageProps}/>
           <Component 
             {...pageProps}
           />

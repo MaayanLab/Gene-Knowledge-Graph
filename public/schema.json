@@ -76,18 +76,21 @@
 			}
 		]
 	},
-	"header": [
-		{
-			"label": "BioGRID",
-			"icon": "${PREFIX}/static/resources/biogrid.jpg"
-		},
-		{
-			"label": "ARCHS4",
-			"icon": "${PREFIX}/static/resources/archs.png"
-		},
-		{
-			"label": "LINCS",
-			"icon": "${PREFIX}/static/resources/lincslogo.svg"
-		}
-	]
+	"header": {
+		"title": "Gene-centric Knowledge Graph",
+		"subheader": [
+			{
+				"label": "BioGRID",
+				"icon": "${PREFIX}/static/resources/biogrid.jpg"
+			},
+			{
+				"label": "ARCHS4",
+				"icon": "${PREFIX}/static/resources/archs.png"
+			},
+			{
+				"label": "LINCS",
+				"icon": "${PREFIX}/static/resources/lincslogo.svg"
+			}
+		]
+	}
 }
