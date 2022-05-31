@@ -55,10 +55,20 @@ const get_node_color_and_type = ({node, label, schema, order, max_scores, terms}
 }
 
 const get_edge_color = ({relation, schema, order, max_scores}) => {
-	const {on, field} = schema.order[order]
-	if (on === "edge") {
-		return {
-			lineColor: edge_color.darken((relation.properties[field[0]]/max_scores[`max_${field[0]}`])*0.8).hex()
+	if (order) {
+		const {on, field} = schema.order[order]
+		if (on === "edge") {
+			return {
+				lineColor: edge_color.darken((relation.properties[field[0]]/max_scores[`max_${field[0]}`])*0.8).hex()
+			}
+		}
+	} else {
+		for (const [k, {on, field}] of Object.entries(schema.order)) {
+			if (on === "edge" && relation.properties[field[0]]) {
+				return {
+					lineColor: edge_color.darken((relation.properties[field[0]]/max_scores[`max_${field[0]}`])*0.8).hex(),
+				}
+			} 
 		}
 	}
 	return {
@@ -141,7 +151,7 @@ const resolve_two_terms = async ({session, start_term, start, end_term, end, lim
 		}
 	})
 	let query = `${ordering.join("\n")}
-		MATCH p=(a: ${start} {label: $start_term})-[*1..4]-(b: ${end} {label: $end_term})
+		MATCH p=allShortestPaths((a: ${start} {label: $start_term})-[*1..4]-(b: ${end} {label: $end_term}))
 		`
 
 	if (order) {
@@ -164,8 +174,9 @@ const resolve_two_terms = async ({session, start_term, start, end_term, end, lim
 			`
 		}
 	} else {
-		query = `${query} 
+		query = ` ${query} 
 			WITH a, b, nodes(p) as n, relationships(p) as r, ${score_fields.join(", ")}
+			RETURN *
 			LIMIT ${limit}
 		`
 	}
@@ -192,7 +203,7 @@ const resolve_one_term = async ({session, start, term, limit, order, schema}) =>
 		}
 	})
 	let query = `${ordering.join("\n")}
-		MATCH p=(st:${start} { label: $term })-[r1]-(it)-[r2]-(en)
+		MATCH p=(st:${start} { label: $term })-[r]-(en)
 		WITH nodes(p) as n, relationships(p) as r, ${score_fields.join(", ")}`
 	
 	if (order) {
@@ -210,14 +221,17 @@ const resolve_one_term = async ({session, start, term, limit, order, schema}) =>
 				ORDER BY score ${field[1]} 
 			`
 		}
+	} else {
+		query = `${query} RETURN *`
 	}
-	query = query +  `LIMIT ${limit}`
+	query = query +  ` LIMIT ${limit}`
+	console.log(query)
 	const results = await session.readTransaction(txc => txc.run(query, { term }))
 	return resolve_results({results, term, schema, order, score_fields})
 }
 
 export default async function query(req, res) {
-  const { start, start_term, end, end_term, limit=25, order="Confidence_Values" } = await req.query
+  const { start, start_term, end, end_term, limit=25, order } = await req.query
   if (!schema) schema = await fetch_schema()
   get_color_map({node: start})
   if (color_map[start] === undefined) res.status(400).send("Invalid start node")
