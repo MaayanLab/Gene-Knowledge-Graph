@@ -25,7 +25,6 @@ export default async function get_terms(node) {
 		return entries
 	} else {
 		console.log("Starting...")
-		console.log(`MATCH (g: ${node}) RETURN count(g) as count`)
 		const count_r = await session.readTransaction(txc => txc.run(`MATCH (g: ${node}) RETURN count(g) as count`))
 		// const count = count_r.get('count')
 		const count = count_r.records[0].get('count')["low"]
