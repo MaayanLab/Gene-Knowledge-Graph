@@ -4,7 +4,8 @@ import { makeTemplate } from "../utils/helper";
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
 
-const Header = ({schema}) => {
+const Header = ({schema, ...rest}) => {
+	if (schema === undefined || schema.header === undefined) return null
 	return(
 	<Grid container justifyContent={"center"} alignItems={"center"} spacing={2} style={{marginBottom: 20}}>
 		<Grid item xs={12} align="center">
