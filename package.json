@@ -17,7 +17,6 @@
     "@mui/icons-material": "^5.6.2",
     "@mui/material": "^5.6.4",
     "@mui/x-data-grid": "^5.10.0",
-    "@prisma/client": "^3.13.0",
     "color": "^4.2.3",
     "cytoscape": "^3.21.0",
     "cytoscape-avsdf": "^1.0.0",
@@ -36,7 +35,6 @@
     "@types/node": "^17.0.31",
     "eslint": "8.14.0",
     "eslint-config-next": "12.1.6",
-    "prisma": "^3.13.0",
     "typescript": "^4.6.4"
   }
 }

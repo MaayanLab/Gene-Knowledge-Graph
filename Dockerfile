@@ -11,9 +11,6 @@ FROM node:16-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-COPY --chown=nextjs:nodejs prisma prisma
-RUN npm install @prisma/client
-RUN npx prisma generate
 RUN npm run build
 
 # Production image, copy all the files and run next
@@ -34,8 +31,6 @@ COPY --from=builder /app/package.json ./package.json
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/lib/prisma.ts ./lib/prisma.ts
-COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 COPY ./scripts ./scripts
  
