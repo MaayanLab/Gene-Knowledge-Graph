@@ -28,10 +28,6 @@ const Cytoscape = dynamic(() => import('../components/Cytoscape'), { ssr: false 
 const CameraAltOutlinedIcon  = dynamic(() => import('@mui/icons-material/CameraAltOutlined'));
 const NetworkTable =  dynamic(() => import('../components/network_table'))
 
-const route_mapper = {
-  Gene: "genes",
-}
-
 const layouts = {
   "Force-directed": {
     name: 'fcose',
@@ -90,7 +86,7 @@ const TooltipCard = ({node, schema}) => {
   )
 }
 
-export default function KnowledgeGraph({entries, examples=default_examples, schema}) {
+export default function KnowledgeGraph({entries, nodes, examples=default_examples, schema}) {
   const router = useRouter()
   const {start="Gene", start_term, end_term, end="Gene", limit=25, order=(Object.keys(schema.order || {}))[0]} = router.query
   const [allStartTerms, setAllStartTerms] = React.useState([])
@@ -116,15 +112,15 @@ export default function KnowledgeGraph({entries, examples=default_examples, sche
   }, [end_term])
 
   React.useEffect(()=>{
-	if (!start) {
-		const query = examples[Object.keys(examples)[0]].href.query
-		redirect(query)
-	} else if (!start_term) {
-		const query = examples[start].href.query
-		redirect(query)
-	} else if (start && entries[start]) {
-		setAllStartTerms(entries[start])
-	}
+    if (!start) {
+      const query = examples[Object.keys(examples)[0]].href.query
+      redirect(query)
+    } else if (!start_term) {
+      const query = examples[start].href.query
+      redirect(query)
+    } else if (start && entries[start]) {
+      setAllStartTerms(entries[start])
+    }
   }, [start])
 
   React.useEffect(()=>{
@@ -132,6 +128,7 @@ export default function KnowledgeGraph({entries, examples=default_examples, sche
 		setAllEndTerms(entries[end])
 	}
   }, [end])
+
   return (
     <Grid container justifyContent="space-around">
       <Grid item xs={3}>
@@ -158,7 +155,7 @@ export default function KnowledgeGraph({entries, examples=default_examples, sche
                   <Autocomplete
                     id="my-input" aria-describedby="gene" 
                     freeSolo
-                    options={Object.keys(allStartTerms)}
+                    options={Object.keys(entries[start])}
                     value={startTermInput}
                     onChange={(evt, value) => {
                       if (value === null) value = ''
@@ -295,7 +292,7 @@ export default function KnowledgeGraph({entries, examples=default_examples, sche
         </Grid>
       </Grid>
       <Grid item xs={9}>
-        {(start && route_mapper[start]) && 
+        {(start && nodes.indexOf(start) > -1) && 
           <KnowledgeGraphViz 
             start_term={start_term}
             start={start}
@@ -322,6 +319,7 @@ export default function KnowledgeGraph({entries, examples=default_examples, sche
 
 function KnowledgeGraphViz(props) {
   const {start_term, start, end_term, end, limit, setNode, node, setData, examples, schema, order} = props
+  console.log(start_term)
   const router = useRouter()
   const [id, setId] = React.useState(0)
   const [elements, setElements] = React.useState(undefined)
@@ -368,6 +366,7 @@ function KnowledgeGraphViz(props) {
   }
 
   useAsyncEffect(async (isActive) => {
+    console.log(start_term)
     if (!start_term) {
       if (elements === undefined) {
         router.push({
@@ -624,17 +623,21 @@ export async function getStaticProps(ctx) {
 	const schema = await fetch_schema()
 	const examples = {}
 	const entries = {}
+  const nodes = []
 	for (const i of schema.nodes) {
 		const {node, example} = i
 		const results = await get_terms(node)
-		entries[node] = results
+    entries[node] = results
 		examples[node] = example
+    nodes.push(node)
 	}
+  // console.log(JSON.stringify(examples))
 	return {
 	  props: {
 		  examples,
 		  entries,
       schema,
+      nodes,
 	  }
 	};
 }

@@ -29,15 +29,15 @@ const get_node_color_and_type = ({node, label, schema, order, max_scores, terms}
 			const {on, field} = schema[order]
 			if (on === "node" && node.properties[field[0]]) {
 				return {
-					color: get_color_map({node: label, darken: 1-(node.properties[field[0]]/max_scores[`max_${field[0]}`])}),
+					color: get_color_map({node: label, darken: 1-Math.abs(node.properties[field[0]]/max_scores[`max_${field[0]}`])}),
 					node_type: 0
 				}
 			}
 		}
-		for (const [k, {on, field}] of Object.entries(schema.order)) {
+		for (const [k, {on, field}] of Object.entries(schema.color)) {
 			if (on === "node" && node.properties[field[0]]) {
 				return {
-					color: get_color_map({node: label, darken: 1-(node.properties[field[0]]/max_scores[`max_${field[0]}`])}),
+					color: get_color_map({node: label, darken: 1-Math.abs(node.properties[field[0]]/max_scores[`max_${field[0]}`])}),
 					node_type: 0
 				}
 			} 
@@ -56,17 +56,17 @@ const get_node_color_and_type = ({node, label, schema, order, max_scores, terms}
 
 const get_edge_color = ({relation, schema, order, max_scores}) => {
 	if (order) {
-		const {on, field} = schema.order[order]
+		const {on, field} = schema.color[order]
 		if (on === "edge") {
 			return {
-				lineColor: edge_color.darken((relation.properties[field[0]]/max_scores[`max_${field[0]}`])*0.8).hex()
+				lineColor: edge_color.darken((Math.abs(relation.properties[field[0]])/max_scores[`max_${field[0]}`])*0.8).hex()
 			}
 		}
 	} else {
-		for (const [k, {on, field}] of Object.entries(schema.order)) {
+		for (const [k, {on, field}] of Object.entries(schema.color)) {
 			if (on === "edge" && relation.properties[field[0]]) {
 				return {
-					lineColor: edge_color.darken((relation.properties[field[0]]/max_scores[`max_${field[0]}`])*0.8).hex(),
+					lineColor: edge_color.darken((Math.abs(relation.properties[field[0]])/max_scores[`max_${field[0]}`])*0.8).hex(),
 				}
 			} 
 		}
@@ -125,7 +125,7 @@ const resolve_results = ({results, start_term, end_term, term, schema, order, sc
 					kind: end_label,
 					label: end_node.properties.label || end_node.properties.id,
 					properties: end_node.properties,
-					...(get_node_color_and_type({node: end_node, label: end_label, order: schema.order, max_scores, terms: [start_term, end_term, term]}))
+					...(get_node_color_and_type({node: end_node, label: end_label, order: schema.color, max_scores, terms: [start_term, end_term, term]}))
 				} 
 			})
 		}
@@ -135,7 +135,7 @@ const resolve_results = ({results, start_term, end_term, term, schema, order, sc
 
 const resolve_two_terms = async ({session, start_term, start, end_term, end, limit, order, schema}) => {
 	const score_fields = []	
-	const ordering = Object.entries(schema.order).map(([key, {on, field}])=> {
+	const ordering = Object.entries(schema.color).map(([key, {on, field}])=> {
 		if (on === "edge") {
 			const q = `MATCH (st)-[rel]-(en)
 				WITH ${score_fields.join(", ")}${score_fields.length > 0 ? ",": ""}
@@ -151,11 +151,11 @@ const resolve_two_terms = async ({session, start_term, start, end_term, end, lim
 		}
 	})
 	let query = `${ordering.join("\n")}
-		MATCH p=allShortestPaths((a: ${start} {label: $start_term})-[*1..4]-(b: ${end} {label: $end_term}))
+		MATCH p=(a: ${start} {label: $start_term})-[*1..4]-(b: ${end} {label: $end_term})
 		`
 
 	if (order) {
-		const {on, field} = schema.order[order]
+		const {on, field} = schema.color[order]
 		if (on === "edge") {
 			query = `${query}
 				WITH nodes(p) as n, relationships(p) as r, 
@@ -187,7 +187,7 @@ const resolve_two_terms = async ({session, start_term, start, end_term, end, lim
 
 const resolve_one_term = async ({session, start, term, limit, order, schema}) => {
 	const score_fields = []	
-	const ordering = Object.entries(schema.order).map(([key, {on, field}])=> {
+	const ordering = Object.entries(schema.color).map(([key, {on, field}])=> {
 		if (on === "edge") {
 			const q = `MATCH (st)-[rel]-(en)
 				WITH ${score_fields.join(", ")}${score_fields.length > 0 ? ",": ""}
@@ -203,11 +203,11 @@ const resolve_one_term = async ({session, start, term, limit, order, schema}) =>
 		}
 	})
 	let query = `${ordering.join("\n")}
-		MATCH p=(st:${start} { label: $term })-[r]-(en)
+		MATCH p=(st:${start} { label: $term })-[*2]-(en)
 		WITH nodes(p) as n, relationships(p) as r, ${score_fields.join(", ")}`
 	
 	if (order) {
-		const {on, field} = schema.order[order]
+		const {on, field} = schema.color[order]
 		if (on === "edge") {
 			query = `${query},
 				reduce(acc=0, i in relationships(p) | acc + COALESCE(i.${field[0]}, 0))/length(p) as score
@@ -222,7 +222,7 @@ const resolve_one_term = async ({session, start, term, limit, order, schema}) =>
 			`
 		}
 	} else {
-		query = `${query} RETURN *`
+		query = `${query} RETURN * ORDER BY rand()`
 	}
 	query = query +  ` LIMIT ${limit}`
 	const results = await session.readTransaction(txc => txc.run(query, { term }))
