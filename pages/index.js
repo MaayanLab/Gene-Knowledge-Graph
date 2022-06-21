@@ -90,7 +90,11 @@ const TooltipCard = ({node, schema}) => {
 export default function KnowledgeGraph({entries, nodes, examples=default_examples, schema}) {
   if (!schema) schema=default_schema  
   const router = useRouter()
-  const {start="Gene", start_term, end_term, end="Gene", limit=25, order=(Object.keys(schema.order || {}))[0]} = router.query
+  const {start_term, end_term, limit=25, order=(Object.keys(schema.order || {}))[0]} = router.query
+  let start = router.query.start
+  let end = router.query.end
+  if (!start) start = schema.nodes[0].node
+  if (!end) end = schema.nodes[0].node
   const [allStartTerms, setAllStartTerms] = React.useState([])
   const [startTermInput, setStartTermInput] = React.useState(start_term || '')
   const [allEndTerms, setAllEndTerms] = React.useState([])
@@ -560,15 +564,13 @@ function KnowledgeGraphViz(props) {
                 // setAnchorEl(null)
                 setNode(null)
                 const node = evt.target.data()
-                if (node.kind === 'Gene' || node.kind === 'Drug' || node.kind === 'BirthDefect') {
-                  router.push({
-                    pathname: schema.endpoint,
-                    query: {
-                      start: node.kind,
-                      start_term: node.label
-                    }
-                  }, undefined, { shallow: true })
-                } 
+                router.push({
+                  pathname: schema.endpoint,
+                  query: {
+                    start: node.kind,
+                    start_term: node.label
+                  }
+                }, undefined, { shallow: true })
               })
 
               cy.nodes().on('mouseover', (evt) => {
