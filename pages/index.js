@@ -3,10 +3,10 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import useAsyncEffect from 'use-async-effect'
 import { useRouter } from 'next/router'
+import { fetch_kg_schema, get_terms } from '../utils/initialize';
 import { precise, makeTemplate } from '../utils/helper';
 import fileDownload from 'js-file-download'
-import fetch from 'isomorphic-unfetch'
-import get_terms, { fetch_schema } from '../utils/initialize';
+import * as default_schema from '../public/schema.json'
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Box = dynamic(() => import('@mui/material/Box'));
@@ -51,7 +51,7 @@ const layouts = {
 const default_examples = {
   Gene: {
 	  href: {
-        pathname:`/`,
+        pathname: "/knowledge_graph",
         query: {
 			start: "Gene",
 			start_term: "CAND2",
@@ -69,7 +69,7 @@ const TooltipCard = ({node, schema}) => {
     if (e !== 'undefined') {
       elements.push(
         <Typography key={i.label} variant="subtitle2">
-          <b>{i.label}</b> {precise(e)}
+          <b>{i.label}</b> {i.type === "string" ? e: precise(e)}
         </Typography>  
       )
     }
@@ -87,6 +87,7 @@ const TooltipCard = ({node, schema}) => {
 }
 
 export default function KnowledgeGraph({entries, nodes, examples=default_examples, schema}) {
+  if (!schema) schema=default_schema  
   const router = useRouter()
   const {start="Gene", start_term, end_term, end="Gene", limit=25, order=(Object.keys(schema.order || {}))[0]} = router.query
   const [allStartTerms, setAllStartTerms] = React.useState([])
@@ -98,7 +99,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
   const tableref = useRef(null);
   const redirect = (query) => {
     router.push({
-      pathname: `/`,
+      pathname: schema.endpoint,
       query
     }, undefined, {shallow: true})
   }
@@ -170,7 +171,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
                           query.end = end
                         }
                         router.push({
-                          pathname: `/`,
+                          pathname:  schema.endpoint,
                           query
                         }, undefined, { shallow: true })
                       }
@@ -228,7 +229,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
                       if (value === null) value = ''
                       setEndTermInput(value)
                       router.push({
-                        pathname: `/`,
+                        pathname:  schema.endpoint,
                         query: {
                           start,
                           start_term,
@@ -319,7 +320,6 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
 
 function KnowledgeGraphViz(props) {
   const {start_term, start, end_term, end, limit, setNode, node, setData, examples, schema, order} = props
-  console.log(start_term)
   const router = useRouter()
   const [id, setId] = React.useState(0)
   const [elements, setElements] = React.useState(undefined)
@@ -370,7 +370,7 @@ function KnowledgeGraphViz(props) {
     if (!start_term) {
       if (elements === undefined) {
         router.push({
-          pathname: `/`,
+          pathname: schema.endpoint,
           query: {
             start,
             start_term: examples[start].href.query.start_term
@@ -429,7 +429,7 @@ function KnowledgeGraphViz(props) {
                 label="Order by"
                 onChange={(e, nv)=>{
                   router.push({
-                    pathname: `/`,
+                    pathname:  schema.endpoint,
                     query: {
                       ...router.query,
                       order: e.target.value
@@ -467,7 +467,7 @@ function KnowledgeGraphViz(props) {
               color="blues"
               onChange={(e, nv)=>{
                 router.push({
-                  pathname: `/`,
+                  pathname: schema.endpoint,
                   query: {
                     ...router.query,
                     limit: nv
@@ -561,7 +561,7 @@ function KnowledgeGraphViz(props) {
                 const node = evt.target.data()
                 if (node.kind === 'Gene' || node.kind === 'Drug' || node.kind === 'BirthDefect') {
                   router.push({
-                    pathname: `/`,
+                    pathname: schema.endpoint,
                     query: {
                       start: node.kind,
                       start_term: node.label
@@ -620,10 +620,16 @@ function KnowledgeGraphViz(props) {
 }
 
 export async function getStaticProps(ctx) {
-	const schema = await fetch_schema()
-	const examples = {}
+  const examples = {}
 	const entries = {}
   const nodes = []
+  let schema = default_schema
+  let s = null
+  if (process.env.NEXT_PUBLIC_SCHEMA) {
+    schema = await fetch_kg_schema()
+    s = schema
+  }
+  console.log(schema)
 	for (const i of schema.nodes) {
 		const {node, example} = i
 		const results = await get_terms(node)
@@ -631,13 +637,12 @@ export async function getStaticProps(ctx) {
 		examples[node] = example
     nodes.push(node)
 	}
-  // console.log(JSON.stringify(examples))
 	return {
 	  props: {
-		  examples,
+      examples,
 		  entries,
-      schema,
       nodes,
-	  }
+      schema: s
+    }
 	};
 }

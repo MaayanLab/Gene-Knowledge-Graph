@@ -1,7 +1,8 @@
 import neo4j from "neo4j-driver"
 import { neo4jDriver } from "../../../utils/neo4j"
 import Color from 'color'
-import { fetch_schema } from "../../../utils/initialize"
+import { fetch_kg_schema } from "../../../utils/initialize"
+import * as default_schema from "../../../public/schema.json"
 
 let schema = null
 let color_map = null
@@ -112,6 +113,8 @@ const resolve_results = ({results, start_term, end_term, term, schema, order, sc
 					kind: "Relation",
 					label: relation_type,
 					properties: {
+						id: `${start_node.properties.label}_${relation_type}_${end_node.properties.label}`,
+						label: relation_type,
 						source_label: start_node.properties.label,
 						target_label: end_node.properties.label,
 						...relation.properties,
@@ -203,7 +206,7 @@ const resolve_one_term = async ({session, start, term, limit, order, schema}) =>
 		}
 	})
 	let query = `${ordering.join("\n")}
-		MATCH p=(st:${start} { label: $term })-[*2]-(en)
+		MATCH p=(st:${start} { label: $term })-[rel]-(en)
 		WITH nodes(p) as n, relationships(p) as r, ${score_fields.join(", ")}`
 	
 	if (order) {
@@ -231,7 +234,12 @@ const resolve_one_term = async ({session, start, term, limit, order, schema}) =>
 
 export default async function query(req, res) {
   const { start, start_term, end, end_term, limit=25, order } = await req.query
-  if (!schema) schema = await fetch_schema()
+  if (!schema) {
+	schema = default_schema
+	if (process.env.NEXT_PUBLIC_SCHEMA) {
+	  schema = await fetch_kg_schema()
+	}
+  }
   get_color_map({node: start})
   if (color_map[start] === undefined) res.status(400).send("Invalid start node")
   else if (end && color_map[end] === undefined) res.status(400).send("Invalid end node")

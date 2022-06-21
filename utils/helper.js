@@ -9,14 +9,14 @@ export const precise = (value) => {
 	}
   }
 
-export function makeTemplate(
+  export function makeTemplate(
     templateString,
     templateVariables
 ) {
   const keys = [...Object.keys(templateVariables).map((key) => key.replace(/ /g, '_')), 'PREFIX']
   const values = [...Object.values(templateVariables), process.env.NEXT_PUBLIC_PREFIX]
-  const templateFunction = new Function(...keys, `return \`${templateString}\`;`)
   try {
+    const templateFunction = new Function(...keys, `return \`${templateString}\`;`)
     return templateFunction(...values)
   } catch (error) {
     return 'undefined'

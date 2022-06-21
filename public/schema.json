@@ -16,7 +16,7 @@
 			"node_color": "#aed581"
 		}
 	],
-	"order": {
+	"color": {
 		"Confidence_Values": {
 			"on": "edge",
 			"field": ["Confidence_Values", "DESC"]

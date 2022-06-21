@@ -1,8 +1,9 @@
 import neo4j from "neo4j-driver"
 import { neo4jDriver } from "./neo4j"
 import fetch from 'isomorphic-unfetch'
+import * as default_schema from '../public/schema.json'
 
-export default async function get_terms(node) {
+export async function get_terms(node) {
   try {
 	console.log(`Connecting to ${process.env.NEO4J_URL}`)
     const session = neo4jDriver.session({
@@ -48,10 +49,17 @@ export default async function get_terms(node) {
   }
 }
 
-export const fetch_schema = async () => {
+export const fetch_kg_schema = async () => {
 	const r = await fetch(process.env.NEXT_PUBLIC_SCHEMA)
 	if (!r.ok) {
 		throw new Error(`Error communicating with ${process.env.NEXT_PUBLIC_SCHEMA}`)
 	}
 	return await r.json()
+  }
+export const fetch_schema = async () => {
+	let schema = default_schema
+	if (process.env.NEXT_PUBLIC_SCHEMA) {
+		schema = await fetch_kg_schema()
+	}
+	return schema
 }

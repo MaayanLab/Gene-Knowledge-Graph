@@ -1,10 +1,13 @@
 import dynamic from "next/dynamic";
 import Image from 'next/image'
 import { makeTemplate } from "../utils/helper";
+import * as default_schema from '../public/schema.json'
+
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
 
 const Header = ({schema, ...rest}) => {
+	if (!schema) schema = default_schema
 	if (schema === undefined || schema.header === undefined) return null
 	return(
 	<Grid container justifyContent={"center"} alignItems={"center"} spacing={2} style={{marginBottom: 20}}>
