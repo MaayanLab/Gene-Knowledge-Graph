@@ -1,6 +1,7 @@
 from rdflib import  Graph, RDF, RDFS
 import sys
 import json
+import glob
 
 def get_id(value):
     for prefix, val in rdfgraph.namespaces():

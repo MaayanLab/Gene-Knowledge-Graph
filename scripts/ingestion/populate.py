@@ -15,9 +15,11 @@ class GraphEx:
   '''
   chunk_size = 2000
 
-  def __init__(self, *args, **kwargs):
+  def __init__(self, *args, clean=False, **kwargs):
     self.graph = Graph(*args, **kwargs)
-    self.graph.delete_all()
+    if (clean):
+      print("Clean install")
+      self.graph.delete_all()
     self.n = 0
     self.tx = None
 
@@ -53,33 +55,40 @@ class GraphEx:
     return self.graph.run(parameters=parameters, **kwparameters)
 
 
-neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']))
 
 
-# python populate.py /path/to/files/to/ingest
-directory = sys.argv[1]
+# python populate.py clean (optional) /path/to/files/to/ingest
+vals = sys.argv[1:]
+clean = False
+if vals[0] == "clean":
+  clean = True
+  directories = vals[1:]
+  neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']), clean=True)
+else:
+  directories = vals
+  neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']), clean=False)
+for directory in directories:
+  for filename in glob.glob(directory + "/*.valid.json"):
+    with open(filename) as o:
+      print("Ingesting %s"%filename)
+      serialized = json.loads(o.read())
+      for i in tqdm(serialized["edges"]):
+        source = i["source"]
+        node_a_props = serialized["nodes"][source]
+        node_a_properties = node_a_props.get("properties", {})
+        node_a_type = node_a_props["type"]
+        node_a = Node(node_a_type, **node_a_properties)
+        neo4graph.merge(node_a)
 
-for filename in glob.glob(directory + "/*.valid.json"):
-  with open(filename) as o:
-    print("Ingesting %s"%filename)
-    serialized = json.loads(o.read())
-    for i in tqdm(serialized["edges"]):
-      source = i["source"]
-      node_a_props = serialized["nodes"][source]
-      node_a_properties = node_a_props.get("properties", {})
-      node_a_type = node_a_props["type"]
-      node_a = Node(node_a_type, **node_a_properties)
-      neo4graph.merge(node_a)
+        target = i["target"]
+        node_b_props = serialized["nodes"][target]
+        node_b_properties = node_b_props.get("properties", {})
+        node_b_type = node_b_props["type"]
+        node_b = Node(node_b_type, **node_b_properties)
+        neo4graph.merge(node_b)
 
-      target = i["target"]
-      node_b_props = serialized["nodes"][target]
-      node_b_properties = node_b_props.get("properties", {})
-      node_b_type = node_b_props["type"]
-      node_b = Node(node_b_type, **node_b_properties)
-      neo4graph.merge(node_b)
-
-      relation = i["relation"]
-      relation_properties_dict = i.get("properties", {})
-      neo4graph.merge(Relationship(node_a, relation, node_b, **relation_properties_dict))
+        relation = i["relation"]
+        relation_properties_dict = i.get("properties", {})
+        neo4graph.merge(Relationship(node_a, relation, node_b, **relation_properties_dict))
 
 neo4graph.commit()

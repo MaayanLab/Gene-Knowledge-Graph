@@ -9,7 +9,8 @@ type_mapper = {
     "number": float,
     "string": str,
     "object": dict,
-    "array": list
+    "array": list,
+    "bool": bool
 }
 
 def validation(entry):
