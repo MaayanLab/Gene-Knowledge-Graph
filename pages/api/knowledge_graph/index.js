@@ -180,6 +180,9 @@ const resolve_two_terms = async ({session, start_term, start, end_term, end, lim
 	} else {
 		query = ` ${query} 
 			WITH a, b, nodes(p) as n, relationships(p) as r
+		`
+		if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
+		query = ` ${query} 
 			RETURN *
 			LIMIT ${limit}
 		`
@@ -208,8 +211,11 @@ const resolve_one_term = async ({session, start, term, limit, order, schema}) =>
 	})
 	let query = `${ordering.join("\n")}
 		MATCH p=(st:${start} { label: $term })-[rel]-(en)
-		WITH nodes(p) as n, relationships(p) as r, ${score_fields.join(", ")}`
+		WITH nodes(p) as n, relationships(p) as r`
 	
+	
+	if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
+
 	if (order) {
 		const {on, field} = schema.color[order]
 		if (on === "edge") {
