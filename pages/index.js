@@ -157,7 +157,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
                   <Autocomplete
                     id="my-input" aria-describedby="gene" 
                     freeSolo
-                    options={Object.keys(entries[start])}
+                    options={Object.keys(entries[start] || {})}
                     value={startTermInput}
                     onChange={(evt, value) => {
                       if (value === null) value = ''
@@ -223,7 +223,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
                   <Autocomplete
                     id="my-input" aria-describedby="gene"
                     freeSolo 
-                    options={Object.keys(allEndTerms)}
+                    options={Object.keys(allEndTerms || {})}
                     placeholder="Optional"
                     value={endTermInput}
                     onChange={(evt, value) => {

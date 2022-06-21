@@ -14,7 +14,7 @@ const get_color_map = ({node, darken}) => {
 		}), {})
 		color_map = c
 	}
-	
+
 	if (darken) return color_map[node].darken((darken)*0.65).hex()
 	else return color_map[node].hex()
 }
