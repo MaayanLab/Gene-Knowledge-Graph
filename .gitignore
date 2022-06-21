@@ -34,3 +34,5 @@ yarn-error.log*
 .env
 
 data
+
+public/schema.json

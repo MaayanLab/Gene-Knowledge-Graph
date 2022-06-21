@@ -1,0 +1,111 @@
+{
+	"nodes": [
+		{
+			"node": "Gene",
+			"example": {
+				"href": {
+					"pathname": "/",
+					"query": {
+						"start": "Gene",
+						"start_term": "GCC2"
+					}
+				}
+			},
+			"palette": {
+				"name": "greens",
+				"main": "#aed581",
+				"contrastText": "#000"
+			}
+		},
+		{
+			"node": "Drug",
+			"example": {
+				"href": {
+					"pathname": "/",
+					"query": {
+						"start": "Drug",
+						"start_term": "Esmolol"
+					}
+				}
+			},
+			"palette": {
+				"name": "oranges",
+				"main": "#ffb74d",
+				"contrastText": "#000"
+			}
+		}
+	],
+	"color": {
+	},
+	"tooltip": {
+		"Gene": [
+			{
+				"label": "Gene ID",
+				"text": "${id}"
+			},
+			{
+				"label": "Aliases",
+				"text": "${Aliases.split('|').join(', ')}"
+			},
+			{
+				"label": "Alternative IDs",
+				"text": "${Alt_IDs.split('|').join(', ')}"
+			}
+		],
+		"Relation": [
+			{
+				"label": "Gene ID",
+				"text": "${id}"
+			},
+			{
+				"label": "Source Label",
+				"text": "${source_label}"
+			},
+			{
+				"label": "Target Label",
+				"text": "${target_label}"
+			},
+			{
+				"label": "Source Database",
+				"text": "${Source_Database}"
+			},
+			{
+				"label": "Interaction Detection Method",
+				"text": "${Interaction_Detection_Method}"
+			},
+			{
+				"label": "Publication First Author",
+				"text": "${Publication_1st_Author}"
+			},
+			{
+				"label": "Pubmed",
+				"text": "${Publication_Identifiers}"
+			},
+			{
+				"label": "Alternative IDs",
+				"text": "${Alt_IDs.split('|').join(',')}"
+			},
+			{
+				"label": "Confidence Value",
+				"text": "${Confidence_Values}"
+			}
+		]
+	},
+	"header": {
+		"title": "Gene-centric Knowledge Graph",
+		"subheader": [
+			{
+				"label": "BioGRID",
+				"icon": "${PREFIX}/static/resources/biogrid.jpg"
+			},
+			{
+				"label": "ARCHS4",
+				"icon": "${PREFIX}/static/resources/archs.png"
+			},
+			{
+				"label": "LINCS",
+				"icon": "${PREFIX}/static/resources/lincslogo.svg"
+			}
+		]
+	}
+}

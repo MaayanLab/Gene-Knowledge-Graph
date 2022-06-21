@@ -179,7 +179,7 @@ const resolve_two_terms = async ({session, start_term, start, end_term, end, lim
 		}
 	} else {
 		query = ` ${query} 
-			WITH a, b, nodes(p) as n, relationships(p) as r, ${score_fields.join(", ")}
+			WITH a, b, nodes(p) as n, relationships(p) as r
 			RETURN *
 			LIMIT ${limit}
 		`
