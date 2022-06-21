@@ -7,6 +7,7 @@ import { fetch_kg_schema, get_terms } from '../utils/initialize';
 import { precise, makeTemplate } from '../utils/helper';
 import fileDownload from 'js-file-download'
 import * as default_schema from '../public/schema.json'
+import Color from 'color'
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Box = dynamic(() => import('@mui/material/Box'));
@@ -64,7 +65,7 @@ const default_examples = {
 
 const TooltipCard = ({node, schema}) => {
   const elements = []
-  for (const i of schema.tooltip[node.kind]) {
+  for (const i of schema.tooltip[node.kind] || []) {
     const e = makeTemplate(i.text, node.properties)
     if (e !== 'undefined') {
       elements.push(
@@ -129,7 +130,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
 		setAllEndTerms(entries[end])
 	}
   }, [end])
-
+  console.log(examples)
   return (
     <Grid container justifyContent="space-around">
       <Grid item xs={3}>
@@ -273,7 +274,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
                       href={href}
                       shallow
                     >
-                      <Button variant="outlined" color={palette}><Typography variant="caption">{href.query.start_term}</Typography></Button>
+                      <Button variant="outlined" color={palette.name}><Typography variant="caption">{href.query.start_term}</Typography></Button>
                     </Link> 
                   </Grid>
                 )
@@ -622,6 +623,7 @@ function KnowledgeGraphViz(props) {
 export async function getStaticProps(ctx) {
   const examples = {}
 	const entries = {}
+  const palettes = {}
   const nodes = []
   let schema = default_schema
   let s = null
@@ -629,20 +631,27 @@ export async function getStaticProps(ctx) {
     schema = await fetch_kg_schema()
     s = schema
   }
-  console.log(schema)
 	for (const i of schema.nodes) {
-		const {node, example} = i
+		const {node, example, palette} = i
 		const results = await get_terms(node)
     entries[node] = results
-		examples[node] = example
+		examples[node] = {...example, palette}
     nodes.push(node)
+    const {name, main, light, dark, contrastText} = palette
+    palettes[name] = {
+      main,
+      light: light || Color(main).lighten(0.25).hex(),
+      dark: dark || Color(main).darken(0.25).hex(),
+      contrastText: contrastText || "#000"
+    }
 	}
 	return {
 	  props: {
       examples,
 		  entries,
       nodes,
-      schema: s
+      schema: s,
+      palettes
     }
 	};
 }

@@ -2,7 +2,6 @@
 	"nodes": [
 		{
 			"node": "Gene",
-			"route": "/genes",
 			"example": {
 				"href": {
 					"pathname": "/",
@@ -10,10 +9,30 @@
 						"start": "Gene",
 						"start_term": "GCC2"
 					}
-				}, 
-				"palette": "greens"
+				}
 			},
-			"node_color": "#aed581"
+			"palette": {
+				"name": "greens",
+				"main": "#aed581",
+				"contrastText": "#000"
+			}
+		},
+		{
+			"node": "Drug",
+			"example": {
+				"href": {
+					"pathname": "/",
+					"query": {
+						"start": "Drug",
+						"start_term": "Esmolol"
+					}
+				}
+			},
+			"palette": {
+				"name": "oranges",
+				"main": "#ffb74d",
+				"contrastText": "#000"
+			}
 		}
 	],
 	"color": {

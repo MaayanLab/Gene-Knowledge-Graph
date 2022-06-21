@@ -4,7 +4,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const Container = dynamic(() => import('@mui/material/Container'));
 const Header = dynamic(() => import('../components/header'));
 
-const theme = createTheme({
+const theme_object = {
   palette: {
     default: {
       main: "#e0e0e0",
@@ -55,11 +55,14 @@ const theme = createTheme({
       textTransform: "none"
     }
   }
-});
+};
 
 
 
 function MyApp({ Component, pageProps }) {
+  const palettes = pageProps.palettes
+  theme_object.palette = {...theme_object.palette, ...palettes}
+  const theme = createTheme(theme_object)
   return (
       <ThemeProvider theme={theme}>
         <Container style={{marginTop: 20}}>

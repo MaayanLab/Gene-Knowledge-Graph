@@ -10,10 +10,11 @@ const get_color_map = ({node, darken}) => {
 	if (!color_map) {
 		const c = schema.nodes.reduce((acc, it)=>({
 			...acc,
-			[it.node]: Color(it.node_color)
+			[it.node]: Color(it.palette.main)
 		}), {})
 		color_map = c
 	}
+	
 	if (darken) return color_map[node].darken((darken)*0.65).hex()
 	else return color_map[node].hex()
 }
