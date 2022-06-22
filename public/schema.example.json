@@ -36,58 +36,111 @@
 		}
 	],
 	"color": {
+		"Confidence_Values": {
+			"on": "edge",
+			"field": ["Confidence_Values", "DESC"]
+		}
 	},
 	"tooltip": {
 		"Gene": [
 			{
 				"label": "Gene ID",
-				"text": "${id}"
+				"text": "${id}",
+				"type": "link",
+				"href": "https://www.ncbi.nlm.nih.gov/gene/${id}"
 			},
 			{
 				"label": "Aliases",
-				"text": "${Aliases.split('|').join(', ')}"
+				"text": "${Aliases.split('|').join(', ')}",
+				"type": "text"
 			},
 			{
 				"label": "Alternative IDs",
-				"text": "${Alt_IDs.split('|').join(', ')}"
+				"text": "${Alt_IDs.split('|').join(', ')}",
+				"type": "text"
+			},
+			{
+				"label": "ARCHS4",
+				"text": "${label}",
+				"type": "link",
+				"href": "https://maayanlab.cloud/archs4/gene/${label}"
+			},
+			{
+				"label": "GDLPA",
+				"text": "${label}",
+				"type": "link",
+				"href": "https://cfde-gene-pages.cloud/gene/${label}?CF=false&PS=true&Ag=true"
+			}
+		],
+		"Drug": [
+			{
+				"label": "Drug ID",
+				"text": "${id}",
+				"type": "link",
+				"href": "https://pubchem.ncbi.nlm.nih.gov/compound/${id.replace('CID:', '')}"
+			},
+			{
+				"label": "GDLPA",
+				"text": "${label}",
+				"type": "link",
+				"href": "https://cfde-gene-pages.cloud/drug/${label}?CF=false&PS=true"
 			}
 		],
 		"Relation": [
 			{
-				"label": "Gene ID",
-				"text": "${id}"
+				"label": "ID",
+				"text": "${id}",
+				"type": "text"
 			},
 			{
 				"label": "Source Label",
-				"text": "${source_label}"
+				"text": "${source_label}",
+				"type": "text"
 			},
 			{
 				"label": "Target Label",
-				"text": "${target_label}"
+				"text": "${target_label}",
+				"type": "text"
 			},
 			{
 				"label": "Source Database",
-				"text": "${Source_Database}"
+				"text": "${Source_Database}",
+				"type": "text"
 			},
 			{
 				"label": "Interaction Detection Method",
-				"text": "${Interaction_Detection_Method}"
+				"text": "${Interaction_Detection_Method}",
+				"type": "text"
 			},
 			{
 				"label": "Publication First Author",
-				"text": "${Publication_1st_Author}"
+				"text": "${Publication_1st_Author}",
+				"type": "text"
 			},
 			{
 				"label": "Pubmed",
-				"text": "${Publication_Identifiers}"
+				"text": "${Publication_Identifiers}",
+				"type": "text"
 			},
 			{
 				"label": "Alternative IDs",
-				"text": "${Alt_IDs.split('|').join(',')}"
+				"text": "${Alt_IDs.split('|').join(',')}",
+				"type": "text"
 			},
 			{
 				"label": "Confidence Value",
-				"text": "${Confidence_Values}"
+				"text": "${Confidence_Values}",
+				"type": "text"
+			},
+			{
+				"label": "Correlation Coefficient",
+				"text": "${correlation_coefficient}",
+				"type": "number"
+			},
+			{
+				"label": "Mean CD Coefficient",
+				"text": "${mean_CD_coefficient}",
+				"type": "number"
 			}
 		]
 	},
@@ -95,16 +148,32 @@
 		"title": "Gene-centric Knowledge Graph",
 		"subheader": [
 			{
-				"label": "BioGRID",
-				"icon": "${PREFIX}/static/resources/biogrid.jpg"
-			},
-			{
-				"label": "ARCHS4",
-				"icon": "${PREFIX}/static/resources/archs.png"
-			},
-			{
 				"label": "LINCS",
-				"icon": "${PREFIX}/static/resources/lincslogo.svg"
+				"icon": "${PREFIX}/static/resources/lincs.gif"
+			},
+			{
+				"label": "Metabolomics Workbench",
+				"icon": "${PREFIX}/static/resources/metabolomics.png"
+			},
+			{
+				"label": "GlyGen",
+				"icon": "${PREFIX}/static/resources/glygen.png"
+			},
+			{
+				"label": "GTEx",
+				"icon": "${PREFIX}/static/resources/gtex.png"
+			},
+			{
+				"label": "IDG",
+				"icon": "${PREFIX}/static/resources/idg.png"
+			},
+			{
+				"label": "HuBMAP",
+				"icon": "${PREFIX}/static/resources/hubmap.png"
+			},
+			{
+				"label": "ERCC",
+				"icon": "${PREFIX}/static/resources/exrna.png"
 			}
 		]
 	}
