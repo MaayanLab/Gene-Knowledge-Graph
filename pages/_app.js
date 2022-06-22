@@ -1,6 +1,9 @@
 import '../styles/globals.css'
 import dynamic from 'next/dynamic';
+import Head from 'next/head'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import * as default_schema from '../public/schema.json'
+
 const Container = dynamic(() => import('@mui/material/Container'));
 const Header = dynamic(() => import('../components/header'));
 
@@ -63,8 +66,17 @@ function MyApp({ Component, pageProps }) {
   const palettes = pageProps.palettes
   theme_object.palette = {...theme_object.palette, ...palettes}
   const theme = createTheme(theme_object)
+  console.log(pageProps)
   return (
       <ThemeProvider theme={theme}>
+        <Head>
+          <meta charSet="utf-8" />
+          <title>{((pageProps.schemas || default_schema).header || {}).title}</title>
+          <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+          <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css" rel="stylesheet" />
+          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+          <script async defer src="https://buttons.github.io/buttons.js"></script>
+        </Head>
         <Container style={{marginTop: 20}}>
           <Header {...pageProps}/>
           <Component 
