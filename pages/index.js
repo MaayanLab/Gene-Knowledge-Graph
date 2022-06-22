@@ -63,16 +63,33 @@ const default_examples = {
   } 
 }
 
-const TooltipCard = ({node, schema}) => {
+const TooltipCard = ({node, schema, setFocused, router}) => {
   const elements = []
   for (const i of schema.tooltip[node.kind] || []) {
-    const e = makeTemplate(i.text, node.properties)
-    if (e !== 'undefined') {
-      elements.push(
-        <Typography key={i.label} variant="subtitle2">
-          <b>{i.label}</b> {i.type === "string" ? e: precise(e)}
-        </Typography>  
-      )
+    if (i.type === "link") {
+      const text = makeTemplate(i.text, node.properties)
+      const href = makeTemplate(i.href, node.properties)
+      if (text !== 'undefined') {
+        elements.push(
+          <Typography key={i.label} variant="subtitle2">
+            <b>{i.label}</b> <Button size='small' 
+                style={{padding: 0}} 
+                href={href}
+								target="_blank"
+								rel="noopener noreferrer"
+            >{text}</Button>
+          </Typography>  
+        )
+      }
+    } else {
+      const e = makeTemplate(i.text, node.properties)
+      if (e !== 'undefined') {
+        elements.push(
+          <Typography key={i.label} variant="subtitle2">
+            <b>{i.label}</b> {i.type === "text" ? e: precise(e)}
+          </Typography>  
+        )
+      }
     }
   }
   return(
@@ -82,6 +99,19 @@ const TooltipCard = ({node, schema}) => {
           <b>{node.label}</b>
         </Typography>
         {elements}
+        {node.kind !== "Relation" && <Button
+          variant="outlined"
+          onClick={()=>{
+            setFocused(null)
+            router.push({
+              pathname: schema.endpoint,
+              query: {
+                start: node.kind,
+                start_term: node.label
+              }
+            }, undefined, { shallow: true })
+          }}
+        >Expand</Button>}
       </CardContent>
     </Card>
   )
@@ -101,6 +131,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
   const [endTermInput, setEndTermInput] = React.useState(end_term || '')
   const [node, setNode] = React.useState(null)
   const [data, setData] = React.useState(null)
+  const [focused, setFocused] = React.useState(null)
   const tableref = useRef(null);
   const redirect = (query) => {
     router.push({
@@ -111,10 +142,12 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
 
   React.useEffect(() => {
     setStartTermInput(start_term || '')
+    setFocused(null)
   }, [start_term])
 
   React.useEffect(() => {
     setEndTermInput(end_term || '')
+    setFocused(null)
   }, [end_term])
 
   React.useEffect(()=>{
@@ -134,7 +167,6 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
 		setAllEndTerms(entries[end])
 	}
   }, [end])
-  console.log(examples)
   return (
     <Grid container justifyContent="space-around">
       <Grid item xs={3}>
@@ -293,7 +325,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
             </Grid>
           }
           <Grid item xs={12} style={{minHeight: 300}}>
-            {node && <TooltipCard node={node} schema={schema}/>}
+            {(focused || node) && <TooltipCard node={focused || node} schema={schema} setFocused={setFocused} router={router}/>}
           </Grid>
         </Grid>
       </Grid>
@@ -304,13 +336,21 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
             start={start}
             end_term={end_term}
             end={end}
-            setNode={setNode}
+            setNode={({node, type="node"})=> {
+              if (focused === null && type === "node") {
+                setNode(node)
+              } else if (type === "focused") {
+                setNode(null)
+                setFocused(node)
+              }
+            }}
             node={node}
             limit={limit}
             setData={setData}
 			      examples={examples}
             schema={schema}
             order={order}
+            focused={focused}
           />
         }
       </Grid>
@@ -324,7 +364,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
 }
 
 function KnowledgeGraphViz(props) {
-  const {start_term, start, end_term, end, limit, setNode, node, setData, examples, schema, order} = props
+  const {start_term, start, end_term, end, limit, setNode, node, setData, examples, schema, focused} = props
   const router = useRouter()
   const [id, setId] = React.useState(0)
   const [elements, setElements] = React.useState(undefined)
@@ -371,7 +411,6 @@ function KnowledgeGraphViz(props) {
   }
 
   useAsyncEffect(async (isActive) => {
-    console.log(start_term)
     if (!start_term) {
       if (elements === undefined) {
         router.push({
@@ -541,7 +580,29 @@ function KnowledgeGraphViz(props) {
                   }
                 },
                 {
+                  selector: 'node.focused',
+                  style: {
+                      'border-color': 'gray',
+                      'border-width': '2px',
+                      'font-weight': 'bold',
+                      'font-size': '18px',
+                      'width': `mapData(node_type, 0, 1, 90, 170)`,
+                      'height': `mapData(node_type, 0, 1, 90, 170)`,
+                  }
+                },
+                {
+                  selector: 'edge.focusedColored',
+                  style: {
+                      'line-color': '#F8333C',
+                      'width': '6'
+                  }
+                },
+                {
                   selector: 'node.semitransp',
+                  style:{ 'opacity': '0.5' }
+                },
+                {
+                  selector: 'node.focusedSemitransp',
                   style:{ 'opacity': '0.5' }
                 },
                 {
@@ -555,6 +616,10 @@ function KnowledgeGraphViz(props) {
                   selector: 'edge.semitransp',
                   style:{ 'opacity': '0.5' }
                 },
+                {
+                  selector: 'edge.focusedSemitransp',
+                  style:{ 'opacity': '0.5' }
+                }
               ]}
               elements={elements}
               layout={layouts[layout]}
@@ -562,15 +627,26 @@ function KnowledgeGraphViz(props) {
                 cyref.current = cy
                 cy.on('click', 'node', function (evt) {
                 // setAnchorEl(null)
-                setNode(null)
                 const node = evt.target.data()
-                router.push({
-                  pathname: schema.endpoint,
-                  query: {
-                    start: node.kind,
-                    start_term: node.label
-                  }
-                }, undefined, { shallow: true })
+
+                if (focused && node.id === focused.id) {
+                  const sel = evt.target;
+                  cy.elements().removeClass('focusedSemitransp');
+                  sel.removeClass('focused').outgoers().removeClass('focusedColored')
+                  sel.incomers().removeClass('focusedColored')
+                  setNode({node: null, type: "focused"})
+                } else{
+                  const sel = evt.target;
+                  cy.elements().removeClass('focused');
+                  cy.elements().removeClass('focusedSemitransp');
+                  cy.elements().removeClass('focusedColored');
+                  cy.elements().not(sel).addClass('focusedSemitransp');
+                  sel.addClass('focused').outgoers().addClass('focusedColored')
+                  sel.incomers().addClass('focusedColored')
+                  sel.incomers().removeClass('focusedSemitransp')
+                  sel.outgoers().removeClass('focusedSemitransp')
+                  setNode({node, type: "focused"})
+                }
               })
 
               cy.nodes().on('mouseover', (evt) => {
@@ -583,7 +659,7 @@ function KnowledgeGraphViz(props) {
                 sel.outgoers().removeClass('semitransp')
                 if (n.id !== (node || {}).id) {
                   // setAnchorEl(evt.target.popperRef())
-                  setNode(n)
+                  setNode({node: n})
                 }
               });
 
@@ -593,7 +669,8 @@ function KnowledgeGraphViz(props) {
                 sel.removeClass('highlight').outgoers().removeClass('colored')
                 sel.incomers().removeClass('colored')
                 // setAnchorEl(null)
-                setNode(null)
+                setNode({node: null})
+              
               });
               cy.edges().on('mouseover', (evt) => {
                 const n = evt.target.data()
@@ -603,7 +680,7 @@ function KnowledgeGraphViz(props) {
                 sel.connectedNodes().removeClass('semitransp')
                 if (n.id !== (node || {}).id) {
                   // setAnchorEl(evt.target.popperRef())
-                  setNode(n)
+                  setNode({node: n})
                 }
               });
               cy.edges().on('mouseout', (evt) => {
@@ -611,7 +688,7 @@ function KnowledgeGraphViz(props) {
                 cy.elements().removeClass('semitransp');
                 sel.removeClass('colored').connectedNodes().removeClass('highlight')
                 // setAnchorEl(null)
-                setNode(null)
+                setNode({node: null})
               });
             }}
             />
