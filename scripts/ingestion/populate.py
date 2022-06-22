@@ -94,6 +94,3 @@ try:
   neo4graph.commit()
 except Exception as e:
   print(e)
-  print(node_a)
-  print(node_b)
-  print(i)
