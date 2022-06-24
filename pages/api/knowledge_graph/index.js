@@ -120,7 +120,8 @@ const resolve_results = ({results, start_term, end_term, term, schema, order, sc
 						target_label: end_node.properties.label,
 						...relation.properties,
 					},
-					...(get_edge_color({relation, schema, order, max_scores}))
+					...(get_edge_color({relation, schema, order, max_scores})),
+					directed: relation.properties.directed ? 'vee': 'none'
 				} 
 			})
 			path.push({ 

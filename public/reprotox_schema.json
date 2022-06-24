@@ -1,0 +1,118 @@
+{
+	"nodes": [
+		{
+			"node": "Gene",
+			"example": {
+				"href": {
+					"pathname": "/",
+					"query": {
+						"start": "Gene",
+						"start_term": "S100A8"
+					}
+				}, 
+				"palette": "greens"
+			},
+			"node_color": "#aed581"
+		},
+		{
+			"node": "Drug",
+			"example": {
+				"href": {
+					"pathname": "/",
+					"query": {
+						"start": "Drug",
+						"start_term": "Terconazole"
+					}
+				}, 
+				"palette": "oranges"
+			},
+			"node_color": "#ffb74d"
+		},
+		{
+			"node": "BirthDefect",
+			"example": {
+				"href": {
+					"pathname": "/",
+					"query": {
+						"start": "BirthDefect",
+						"start_term": "Anencephaly"
+					}
+				}, 
+				"palette": "pinks"
+			},
+			"node_color": "#f8bbd0"
+		}
+	],
+	"color": {
+		"mean_CD_Coefficient": {
+			"on": "edge",
+			"field": ["mean_CD_coefficient", "DESC"]
+		},
+		"Placenta Crossing Likelihood Score": {
+			"on": "node",
+			"field": ["placenta_score", "DESC"]
+		},
+		"pLI": {
+			"on": "node",
+			"field": ["pLI", "DESC"]
+		}
+	},
+	"tooltip": {
+		"Gene": [
+			{
+				"label": "Gene ID",
+				"text": "${id}"
+			},
+			{
+				"label": "pLI",
+				"text": "${pLI}"
+			},
+			{
+				"label": "Residual Variation Intolerance Score",
+				"text": "${Residual_Variation_Intolerance_Score}"
+			},
+			{
+				"label": "Residual Variation Intolerance Score Percentile",
+				"text": "${Residual_Variation_Intolerance_Score_Percentile}"
+			},
+			{
+				"label": "pHI",
+				"text": "${pHI}"
+			},
+			{
+				"label": "pTS",
+				"text": "${pTS}"
+			}
+		],
+		"Drug": [
+			{
+				"label": "Drug ID",
+				"text": "${id}"
+			},
+			{
+				"label": "Placenta Crossing Likelihood Score",
+				"text": "${placenta_score}"
+			},
+			{
+				"label": "Placenta Crossing Likelihood Rank",
+				"text": "${placenta_rank}"
+			}
+		],
+		"BirthDefect": [
+			{
+				"label": "ID",
+				"text": "${id}"
+			}
+		],
+		"Relation": [
+			{
+				"label": "Mean CD Coefficient",
+				"text": "${mean_CD_coefficient}"
+			}
+		]
+	},
+	"header": {
+		"title": "Reprotox Knowledge Graph",
+		"subheader": []
+	}
+}
