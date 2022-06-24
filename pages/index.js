@@ -556,7 +556,7 @@ function KnowledgeGraphViz(props) {
                 {
                   selector: 'edge',
                   style: {
-                    'curve-style': 'haystack',
+                    'curve-style': 'straight',
                     // 'opacity': '0.5',
                     'line-color': 'data(lineColor)',
                     'width': '4',
@@ -565,6 +565,10 @@ function KnowledgeGraphViz(props) {
                     "text-margin-x": "0px",
                     "text-margin-y": "0px",
                     'font-size': '12px',
+                    'target-arrow-shape': `data(directed)`,
+                    'target-endpoint': 'outside-to-node',
+                    'source-endpoint': 'outside-to-node',
+                    'target-arrow-color': 'data(lineColor)',
                     ...edgeStyle
                   }
                 },
@@ -609,6 +613,7 @@ function KnowledgeGraphViz(props) {
                   selector: 'edge.colored',
                   style: {
                       'line-color': '#F8333C',
+                      'target-arrow-color': '#F8333C',
                       'width': '6'
                   }
                 },
