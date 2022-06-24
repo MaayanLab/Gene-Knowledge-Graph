@@ -15,7 +15,37 @@
 				"name": "greens",
 				"main": "#aed581",
 				"contrastText": "#000"
-			}
+			},
+			"display": [
+				{
+					"label": "Gene ID",
+					"text": "${id}",
+					"type": "link",
+					"href": "https://www.ncbi.nlm.nih.gov/gene/${id}"
+				},
+				{
+					"label": "Aliases",
+					"text": "${Aliases.split('|').join(', ')}",
+					"type": "text"
+				},
+				{
+					"label": "Alternative IDs",
+					"text": "${Alt_IDs.split('|').join(', ')}",
+					"type": "text"
+				},
+				{
+					"label": "ARCHS4",
+					"text": "${label}",
+					"type": "link",
+					"href": "https://maayanlab.cloud/archs4/gene/${label}"
+				},
+				{
+					"label": "GDLPA",
+					"text": "${label}",
+					"type": "link",
+					"href": "https://cfde-gene-pages.cloud/gene/${label}?CF=false&PS=true&Ag=true"
+				}
+			]
 		},
 		{
 			"node": "Drug",
@@ -32,7 +62,207 @@
 				"name": "oranges",
 				"main": "#ffb74d",
 				"contrastText": "#000"
-			}
+			},
+			"display": [
+				{
+					"label": "Drug ID",
+					"text": "${id}",
+					"type": "link",
+					"href": "https://pubchem.ncbi.nlm.nih.gov/compound/${id.replace('CID:', '')}"
+				},
+				{
+					"label": "GDLPA",
+					"text": "${label}",
+					"type": "link",
+					"href": "https://cfde-gene-pages.cloud/drug/${label}?CF=false&PS=true"
+				}
+			]
+		}
+	],
+	"edges": [
+		{
+			"match": ["physical association", "direct interaction"],
+			"color": {
+				"field": ["Confidence_Values", "DESC"]
+			},
+			"display": [
+				{
+					"label": "ID",
+					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "Source Database",
+					"text": "${Source_Database}",
+					"type": "text"
+				},
+				{
+					"label": "Interaction Detection Method",
+					"text": "${Interaction_Detection_Method}",
+					"type": "text"
+				},
+				{
+					"label": "Pubmed",
+					"text": "${Publication_Identifiers}",
+					"type": "text"
+				},
+				{
+					"label": "Publication First Author",
+					"text": "${Publication_1st_Author}",
+					"type": "text"
+				},
+				{
+					"label": "Confidence Value",
+					"text": "${Confidence_Values}",
+					"type": "text"
+				}	
+			]
+		},
+		{
+			"match": ["negatively correlated (ARCHS4)"],
+			"color": {
+				"field": ["correlation_coefficient", "DESC"],
+				"hex": "#f9a825"
+			},
+			"display": [
+				{
+					"label": "ID",
+					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "Source Database",
+					"text": "${Source_Database}",
+					"type": "text"
+				},
+				{
+					"label": "Correlation Coefficient",
+					"text": "${correlation_coefficient}",
+					"type": "number"
+				}	
+			]
+		},
+		{
+			"match": ["positively correlated (ARCHS4)"],
+			"color": {
+				"field": ["correlation_coefficient", "DESC"],
+				"hex": "#0277bd"
+			},
+			"display": [
+				{
+					"label": "ID",
+					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "Source Database",
+					"text": "${Source_Database}",
+					"type": "text"
+				},
+				{
+					"label": "Correlation Coefficient",
+					"text": "${correlation_coefficient}",
+					"type": "number"
+				}	
+			]
+		},
+		{
+			"match": ["downregulates (LINCS)"],
+			"color": {
+				"field": ["correlation_coefficient", "DESC"],
+				"hex": "#f9a825"
+			},
+			"display": [
+				{
+					"label": "ID",
+					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "Source Database",
+					"text": "${Source_Database}",
+					"type": "text"
+				},
+				{
+					"label": "Correlation Coefficient",
+					"text": "${correlation_coefficient}",
+					"type": "number"
+				}	
+			]
+		},
+		{
+			"match": ["upregulates (LINCS)"],
+			"color": {
+				"field": ["correlation_coefficient", "DESC"],
+				"hex": "#0277bd"
+			},
+			"display": [
+				{
+					"label": "ID",
+					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "Source Database",
+					"text": "${Source_Database}",
+					"type": "text"
+				},
+				{
+					"label": "Correlation Coefficient",
+					"text": "${correlation_coefficient}",
+					"type": "number"
+				}	
+			]
 		}
 	],
 	"color": {
@@ -145,7 +375,7 @@
 		]
 	},
 	"header": {
-		"title": "Gene-centric Knowledge Graph",
+		"title": "Gene-Centric CFDE Knowledge Graph",
 		"subheader": [
 			{
 				"label": "LINCS",
