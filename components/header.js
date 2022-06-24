@@ -16,12 +16,12 @@ const Header = ({schema, ...rest}) => {
 		</Grid>
 		{((schema.header || {}).subheader||[]).map(({label, icon})=>(
 			<Grid item key={label} style={{marginLeft: 10, marginRight: 10}}>
-				<div style={{height: 50, minWidth: 50}}>
+				<div style={{height:100, minWidth: 100}}>
 					<Image
 						// loader={()=>`/birth-defect-drugs${val.icon}`} 
 						src={makeTemplate(icon, {})}
-						height={50}
-						width={50}
+						height={100}
+						width={100}
 						layout="responsive"
 						objectFit="contain"
 						alt={label}
