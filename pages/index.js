@@ -559,7 +559,7 @@ function KnowledgeGraphViz(props) {
                     'curve-style': 'straight',
                     // 'opacity': '0.5',
                     'line-color': 'data(lineColor)',
-                    'width': '4',
+                    'width': '3',
                     // 'label': 'data(label)',
                     "text-rotation": "autorotate",
                     "text-margin-x": "0px",

@@ -121,7 +121,7 @@ const resolve_results = ({results, start_term, end_term, term, schema, order, sc
 						...relation.properties,
 					},
 					...(get_edge_color({relation, schema, order, max_scores})),
-					directed: relation.properties.directed ? 'vee': 'none'
+					directed: relation.properties.directed ? 'triangle': 'none'
 				} 
 			})
 			path.push({ 
