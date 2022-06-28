@@ -6,6 +6,9 @@ import * as default_schema from "../../../public/schema.json"
 
 let schema = null
 let color_map = {}
+let aggr_scores = null
+let score_fields
+let colors
 const get_color = ({color, darken}) => {
 	if (!color_map[color]) color_map[color] = Color(color)
 
@@ -21,7 +24,7 @@ const get_node_color_and_type = ({node, terms, color=default_color, record, fiel
 	if (terms.indexOf(node.properties.label) > -1) {
 		return {color: highlight_color, node_type: 1}
 	} else if (node.properties[field] && aggr_field!==undefined) {
-		const aggr_score = record.get(aggr_field)
+		const aggr_score = aggr_scores[aggr_field]
 		return {
 			color: get_color({color, darken: 1-Math.abs(node.properties[field]/aggr_score)}),
 			node_type: 0
@@ -35,7 +38,7 @@ const get_node_color_and_type = ({node, terms, color=default_color, record, fiel
 
 const get_edge_color = ({relation, color, record, aggr_field, field}) => {
 	if (relation.properties[field] && aggr_field) {
-		const aggr_score = record.get(aggr_field)
+		const aggr_score = aggr_scores[aggr_field]
 		return {
 			lineColor: get_color({color, darken: Math.abs(relation.properties[field]/aggr_score)}),
 			node_type: 0
@@ -102,88 +105,96 @@ const resolve_results = ({results, start_term, end_term, term, colors}) => (
 	  })
 )
 
-const aggregates = (schema) => {
-	const score_fields = []	
-	const colors = {}
-	let edge_query = ""
-	const edge_aggr = []
-	for (const s of schema.edges) {
-		
-		for (const i of (s.match || [])) {
-			colors[i] = {
-				color: (s.palette || {}).main || default_edge_color,
+const aggregates = async ({session, schema}) => {
+	if (aggr_scores === null) {
+		score_fields = []	
+		colors = {}
+		let edge_query = ""
+		const edge_aggr = []
+		for (const s of schema.edges) {
+			
+			for (const i of (s.match || [])) {
+				colors[i] = {
+					color: (s.palette || {}).main || default_edge_color,
+				}
+			}
+			if (s.order) {
+				const [field, order] = s.order
+				const order_pref = order === "DESC" ? 'max': 'min'
+				// const q = `WITH ${score_fields.join(", ")}${score_fields.length > 0 ? ",": ""}
+				// 		${order_pref}(rel.${field}) as ${order_pref}_${field}`
+				edge_aggr.push(`${order_pref}(rel.${field}) as ${order_pref}_${field}`)
+				score_fields.push(`${order_pref}_${field}`)
+				for (const i of (s.match || [])) {
+					colors[i].aggr_field = `${order_pref}_${field}`
+					colors[i].field = field
+				}
 			}
 		}
-		if (s.order) {
-			const [field, order] = s.order
-			const order_pref = order === "DESC" ? 'max': 'min'
-			// const q = `WITH ${score_fields.join(", ")}${score_fields.length > 0 ? ",": ""}
-			// 		${order_pref}(rel.${field}) as ${order_pref}_${field}`
-			edge_aggr.push(`${order_pref}(rel.${field}) as ${order_pref}_${field}`)
-			score_fields.push(`${order_pref}_${field}`)
-			for (const i of (s.match || [])) {
+		if (edge_aggr.length > 0) {
+			edge_query = `MATCH (st)-[rel]-(en) WITH ${edge_aggr.join(", ")}`
+		}
+
+		let node_query = ""
+		const node_aggr = []
+		for (const s of schema.nodes) {
+			colors[s.node] = {
+				color: (s.palette || {}).main || default_edge_color,
+			}
+			if (s.order) {
+				const [field, order] = s.order
+				const order_pref = order === "DESC" ? 'max': 'min'
+				const q = `MATCH (st)
+						WITH ${score_fields.join(", ")}${score_fields.length > 0 ? ",": ""}
+						${order_pref}(st.${field}) as ${order_pref}_${field}`
+				node_aggr.push(`${order_pref}(rel.${field}) as ${order_pref}_${field}`)
+				score_fields.push(`${order_pref}_${field}`)
+						
 				colors[i].aggr_field = `${order_pref}_${field}`
 				colors[i].field = field
 			}
 		}
-	}
-	if (edge_aggr.length > 0) {
-		edge_query = `MATCH (st)-[rel]-(en) WITH ${edge_aggr.join(", ")}`
-	}
 
-	let node_query = ""
-	const node_aggr = []
-	for (const s of schema.nodes) {
-		colors[s.node] = {
-			color: (s.palette || {}).main || default_edge_color,
+		if (node_aggr.length > 0) {
+			node_query = `MATCH (st) WITH ${score_fields.join(", ")}${score_fields.length > 0 ? ",": ""} ${node_aggr.join(", ")}`
 		}
-		if (s.order) {
-			const [field, order] = s.order
-			const order_pref = order === "DESC" ? 'max': 'min'
-			const q = `MATCH (st)
-					WITH ${score_fields.join(", ")}${score_fields.length > 0 ? ",": ""}
-					${order_pref}(st.${field}) as ${order_pref}_${field}`
-			node_aggr.push(`${order_pref}(rel.${field}) as ${order_pref}_${field}`)
-			score_fields.push(`${order_pref}_${field}`)
-					
-			colors[i].aggr_field = `${order_pref}_${field}`
-			colors[i].field = field
-		}
-	}
-
-	if (node_aggr.length > 0) {
-		node_query = `MATCH (st) WITH ${score_fields.join(", ")}${score_fields.length > 0 ? ",": ""} ${node_aggr.join(", ")}`
-	}
-
-	return {
-		prefix: [node_query, edge_query].join("\t"),
-		score_fields,
-		colors
+		const query = `${[edge_query, node_query].join("\t")} RETURN *`
+		const results = await session.readTransaction(txc => txc.run(query))
+		aggr_scores = {}
+		results.records.flatMap(record => {
+			for (const i of score_fields) {
+				const score = record.get(i)
+				aggr_scores[i] = score
+			}
+		})
+	} else {
+		console.log("Aggregate score is already cached!")
 	}
 }
 
 const resolve_two_terms = async ({session, start_term, start, end_term, end, limit, order, schema}) => {
-	const {prefix, colors, score_fields} = aggregates(schema)
-	let query = `${prefix}
-		MATCH p=(a: ${start} {label: $start_term})-[*1..4]-(b: ${end} {label: $end_term})
-		WITH nodes(p) as n, relationships(p) as r`
+	await aggregates({session, schema})
+	let query = `MATCH p=(a: ${start} {label: $start_term})-[*1..4]-(b: ${end} {label: $end_term})
+		WITH nodes(p) as n, relationships(p) as r
+		RETURN * ORDER BY rand() LIMIT ${limit}`
 
 	
-	if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
-	query = `${query} RETURN * ORDER BY rand() LIMIT ${limit}`
+	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
+	// query = `${query} RETURN * ORDER BY rand() LIMIT ${limit}`
 	const results = await session.readTransaction(txc => txc.run(query, { start_term, end_term }))
 	return resolve_results({results, start_term, end_term, schema, order, score_fields, colors})
 }
 
 const resolve_one_term = async ({session, start, term, limit, order, schema}) => {
-	const {prefix, colors, score_fields} = aggregates(schema)
-	let query = `${prefix}
+	await aggregates({session, schema})
+	let query = `
 		MATCH p=(st:${start} { label: $term })-[rel]-(en)
-		WITH nodes(p) as n, relationships(p) as r`
+		WITH nodes(p) as n, relationships(p) as r
+		RETURN * ORDER BY rand() LIMIT ${limit}
+		`
 	
-	if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
+	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 
-	query = `${query} RETURN * ORDER BY rand() LIMIT ${limit}`
 	const results = await session.readTransaction(txc => txc.run(query, { term }))
 	return resolve_results({results, term, schema, order, score_fields, colors})
 }
