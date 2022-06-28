@@ -223,12 +223,12 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
   }, [end])
   return (
     <Grid container justifyContent="space-around">
-      <Grid item xs={3}>
+      <Grid item md={3} xs={12} style={{minHeight: 600}}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Grid container justifyContent="flex-start" alignItems="center" spacing={1}>
               <Grid item xs={12}>
-                <Typography variant="subtitle2">Start with</Typography>
+                <Typography variant="body1">Start with</Typography>
                 <Selector entries={entries} value={start} prefix={"Start"} onChange={(e)=>redirect({start: e})}/>
               </Grid>
               <Grid item xs={12}>
@@ -283,8 +283,11 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
                 </FormControl> 
               </Grid>
               <Grid item xs={12}>
-                <Typography variant="subtitle2">End with</Typography>
-                <Selector entries={entries} value={start} prefix={"End"} onChange={(e)=>redirect({start, start_term, end: e, limit})}/>
+                <Typography variant="body1">End with</Typography>
+                <Selector entries={entries} value={end} prefix={"End"} onChange={(e)=>{
+                  console.log(e)
+                  redirect({start, start_term, end: e, limit})
+                }}/>
               </Grid>
               <Grid item xs={12}>
                 <FormControl>
@@ -358,7 +361,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
           }
         </Grid>
       </Grid>
-      <Grid item xs={7}>
+      <Grid item md={7} xs={12}>
         {(start && nodes.indexOf(start) > -1) && 
           <KnowledgeGraphViz 
             start_term={start_term}
@@ -383,7 +386,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
           />
         }
       </Grid>
-      <Grid item xs={2}>
+      <Grid item md={2} xs={12}>
         {(focused || node) && <TooltipCard node={focused || node} tooltip_templates={tooltip_templates} setFocused={setFocused} router={router}/>}
       </Grid>
       <Grid item xs={12}>
@@ -414,6 +417,7 @@ function KnowledgeGraphViz(props) {
   
   const resolve_elements = async (isActive) => {
     try {
+      setElements(undefined)
       const controller = get_controller()
       const body = {
         start,
@@ -471,7 +475,7 @@ function KnowledgeGraphViz(props) {
   }, [limit])
   return (
     <Box>
-      {elements === undefined ? (
+      {(elements === undefined) ? (
         <div>Loading...</div>
       ) : elements.length === 0 ? (
         <div>No results</div>
