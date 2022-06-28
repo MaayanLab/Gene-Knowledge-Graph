@@ -1,8 +1,11 @@
 #!/bin/sh
 
-cd scripts/ingestion
-python validation.py data
-python populate.py clean data
-
-cd ../..
+if [ $INGEST ]
+then
+	cd scripts/ingestion
+	python populate.py $CLEAN data
+	cd ../..
+else
+   echo "skipping ingestion..."
+fi
 node server.js
