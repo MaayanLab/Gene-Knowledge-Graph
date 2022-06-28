@@ -63,9 +63,10 @@ const default_examples = {
   } 
 }
 
-const TooltipCard = ({node, schema, setFocused, router}) => {
+const TooltipCard = ({node, tooltip_templates, setFocused, router}) => {
   const elements = []
-  for (const i of schema.tooltip[node.kind] || []) {
+  const field = node.kind === "Relation" ? node.label : node.kind
+  for (const i of tooltip_templates[field] || []) {
     if (i.type === "link") {
       const text = makeTemplate(i.text, node.properties)
       const href = makeTemplate(i.href, node.properties)
@@ -117,6 +118,47 @@ const TooltipCard = ({node, schema, setFocused, router}) => {
   )
 }
 
+const Selector = ({entries, value, onChange, prefix}) => {
+  if (Object.keys(entries).length === 1) return null
+  else if (Object.keys(entries).length < 4) {
+    return (
+      <ToggleButtonGroup
+        value={value}
+        exclusive
+        /*  */
+        onChange={(e,n)=>onChange(n)}
+        aria-label={`${prefix}selector`}
+      >
+        {Object.keys(entries).map(k=>(
+          <ToggleButton value={k} aria-label="left aligned" key={`${prefix}-${k}`}>
+            <Typography variant="caption" style={{textTransform: "none"}}>{k}</Typography>
+          </ToggleButton>
+        ))}
+      </ToggleButtonGroup>
+    )
+  } else {
+    return (
+      <FormControl>
+        <Select
+          labelId={`${prefix}layouts-select`}
+          id={`${prefix}-label`}
+          value={value}
+          label={`${prefix} with`}
+          onChange={(e,v)=>onChange(e.target.value)}
+          variant="standard"
+          disableUnderline={true}
+          style={{width: 215, padding: 0}}
+        >
+          {Object.keys(entries).map(val=>(
+            <MenuItem key={val} value={val}>{val}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    )
+  }
+
+}
+
 export default function KnowledgeGraph({entries, nodes, examples=default_examples, schema}) {
   if (!schema) schema=default_schema  
   const router = useRouter()
@@ -132,6 +174,18 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
   const [node, setNode] = React.useState(null)
   const [data, setData] = React.useState(null)
   const [focused, setFocused] = React.useState(null)
+
+  const tooltip_templates = {}
+  for (const i of schema.nodes) {
+    tooltip_templates[i.node] = i.display
+  }
+
+  for (const e of schema.edges) {
+    for (const i of e.match) {
+      tooltip_templates[i] = e.display
+    }
+  }
+
   const tableref = useRef(null);
   const redirect = (query) => {
     router.push({
@@ -175,18 +229,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
             <Grid container justifyContent="flex-start" alignItems="center" spacing={1}>
               <Grid item xs={12}>
                 <Typography variant="subtitle2">Start with</Typography>
-                {Object.keys(entries).length > 1 && <ToggleButtonGroup
-                  value={start}
-                  exclusive
-                  onChange={(e, new_start)=>redirect({start: new_start})}
-                  aria-label="start node"
-                >
-                  {Object.keys(entries).map(k=>(
-                    <ToggleButton value={k} aria-label="left aligned" key={`start-${k}`}>
-                      <Typography variant="caption" style={{textTransform: "none"}}>{k.replace("BirthDefects", "Birth Defects")}</Typography>
-                    </ToggleButton>
-                  ))}
-                </ToggleButtonGroup>}
+                <Selector entries={entries} value={start} prefix={"Start"} onChange={(e)=>redirect({start: e})}/>
               </Grid>
               <Grid item xs={12}>
                 <FormControl>
@@ -241,18 +284,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="subtitle2">End with</Typography>
-                {Object.keys(entries).length > 1 && <ToggleButtonGroup
-                  value={end}
-                  exclusive
-                  onChange={(e, new_end)=>redirect({start, start_term, end: new_end, limit})}
-                  aria-label="end node"
-                >
-                  {Object.keys(entries).map(k=>(
-                    <ToggleButton value={k} aria-label="left aligned" key={`end-${k}`}>
-                      <Typography variant="caption" style={{textTransform: "none"}}>{k.replace("BirthDefects", "Birth Defects")}</Typography>
-                    </ToggleButton>
-                  ))}
-                </ToggleButtonGroup>}
+                <Selector entries={entries} value={start} prefix={"End"} onChange={(e)=>redirect({start, start_term, end: e, limit})}/>
               </Grid>
               <Grid item xs={12}>
                 <FormControl>
@@ -324,12 +356,9 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
               }}>Go to table</Button>
             </Grid>
           }
-          <Grid item xs={12} style={{minHeight: 300}}>
-            {(focused || node) && <TooltipCard node={focused || node} schema={schema} setFocused={setFocused} router={router}/>}
-          </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={7}>
         {(start && nodes.indexOf(start) > -1) && 
           <KnowledgeGraphViz 
             start_term={start_term}
@@ -353,6 +382,9 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
             focused={focused}
           />
         }
+      </Grid>
+      <Grid item xs={2}>
+        {(focused || node) && <TooltipCard node={focused || node} tooltip_templates={tooltip_templates} setFocused={setFocused} router={router}/>}
       </Grid>
       <Grid item xs={12}>
         <div ref={tableref}>
