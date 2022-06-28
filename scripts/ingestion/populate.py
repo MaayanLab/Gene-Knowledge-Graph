@@ -15,11 +15,8 @@ class GraphEx:
   '''
   chunk_size = 2000
 
-  def __init__(self, *args, clean=False, **kwargs):
+  def __init__(self, *args, **kwargs):
     self.graph = Graph(*args, **kwargs)
-    if (clean):
-      print("Clean install")
-      self.graph.delete_all()
     self.n = 0
     self.tx = None
 
@@ -42,6 +39,11 @@ class GraphEx:
     self._begin()
     self.tx.create(obj)
     self._periodic_commit()
+
+  def delete(self, id):
+    self._begin()
+    self.graph.run("MATCH (n {id: '%s'}) DETACH DELETE n"%id)
+    self._periodic_commit()
   
   def merge(self, obj):
     self._begin()
@@ -63,11 +65,39 @@ clean = False
 if vals[0] == "clean":
   clean = True
   directories = vals[1:]
-  neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']), clean=True)
 else:
   directories = vals
-  neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']), clean=False)
+  
 try:
+  neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']))
+  if clean:
+    print("Clean install...")
+    deleted_nodes = set()
+    for directory in directories:
+      for filename in glob.glob(directory + "/*.valid.json"):
+          with open(filename) as o:
+            print("Deleting %s"%filename)
+            serialized = json.loads(o.read())
+            for i in tqdm(serialized["edges"]):
+              source = i["source"]
+              if source not in deleted_nodes:
+                deleted_nodes.add(source)
+                # node_a_props = serialized["nodes"][source]
+                # node_a_properties = node_a_props.get("properties", {})
+                # node_a_type = node_a_props["type"]
+                # node_a = Node(node_a_type, **node_a_properties)
+                neo4graph.delete(source)
+
+              target = i["target"]
+              if target not in deleted_nodes:
+                deleted_nodes.add(target)
+                # node_b_props = serialized["nodes"][target]
+                # node_b_properties = node_b_props.get("properties", {})
+                # node_b_type = node_b_props["type"]
+                # node_b = Node(node_b_type, **node_b_properties)
+                neo4graph.delete(target)
+          neo4graph.commit()
+  print("Ingesting...")
   for directory in directories:
     for filename in glob.glob(directory + "/*.valid.json"):
       with open(filename) as o:
