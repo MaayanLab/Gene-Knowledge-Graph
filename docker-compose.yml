@@ -13,6 +13,7 @@ services:
     environment:
       NEO4JLABS_PLUGINS: '["apoc", "graph-data-science", "n10s"]'
       NEO4J_AUTH: ${NEO4J_USER}/${NEO4J_PASSWORD}
+      NEO4J_dbms_memory_heap_max__size: 1G
     ports:
       - 7474:7474
       - 7687:7687
