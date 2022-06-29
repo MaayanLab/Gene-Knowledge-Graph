@@ -8,4 +8,7 @@ then
 else
    echo "skipping ingestion..."
 fi
+cd scripts/ingestion
+python indexing.py schema.json
+cd ../..
 node server.js

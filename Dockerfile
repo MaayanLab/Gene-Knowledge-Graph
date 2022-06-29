@@ -33,6 +33,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 COPY ./scripts ./scripts
+COPY ./public/schema.json ./scripts/ingestion
  
 ENV PYTHONUNBUFFERED=1
 RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
