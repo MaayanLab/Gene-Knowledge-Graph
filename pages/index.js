@@ -465,19 +465,6 @@ function KnowledgeGraphViz(props) {
     }
   }, [start_term, end_term, limit])
 
-  // useAsyncEffect(async (isActive) => {
-  //   if (start_term && end_term) {
-  //     console.log("HO")
-  //     await  resolve_elements(isActive)
-  //   }
-  // }, [end_term])
-
-  // useAsyncEffect(async (isActive) => {
-  //   if (start_term) {
-  //     console.log("HID")
-  //     await  resolve_elements(isActive)
-  //   }
-  // }, [limit])
   return (
     <Box>
       {(elements === undefined) ? (
