@@ -158,15 +158,18 @@ const aggregates = async ({session, schema}) => {
 		if (node_aggr.length > 0) {
 			node_query = `MATCH (st) WITH ${score_fields.join(", ")}${score_fields.length > 0 ? ",": ""} ${node_aggr.join(", ")}`
 		}
-		const query = `${[edge_query, node_query].join("\t")} RETURN *`
-		const results = await session.readTransaction(txc => txc.run(query))
 		aggr_scores = {}
-		results.records.flatMap(record => {
-			for (const i of score_fields) {
-				const score = record.get(i)
-				aggr_scores[i] = score
-			}
-		})
+		if (score_fields.length > 0) {
+			const query = `${[edge_query, node_query].join("\t")} RETURN *`
+			const results = await session.readTransaction(txc => txc.run(query))
+			
+			results.records.flatMap(record => {
+				for (const i of score_fields) {
+					const score = record.get(i)
+					aggr_scores[i] = score
+				}
+			})
+		}
 	} else {
 		console.log("Aggregate score is already cached!")
 	}
