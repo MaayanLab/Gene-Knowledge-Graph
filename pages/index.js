@@ -64,7 +64,7 @@ const default_examples = {
   } 
 }
 
-const TooltipCard = ({node, tooltip_templates, setFocused, router}) => {
+const TooltipCard = ({node, tooltip_templates, setFocused, router, schema}) => {
   const elements = []
   const field = node.kind === "Relation" ? node.label : node.kind
   for (const i of tooltip_templates[field] || []) {
@@ -106,7 +106,7 @@ const TooltipCard = ({node, tooltip_templates, setFocused, router}) => {
           onClick={()=>{
             setFocused(null)
             router.push({
-              pathname: schema.endpoint,
+              pathname: schema.endpoint || '',
               query: {
                 start: node.kind,
                 start_term: node.label
@@ -190,7 +190,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
   const tableref = useRef(null);
   const redirect = (query) => {
     router.push({
-      pathname: schema.endpoint,
+      pathname: schema.endpoint || '',
       query
     }, undefined, {shallow: true})
   }
@@ -252,7 +252,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
                           query.end = end
                         }
                         router.push({
-                          pathname:  schema.endpoint,
+                          pathname:  schema.endpoint || '',
                           query
                         }, undefined, { shallow: true })
                       }
@@ -301,7 +301,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
                       if (value === null) value = ''
                       setEndTermInput(value)
                       router.push({
-                        pathname:  schema.endpoint,
+                        pathname:  schema.endpoint || '',
                         query: {
                           start,
                           start_term,
@@ -387,7 +387,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
         }
       </Grid>
       <Grid item md={2} xs={12}>
-        {(focused || node) && <TooltipCard node={focused || node} tooltip_templates={tooltip_templates} setFocused={setFocused} router={router}/>}
+        {(focused || node) && <TooltipCard node={focused || node} schema={schema} tooltip_templates={tooltip_templates} setFocused={setFocused} router={router}/>}
       </Grid>
       <Grid item xs={12}>
         <div ref={tableref}>
@@ -453,7 +453,7 @@ function KnowledgeGraphViz(props) {
     if (!start_term) {
       if (elements === undefined) {
         router.push({
-          pathname: schema.endpoint,
+          pathname: schema.endpoint || '',
           query: {
             start,
             start_term: examples[start].href.query.start_term
@@ -464,6 +464,7 @@ function KnowledgeGraphViz(props) {
       await  resolve_elements(isActive)
     }
   }, [start_term, end_term, limit])
+
 
   return (
     <Box>
@@ -501,7 +502,7 @@ function KnowledgeGraphViz(props) {
                 label="Order by"
                 onChange={(e, nv)=>{
                   router.push({
-                    pathname:  schema.endpoint,
+                    pathname:  schema.endpoint || '',
                     query: {
                       ...router.query,
                       order: e.target.value
@@ -539,7 +540,7 @@ function KnowledgeGraphViz(props) {
               color="blues"
               onChange={(e, nv)=>{
                 router.push({
-                  pathname: schema.endpoint,
+                  pathname: schema.endpoint || '',
                   query: {
                     ...router.query,
                     limit: nv
