@@ -179,7 +179,7 @@ const resolve_two_terms = async ({session, start_term, start, end_term, end, lim
 	await aggregates({session, schema})
 	let query = `MATCH p=(a: ${start} {label: $start_term})-[*1..4]-(b: ${end} {label: $end_term})
 		WITH nodes(p) as n, relationships(p) as r
-		RETURN * ORDER BY rand() LIMIT ${limit}`
+		RETURN * LIMIT ${limit}`
 
 	
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
@@ -193,7 +193,7 @@ const resolve_one_term = async ({session, start, term, limit, order, schema}) =>
 	let query = `
 		MATCH p=(st:${start} { label: $term })-[rel]-(en)
 		WITH nodes(p) as n, relationships(p) as r
-		RETURN * ORDER BY rand() LIMIT ${limit}
+		RETURN * LIMIT ${limit}
 		`
 	
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
