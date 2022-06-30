@@ -463,7 +463,13 @@ function KnowledgeGraphViz(props) {
     } else {
       await  resolve_elements(isActive)
     }
-  }, [start_term, end_term, limit])
+  }, [start_term, limit])
+
+  useAsyncEffect(async (isActive) => {
+    if (end_term) {
+      await  resolve_elements(isActive)
+    }
+  }, [end_term])
 
 
   return (
