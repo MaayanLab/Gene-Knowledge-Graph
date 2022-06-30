@@ -774,6 +774,5 @@ export async function getStaticProps(ctx) {
       schema: s,
       palettes
     },
-    revalidate: 10,
 	};
 }
