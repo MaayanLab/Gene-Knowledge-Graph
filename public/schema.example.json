@@ -1,13 +1,44 @@
 {
 	"nodes": [
 		{
+			"node": "Drug",
+			"example": {
+				"href": {
+					"pathname": "/",
+					"query": {
+						"start": "Drug",
+						"start_term": "Esmolol"
+					}
+				}
+			},
+			"palette": {
+				"name": "oranges",
+				"main": "#ffb74d",
+				"contrastText": "#000"
+			},
+			"display": [
+				{
+					"label": "Drug ID",
+					"text": "${id}",
+					"type": "link",
+					"href": "https://pubchem.ncbi.nlm.nih.gov/compound/${id.replace('CID:', '')}"
+				},
+				{
+					"label": "GDLPA",
+					"text": "${label}",
+					"type": "link",
+					"href": "https://cfde-gene-pages.cloud/drug/${label}?CF=false&PS=true"
+				}
+			]
+		},
+		{
 			"node": "Gene",
 			"example": {
 				"href": {
 					"pathname": "/",
 					"query": {
 						"start": "Gene",
-						"start_term": "GCC2"
+						"start_term": "TAT"
 					}
 				}
 			},
@@ -48,33 +79,61 @@
 			]
 		},
 		{
-			"node": "Drug",
+			"node": "Glycoconjugate",
 			"example": {
 				"href": {
 					"pathname": "/",
 					"query": {
-						"start": "Drug",
-						"start_term": "Esmolol"
+						"start": "Glycoconjugate",
+						"start_term": "Asn-GlcNAc..."
 					}
 				}
 			},
 			"palette": {
-				"name": "oranges",
-				"main": "#ffb74d",
+				"name": "purples",
+				"main": "#b39ddb",
 				"contrastText": "#000"
 			},
 			"display": [
 				{
-					"label": "Drug ID",
-					"text": "${id}",
-					"type": "link",
-					"href": "https://pubchem.ncbi.nlm.nih.gov/compound/${id.replace('CID:', '')}"
+					"label": "Amino acid",
+					"text": "${amino_acid}",
+					"type": "text"
 				},
 				{
-					"label": "GDLPA",
-					"text": "${label}",
+					"label": "Glycan",
+					"text": "${carb}",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"node": "Metabolite",
+			"example": {
+				"href": {
+					"pathname": "/",
+					"query": {
+						"start": "Metabolite",
+						"start_term": "L-Glutamate"
+					}
+				}
+			},
+			"palette": {
+				"name": "cyans",
+				"main": "#26c6da",
+				"contrastText": "#000"
+			},
+			"display": [
+				{
+					"label": "Metabolite ID",
+					"text": "${id}",
 					"type": "link",
-					"href": "https://cfde-gene-pages.cloud/drug/${label}?CF=false&PS=true"
+					"href": "https://www.genome.jp/entry/${id}"
+				},
+				{
+					"label": "Synonyms",
+					"text": "${synonyms.join(', ')}",
+					"type": "text"
 				}
 			]
 		}
@@ -82,9 +141,7 @@
 	"edges": [
 		{
 			"match": ["physical association", "direct interaction"],
-			"color": {
-				"field": ["Confidence_Values", "DESC"]
-			},
+			"order": ["Confidence_Values", "DESC"],
 			"display": [
 				{
 					"label": "ID",
@@ -125,15 +182,21 @@
 					"label": "Confidence Value",
 					"text": "${Confidence_Values}",
 					"type": "text"
+				},
+				{
+					"label": "Resource",
+					"text": "BioGRID",
+					"href": "https://thebiogrid.org/",
+					"type": "link"
 				}	
 			]
 		},
 		{
-			"match": ["negatively correlated (ARCHS4)"],
-			"color": {
-				"field": ["correlation_coefficient", "DESC"],
-				"hex": "#f9a825"
+			"match": ["negatively correlated"],
+			"palette": {
+				"main": "#f8bbd0"
 			},
+			"order": ["correlation_coefficient", "ASC"],
 			"display": [
 				{
 					"label": "ID",
@@ -159,15 +222,21 @@
 					"label": "Correlation Coefficient",
 					"text": "${correlation_coefficient}",
 					"type": "number"
+				},
+				{
+					"label": "Resource",
+					"text": "ARCHS4",
+					"href": "https://maayanlab.cloud/archs4/",
+					"type": "link"
 				}	
 			]
 		},
 		{
-			"match": ["positively correlated (ARCHS4)"],
-			"color": {
-				"field": ["correlation_coefficient", "DESC"],
-				"hex": "#0277bd"
+			"match": ["positively correlated"],
+			"palette": {
+				"main": "#4fc3f7"
 			},
+			"order": ["correlation_coefficient", "DESC"],
 			"display": [
 				{
 					"label": "ID",
@@ -193,15 +262,21 @@
 					"label": "Correlation Coefficient",
 					"text": "${correlation_coefficient}",
 					"type": "number"
-				}	
+				},
+				{
+					"label": "Resource",
+					"text": "ARCHS4",
+					"href": "https://maayanlab.cloud/archs4/",
+					"type": "link"
+				}		
 			]
 		},
 		{
-			"match": ["downregulates (LINCS)"],
-			"color": {
-				"field": ["correlation_coefficient", "DESC"],
-				"hex": "#f9a825"
+			"match": ["downregulates"],
+			"palette": {
+				"main": "#f8bbd0"
 			},
+			"order": ["mean_CD_coefficient", "ASC"],
 			"display": [
 				{
 					"label": "ID",
@@ -227,15 +302,21 @@
 					"label": "Correlation Coefficient",
 					"text": "${correlation_coefficient}",
 					"type": "number"
+				},
+				{
+					"label": "Resource",
+					"text": "SigCom LINCS",
+					"href": "https://maayanlab.cloud/sigcom-lincs/",
+					"type": "link"
 				}	
 			]
 		},
 		{
-			"match": ["upregulates (LINCS)"],
-			"color": {
-				"field": ["correlation_coefficient", "DESC"],
-				"hex": "#0277bd"
+			"match": ["upregulates"],
+			"palette": {
+				"main": "#4fc3f7"
 			},
+			"order": ["mean_CD_coefficient", "DESC"],
 			"display": [
 				{
 					"label": "ID",
@@ -261,121 +342,61 @@
 					"label": "Correlation Coefficient",
 					"text": "${correlation_coefficient}",
 					"type": "number"
+				},
+				{
+					"label": "Resource",
+					"text": "SigCom LINCS",
+					"href": "https://maayanlab.cloud/sigcom-lincs/",
+					"type": "link"
+				}	
+			]
+		},
+		{
+			"match": ["Metabolite-Gene"],
+			"display": [
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "Resource",
+					"text": "Metabolomics Workbench",
+					"href": "https://www.metabolomicsworkbench.org/",
+					"type": "link"
+				}	
+			]
+		},
+		{
+			"match": ["Glycosylation"],
+			"display": [
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "Resource",
+					"text": "GlyGen",
+					"href": "https://glygen.org",
+					"type": "link"
 				}	
 			]
 		}
-	],
-	"color": {
-		"Confidence_Values": {
-			"on": "edge",
-			"field": ["Confidence_Values", "DESC"]
-		}
-	},
-	"tooltip": {
-		"Gene": [
-			{
-				"label": "Gene ID",
-				"text": "${id}",
-				"type": "link",
-				"href": "https://www.ncbi.nlm.nih.gov/gene/${id}"
-			},
-			{
-				"label": "Aliases",
-				"text": "${Aliases.split('|').join(', ')}",
-				"type": "text"
-			},
-			{
-				"label": "Alternative IDs",
-				"text": "${Alt_IDs.split('|').join(', ')}",
-				"type": "text"
-			},
-			{
-				"label": "ARCHS4",
-				"text": "${label}",
-				"type": "link",
-				"href": "https://maayanlab.cloud/archs4/gene/${label}"
-			},
-			{
-				"label": "GDLPA",
-				"text": "${label}",
-				"type": "link",
-				"href": "https://cfde-gene-pages.cloud/gene/${label}?CF=false&PS=true&Ag=true"
-			}
-		],
-		"Drug": [
-			{
-				"label": "Drug ID",
-				"text": "${id}",
-				"type": "link",
-				"href": "https://pubchem.ncbi.nlm.nih.gov/compound/${id.replace('CID:', '')}"
-			},
-			{
-				"label": "GDLPA",
-				"text": "${label}",
-				"type": "link",
-				"href": "https://cfde-gene-pages.cloud/drug/${label}?CF=false&PS=true"
-			}
-		],
-		"Relation": [
-			{
-				"label": "ID",
-				"text": "${id}",
-				"type": "text"
-			},
-			{
-				"label": "Source Label",
-				"text": "${source_label}",
-				"type": "text"
-			},
-			{
-				"label": "Target Label",
-				"text": "${target_label}",
-				"type": "text"
-			},
-			{
-				"label": "Source Database",
-				"text": "${Source_Database}",
-				"type": "text"
-			},
-			{
-				"label": "Interaction Detection Method",
-				"text": "${Interaction_Detection_Method}",
-				"type": "text"
-			},
-			{
-				"label": "Publication First Author",
-				"text": "${Publication_1st_Author}",
-				"type": "text"
-			},
-			{
-				"label": "Pubmed",
-				"text": "${Publication_Identifiers}",
-				"type": "text"
-			},
-			{
-				"label": "Alternative IDs",
-				"text": "${Alt_IDs.split('|').join(',')}",
-				"type": "text"
-			},
-			{
-				"label": "Confidence Value",
-				"text": "${Confidence_Values}",
-				"type": "text"
-			},
-			{
-				"label": "Correlation Coefficient",
-				"text": "${correlation_coefficient}",
-				"type": "number"
-			},
-			{
-				"label": "Mean CD Coefficient",
-				"text": "${mean_CD_coefficient}",
-				"type": "number"
-			}
-		]
-	},
+	],	
 	"header": {
 		"title": "Gene-Centric CFDE Knowledge Graph",
+		"icon": "${PREFIX}/static/icons/CFDE-logo.png",
 		"subheader": [
 			{
 				"label": "LINCS",

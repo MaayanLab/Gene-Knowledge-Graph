@@ -33,6 +33,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 COPY ./scripts ./scripts
+COPY ./public/schema.json ./scripts/ingestion
  
 ENV PYTHONUNBUFFERED=1
 RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
@@ -52,6 +53,8 @@ ENV PORT=3000
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry.
 
-
+COPY --chown=nextjs:nodejs ./entrypoint.sh ./entrypoint.sh
 ENV NEXT_TELEMETRY_DISABLED 1
-CMD ["node", "server.js"]
+# CMD ["node", "server.js"]
+RUN ["chmod", "+x", "./entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]

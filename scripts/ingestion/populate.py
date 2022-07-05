@@ -16,11 +16,8 @@ class GraphEx:
   '''
   chunk_size = 2000
 
-  def __init__(self, *args, clean=False, **kwargs):
+  def __init__(self, *args, **kwargs):
     self.graph = Graph(*args, **kwargs)
-    if (clean):
-      print("Clean install")
-      self.graph.delete_all()
     self.n = 0
     self.tx = None
 
@@ -42,6 +39,11 @@ class GraphEx:
   def create(self, obj):
     self._begin()
     self.tx.create(obj)
+    self._periodic_commit()
+
+  def delete(self, id):
+    self._begin()
+    self.graph.run("MATCH (n {id: '%s'}) DETACH DELETE n"%id)
     self._periodic_commit()
   
   def merge(self, obj):
@@ -76,6 +78,9 @@ def process_serialized(serialized):
     relation_properties_dict = i.get("properties", {})
     neo4graph.merge(Relationship(node_a, relation, node_b, **relation_properties_dict))
 
+def delete_nodes(serialized):
+  for i in tqdm(serialized["nodes"]):
+    neo4graph.delete(i)
 
 # python populate.py clean (optional) /path/to/files/to/ingest
 vals = sys.argv[1:]
@@ -85,7 +90,8 @@ if len(vals) > 0 and vals[0] == "clean":
   directories = vals[1:]
 else:
   directories = vals
-neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']), clean=clean)
+
+neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']))
 if os.environ["AWS_PREFIX"] and  os.environ["AWS_BUCKET"] and os.environ['ACCESS_KEY'] and os.environ['SECRET_KEY']:
   print("Found AWS credentials...")
   client = boto3.client(
@@ -104,11 +110,12 @@ if os.environ["AWS_PREFIX"] and  os.environ["AWS_BUCKET"] and os.environ['ACCESS
             print("Ingesting %s"%object.key)
             res = requests.get(url)
             serialized = res.json()
+            if clean:
+              delete_nodes(serialized)
             process_serialized(serialized)
     neo4graph.commit()
   except Exception as e:
     print(e)
-
 else:
   try:
     for directory in directories:
@@ -116,6 +123,8 @@ else:
         with open(filename) as o:
           print("Ingesting %s"%filename)
           serialized = json.loads(o.read())
+          if clean:
+            delete_nodes(serialized)
           process_serialized(serialized)
     neo4graph.commit()
   except Exception as e:

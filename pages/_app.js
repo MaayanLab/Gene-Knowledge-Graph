@@ -66,7 +66,6 @@ function MyApp({ Component, pageProps }) {
   const palettes = pageProps.palettes
   theme_object.palette = {...theme_object.palette, ...palettes}
   const theme = createTheme(theme_object)
-  console.log(pageProps)
   return (
       <ThemeProvider theme={theme}>
         <Head>
