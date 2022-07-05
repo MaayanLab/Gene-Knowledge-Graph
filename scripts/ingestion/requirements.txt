@@ -2,3 +2,5 @@ py2neo
 tqdm
 python-dotenv
 rdflib
+boto3
+requests
