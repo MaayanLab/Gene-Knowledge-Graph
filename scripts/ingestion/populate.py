@@ -107,11 +107,13 @@ if os.environ["AWS_PREFIX"] and  os.environ["AWS_BUCKET"] and os.environ['ACCESS
     for object in bucket.objects.filter(Prefix=prefix):
         if not object.key.replace("/","") == prefix:
             url = "https://s3.amazonaws.com/%s/%s"%(bucket_name, object.key)
-            print("Ingesting %s"%object.key)
+            print(object.key)
             res = requests.get(url)
             serialized = res.json()
             if clean:
+              print("Cleaning...")
               delete_nodes(serialized)
+            print("Ingesting...")
             process_serialized(serialized)
     neo4graph.commit()
   except Exception as e:
@@ -121,10 +123,12 @@ else:
     for directory in directories:
       for filename in glob.glob(directory + "/*.valid.json"):
         with open(filename) as o:
-          print("Ingesting %s"%filename)
+          print(filename)
           serialized = json.loads(o.read())
           if clean:
+            print("Cleaning...")
             delete_nodes(serialized)
+          print("Ingesting...")
           process_serialized(serialized)
     neo4graph.commit()
   except Exception as e:
