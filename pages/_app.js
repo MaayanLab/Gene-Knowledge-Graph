@@ -6,6 +6,7 @@ import * as default_schema from '../public/schema.json'
 
 const Container = dynamic(() => import('@mui/material/Container'));
 const Header = dynamic(() => import('../components/header'));
+const Footer = dynamic(() => import('../components/footer'));
 
 const theme_object = {
   palette: {
@@ -82,6 +83,7 @@ function MyApp({ Component, pageProps }) {
             {...pageProps}
           />
         </Container>
+        <Footer {...pageProps}/>
       </ThemeProvider>
   )
 }
