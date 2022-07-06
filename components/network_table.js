@@ -43,7 +43,8 @@ const NetworkTable = ({data, schema}) => {
 									flex: 1,
 									style: {flexDirection: "row"},
 									align: "left",
-									text: prop.text
+									text: prop.text,
+									type: relation !== undefined ? "edge": "node"
 								})
 							}
 						} else {
@@ -55,6 +56,7 @@ const NetworkTable = ({data, schema}) => {
 								flex: 1,
 								style: {flexDirection: "row"},
 								align: "left",
+								type: relation !== undefined ? "edge": "node"
 							})
 							header.push({
 								field: 'label',
@@ -62,6 +64,7 @@ const NetworkTable = ({data, schema}) => {
 								flex: 1,
 								style: {flexDirection: "row"},
 								align: "left",
+								type: relation !== undefined ? "edge": "node"
 							})
 							for (const field of Object.keys(rest)) {
 								const headerName = field.replaceAll(".", " ")
@@ -71,6 +74,7 @@ const NetworkTable = ({data, schema}) => {
 									flex: 1,
 									style: {flexDirection: "row"},
 									align: "left",
+									type: relation !== undefined ? "edge": "node"
 								})
 							}
 						}
@@ -124,6 +128,12 @@ const NetworkTable = ({data, schema}) => {
 	if (processedData === null) return null
 	else {
 		const {data={}, header=[]} = processedData[tab] || {}
+		const edge_header = []
+		const node_header = []
+		for (const i of header) {
+			if (i.type === "edge") edge_header.push(i)
+			else node_header.push(i)
+		}
 		return (
 			<Grid container>
 				<Grid item xs={12}>
@@ -146,7 +156,7 @@ const NetworkTable = ({data, schema}) => {
 						components={{ Toolbar: GridToolbar }}
 						sortingOrder={['desc', 'asc']}
 						rows={Object.values(data)}
-						columns={header}
+						columns={[...node_header, ...edge_header]}
 						autoPageSize
 						disableColumnMenu
 						autoHeight
