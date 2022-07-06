@@ -497,32 +497,61 @@
 		"subheader": [
 			{
 				"label": "LINCS",
-				"icon": "${PREFIX}/static/resources/lincs.gif"
+				"icon": "${PREFIX}/static/resources/lincs.gif",
+				"height": 120,
+				"width": 120
 			},
 			{
 				"label": "Metabolomics Workbench",
-				"icon": "${PREFIX}/static/resources/metabolomics.png"
+				"icon": "${PREFIX}/static/resources/metabolomics.png",
+				"height": 100,
+				"width": 100
 			},
 			{
 				"label": "GlyGen",
-				"icon": "${PREFIX}/static/resources/glygen.png"
+				"icon": "${PREFIX}/static/resources/glygen.png",
+				"height": 100,
+				"width": 100
 			},
 			{
 				"label": "GTEx",
-				"icon": "${PREFIX}/static/resources/gtex.png"
+				"icon": "${PREFIX}/static/resources/gtex.png",
+				"height": 80,
+				"width": 80
 			},
 			{
 				"label": "IDG",
-				"icon": "${PREFIX}/static/resources/idg.png"
+				"icon": "${PREFIX}/static/resources/idg.png",
+				"height": 100,
+				"width": 100
 			},
 			{
 				"label": "HuBMAP",
-				"icon": "${PREFIX}/static/resources/hubmap.png"
+				"icon": "${PREFIX}/static/resources/hubmap.png",
+				"height": 100,
+				"width": 100
 			},
 			{
 				"label": "ERCC",
-				"icon": "${PREFIX}/static/resources/exrna.png"
+				"icon": "${PREFIX}/static/resources/exrna.png",
+				"height": 100,
+				"width": 100
 			}
 		]
-	}
+	},
+	"footer": [
+		{
+			"type": "github",
+			"code": "https://github.com/maayanLab/gene-knowledge-graph",
+			"issues": "https://github.com/MaayanLab/Gene-Knowledge-Graph/issues"
+		},
+		{
+			"type": "icon",
+			"src": "${PREFIX}/static/icons/CFDE-logo.png",
+			"alt": "CFDE",
+			"link": "https://www.nih-cfde.org/",
+			"height": 100,
+			"width": 100
+		}
+	]
 }

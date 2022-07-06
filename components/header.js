@@ -14,14 +14,14 @@ const Header = ({schema, ...rest}) => {
 		<Grid item xs={12} align="center">
 			<Typography variant="h4">{schema.header.title}</Typography>
 		</Grid>
-		{((schema.header || {}).subheader||[]).map(({label, icon})=>(
+		{((schema.header || {}).subheader||[]).map(({label, icon, height=100, width=100})=>(
 			<Grid item key={label} style={{marginLeft: 10, marginRight: 10}}>
-				<div style={{height:100, minWidth: 100}}>
+				<div style={{height, minWidth: width}}>
 					<Image
 						// loader={()=>`/birth-defect-drugs${val.icon}`} 
 						src={makeTemplate(icon, {})}
-						height={100}
-						width={100}
+						height={height}
+						width={width}
 						layout="responsive"
 						objectFit="contain"
 						alt={label}
