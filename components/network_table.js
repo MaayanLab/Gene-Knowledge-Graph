@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { makeTemplate } from "../utils/helper";
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
@@ -8,84 +9,111 @@ const GridToolbar = dynamic(async () => (await import('@mui/x-data-grid')).GridT
 const ToggleButton = dynamic(() => import('@mui/material/ToggleButton'));
 const ToggleButtonGroup = dynamic(() => import('@mui/material/ToggleButtonGroup'));
 
-const NetworkTable = ({data}) => {
+const NetworkTable = ({data, schema}) => {
 	const [processedData, setProcessedData] = useState(null)
 	const [mapper, setMapper] = useState({})
 	const [tab, setTab] = useState(null)
 	const [tabs, setTabs] = useState(null)
-
+	const display = {}
+	for (const i of schema.nodes) {
+		display[i.node] = i.display
+	}
+	for (const i of schema.edges) {
+		for (const m of i.match) {
+			display[m] = i.display
+		}
+	}
 	useEffect(()=>{
 		if (data) {
 			const processed = {}
 			const id_mapper = {}
 			for (const d of data) {
-				const {kind, properties, source, target} = d.data
-				if (kind) {
-					if (processed[kind] === undefined) {
-						processed[kind] = {header: [], data: {}}
+				const {kind, relation, properties, source, target} = d.data
+				const key = relation || kind
+				if (key) { 
+					if ( processed[key] === undefined) {
+						processed[key] = {header: [], data: {}}
 						const header = []
-						const {id, label, symbol, ref, ...rest} = properties
-						id_mapper[id] = label
-						header.push({
-							field: 'id',
-							headerName: "ID",
-							flex: 1,
-							style: {flexDirection: "row"},
-							align: "left",
-						})
-						header.push({
-							field: 'label',
-							headerName: "Label",
-							flex: 1,
-							style: {flexDirection: "row"},
-							align: "left",
-						})
-						for (const field of Object.keys(rest)) {
-							const headerName = field.replaceAll(".", " ")
+						if (display[key]) {
+							for (const prop of display[key]) {
+								const field = prop.label
+								header.push({
+									field,
+									headerName: field,
+									flex: 1,
+									style: {flexDirection: "row"},
+									align: "left",
+									text: prop.text
+								})
+							}
+						} else {
+							const {id, label, symbol, ref, ...rest} = properties
+							id_mapper[id] = label
 							header.push({
-								field,
-								headerName: headerName.charAt(0).toUpperCase() + headerName.slice(1),
+								field: 'id',
+								headerName: "ID",
 								flex: 1,
 								style: {flexDirection: "row"},
 								align: "left",
 							})
-						}
-						processed[kind].header = header
-					}
-					if (processed[kind].data[properties.id] === undefined)
-						processed[kind].data[properties.id] = properties
-				} else {
-					if (processed["Relationships"] === undefined) {
-						processed["Relationships"] = {header: [], data: []}
-						const header = [
-							{
+							header.push({
 								field: 'label',
 								headerName: "Label",
 								flex: 1,
 								style: {flexDirection: "row"},
 								align: "left",
-							}
-						]
-						const {id, label, ...rest} = properties
-						for (const field of Object.keys(rest)) {
-							const headerName = field.replaceAll(".", " ")
-							header.push({
-								field,
-								headerName: headerName.charAt(0).toUpperCase() + headerName.slice(1),
-								flex: 1,
-								style: {flexDirection: "row"},
-								align: "left",
 							})
+							for (const field of Object.keys(rest)) {
+								const headerName = field.replaceAll(".", " ")
+								header.push({
+									field,
+									headerName: headerName.charAt(0).toUpperCase() + headerName.slice(1),
+									flex: 1,
+									style: {flexDirection: "row"},
+									align: "left",
+								})
+							}
 						}
-						processed["Relationships"].header= header
+						processed[key].header = header
 					}
-					const id = `${d.data.source}_${d.data.target}`
-					if (processed["Relationships"].data[id] === undefined)
-						processed["Relationships"].data[id] = {
-							...d.data.properties,
-							id: `${d.data.source}_${d.data.target}`
+					if (processed[key].data[properties.id] === undefined)
+						processed[key].data[properties.id] = {id: properties.id || `${source}_${target}`}
+						for (const i of processed[key].header) {
+							processed[key].data[properties.id][i.field] = makeTemplate(i.text, properties)
 						}
-				}
+				} 
+				// else {
+				// 	if (processed["Relationships"] === undefined) {
+				// 		processed["Relationships"] = {header: [], data: []}
+				// 		const header = [
+				// 			{
+				// 				field: 'label',
+				// 				headerName: "Label",
+				// 				flex: 1,
+				// 				style: {flexDirection: "row"},
+				// 				align: "left",
+				// 			}
+				// 		]
+				// 		const {id, label, ...rest} = properties
+				// 		for (const field of Object.keys(rest)) {
+				// 			const headerName = field.replaceAll(".", " ")
+				// 			header.push({
+				// 				field,
+				// 				headerName: headerName.charAt(0).toUpperCase() + headerName.slice(1),
+				// 				flex: 1,
+				// 				style: {flexDirection: "row"},
+				// 				align: "left",
+				// 			})
+				// 		}
+				// 		processed["Relationships"].header= header
+				// 	}
+				// 	const id = `${d.data.source}_${d.data.target}`
+				// 	if (processed["Relationships"].data[id] === undefined)
+				// 		processed["Relationships"].data[id] = {
+				// 			id: `${d.data.source}_${d.data.target}`,
+				// 			...d.data.properties,
+				// 		}
+				// }
 			}
 			setMapper(id_mapper)
 			setTabs(Object.keys(processed))

@@ -212,11 +212,6 @@
 					"type": "text"
 				},
 				{
-					"label": "Source Database",
-					"text": "${Source_Database}",
-					"type": "text"
-				},
-				{
 					"label": "Interaction Detection Method",
 					"text": "${Interaction_Detection_Method}",
 					"type": "text"
@@ -267,11 +262,6 @@
 					"type": "text"
 				},
 				{
-					"label": "Source Database",
-					"text": "${Source_Database}",
-					"type": "text"
-				},
-				{
 					"label": "Correlation Coefficient",
 					"text": "${correlation_coefficient}",
 					"type": "number"
@@ -304,11 +294,6 @@
 				{
 					"label": "Target Label",
 					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "Source Database",
-					"text": "${Source_Database}",
 					"type": "text"
 				},
 				{
@@ -347,13 +332,8 @@
 					"type": "text"
 				},
 				{
-					"label": "Source Database",
-					"text": "${Source_Database}",
-					"type": "text"
-				},
-				{
 					"label": "Correlation Coefficient",
-					"text": "${correlation_coefficient}",
+					"text": "${mean_CD_coefficient}",
 					"type": "number"
 				},
 				{
@@ -387,13 +367,8 @@
 					"type": "text"
 				},
 				{
-					"label": "Source Database",
-					"text": "${Source_Database}",
-					"type": "text"
-				},
-				{
 					"label": "Correlation Coefficient",
-					"text": "${correlation_coefficient}",
+					"text": "${mean_CD_coefficient}",
 					"type": "number"
 				},
 				{
@@ -485,8 +460,8 @@
 				},
 				{
 					"label": "Resource",
-					"text": "HuBMAP",
-					"href": "https://portal.hubmapconsortium.org",
+					"text": "GTEx",
+					"href": "https://gtexportal.org/home/",
 					"type": "link"
 				}	
 			]
@@ -509,10 +484,10 @@
 				},
 				{
 					"label": "Resource",
-					"text": "HuBMAP",
-					"href": "https://portal.hubmapconsortium.org",
+					"text": "GTEx",
+					"href": "https://gtexportal.org/home/",
 					"type": "link"
-				}	
+				}
 			]
 		}
 	],	

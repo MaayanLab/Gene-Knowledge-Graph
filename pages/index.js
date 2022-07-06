@@ -391,7 +391,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
       </Grid>
       <Grid item xs={12}>
         <div ref={tableref}>
-          <NetworkTable data={data}/>
+          <NetworkTable data={data} schema={schema}/>
         </div>
       </Grid>
     </Grid>

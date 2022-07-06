@@ -78,6 +78,7 @@ const resolve_results = ({results, start_term, end_term, term, colors}) => (
 					source: start_node.properties.id,
 					target: end_node.properties.id,
 					kind: "Relation",
+					relation: relation_type,
 					label: relation_type,
 					properties: {
 						id: `${start_node.properties.label}_${relation_type}_${end_node.properties.label}`,
