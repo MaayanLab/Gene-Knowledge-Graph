@@ -132,7 +132,7 @@ const Selector = ({entries, value, onChange, prefix}) => {
       >
         {Object.keys(entries).map(k=>(
           <ToggleButton value={k} aria-label="left aligned" key={`${prefix}-${k}`}>
-            <Typography variant="caption" style={{textTransform: "none"}}>{k}</Typography>
+            <Typography variant="caption" style={{textTransform: "none"}}>{k.replaceAll("_", " ")}</Typography>
           </ToggleButton>
         ))}
       </ToggleButtonGroup>
@@ -151,7 +151,7 @@ const Selector = ({entries, value, onChange, prefix}) => {
           style={{width: 215, padding: 0}}
         >
           {Object.keys(entries).map(val=>(
-            <MenuItem key={val} value={val}>{val}</MenuItem>
+            <MenuItem key={val} value={val}>{val.replaceAll("_", " ")}</MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -340,7 +340,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
                 const {href, palette} = v
                 return (
                   <Grid item xs={12} key={href.query.start_term}>
-                    <Typography variant="caption" style={{marginRight: 10}}>{k} Example:</Typography>
+                    <Typography variant="caption" style={{marginRight: 10}}>{k.replaceAll("_", " ")} Example:</Typography>
                     <Link
                       href={href}
                       shallow
