@@ -222,6 +222,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
 		setAllEndTerms(entries[end])
 	}
   }, [end])
+  const example = examples[start]
   return (
     <Grid container justifyContent="space-around">
       <Grid item md={3} xs={12} style={{minHeight: 600}}>
@@ -283,6 +284,17 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
                   <FormHelperText id="gene">Search Term</FormHelperText>
                 </FormControl> 
               </Grid>
+              { example && 
+                <Grid item xs={12} key={example.href.query.start_term}>
+                  <Typography variant="caption" style={{marginRight: 10}}>Example:</Typography>
+                  <Link
+                    href={example.href}
+                    shallow
+                  >
+                    <Button variant="outlined" color={example.palette.name}><Typography variant="caption">{example.href.query.start_term}</Typography></Button>
+                  </Link> 
+                </Grid>
+              }
               <Grid item xs={12}>
                 <Typography variant="body1">End with</Typography>
                 <Selector entries={entries} value={end} prefix={"End"} onChange={(e)=>{
@@ -336,20 +348,6 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
                   <FormHelperText id="gene">Search another term (optional)</FormHelperText>
                 </FormControl> 
               </Grid>
-              {Object.entries(examples).map(([k, v])=>{
-                const {href, palette} = v
-                return (
-                  <Grid item xs={12} key={href.query.start_term}>
-                    <Typography variant="caption" style={{marginRight: 10}}>{k.replaceAll("_", " ")} Example:</Typography>
-                    <Link
-                      href={href}
-                      shallow
-                    >
-                      <Button variant="outlined" color={palette.name}><Typography variant="caption">{href.query.start_term}</Typography></Button>
-                    </Link> 
-                  </Grid>
-                )
-              })}
             </Grid>
           </Grid>
           {start_term &&
