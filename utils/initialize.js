@@ -40,6 +40,7 @@ export async function get_terms(node) {
 					return {...acc, [g.properties.label]: g.properties}
 				}, entries)
 			skip = skip + limit	
+			console.log(`Done with ${skip}/${count}`)
 		}
 		return entries
 	}
