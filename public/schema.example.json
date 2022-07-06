@@ -136,16 +136,69 @@
 					"type": "text"
 				}
 			]
+		},
+		{
+			"node": "Cell_Type_or_Tissue",
+			"example": {
+				"href": {
+					"pathname": "/",
+					"query": {
+						"start": "Cell_Type_or_Tissue",
+						"start_term": "Brain"
+					}
+				}
+			},
+			"palette": {
+				"name": "teals",
+				"main": "#4db6ac",
+				"contrastText": "#000"
+			},
+			"display": [
+				{
+					"label": "Ontology ID",
+					"text": "${id}",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"node": "GTEx_Group",
+			"example": {
+				"href": {
+					"pathname": "/",
+					"query": {
+						"start": "GTEx_Group",
+						"start_term": "Muscle-Skeletal_subj-age-30-39"
+					}
+				}
+			},
+			"palette": {
+				"name": "limes",
+				"main": "#dce775",
+				"contrastText": "#000"
+			},
+			"display": [
+				{
+					"label": "Ontology ID",
+					"text": "${id}",
+					"type": "text"
+				}
+			]
 		}
 	],
 	"edges": [
 		{
-			"match": ["physical association", "direct interaction"],
+			"match": ["BioGRID"],
 			"order": ["Confidence_Values", "DESC"],
 			"display": [
 				{
 					"label": "ID",
 					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Name",
+					"text": "${label}",
 					"type": "text"
 				},
 				{
@@ -192,7 +245,7 @@
 			]
 		},
 		{
-			"match": ["negatively correlated"],
+			"match": ["ARCHS4 (negatively correlated)"],
 			"palette": {
 				"main": "#f8bbd0"
 			},
@@ -232,7 +285,7 @@
 			]
 		},
 		{
-			"match": ["positively correlated"],
+			"match": ["ARCHS4 (positively correlated)"],
 			"palette": {
 				"main": "#4fc3f7"
 			},
@@ -272,7 +325,7 @@
 			]
 		},
 		{
-			"match": ["downregulates"],
+			"match": ["LINCS (downregulates)"],
 			"palette": {
 				"main": "#f8bbd0"
 			},
@@ -312,7 +365,7 @@
 			]
 		},
 		{
-			"match": ["upregulates"],
+			"match": ["LINCS (upregulates)"],
 			"palette": {
 				"main": "#4fc3f7"
 			},
@@ -352,7 +405,7 @@
 			]
 		},
 		{
-			"match": ["Metabolite-Gene"],
+			"match": ["Metabolomics Workbench"],
 			"display": [
 				{
 					"label": "Source Label",
@@ -373,7 +426,7 @@
 			]
 		},
 		{
-			"match": ["Glycosylation"],
+			"match": ["GlyGen"],
 			"display": [
 				{
 					"label": "Source Label",
@@ -389,6 +442,75 @@
 					"label": "Resource",
 					"text": "GlyGen",
 					"href": "https://glygen.org",
+					"type": "link"
+				}	
+			]
+		},
+		{
+			"match": ["HuBMAP"],
+			"display": [
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "Resource",
+					"text": "HuBMAP",
+					"href": "https://portal.hubmapconsortium.org",
+					"type": "link"
+				}	
+			]
+		},
+		{
+			"match": ["GTEx (up)"],
+			"palette": {
+				"main": "#4fc3f7"
+			},
+			"display": [
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "Resource",
+					"text": "HuBMAP",
+					"href": "https://portal.hubmapconsortium.org",
+					"type": "link"
+				}	
+			]
+		},
+		{
+			"match": ["GTEx (down)"],
+			"palette": {
+				"main": "#f8bbd0"
+			},
+			"display": [
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "Resource",
+					"text": "HuBMAP",
+					"href": "https://portal.hubmapconsortium.org",
 					"type": "link"
 				}	
 			]

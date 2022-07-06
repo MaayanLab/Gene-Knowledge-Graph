@@ -4,7 +4,8 @@ import json
 import glob
 from py2neo import Graph, Node, Relationship
 from tqdm import tqdm
-
+import boto3
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -57,70 +58,88 @@ class GraphEx:
     return self.graph.run(parameters=parameters, **kwparameters)
 
 
+def process_serialized(serialized):
+  for i in tqdm(serialized["edges"]):
+    source = i["source"]
+    node_a_props = serialized["nodes"][source]
+    node_a_properties = node_a_props.get("properties", {})
+    node_a_type = node_a_props["type"]
+    node_a = Node(node_a_type, **node_a_properties)
+    neo4graph.merge(node_a)
 
+    target = i["target"]
+    node_b_props = serialized["nodes"][target]
+    node_b_properties = node_b_props.get("properties", {})
+    node_b_type = node_b_props["type"]
+    node_b = Node(node_b_type, **node_b_properties)
+    neo4graph.merge(node_b)
+
+    relation = i["relation"]
+    relation_properties_dict = i.get("properties", {})
+    neo4graph.merge(Relationship(node_a, relation, node_b, **relation_properties_dict))
+
+def delete_nodes(serialized):
+  for i in tqdm(serialized["nodes"]):
+    neo4graph.delete(i)
 
 # python populate.py clean (optional) /path/to/files/to/ingest
 vals = sys.argv[1:]
 clean = False
-if vals[0] == "clean":
+if len(vals) > 0 and vals[0] == "clean":
   clean = True
   directories = vals[1:]
 else:
   directories = vals
-  
-try:
-  neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']))
-  if clean:
-    print("Clean install...")
-    deleted_nodes = set()
+
+neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']))
+if os.environ["AWS_PREFIX"] and  os.environ["AWS_BUCKET"] and os.environ['ACCESS_KEY'] and os.environ['SECRET_KEY']:
+  print("Found AWS credentials...")
+  client = boto3.client(
+    's3',
+    aws_access_key_id=os.environ['ACCESS_KEY'],
+    aws_secret_access_key=os.environ['SECRET_KEY'],
+  )
+  prefix = os.environ["AWS_PREFIX"]
+  bucket_name = os.environ["AWS_BUCKET"]
+  s3 = boto3.resource('s3')
+  bucket = s3.Bucket(bucket_name)
+  try:
+    if clean:
+       for object in bucket.objects.filter(Prefix=prefix):
+        if not object.key.replace("/","") == prefix:
+            url = "https://s3.amazonaws.com/%s/%s"%(bucket_name, object.key)
+            print(object.key)
+            print("Cleaning %s..."%object.key)
+            res = requests.get(url)
+            serialized = res.json()
+            delete_nodes(serialized)
+    for object in bucket.objects.filter(Prefix=prefix):
+        if not object.key.replace("/","") == prefix:
+            url = "https://s3.amazonaws.com/%s/%s"%(bucket_name, object.key)
+            print("Ingesting %s..."%object.key)
+            res = requests.get(url)
+            serialized = res.json()
+            print("Ingesting...")
+            process_serialized(serialized)
+    neo4graph.commit()
+  except Exception as e:
+    print(e)
+else:
+  try:
+    if clean:
+      for directory in directories:
+        for filename in glob.glob(directory + "/*.valid.json"):
+          with open(filename) as o:
+            print("Cleaning %s..."%filename)
+            serialized = json.loads(o.read())
+            delete_nodes(serialized)
     for directory in directories:
       for filename in glob.glob(directory + "/*.valid.json"):
-          with open(filename) as o:
-            print("Deleting %s"%filename)
-            serialized = json.loads(o.read())
-            for i in tqdm(serialized["edges"]):
-              source = i["source"]
-              if source not in deleted_nodes:
-                deleted_nodes.add(source)
-                # node_a_props = serialized["nodes"][source]
-                # node_a_properties = node_a_props.get("properties", {})
-                # node_a_type = node_a_props["type"]
-                # node_a = Node(node_a_type, **node_a_properties)
-                neo4graph.delete(source)
-
-              target = i["target"]
-              if target not in deleted_nodes:
-                deleted_nodes.add(target)
-                # node_b_props = serialized["nodes"][target]
-                # node_b_properties = node_b_props.get("properties", {})
-                # node_b_type = node_b_props["type"]
-                # node_b = Node(node_b_type, **node_b_properties)
-                neo4graph.delete(target)
-          neo4graph.commit()
-  print("Ingesting...")
-  for directory in directories:
-    for filename in glob.glob(directory + "/*.valid.json"):
-      with open(filename) as o:
-        print("Ingesting %s"%filename)
-        serialized = json.loads(o.read())
-        for i in tqdm(serialized["edges"]):
-          source = i["source"]
-          node_a_props = serialized["nodes"][source]
-          node_a_properties = node_a_props.get("properties", {})
-          node_a_type = node_a_props["type"]
-          node_a = Node(node_a_type, **node_a_properties)
-          neo4graph.merge(node_a)
-
-          target = i["target"]
-          node_b_props = serialized["nodes"][target]
-          node_b_properties = node_b_props.get("properties", {})
-          node_b_type = node_b_props["type"]
-          node_b = Node(node_b_type, **node_b_properties)
-          neo4graph.merge(node_b)
-
-          relation = i["relation"]
-          relation_properties_dict = i.get("properties", {})
-          neo4graph.merge(Relationship(node_a, relation, node_b, **relation_properties_dict))
-  neo4graph.commit()
-except Exception as e:
-  print(e)
+        with open(filename) as o:
+          print("Ingesting %s..."%filename)
+          serialized = json.loads(o.read())
+          print("Ingesting...")
+          process_serialized(serialized)
+    neo4graph.commit()
+  except Exception as e:
+    print(e)
