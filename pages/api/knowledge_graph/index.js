@@ -199,7 +199,7 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 		WITH nodes(p) as n, relationships(p) as r
 		RETURN * LIMIT ${limit}
 		`
-	if (relation) query = query.replace("[rel]",`:[rel:\`${relation}\`]`)
+	if (relation) query = query.replace("[rel]",`[rel:\`${relation}\`]`)
 	console.log(query)
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 
