@@ -96,12 +96,12 @@ def graph_to_json(rdfgraph):
                 # If it is a literal then it may be describing a property
                     if not pred_prefix == "Literal":
                         edges[pred] = {
-                            "source": source,
+                            "source": subj,
                             "relation": pred,
                             "target": obj,
                             "type": "Relation",
                             "properties": {
-                                "id": "%s_%s_%s"%(source, pred, target)
+                                "id": "%s_%s_%s"%(subj, pred, obj)
                             }
                         }
                     else:

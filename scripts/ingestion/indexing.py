@@ -25,3 +25,12 @@ for i in schema["nodes"]:
 		FOR (n:%s)
 		ON (n.label)
 	"""%(i["node"], i["node"]))
+	for k in (i["search"] or []):
+		print("Indexing %s"%k)
+		graph.run("""
+			CREATE BTREE INDEX %s_%s_index IF NOT EXISTS
+			FOR (n:%s)
+			ON (n.%s)
+		"""%(i["node"], k, i["node"], k))
+		 
+	
