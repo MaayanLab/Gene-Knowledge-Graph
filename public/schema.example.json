@@ -29,6 +29,10 @@
 					"type": "link",
 					"href": "https://cfde-gene-pages.cloud/drug/${label}?CF=false&PS=true"
 				}
+			],
+			"search": [
+				"label",
+				"id"
 			]
 		},
 		{
@@ -76,6 +80,10 @@
 					"type": "link",
 					"href": "https://cfde-gene-pages.cloud/gene/${label}?CF=false&PS=true&Ag=true"
 				}
+			],
+			"search": [
+				"label",
+				"id"
 			]
 		},
 		{
@@ -105,6 +113,10 @@
 					"text": "${carb}",
 					"type": "text"
 				}
+			],
+			"search": [
+				"label",
+				"id"
 			]
 		},
 		{
@@ -135,6 +147,10 @@
 					"text": "${synonyms.join(', ')}",
 					"type": "text"
 				}
+			],
+			"search": [
+				"label",
+				"id"
 			]
 		},
 		{
@@ -159,6 +175,10 @@
 					"text": "${id}",
 					"type": "text"
 				}
+			],
+			"search": [
+				"label",
+				"id"
 			]
 		},
 		{
@@ -179,10 +199,20 @@
 			},
 			"display": [
 				{
-					"label": "Ontology ID",
-					"text": "${id}",
+					"label": "Tissue",
+					"text": "${tissue}",
+					"type": "text"
+				},
+				{
+					"label": "Age group",
+					"text": "${age_group}",
 					"type": "text"
 				}
+			],
+			"search": [
+				"label",
+				"tissue",
+				"age_group"
 			]
 		}
 	],

@@ -176,14 +176,14 @@ const aggregates = async ({session, schema}) => {
 	}
 }
 
-const resolve_two_terms = async ({session, start_term, start, end_term, end, limit, order, schema}) => {
+const resolve_two_terms = async ({session, start_term, start_field, start, end_term, end_field, end, limit, order, schema, relation}) => {
 	await aggregates({session, schema})
-	let query = `MATCH p=(a: ${start} {label: $start_term})-[*1..4]-(b: ${end} {label: $end_term})
-		USING INDEX a:${start}(label)
-		USING INDEX b:${end}(label)
+	let query = `MATCH p=(a: \`${start}\` {${start_field}: $start_term})-[*1..4]-(b: \`${end}\` {${end_field}: $end_term})
+		USING INDEX a:\`${start}\`(${start_field})
+		USING INDEX b:\`${end}\`(${end_field})
 		WITH nodes(p) as n, relationships(p) as r
 		RETURN * LIMIT ${limit}`
-
+	if (relation) query = query.replace("[*1..4]",`:\`${relation}\`[*1..4]`)
 	
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 	// query = `${query} RETURN * ORDER BY rand() LIMIT ${limit}`
@@ -191,15 +191,16 @@ const resolve_two_terms = async ({session, start_term, start, end_term, end, lim
 	return resolve_results({results, start_term, end_term, schema, order, score_fields, colors})
 }
 
-const resolve_one_term = async ({session, start, term, limit, order, schema}) => {
+const resolve_one_term = async ({session, start, field, term, relation, limit, order, schema}) => {
 	await aggregates({session, schema})
 	let query = `
-		MATCH p=(st:${start} { label: $term })-[rel]-(en)
-		USING INDEX st:${start}(label)
+		MATCH p=(st:\`${start}\` { ${field}: $term })-[rel]-(en)
+		USING INDEX st:\`${start}\`(${field})
 		WITH nodes(p) as n, relationships(p) as r
 		RETURN * LIMIT ${limit}
 		`
-	
+	if (relation) query = query.replace("[rel]",`:[rel:\`${relation}\`]`)
+	console.log(query)
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 
 	const results = await session.readTransaction(txc => txc.run(query, { term }))
@@ -207,7 +208,7 @@ const resolve_one_term = async ({session, start, term, limit, order, schema}) =>
 }
 
 export default async function query(req, res) {
-  const { start, start_term, end, end_term, limit=25, order } = await req.query
+  const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=25, order } = await req.query
   if (!schema) {
 	schema = default_schema
 	if (process.env.NEXT_PUBLIC_SCHEMA) {
@@ -224,10 +225,10 @@ export default async function query(req, res) {
 		})
 		try {
 			if (start && end && start_term && end_term) {
-				const results = await resolve_two_terms({session, start_term, start, end_term, end, limit, schema, order})
+				const results = await resolve_two_terms({session, start_term, start_field, start, end_term, end_field, end, relation, limit, schema, order})
 				res.status(200).send(results)
 			} else if (start) {
-				const results = await resolve_one_term({session, start, term: start_term, limit, schema, order})
+				const results = await resolve_one_term({session, start, field: start_field, term: start_term, relation, limit, schema, order})
 				res.status(200).send(results)
 			} else {
 				res.status(400).send("Invalid input")
