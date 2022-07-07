@@ -8,6 +8,8 @@ const DataGrid = dynamic(async () => (await import('@mui/x-data-grid')).DataGrid
 const GridToolbar = dynamic(async () => (await import('@mui/x-data-grid')).GridToolbar);
 const ToggleButton = dynamic(() => import('@mui/material/ToggleButton'));
 const ToggleButtonGroup = dynamic(() => import('@mui/material/ToggleButtonGroup'));
+const Tabs = dynamic(() => import('@mui/material/Tabs'));
+const Tab = dynamic(() => import('@mui/material/Tab'));
 
 const NetworkTable = ({data, schema}) => {
 	const [processedData, setProcessedData] = useState(null)
@@ -132,20 +134,20 @@ const NetworkTable = ({data, schema}) => {
 	else {
 		const {data={}, header=[]} = processedData[tab] || {}
 		return (
-			<Grid container>
+			<Grid container justifyContent={"center"}>
 				<Grid item xs={12}>
-					<ToggleButtonGroup
+					<Tabs
 						value={tab}
-						exclusive
+						variant="scrollable"
+        				scrollButtons="auto"
 						onChange={(e, val)=>setTab(val)}
 						aria-label="tab"
+						fullWidth
 					>
 					{tabs.map(k=>(
-						<ToggleButton value={k} aria-label="left aligned" key={`tab-${k}`}>
-							<Typography>{k}</Typography>
-						</ToggleButton>
+						<Tab value={k} aria-label="left aligned" key={`tab-${k}`} label={k}/>
 					))}
-					</ToggleButtonGroup>
+					</Tabs>
 				</Grid>
 				<Grid item xs={12}>
 					<DataGrid
