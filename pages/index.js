@@ -132,7 +132,7 @@ const Selector = ({entries, value, onChange, prefix}) => {
       >
         {Object.keys(entries).map(k=>(
           <ToggleButton value={k} aria-label="left aligned" key={`${prefix}-${k}`}>
-            <Typography variant="caption" style={{textTransform: "none"}}>{k.replaceAll("_", " ")}</Typography>
+            <Typography variant="caption" style={{textTransform: "none"}}>{k.replace(/_/g," ")}</Typography>
           </ToggleButton>
         ))}
       </ToggleButtonGroup>
@@ -151,7 +151,7 @@ const Selector = ({entries, value, onChange, prefix}) => {
           style={{width: 215, padding: 0}}
         >
           {Object.keys(entries).map(val=>(
-            <MenuItem key={val} value={val}>{val.replaceAll("_", " ")}</MenuItem>
+            <MenuItem key={val} value={val}>{val.replace(/_/g," ")}</MenuItem>
           ))}
         </Select>
       </FormControl>
