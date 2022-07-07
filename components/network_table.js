@@ -27,11 +27,15 @@ const NetworkTable = ({data, schema}) => {
 		if (data) {
 			const processed = {}
 			const id_mapper = {}
+			const node_tabs = []
+			const edge_tabs = []
 			for (const d of data) {
 				const {kind, relation, properties, source, target} = d.data
 				const key = relation || kind
 				if (key) { 
 					if ( processed[key] === undefined) {
+						if (relation) edge_tabs.push(key)
+						else node_tabs.push(key)
 						processed[key] = {header: [], data: {}}
 						const header = []
 						if (display[key]) {
@@ -43,8 +47,7 @@ const NetworkTable = ({data, schema}) => {
 									flex: 1,
 									style: {flexDirection: "row"},
 									align: "left",
-									text: prop.text,
-									type: relation !== undefined ? "edge": "node"
+									text: prop.text
 								})
 							}
 						} else {
@@ -56,7 +59,7 @@ const NetworkTable = ({data, schema}) => {
 								flex: 1,
 								style: {flexDirection: "row"},
 								align: "left",
-								type: relation !== undefined ? "edge": "node"
+								type: relation ? "edge": "node"
 							})
 							header.push({
 								field: 'label',
@@ -64,7 +67,7 @@ const NetworkTable = ({data, schema}) => {
 								flex: 1,
 								style: {flexDirection: "row"},
 								align: "left",
-								type: relation !== undefined ? "edge": "node"
+								type: relation ? "edge": "node"
 							})
 							for (const field of Object.keys(rest)) {
 								const headerName = field.replaceAll(".", " ")
@@ -74,7 +77,7 @@ const NetworkTable = ({data, schema}) => {
 									flex: 1,
 									style: {flexDirection: "row"},
 									align: "left",
-									type: relation !== undefined ? "edge": "node"
+									type: relation ? "edge": "node"
 								})
 							}
 						}
@@ -120,20 +123,14 @@ const NetworkTable = ({data, schema}) => {
 				// }
 			}
 			setMapper(id_mapper)
-			setTabs(Object.keys(processed))
-			setTab(Object.keys(processed)[0])
+			setTabs([...node_tabs, ...edge_tabs])
+			setTab(node_tabs[0])
 			setProcessedData(processed)	
 		}
 	}, [data])
 	if (processedData === null) return null
 	else {
 		const {data={}, header=[]} = processedData[tab] || {}
-		const edge_header = []
-		const node_header = []
-		for (const i of header) {
-			if (i.type === "edge") edge_header.push(i)
-			else node_header.push(i)
-		}
 		return (
 			<Grid container>
 				<Grid item xs={12}>
@@ -156,7 +153,7 @@ const NetworkTable = ({data, schema}) => {
 						components={{ Toolbar: GridToolbar }}
 						sortingOrder={['desc', 'asc']}
 						rows={Object.values(data)}
-						columns={[...node_header, ...edge_header]}
+						columns={header}
 						autoPageSize
 						disableColumnMenu
 						autoHeight
