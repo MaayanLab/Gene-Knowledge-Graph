@@ -48,16 +48,19 @@ const styles = {
 
 const IconRenderer = ({label, icon, height=100, width=100, onClick, router, selected, setSelected, relation}) => {
 	let buttonStyle = styles.enabled
-	if (selected !== null && label === selected) buttonStyle = styles.active
-	if (selected !== null && label !== selected) buttonStyle = styles.disabled
+	if (selected.length && selected.indexOf(label) > -1) buttonStyle = styles.active
+	if (selected.length && selected.indexOf(label) === -1) buttonStyle = styles.disabled
 	if (onClick !== undefined) {
-		const rel = (onClick.props.relations || []).join(",")
-		if (rel == relation) setSelected(label)
+		const rels = (relation || "").split(",")
+		const rel = (onClick.props.relations || []).filter(i=>rels.indexOf(i) > -1)
+		// console.log(label, selected)
+		if (label === "GlyGen") console.log(rel.length, selected)
+		if (rel.length && selected.indexOf(label)=== -1) setSelected([...selected, label])
 		return (
 			<Button 
 				onClick={()=>{
 					function_mapper[onClick.name](({...onClick.props, router, selected, label, relation}))
-					setSelected(label)
+					if (selected.indexOf(label)=== -1) setSelected([...selected, label])
 				}}
 				sx={buttonStyle}
 			>
@@ -97,12 +100,12 @@ const IconRenderer = ({label, icon, height=100, width=100, onClick, router, sele
 
 
 const Header = ({schema, ...rest}) => {
-	const [selected, setSelected] = useState(null)
+	const [selected, setSelected] = useState([])
 	const router = useRouter()
 	const relation = router.query.relation
 
 	useEffect(()=>{
-		if (relation === undefined) setSelected(null)
+		if (relation === undefined) setSelected([])
 	}, [relation])
 
 	if (!schema) schema = default_schema

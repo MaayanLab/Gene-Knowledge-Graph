@@ -124,7 +124,7 @@ const TooltipCard = ({node, tooltip_templates, setFocused, router, schema}) => {
   )
 }
 
-const Selector = ({entries, value, onChange, prefix, }) => {
+const Selector = ({entries, value, onChange, prefix, ...props }) => {
   if (entries.length === 1) return null
   else return (
     <FormControl>
@@ -136,7 +136,8 @@ const Selector = ({entries, value, onChange, prefix, }) => {
         variant="outlined"
         disableUnderline={true}
         style={{width: 215, padding: 0, height: 45}}
-      >
+        {...props}
+        >
         {entries.map(val=>(
           <MenuItem key={val} value={val}>{val.replace(/_/g," ")}</MenuItem>
         ))}
@@ -146,7 +147,7 @@ const Selector = ({entries, value, onChange, prefix, }) => {
 
 }
 
-export default function KnowledgeGraph({entries, nodes, examples=default_examples, schema}) {
+export default function KnowledgeGraph({entries, edges=[], examples=default_examples, schema}) {
   if (!schema) schema=default_schema  
   const router = useRouter()
   const {start_term, end_term, start_field="label", end_field="label", relation, limit=25, order=(Object.keys(schema.order || {}))[0]} = router.query
@@ -169,7 +170,6 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
   const [loading, setLoading] = React.useState(false)
 
   const firstUpdate = useRef(true);
-
   const tooltip_templates = {}
   for (const i of schema.nodes) {
     tooltip_templates[i.node] = i.display
@@ -466,26 +466,35 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
       }
       <Grid item xs={12}>
         <Grid container spacing={1} alignItems="center" justifyContent="flex-start">
-          <Grid item><Typography variant="subtitle2"><b>Layout:</b></Typography></Grid>
+          {edges.length && <Grid item><Typography variant="body1"><b>Select relation:</b></Typography></Grid>}
+          {edges.length && 
+            <Grid item>
+              <Selector entries={edges}
+                value={(relation || "").split(",")}
+                prefix={"edge"}
+                onChange={(e)=>{
+                  console.log(e)
+                  const relation = e.filter(i=>i!=="").join(",")
+                  if (relation === "") {
+                    const {relation, ...query} = router.query
+                    redirect(query)
+                  } else {
+                    redirect({...router.query, relation})
+                  }
+                }}
+                multiple={true}/>
+            </Grid>
+          }
+          <Grid item><Typography variant="body1"><b>Layout:</b></Typography></Grid>
           <Grid item>
-            <FormControl>
-              <Select
-                labelId="layouts-select"
-                id="layouts-label"
-                value={layout}
-                label="Select Layout"
-                onChange={(e, v)=>setLayout(e.target.value)}
-                variant="standard"
-                disableUnderline={true}
-              >
-                {Object.keys(layouts).map(val=>(
-                  <MenuItem key={val} value={val}>{val}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Selector entries={Object.keys(layouts)}
+              value={layout}
+              prefix={"layout"}
+              onChange={(e, v)=>setLayout(e.target.value)}
+              />
           </Grid>
           <Grid item>
-            <Typography variant="subtitle2"><b>Edge labels:</b><Switch
+            <Typography variant="body1"><b>Edge labels:</b><Switch
                 color="blues"
                 checked={edgeStyle.label}
                 onChange={()=>{
@@ -497,7 +506,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
               /></Typography>
           </Grid>
           <Grid item>
-            <Typography variant="subtitle2"><b>Size:</b></Typography>
+            <Typography variant="body1"><b>Size:</b></Typography>
           </Grid>
           <Grid item xs={2}>
             <Slider 
@@ -518,7 +527,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
               aria-labelledby="continuous-slider" />
           </Grid>
           <Grid item>
-            <Typography variant="subtitle2">{limit}</Typography>
+            <Typography variant="body1">{limit}</Typography>
           </Grid>
           <Grid item>
             <Button color="blues" onClick={()=>{
@@ -728,6 +737,7 @@ export async function getStaticProps(ctx) {
 	const entries = {}
   const palettes = {}
   const nodes = []
+  let edges = []
   let schema = default_schema
   let s = null
   if (process.env.NEXT_PUBLIC_SCHEMA) {
@@ -748,13 +758,17 @@ export async function getStaticProps(ctx) {
       contrastText: contrastText || "#000"
     }
 	}
+  for (const i of schema.edges) {
+    edges = [...edges, ...(i.match || [])]
+  }
   return {
 	  props: {
       examples,
 		  entries,
       nodes,
       schema: s,
-      palettes
+      palettes,
+      edges
     },
 	};
 }
