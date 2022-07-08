@@ -29,18 +29,18 @@ const AddBoxIcon  = dynamic(() => import('@mui/icons-material/AddBox'));
 
 const NetworkTable =  dynamic(() => import('../components/network_table'))
 const layouts = {
-  "Hierarchical Layout": {
-    name: "breadthfirst",
-    animate: true,
-    spacingFactor: 1,
-    padding: 15
-  },
   "Force-directed": {
     name: 'fcose',
     animate: true,
     nodeRepulsion: node => 10000,
     // Ideal edge (non nested) length
     idealEdgeLength: edge => 150
+  },
+  "Hierarchical Layout": {
+    name: "breadthfirst",
+    animate: true,
+    spacingFactor: 1,
+    padding: 15
   },
   Geometric: {
     name: 'avsdf',
@@ -149,7 +149,7 @@ const Selector = ({entries, value, onChange, prefix, }) => {
 export default function KnowledgeGraph({entries, nodes, examples=default_examples, schema}) {
   if (!schema) schema=default_schema  
   const router = useRouter()
-  const {start_term, end_term, start_field="label", end_field="label", limit=25, order=(Object.keys(schema.order || {}))[0]} = router.query
+  const {start_term, end_term, start_field="label", end_field="label", relation, limit=25, order=(Object.keys(schema.order || {}))[0]} = router.query
   let start = router.query.start
   let end = router.query.end
   if (!start) start = schema.nodes[0].node
@@ -168,6 +168,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
   const [controller, setController] = React.useState(null)
   const [loading, setLoading] = React.useState(false)
 
+  const firstUpdate = useRef(true);
 
   const tooltip_templates = {}
   for (const i of schema.nodes) {
@@ -240,6 +241,9 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
         body.end_term = end_term
         body.end_field = end_field
       }
+      if (relation) {
+        body.relation = relation
+      }
       const body_str = Object.entries(body).map(([k,v])=>`${k}=${v}`).join("&")
       
       const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph?${body_str}`,
@@ -281,6 +285,14 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
     }
   }, [end_term])
 
+  useAsyncEffect(async (isActive) => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false
+    } else {
+      await  resolve_elements(isActive)
+    }
+  }, [relation])
+
   const example = examples[start]
   return (
     <Grid container justifyContent="space-around" spacing={2}>
@@ -317,6 +329,9 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
                     if (end) {
                       query.end = end
                       query.end_field = end_field
+                    }
+                    if (relation) {
+                      query.relation = relation
                     }
                     router.push({
                       pathname:  schema.endpoint || '',
@@ -400,17 +415,19 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
                 onChange={(evt, value) => {
                   if (value === null) value = ''
                   setEndTermInput(value)
+                  const query = {
+                    start,
+                    start_term,
+                    start_field,
+                    end,
+                    end_term: value,
+                    end_field,
+                    limit
+                  }
+                  if (relation) query.relation = relation
                   router.push({
                     pathname:  schema.endpoint || '',
-                    query: {
-                      start,
-                      start_term,
-                      start_field,
-                      end,
-                      end_term: value,
-                      end_field,
-                      limit
-                    }
+                    query,
                   }, undefined, { shallow: true })
                 }}
                 style={{ width: 220 }}
@@ -511,7 +528,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
           }
         </Grid>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{minHeight: 500}}>
         {(elements === undefined) ? (
           <CircularProgress/>
         ) : elements.length === 0 ? (
@@ -635,7 +652,7 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
                 sel.incomers().removeClass('focusedSemitransp')
                 sel.outgoers().removeClass('focusedSemitransp')
                 // setNode({node, type: "focused"})
-                setNode(node)
+                setFocused(node)
               }
             })
 
