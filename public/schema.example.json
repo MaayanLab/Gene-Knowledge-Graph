@@ -560,7 +560,7 @@
 					"type": "function",
 					"name": "filter_relation",
 					"props": {
-						"relations": ["Glygen"]
+						"relations": ["GlyGen"]
 					}
 				}
 			},
@@ -581,7 +581,14 @@
 				"label": "IDG",
 				"icon": "${PREFIX}/static/resources/idg.png",
 				"height": 100,
-				"width": 100
+				"width": 100,
+				"onClick": {
+					"type": "function",
+					"name": "filter_relation",
+					"props": {
+						"relations": ["IDG"]
+					}
+				}
 			},
 			{
 				"label": "HuBMAP",
@@ -600,7 +607,14 @@
 				"label": "ERCC",
 				"icon": "${PREFIX}/static/resources/exrna.png",
 				"height": 100,
-				"width": 100
+				"width": 100,
+				"onClick": {
+					"type": "function",
+					"name": "filter_relation",
+					"props": {
+						"relations": ["Ex-RNA"]
+					}
+				}
 			}
 		]
 	},
