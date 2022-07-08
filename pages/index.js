@@ -26,7 +26,7 @@ const Slider = dynamic(() => import('@mui/material/Slider'));
 const Cytoscape = dynamic(() => import('../components/Cytoscape'), { ssr: false })
 const CameraAltOutlinedIcon  = dynamic(() => import('@mui/icons-material/CameraAltOutlined'));
 const AddBoxIcon  = dynamic(() => import('@mui/icons-material/AddBox'));
-
+const IndeterminateCheckBoxIcon = dynamic(() => import('@mui/icons-material/IndeterminateCheckBox'));
 const NetworkTable =  dynamic(() => import('../components/network_table'))
 const layouts = {
   "Force-directed": {
@@ -452,6 +452,14 @@ export default function KnowledgeGraph({entries, nodes, examples=default_example
                   />
                 )}
               />
+            </Grid>
+            <Grid item>
+              <Button onClick={()=>{
+                const {end, end_term, end_field, ...query} = router.query
+                redirect({...query})}
+              } startIcon={<IndeterminateCheckBoxIcon />}>
+                  Remove End Filter
+              </Button>
             </Grid>
           </Grid>
         </Grid>
