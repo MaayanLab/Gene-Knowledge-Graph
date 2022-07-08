@@ -42,7 +42,7 @@
 					"pathname": "/",
 					"query": {
 						"start": "Gene",
-						"start_term": "TAT"
+						"start_term": "LUM"
 					}
 				}
 			},
@@ -193,8 +193,8 @@
 				}
 			},
 			"palette": {
-				"name": "limes",
-				"main": "#dce775",
+				"name": "pinks",
+				"main": "#f48fb1",
 				"contrastText": "#000"
 			},
 			"display": [
@@ -529,25 +529,53 @@
 				"label": "LINCS",
 				"icon": "${PREFIX}/static/resources/lincs.gif",
 				"height": 120,
-				"width": 120
+				"width": 120,
+				"onClick": {
+					"type": "function",
+					"name": "filter_relation",
+					"props": {
+						"relations": ["LINCS (downregulates)", "LINCS (upregulates)"]
+					}
+				}
 			},
 			{
 				"label": "Metabolomics Workbench",
 				"icon": "${PREFIX}/static/resources/metabolomics.png",
 				"height": 100,
-				"width": 100
+				"width": 100,
+				"onClick": {
+					"type": "function",
+					"name": "filter_relation",
+					"props": {
+						"relations": ["Metabolomics Workbench"]
+					}
+				}
 			},
 			{
 				"label": "GlyGen",
 				"icon": "${PREFIX}/static/resources/glygen.png",
 				"height": 100,
-				"width": 100
+				"width": 100,
+				"onClick": {
+					"type": "function",
+					"name": "filter_relation",
+					"props": {
+						"relations": ["Glygen"]
+					}
+				}
 			},
 			{
 				"label": "GTEx",
 				"icon": "${PREFIX}/static/resources/gtex.png",
 				"height": 80,
-				"width": 80
+				"width": 80,
+				"onClick": {
+					"type": "function",
+					"name": "filter_relation",
+					"props": {
+						"relations": ["GTEx (up)", "GTEx (down)"]
+					}
+				}
 			},
 			{
 				"label": "IDG",
@@ -559,7 +587,14 @@
 				"label": "HuBMAP",
 				"icon": "${PREFIX}/static/resources/hubmap.png",
 				"height": 100,
-				"width": 100
+				"width": 100,
+				"onClick": {
+					"type": "function",
+					"name": "filter_relation",
+					"props": {
+						"relations": ["HuBMAP"]
+					}
+				}
 			},
 			{
 				"label": "ERCC",
@@ -572,11 +607,13 @@
 	"footer": [
 		{
 			"type": "github",
+			"key": "github",
 			"code": "https://github.com/maayanLab/gene-knowledge-graph",
 			"issues": "https://github.com/MaayanLab/Gene-Knowledge-Graph/issues"
 		},
 		{
 			"type": "icon",
+			"key": "cfde_icon",
 			"src": "${PREFIX}/static/icons/CFDE-logo.png",
 			"alt": "CFDE",
 			"link": "https://www.nih-cfde.org/",
