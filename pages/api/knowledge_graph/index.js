@@ -183,7 +183,16 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 		USING INDEX b:\`${end}\`(${end_field})
 		WITH nodes(p) as n, relationships(p) as r
 		RETURN * LIMIT ${limit}`
-	if (relation) query = query.replace("[*1..4]",`:\`${relation}\`[*1..4]`)
+		
+	if (relation) {
+		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
+		query = query.replace("[*1..4]",`[:${rels}*1..4]`)
+		// query = `MATCH p=(a: \`${start}\` {${start_field}: $start_term})-[:${rels}]-()-[]-()-[:${rels}]-(b: \`${end}\` {${end_field}: $end_term})
+		// USING INDEX a:\`${start}\`(${start_field})
+		// USING INDEX b:\`${end}\`(${end_field})
+		// WITH nodes(p) as n, relationships(p) as r
+		// RETURN * LIMIT ${limit}`
+	} 
 	
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 	// query = `${query} RETURN * ORDER BY rand() LIMIT ${limit}`
@@ -199,8 +208,10 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 		WITH nodes(p) as n, relationships(p) as r
 		RETURN * LIMIT ${limit}
 		`
-	if (relation) query = query.replace("[rel]",`[rel:\`${relation}\`]`)
-	console.log(query)
+	if (relation) {
+		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
+		query = query.replace("[rel]",`[rel:${rels}]`)
+	}
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 
 	const results = await session.readTransaction(txc => txc.run(query, { term }))
