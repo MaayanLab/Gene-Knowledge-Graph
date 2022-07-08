@@ -3,7 +3,7 @@ import { neo4jDriver } from "./neo4j"
 import fetch from 'isomorphic-unfetch'
 import * as default_schema from '../public/schema.json'
 
-export async function get_terms(node) {
+export async function get_terms(node, search) {
   try {
 	console.log(`Connecting to ${process.env.NEO4J_URL}`)
     const session = neo4jDriver.session({
@@ -12,16 +12,24 @@ export async function get_terms(node) {
 	let query = `MATCH (g: ${node}) RETURN *`
 	if (process.env.NODE_ENV==="development") {
 		console.log("Dev mode")
-		let entries = {}
+		const entries = search.reduce((acc, i)=>({
+			...acc,
+			[i]: new Set()
+		}), {})
 		let skip = 0
 		const limit = 500
 		while (skip < 1000) {
 			const results = await session.readTransaction(txc => txc.run(`${query} SKIP ${skip} LIMIT ${limit}`))
-			entries = results.records.reduce((acc, record) => {
+			for (const record of results.records) {
 				const g = record.get('g')
-					return {...acc, [g.properties.label]: g.properties}
-				}, entries)
+				for (const i of search) {
+					entries[i].add(g.properties[i])
+				}
+			}
 			skip = skip + limit	
+		}
+		for (const i of search) {
+			entries[i] = Array.from(entries[i])
 		}
 		return entries
 	} else {
@@ -30,16 +38,24 @@ export async function get_terms(node) {
 		// const count = count_r.get('count')
 		const count = count_r.records[0].get('count')["low"]
 		console.log("Total:",count)
-		let entries = {}
+		const entries = search.reduce((acc, i)=>({
+			...acc,
+			[i]: new Set()
+		}), {})
 		let skip = 0
 		const limit = 500
 		while (skip < count) {
 			const results = await session.readTransaction(txc => txc.run(`${query} SKIP ${skip} LIMIT ${limit}`))
-			entries = results.records.reduce((acc, record) => {
+			for (const record of results.records) {
 				const g = record.get('g')
-					return {...acc, [g.properties.label]: g.properties}
-				}, entries)
+				for (const i of search) {
+					entries[i].add(g.properties[i])
+				}
+			}
 			skip = skip + limit	
+		}
+		for (const i of search) {
+			entries[i] = Array.from(entries[i])
 		}
 		return entries
 	}
