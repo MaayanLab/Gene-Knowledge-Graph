@@ -20,8 +20,9 @@ const default_color = '#48ACF0'
 const highlight_color = '#F8333C'
 const default_edge_color = '#e0e0e0'
 
-const get_node_color_and_type = ({node, terms, color=default_color, record, field, aggr_field}) => {
-	if (terms.indexOf(node.properties.label) > -1) {
+const get_node_color_and_type = ({node, terms, color=default_color, record, field, aggr_field, fields}) => {
+	// if(terms.indexOf(node.properties.label) > -1){
+	if (fields.filter(i=>i && terms.indexOf(node.properties[i]) > -1).length > 0) {
 		return {color: highlight_color, node_type: 1}
 	} else if (node.properties[field] && aggr_field!==undefined) {
 		const aggr_score = aggr_scores[aggr_field]
@@ -49,7 +50,7 @@ const get_edge_color = ({relation, color, record, aggr_field, field}) => {
 	}
 }
 
-const resolve_results = ({results, start_term, end_term, term, colors}) => (
+const resolve_results = ({results, terms, colors, field, start_field, end_field}) => (
 	results.records.flatMap(record => {
 		const relations = record.get('r')
 		const nodes = record.get('n').reduce((acc, i)=>({
@@ -69,7 +70,7 @@ const resolve_results = ({results, start_term, end_term, term, colors}) => (
 					kind: start_type,
 					label: start_node.properties.label || start_node.properties.id,
 					properties: start_node.properties,
-					...(get_node_color_and_type({node: start_node, terms: [start_term, end_term, term], record,
+					...(get_node_color_and_type({node: start_node, terms, record, fields: [field, start_field, end_field],
 						 ...colors[start_type]}))
 				} 
 			})
@@ -97,7 +98,7 @@ const resolve_results = ({results, start_term, end_term, term, colors}) => (
 					kind: end_type,
 					label: end_node.properties.label || end_node.properties.id,
 					properties: end_node.properties,
-					...(get_node_color_and_type({node: end_node, terms: [start_term, end_term, term], record,
+					...(get_node_color_and_type({node: end_node, terms, record, fields: [field, start_field, end_field],
 						...colors[end_type]}))
 				} 
 			})
@@ -197,7 +198,7 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 	// query = `${query} RETURN * ORDER BY rand() LIMIT ${limit}`
 	const results = await session.readTransaction(txc => txc.run(query, { start_term, end_term }))
-	return resolve_results({results, start_term, end_term, schema, order, score_fields, colors})
+	return resolve_results({results, terms: [start_term, end_term], schema, order, score_fields, colors, start_field, end_field})
 }
 
 const resolve_one_term = async ({session, start, field, term, relation, limit, order, schema}) => {
@@ -215,7 +216,7 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 
 	const results = await session.readTransaction(txc => txc.run(query, { term }))
-	return resolve_results({results, term, schema, order, score_fields, colors})
+	return resolve_results({results, terms: [term], schema, order, score_fields, colors, field})
 }
 
 export default async function query(req, res) {
