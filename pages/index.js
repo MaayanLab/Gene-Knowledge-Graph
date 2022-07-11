@@ -23,6 +23,7 @@ const Card = dynamic(() => import('@mui/material/Card'));
 const CardContent = dynamic(() => import('@mui/material/CardContent'));
 const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
 const Slider = dynamic(() => import('@mui/material/Slider'));
+const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
 const Cytoscape = dynamic(() => import('../components/Cytoscape'), { ssr: false })
 const CameraAltOutlinedIcon  = dynamic(() => import('@mui/icons-material/CameraAltOutlined'));
 const AddBoxIcon  = dynamic(() => import('@mui/icons-material/AddBox'));
@@ -139,7 +140,7 @@ const Selector = ({entries, value, onChange, prefix, ...props }) => {
         {...props}
         >
         {entries.map(val=>(
-          <MenuItem key={val} value={val}>{val.replace(/_/g," ")}</MenuItem>
+          <MenuItem key={val} value={val}>{props.multiple && <Checkbox checked={value.indexOf(val)>-1}/>}{val.replace(/_/g," ")}</MenuItem>
         ))}
       </Select>
     </FormControl>
@@ -482,6 +483,11 @@ export default function KnowledgeGraph({entries, edges=[], examples=default_exam
                     redirect({...router.query, relation})
                   }
                 }}
+                renderValue={(selected) => (
+                  <Box sx={{width: 180}}>
+                    <Typography noWrap>{selected.join(", ")}</Typography>
+                  </Box>
+                )}
                 multiple={true}/>
             </Grid>
           }
@@ -536,13 +542,6 @@ export default function KnowledgeGraph({entries, edges=[], examples=default_exam
               <CameraAltOutlinedIcon/>
             </Button>
           </Grid>
-          {start_term &&
-            <Grid item>
-              <Button variant='outlined' style={{height: 45}} onClick={()=>{
-                tableref.current.scrollIntoView();
-              }}>Go to table</Button>
-            </Grid>
-          }
         </Grid>
       </Grid>
       <Grid item xs={12} style={{minHeight: 500}}>
@@ -761,14 +760,15 @@ export async function getStaticProps(ctx) {
   for (const i of schema.edges) {
     edges = [...edges, ...(i.match || [])]
   }
+
   return {
 	  props: {
-      examples,
-		  entries,
-      nodes,
-      schema: s,
-      palettes,
-      edges
+        examples,
+  	    entries,
+        nodes,
+        schema: s,
+        palettes,
+        edges,
     },
 	};
 }
