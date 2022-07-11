@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as default_schema from '../public/schema.json'
+import { makeTemplate } from '../utils/helper';
 
 const Container = dynamic(() => import('@mui/material/Container'));
 const Header = dynamic(() => import('../components/header'));
@@ -72,6 +73,7 @@ function MyApp({ Component, pageProps }) {
         <Head>
           <meta charSet="utf-8" />
           <title>{((pageProps.schemas || default_schema).header || {}).title}</title>
+          <link rel="shortcut icon" type="image/x-icon" alt={((pageProps.schemas || default_schema).header || {}).title} href={makeTemplate((((pageProps.schemas || default_schema).header || {}).icon).src || '', {})} />
           <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
           <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css" rel="stylesheet" />
           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />

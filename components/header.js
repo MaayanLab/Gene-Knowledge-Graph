@@ -46,7 +46,7 @@ const styles = {
 	}
   }
 
-const IconRenderer = ({label, icon, height=100, width=100, onClick, router, selected, setSelected, relation}) => {
+const IconRenderer = ({label, icon, height=100, width=100, onClick, href, router, selected, setSelected, relation}) => {
 	let buttonStyle = styles.enabled
 	if (selected.length && selected.indexOf(label) > -1) buttonStyle = styles.active
 	if (selected.length && selected.indexOf(label) === -1) buttonStyle = styles.disabled
@@ -54,7 +54,6 @@ const IconRenderer = ({label, icon, height=100, width=100, onClick, router, sele
 		const rels = (relation || "").split(",")
 		const rel = (onClick.props.relations || []).filter(i=>rels.indexOf(i) > -1)
 		// console.log(label, selected)
-		if (label === "GlyGen") console.log(rel.length, selected)
 		if (rel.length && selected.indexOf(label)=== -1) setSelected([...selected, label])
 		return (
 			<Button 
@@ -65,6 +64,26 @@ const IconRenderer = ({label, icon, height=100, width=100, onClick, router, sele
 				sx={buttonStyle}
 			>
 				<div style={{height, minWidth: width, ...buttonStyle}}>
+					<Image
+						// loader={()=>`/birth-defect-drugs${val.icon}`} 
+						src={makeTemplate(icon, {})}
+						height={height}
+						width={width}
+						layout="responsive"
+						objectFit="contain"
+						alt={label}
+					/>
+				</div>
+			</Button>
+		)
+	} else if (href !== undefined) {
+		return (
+			<Button 
+				href={href}
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<div style={{height, minWidth: width}}>
 					<Image
 						// loader={()=>`/birth-defect-drugs${val.icon}`} 
 						src={makeTemplate(icon, {})}
@@ -113,7 +132,27 @@ const Header = ({schema, ...rest}) => {
 	return(
 	<Grid container justifyContent={"center"} alignItems={"center"} spacing={2} style={{marginBottom: 20}}>
 		<Grid item xs={12} align="center">
-			<Typography variant="h4">{schema.header.title}</Typography>
+			{ schema.header.icon ?
+				<Grid container justifyContent={"center"} alignItems={"center"} spacing={2}>
+					<Grid item>
+						<div style={{height: schema.header.icon.height || 30, 
+							minWidth: schema.header.icon.width || 30}}>
+							<Image 
+								layout="responsive"
+								objectFit="contain"
+								width={schema.header.icon.width || 30}
+								height={schema.header.icon.height || 30}
+								src={makeTemplate(schema.header.icon.src, {})}
+								alt={makeTemplate(schema.header.icon.alt, {})}
+							/>
+						</div>
+					</Grid>
+					<Grid item>
+						<Typography variant="h4"><b>{schema.header.title}</b></Typography>
+					</Grid>
+				</Grid>:<Typography variant="h4"><b>{schema.header.title}</b></Typography>
+			}
+			
 		</Grid>
 		{((schema.header || {}).subheader||[]).map((props)=>(
 			<Grid item key={props.label} style={{marginLeft: 10, marginRight: 10}}>

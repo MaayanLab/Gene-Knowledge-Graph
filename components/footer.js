@@ -39,17 +39,35 @@ const FooterContents = ({footer}) => {
             </Grid>
         )
     } else if (footer.type == "icon") {
-        return (
-            <Grid item>
-                <Image 
-					// loader={()=>'/birth-defect-drugs/static/CFDE-logo.png'}
-					src={makeTemplate(footer.src, {})}
-					alt={footer.alt}
-					width={200}
-					height={100}
-				/>
-            </Grid>
-        )
+		if (footer.href) {
+			return (
+				<Button 
+					href={footer.href}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<Image
+						// loader={()=>`/birth-defect-drugs${val.icon}`} 
+						src={makeTemplate(footer.src, {})}
+						alt={footer.alt}
+						width={200}
+						height={100}
+					/>
+				</Button>
+			)
+		} else {
+			return (
+				<Grid item>
+					<Image 
+						// loader={()=>'/birth-defect-drugs/static/CFDE-logo.png'}
+						src={makeTemplate(footer.src, {})}
+						alt={footer.alt}
+						width={footer.width || 200}
+						height={footer.height || 100}
+					/>
+				</Grid>
+			)
+		}
     } else return null
 }
 
