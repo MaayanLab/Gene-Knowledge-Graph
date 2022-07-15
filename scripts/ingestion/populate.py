@@ -21,6 +21,9 @@ class GraphEx:
     self.n = 0
     self.tx = None
 
+  def delete_all(self):
+    self.graph.delete_all()
+
   def _begin(self):
     if self.tx is None:
       self.n = 0
@@ -85,13 +88,20 @@ def delete_nodes(serialized):
 # python populate.py clean (optional) /path/to/files/to/ingest
 vals = sys.argv[1:]
 clean = False
+cleanAll = False
 if len(vals) > 0 and vals[0] == "clean":
   clean = True
+  directories = vals[1:]
+elif len(vals) > 0 and vals[0] == "clean-all":
+  cleanAll = True
   directories = vals[1:]
 else:
   directories = vals
 
 neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']))
+if cleanAll:
+  print("Clean install")
+  neo4graph.delete_all()
 if os.environ["AWS_PREFIX"] and  os.environ["AWS_BUCKET"] and os.environ['ACCESS_KEY'] and os.environ['SECRET_KEY']:
   print("Found AWS credentials...")
   client = boto3.client(
