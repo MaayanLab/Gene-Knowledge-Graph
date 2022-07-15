@@ -7,7 +7,11 @@ services:
     env_file: .env
     ports:
       - 3001:3000
-
+  ingest:
+    build: scripts/ingestion
+    image: maayanlab/kg-ingest:0.1.0
+    platform: linux/x86_64
+    env_file: .env
   neo4j:
     image: neo4j
     user: "${UID}:${GID}"
