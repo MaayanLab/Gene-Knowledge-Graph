@@ -3,6 +3,18 @@ import { neo4jDriver } from "./neo4j"
 import fetch from 'isomorphic-unfetch'
 import * as default_schema from '../public/schema.json'
 
+export function toNumber(value) {
+	if (typeof value !== 'object') return value
+	const { low, high } = value
+	let res = high
+  
+	for (let i = 0; i < 32; i++) {
+	  res *= 2
+	}
+  
+	return low + res
+  }
+
 export async function get_terms(node, search) {
   try {
 	console.log(`Connecting to ${process.env.NEO4J_URL}`)
@@ -23,7 +35,8 @@ export async function get_terms(node, search) {
 			for (const record of results.records) {
 				const g = record.get('g')
 				for (const i of search) {
-					entries[i].add(g.properties[i])
+					const val = toNumber(g.properties[i])
+					if (val) entries[i].add(val)
 				}
 			}
 			skip = skip + limit	
