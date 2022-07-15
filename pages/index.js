@@ -500,7 +500,7 @@ export default function KnowledgeGraph({entries, edges=[], examples=default_exam
               />
           </Grid>
           <Grid item>
-            <Typography variant="body1"><b>Edge labels:</b><Switch
+            <Typography variant="body1"><b>Relationship labels:</b><Switch
                 color="blues"
                 checked={edgeStyle.label}
                 onChange={()=>{
