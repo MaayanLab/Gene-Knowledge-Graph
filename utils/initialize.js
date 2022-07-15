@@ -9,7 +9,7 @@ export async function get_terms(node, search) {
     const session = neo4jDriver.session({
       defaultAccessMode: neo4j.session.READ
     })
-	let query = `MATCH (g: ${node}) RETURN *`
+	let query = `MATCH (g: \`${node}\`) RETURN *`
 	if (process.env.NODE_ENV==="development") {
 		console.log("Dev mode")
 		const entries = search.reduce((acc, i)=>({
