@@ -5,9 +5,13 @@ import { makeTemplate } from "../utils/helper";
 import * as default_schema from '../public/schema.json'
 import { useRouter } from 'next/router'
 
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
 const Button = dynamic(() => import('@mui/material/Button'));
+const MenuIcon = dynamic(import('@mui/icons-material/Menu'));
 
 const function_mapper = {
 	filter_relation: ({relations, router, selected, label, relation})=>{
@@ -120,12 +124,21 @@ const IconRenderer = ({label, icon, height=100, width=100, onClick, href, router
 
 const Header = ({schema, ...rest}) => {
 	const [selected, setSelected] = useState([])
+	const [anchorEl, setAnchorEl] = useState(null);
+  	const open = Boolean(anchorEl);
 	const router = useRouter()
 	const relation = router.query.relation
 
 	useEffect(()=>{
 		if (relation === undefined) setSelected([])
 	}, [relation])
+
+	const handleClickMenu = (e) => {
+		setAnchorEl(e.currentTarget);
+	  };
+	const handleCloseMenu = () => {
+		setAnchorEl(null);
+	};
 
 	if (!schema) schema = default_schema
 	if (schema === undefined || schema.header === undefined) return null
@@ -150,6 +163,31 @@ const Header = ({schema, ...rest}) => {
 					<Grid item>
 						<Typography variant="h4"><b>{schema.header.title}</b></Typography>
 					</Grid>
+					{schema.header.tabs && 
+						<Grid item align="left">
+							<Button onClick={handleClickMenu}
+								aria-controls={open ? 'basic-menu' : undefined}
+								aria-haspopup="true"
+								aria-expanded={open ? 'true' : undefined}
+							><MenuIcon/></Button>
+							<Menu
+								id="basic-menu"
+								anchorEl={anchorEl}
+								open={open}
+								onClose={handleCloseMenu}
+								MenuListProps={{
+									'aria-labelledby': 'basic-button',
+								}}
+							>
+								{schema.header.tabs.map(t=>(
+									<MenuItem key={t.label} onClick={()=> {
+										handleCloseMenu()
+										router.push(t.endpoint)
+									}}>{t.label}</MenuItem>
+								))}
+							</Menu>
+						</Grid>
+					}
 				</Grid>:<Typography variant="h4"><b>{schema.header.title}</b></Typography>
 			}
 			
