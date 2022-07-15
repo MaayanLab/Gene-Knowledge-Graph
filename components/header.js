@@ -14,23 +14,15 @@ const Button = dynamic(() => import('@mui/material/Button'));
 const MenuIcon = dynamic(import('@mui/icons-material/Menu'));
 
 const function_mapper = {
-	filter_relation: ({relations, router, selected, label, relation})=>{
-		if (relations.join(",") === relation) {
-			const {relation: re, ...query} = router.query
-			router.push({
-				pathname: router.route || '/',
-				query
-			  }, undefined, {shallow: true})
-		}
-		else {
-			router.push({
-				pathname: router.route || '/',
-				query: {
-					...router.query,
-					relation: relations.join(",")
-				}
-			  }, undefined, {shallow: true})
-		}
+	filter_relation: ({router, relation})=>{
+		console.log(relation)
+		router.push({
+			pathname: router.route || '/',
+			query: {
+				...router.query,
+				relation
+			}
+		  }, undefined, {shallow: true})
 	}
 }
 
@@ -53,21 +45,31 @@ const styles = {
 const IconRenderer = ({label, icon, height=100, width=100, onClick, href, router, selected, setSelected, relation}) => {
 	let buttonStyle = styles.enabled
 	if (selected.length && selected.indexOf(label) > -1) buttonStyle = styles.active
-	if (selected.length && selected.indexOf(label) === -1) buttonStyle = styles.disabled
+	else if (selected.length && selected.indexOf(label) === -1) buttonStyle = styles.disabled
 	if (onClick !== undefined) {
 		const rels = (relation || "").split(",")
 		const rel = (onClick.props.relations || []).filter(i=>rels.indexOf(i) > -1)
-		// console.log(label, selected)
-		if (rel.length && selected.indexOf(label)=== -1) setSelected([...selected, label])
+		console.log(rel)
+		if (rel.length > 0 && selected.indexOf(label)=== -1) setSelected([...selected, label])
 		return (
 			<Button 
 				onClick={()=>{
-					function_mapper[onClick.name](({...onClick.props, router, selected, label, relation}))
-					if (selected.indexOf(label)=== -1) setSelected([...selected, label])
+					let new_selected = selected
+					let new_relations = relation ? relation.split(",") : []
+					if (selected.indexOf(label)=== -1){ 
+						new_selected = [...selected, label]
+						new_relations = [...new_relations, ...(onClick.props.relations || [])]
+					}
+					else {
+						new_selected = selected.filter(s=>s!==label)
+						new_relations = new_relations.filter(i=> (onClick.props.relations || []).indexOf(i) === -1)
+					}
+					setSelected(new_selected)
+					function_mapper[onClick.name](({...onClick.props, router, selected: new_selected, label, relation: new_relations.join(",")}))
 				}}
 				sx={buttonStyle}
 			>
-				<div style={{height, minWidth: width, ...buttonStyle}}>
+				<div style={{height:100, minWidth: 100, ...buttonStyle}}>
 					<Image
 						// loader={()=>`/birth-defect-drugs${val.icon}`} 
 						src={makeTemplate(icon, {})}
