@@ -15,7 +15,6 @@ const MenuIcon = dynamic(import('@mui/icons-material/Menu'));
 
 const function_mapper = {
 	filter_relation: ({router, relation})=>{
-		console.log(relation)
 		router.push({
 			pathname: router.route || '/',
 			query: {
@@ -49,7 +48,6 @@ const IconRenderer = ({label, icon, height=100, width=100, onClick, href, router
 	if (onClick !== undefined) {
 		const rels = (relation || "").split(",")
 		const rel = (onClick.props.relations || []).filter(i=>rels.indexOf(i) > -1)
-		console.log(rel)
 		if (rel.length > 0 && selected.indexOf(label)=== -1) setSelected([...selected, label])
 		return (
 			<Button 
