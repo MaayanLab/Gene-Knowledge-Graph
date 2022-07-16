@@ -22,3 +22,15 @@ export const precise = (value) => {
     return 'undefined'
   }
 }
+
+export function toNumber(value) {
+	if (typeof value !== 'object') return value
+	const { low, high } = value
+	let res = high
+  
+	for (let i = 0; i < 32; i++) {
+	  res *= 2
+	}
+  
+	return low + res
+  }

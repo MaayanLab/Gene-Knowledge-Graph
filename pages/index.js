@@ -4,7 +4,7 @@ import Link from 'next/link'
 import useAsyncEffect from 'use-async-effect'
 import { useRouter } from 'next/router'
 import { fetch_kg_schema, get_terms } from '../utils/initialize';
-import { precise, makeTemplate } from '../utils/helper';
+import { precise, makeTemplate, toNumber } from '../utils/helper';
 import fileDownload from 'js-file-download'
 import * as default_schema from '../public/schema.json'
 import Color from 'color'
@@ -83,7 +83,8 @@ const TooltipCard = ({node, tooltip_templates, setFocused, router, schema}) => {
         )
       }
     } else {
-      const e = makeTemplate(i.text, node.properties)
+      let e = makeTemplate(i.text, node.properties)
+      if (i.type === "int") e = toNumber(node.properties[i.field])
       if (e !== 'undefined') {
         elements.push(
           <Typography key={i.label} variant="subtitle2">
@@ -669,6 +670,14 @@ export default function KnowledgeGraph({entries, edges=[], examples=default_exam
                 sel.outgoers().removeClass('focusedSemitransp')
                 // setNode({node, type: "focused"})
                 setFocused(node)
+                setTimeout(()=>{
+                  const sel = evt.target;
+                  cy.elements().removeClass('focusedSemitransp');
+                  sel.removeClass('focused').outgoers().removeClass('focusedColored')
+                  sel.incomers().removeClass('focusedColored')
+                  // setNode({node: null, type: "focused"})
+                  setFocused(null)
+                }, 3000)
               }
             })
 
@@ -760,7 +769,7 @@ export async function getStaticProps(ctx) {
   for (const i of schema.edges) {
     edges = [...edges, ...(i.match || [])]
   }
-
+  
   return {
 	  props: {
         examples,

@@ -2,18 +2,7 @@ import neo4j from "neo4j-driver"
 import { neo4jDriver } from "./neo4j"
 import fetch from 'isomorphic-unfetch'
 import * as default_schema from '../public/schema.json'
-
-export function toNumber(value) {
-	if (typeof value !== 'object') return value
-	const { low, high } = value
-	let res = high
-  
-	for (let i = 0; i < 32; i++) {
-	  res *= 2
-	}
-  
-	return low + res
-  }
+import { toNumber } from "./helper"
 
 export async function get_terms(node, search) {
   try {
@@ -36,7 +25,7 @@ export async function get_terms(node, search) {
 				const g = record.get('g')
 				for (const i of search) {
 					const val = toNumber(g.properties[i])
-					if (val) entries[i].add(val)
+					if (val!==undefined) entries[i].add(val)
 				}
 			}
 			skip = skip + limit	
@@ -49,7 +38,7 @@ export async function get_terms(node, search) {
 		console.log("Starting...")
 		const count_r = await session.readTransaction(txc => txc.run(`MATCH (g: ${node}) RETURN count(g) as count`))
 		// const count = count_r.get('count')
-		const count = count_r.records[0].get('count')["low"]
+		const count = toNumber(count_r.records[0].get('count'))
 		console.log("Total:",count)
 		const entries = search.reduce((acc, i)=>({
 			...acc,
