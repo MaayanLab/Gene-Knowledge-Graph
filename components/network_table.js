@@ -3,11 +3,9 @@ import dynamic from "next/dynamic";
 import { makeTemplate } from "../utils/helper";
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
-const Typography = dynamic(() => import('@mui/material/Typography'));
+const Button = dynamic(() => import('@mui/material/Button'));
 const DataGrid = dynamic(async () => (await import('@mui/x-data-grid')).DataGrid);
 const GridToolbar = dynamic(async () => (await import('@mui/x-data-grid')).GridToolbar);
-const ToggleButton = dynamic(() => import('@mui/material/ToggleButton'));
-const ToggleButtonGroup = dynamic(() => import('@mui/material/ToggleButtonGroup'));
 const Tabs = dynamic(() => import('@mui/material/Tabs'));
 const Tab = dynamic(() => import('@mui/material/Tab'));
 
@@ -32,7 +30,7 @@ const NetworkTable = ({data, schema}) => {
 			const node_tabs = []
 			const edge_tabs = []
 			for (const d of data) {
-				const {kind, relation, properties, source, target} = d.data
+				const {kind, relation, properties, source, target, label} = d.data
 				const key = relation || kind
 				if (key) { 
 					if ( processed[key] === undefined) {
@@ -41,16 +39,40 @@ const NetworkTable = ({data, schema}) => {
 						processed[key] = {header: [], data: {}}
 						const header = []
 						if (display[key]) {
+							header.push({
+								field: 'label',
+								headerName: "Label",
+								flex: 1,
+								style: {flexDirection: "row"},
+								align: "left",
+								type: relation ? "edge": "node"
+							})
 							for (const prop of display[key]) {
 								const field = prop.label
-								header.push({
-									field,
-									headerName: field,
-									flex: 1,
-									style: {flexDirection: "row"},
-									align: "left",
-									text: prop.text
-								})
+								if (prop.type === "link") {
+									header.push({
+										field,
+										headerName: field,
+										flex: 1,
+										style: {flexDirection: "row"},
+										align: "left",
+										text: prop.text,
+										href: prop.href,
+										renderCell: ({row, field})=>{
+											return <Button href={row[field].href}>{row[field].text}</Button>
+										}
+									})
+
+								} else {
+									header.push({
+										field,
+										headerName: field,
+										flex: 1,
+										style: {flexDirection: "row"},
+										align: "left",
+										text: prop.text
+									})
+								}
 							}
 						} else {
 							const {id, label, symbol, ref, ...rest} = properties
@@ -79,17 +101,29 @@ const NetworkTable = ({data, schema}) => {
 									flex: 1,
 									style: {flexDirection: "row"},
 									align: "left",
-									type: relation ? "edge": "node"
+									type: relation ? "edge": "node",
 								})
 							}
 						}
 						processed[key].header = header
 					}
-					if (processed[key].data[properties.id] === undefined)
+					if (processed[key].data[properties.id] === undefined) {
 						processed[key].data[properties.id] = {id: properties.id || `${source}_${target}`}
-						for (const i of processed[key].header) {
-							processed[key].data[properties.id][i.field] = makeTemplate(i.text, properties)
+					}
+					for (const i of processed[key].header) {
+						if (i.href) {
+							const val = makeTemplate(i.text, properties)
+							const href = makeTemplate(i.href, properties)
+							processed[key].data[properties.id][i.field] = {
+								text: val === "undefined" ? "": val,
+								href: href === "undefined" ? "": href
+							}
+						} else {
+							const val = makeTemplate(i.text, properties)
+							processed[key].data[properties.id][i.field] = val === "undefined" ? "": val
 						}
+					}
+					if (processed[key].data[properties.id]["label"] === "") processed[key].data[properties.id]["label"] = label
 				} 
 				// else {
 				// 	if (processed["Relationships"] === undefined) {
