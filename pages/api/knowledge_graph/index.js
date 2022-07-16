@@ -3,7 +3,6 @@ import { neo4jDriver } from "../../../utils/neo4j"
 import Color from 'color'
 import { fetch_kg_schema } from "../../../utils/initialize"
 import * as default_schema from "../../../public/schema.json"
-
 let schema = null
 let color_map = {}
 let aggr_scores = null
