@@ -2,7 +2,7 @@ version: '2'
 services:
   kg:
     build: .
-    image: maayanlab/knowledge_graph:0.1.21
+    image: maayanlab/knowledge_graph:0.1.22
     platform: linux/x86_64
     env_file: .env
     ports:
