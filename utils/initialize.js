@@ -36,7 +36,7 @@ export async function get_terms(node, search) {
 		return entries
 	} else {
 		console.log("Starting...")
-		const count_r = await session.readTransaction(txc => txc.run(`MATCH (g: ${node}) RETURN count(g) as count`))
+		const count_r = await session.readTransaction(txc => txc.run(`MATCH (g: \`${node}\`) RETURN count(g) as count`))
 		// const count = count_r.get('count')
 		const count = toNumber(count_r.records[0].get('count'))
 		console.log("Total:",count)
@@ -51,7 +51,8 @@ export async function get_terms(node, search) {
 			for (const record of results.records) {
 				const g = record.get('g')
 				for (const i of search) {
-					entries[i].add(g.properties[i])
+					const val = toNumber(g.properties[i])
+					if (val!==undefined) entries[i].add(val)
 				}
 			}
 			skip = skip + limit	
