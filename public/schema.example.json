@@ -7,7 +7,7 @@
 					"pathname": "/",
 					"query": {
 						"start": "Drug",
-						"start_term": "Esmolol"
+						"start_term": "esmolol"
 					}
 				}
 			},
@@ -59,16 +59,6 @@
 					"href": "https://www.ncbi.nlm.nih.gov/gene/${id}"
 				},
 				{
-					"label": "Aliases",
-					"text": "${Aliases.split('|').join(', ')}",
-					"type": "text"
-				},
-				{
-					"label": "Alternative IDs",
-					"text": "${Alt_IDs.split('|').join(', ')}",
-					"type": "text"
-				},
-				{
 					"label": "ARCHS4",
 					"text": "${label}",
 					"type": "link",
@@ -87,13 +77,13 @@
 			]
 		},
 		{
-			"node": "Glycoconjugate",
+			"node": "Glycan",
 			"example": {
 				"href": {
 					"pathname": "/",
 					"query": {
-						"start": "Glycoconjugate",
-						"start_term": "Asn-GlcNAc..."
+						"start": "Glycan",
+						"start_term": "G00912UN"
 					}
 				}
 			},
@@ -104,19 +94,43 @@
 			},
 			"display": [
 				{
-					"label": "Amino acid",
-					"text": "${amino_acid}",
+					"label": "Byonic",
+					"text": "${byonic}",
 					"type": "text"
 				},
 				{
-					"label": "Glycan",
-					"text": "${carb}",
+					"label": "Glycan Type",
+					"text": "${glycan_type}",
 					"type": "text"
+				},
+				{
+					"label": "mass",
+					"text": "${mass}",
+					"type": "text"
+				},
+				{
+					"label": "monosaccharides",
+					"field": "monosaccharides",
+					"type": "int"
+				},
+				{
+					"label": "Glygen page",
+					"href": "${uri}",
+					"text": "${id}",
+					"type": "link"
+				},
+				{
+					"label": "Glytoucan page",
+					"href": "${glytoucan_url}",
+					"text": "${id}",
+					"type": "link"
 				}
 			],
 			"search": [
 				"label",
-				"id"
+				"id",
+				"byonic",
+				"glycan_type"
 			]
 		},
 		{
@@ -154,12 +168,12 @@
 			]
 		},
 		{
-			"node": "Cell_Type_or_Tissue",
+			"node": "Cell or Tissue (HuBMAP)",
 			"example": {
 				"href": {
 					"pathname": "/",
 					"query": {
-						"start": "Cell_Type_or_Tissue",
+						"start": "Cell or Tissue (HuBMAP)",
 						"start_term": "Brain"
 					}
 				}
@@ -174,6 +188,12 @@
 					"label": "Ontology ID",
 					"text": "${id}",
 					"type": "text"
+				},
+				{
+					"label": "Resource",
+					"text": "HuBMAP",
+					"type": "link",
+					"href": "https://hubmapconsortium.github.io/ccf-asct-reporter/"
 				}
 			],
 			"search": [
@@ -182,13 +202,13 @@
 			]
 		},
 		{
-			"node": "GTEx_Group",
+			"node": "Tissue Group (GTEx)",
 			"example": {
 				"href": {
 					"pathname": "/",
 					"query": {
-						"start": "GTEx_Group",
-						"start_term": "Muscle-Skeletal_subj-age-30-39"
+						"start": "Tissue Group (GTEx)",
+						"start_term": "Liver_subj-age_30-39"
 					}
 				}
 			},
@@ -201,6 +221,11 @@
 				{
 					"label": "Tissue",
 					"text": "${tissue}",
+					"type": "text"
+				},
+				{
+					"label": "Ontology ID",
+					"text": "${id}",
 					"type": "text"
 				},
 				{
@@ -467,7 +492,7 @@
 				{
 					"label": "Resource",
 					"text": "HuBMAP",
-					"href": "https://portal.hubmapconsortium.org",
+					"href": "https://hubmapconsortium.github.io/ccf-asct-reporter/",
 					"type": "link"
 				}	
 			]
@@ -529,6 +554,19 @@
 			"width": 100,
 			"height": 100
 		},
+		"tabs": [
+			{
+				"endpoint": "/",
+				"label": "Knowledge Graph",
+				"type": "page"
+			},
+			{
+				"endpoint": "/downloads",
+				"label": "Download Assets",
+				"type": "markdown",
+				"src": "/markdown/download.md"
+			}
+		],
 		"subheader": [
 			{
 				"label": "LINCS",
@@ -537,10 +575,10 @@
 				"width": 120,
 				"onClick": {
 					"type": "function",
-					"name": "filter_relation",
-					"props": {
-						"relations": ["LINCS (downregulates)", "LINCS (upregulates)"]
-					}
+					"name": "filter_relation"
+				},
+				"props": {
+					"selected": ["LINCS (downregulates)", "LINCS (upregulates)"]
 				}
 			},
 			{
@@ -550,10 +588,10 @@
 				"width": 100,
 				"onClick": {
 					"type": "function",
-					"name": "filter_relation",
-					"props": {
-						"relations": ["Metabolomics Workbench"]
-					}
+					"name": "filter_relation"
+				},
+				"props": {
+					"selected": ["Metabolomics Workbench"]
 				}
 			},
 			{
@@ -563,10 +601,10 @@
 				"width": 100,
 				"onClick": {
 					"type": "function",
-					"name": "filter_relation",
-					"props": {
-						"relations": ["GlyGen"]
-					}
+					"name": "filter_relation"
+				},
+				"props": {
+					"selected": ["GlyGen"]
 				}
 			},
 			{
@@ -576,10 +614,10 @@
 				"width": 80,
 				"onClick": {
 					"type": "function",
-					"name": "filter_relation",
-					"props": {
-						"relations": ["GTEx (up)", "GTEx (down)"]
-					}
+					"name": "filter_relation"
+				},
+				"props": {
+					"selected": ["GTEx (up)", "GTEx (down)"]
 				}
 			},
 			{
@@ -587,7 +625,13 @@
 				"icon": "${PREFIX}/static/resources/idg.png",
 				"height": 100,
 				"width": 100,
-				"href": "https://druggablegenome.net/"
+				"onClick": {
+					"type": "function",
+					"name": "filter_relation"
+				},
+				"props": {
+					"selected": ["IDG"]
+				}
 			},
 			{
 				"label": "HuBMAP",
@@ -596,10 +640,10 @@
 				"width": 100,
 				"onClick": {
 					"type": "function",
-					"name": "filter_relation",
-					"props": {
-						"relations": ["HuBMAP"]
-					}
+					"name": "filter_relation"
+				},
+				"props": {
+					"selected": ["HuBMAP"]
 				}
 			},
 			{
@@ -607,7 +651,39 @@
 				"icon": "${PREFIX}/static/resources/exrna.png",
 				"height": 100,
 				"width": 100,
-				"href": "https://exrna.org/"
+				"onClick": {
+					"type": "function",
+					"name": "filter_relation"
+				},
+				"props": {
+					"selected": ["ERCC"]
+				}
+			},
+			{
+				"label": "BioGRID",
+				"icon": "${PREFIX}/static/resources/biogrid.jpg",
+				"height": 80,
+				"width": 80,
+				"onClick": {
+					"type": "function",
+					"name": "filter_relation"
+				},
+				"props": {
+					"selected": ["BioGRID"]
+				}
+			},
+			{
+				"label": "ARCHS4",
+				"icon": "${PREFIX}/static/resources/archs.png",
+				"height": 100,
+				"width": 100,
+				"onClick": {
+					"type": "function",
+					"name": "filter_relation"
+				},
+				"props": {
+					"selected": ["ARCHS4 (negatively correlated)", "ARCHS4 (positively correlated)"]
+				}
 			}
 		]
 	},
