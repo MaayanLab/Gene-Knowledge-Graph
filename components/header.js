@@ -14,14 +14,32 @@ const Button = dynamic(() => import('@mui/material/Button'));
 const MenuIcon = dynamic(import('@mui/icons-material/Menu'));
 
 const function_mapper = {
-	filter_relation: ({router, relation})=>{
-		router.push({
-			pathname: router.route || '/',
-			query: {
-				...router.query,
-				relation
-			}
-		  }, undefined, {shallow: true})
+	filter_relation: ({router, selected, relation, label, props})=>{
+		let new_selected = selected
+		let new_relations = relation ? relation.split(",") : []
+		if (selected.indexOf(label)=== -1){ 
+			new_selected = [...selected, label]
+			new_relations = [...new_relations, ...(props.selected || [])]
+		}
+		else {
+			new_selected = selected.filter(s=>s!==label)
+			new_relations = new_relations.filter(i=> (props.selected || []).indexOf(i) === -1)
+		}
+		if (new_relations.length) {
+			router.push({
+				pathname: router.route || '/',
+				query: {
+					...router.query,
+					relation: new_relations.join(",")
+				}
+			  }, undefined, {shallow: true})
+		} else {
+			const {relation: popped, ...query} = router.query
+			router.push({
+				pathname: router.route || '/',
+				query
+			  }, undefined, {shallow: true})
+		}
 	}
 }
 
@@ -41,29 +59,16 @@ const styles = {
 	}
   }
 
-const IconRenderer = ({label, icon, height=100, width=100, onClick, href, router, selected, setSelected, relation}) => {
+const IconRenderer = ({label, icon, height=100, width=100, onClick, href, router, selected, relation, props}) => {
 	let buttonStyle = styles.enabled
 	if (selected.length && selected.indexOf(label) > -1) buttonStyle = styles.active
 	else if (selected.length && selected.indexOf(label) === -1) buttonStyle = styles.disabled
 	if (onClick !== undefined) {
-		const rels = (relation || "").split(",")
-		const rel = (onClick.props.relations || []).filter(i=>rels.indexOf(i) > -1)
-		if (rel.length > 0 && selected.indexOf(label)=== -1) setSelected([...selected, label])
 		return (
 			<Button 
 				onClick={()=>{
-					let new_selected = selected
-					let new_relations = relation ? relation.split(",") : []
-					if (selected.indexOf(label)=== -1){ 
-						new_selected = [...selected, label]
-						new_relations = [...new_relations, ...(onClick.props.relations || [])]
-					}
-					else {
-						new_selected = selected.filter(s=>s!==label)
-						new_relations = new_relations.filter(i=> (onClick.props.relations || []).indexOf(i) === -1)
-					}
-					setSelected(new_selected)
-					function_mapper[onClick.name](({...onClick.props, router, selected: new_selected, label, relation: new_relations.join(",")}))
+					function_mapper[onClick.name](({...onClick.props, router, selected, label, relation, props}))
+					
 				}}
 				sx={buttonStyle}
 			>
@@ -142,6 +147,33 @@ const Header = ({schema, ...rest}) => {
 
 	if (!schema) schema = default_schema
 	if (schema === undefined || schema.header === undefined) return null
+	const icon_buttons = []
+	const selection_rules = {}
+	for (const i of ((schema.header || {}).subheader||[])) {
+		icon_buttons.push(
+			<Grid item key={i.label} style={{marginLeft: 10, marginRight: 10}}>
+				<IconRenderer
+					router={router}
+					setSelected={setSelected}
+					selected={selected}
+					relation={relation}
+					{...i}
+				/>
+			</Grid>
+		)
+		for (const s of (i.props || {}).selected || []) {
+			selection_rules[s] = i.label
+		}
+	}
+	useEffect(()=>{
+		const new_selected = []
+		if (relation) {
+			for (const i of (relation).split(",")) {
+				new_selected.push(selection_rules[i])
+			}	
+		}
+		setSelected(new_selected)
+	},[relation])
 	return(
 	<Grid container justifyContent={"center"} alignItems={"center"} spacing={2} style={{marginBottom: 20}}>
 		<Grid item xs={12} align="center">
@@ -192,17 +224,7 @@ const Header = ({schema, ...rest}) => {
 			}
 			
 		</Grid>
-		{((schema.header || {}).subheader||[]).map((props)=>(
-			<Grid item key={props.label} style={{marginLeft: 10, marginRight: 10}}>
-				<IconRenderer
-					router={router}
-					setSelected={setSelected}
-					selected={selected}
-					relation={relation}
-					{...props}
-				/>
-			</Grid>
-		))}
+		{icon_buttons}
 	</Grid>
 )}
 export default Header

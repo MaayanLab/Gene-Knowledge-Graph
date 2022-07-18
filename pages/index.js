@@ -475,7 +475,6 @@ export default function KnowledgeGraph({entries, edges=[], examples=default_exam
                 value={(relation || "").split(",")}
                 prefix={"edge"}
                 onChange={(e)=>{
-                  console.log(e)
                   const relation = e.filter(i=>i!=="").join(",")
                   if (relation === "") {
                     const {relation, ...query} = router.query
