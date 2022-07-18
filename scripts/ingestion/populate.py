@@ -3,7 +3,6 @@ import os
 import json
 import glob
 from py2neo import Graph, Node, Relationship
-from tqdm import tqdm
 import boto3
 import requests
 from dotenv import load_dotenv
@@ -62,7 +61,7 @@ class GraphEx:
 
 
 def process_serialized(serialized):
-  for i in tqdm(serialized["edges"]):
+  for i in serialized["edges"]:
     source = i["source"]
     node_a_props = serialized["nodes"][source]
     node_a_properties = node_a_props.get("properties", {})
@@ -82,7 +81,7 @@ def process_serialized(serialized):
     neo4graph.merge(Relationship(node_a, relation, node_b, **relation_properties_dict))
 
 def delete_nodes(serialized):
-  for i in tqdm(serialized["nodes"]):
+  for i in serialized["nodes"]:
     neo4graph.delete(i)
 
 # python populate.py clean (optional) /path/to/files/to/ingest

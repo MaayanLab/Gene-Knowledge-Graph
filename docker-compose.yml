@@ -9,7 +9,7 @@ services:
       - 3001:3000
   ingest:
     build: scripts/ingestion
-    image: maayanlab/kg-ingest:0.1.1
+    image: maayanlab/kg-ingest:0.1.4
     platform: linux/x86_64
     env_file: .env
   neo4j:
