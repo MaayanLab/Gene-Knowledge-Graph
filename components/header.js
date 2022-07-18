@@ -146,7 +146,6 @@ const Header = ({schema, ...rest}) => {
 	};
 
 	if (!schema) schema = default_schema
-	if (schema === undefined || schema.header === undefined) return null
 	const icon_buttons = []
 	const selection_rules = {}
 	for (const i of ((schema.header || {}).subheader||[])) {
@@ -174,6 +173,8 @@ const Header = ({schema, ...rest}) => {
 		}
 		setSelected(new_selected)
 	},[relation])
+	if (schema === undefined || schema.header === undefined) return null
+	
 	return(
 	<Grid container justifyContent={"center"} alignItems={"center"} spacing={2} style={{marginBottom: 20}}>
 		<Grid item xs={12} align="center">
