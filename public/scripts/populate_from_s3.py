@@ -84,12 +84,12 @@ def delete_nodes(serialized):
 # python populate.py clean (optional) /path/to/files/to/ingest
 
 files = [
-    "https://s3.amazonaws.com/maayan-kg/ingestion/glygen.valid.json",
+    # "https://s3.amazonaws.com/maayan-kg/ingestion/glygen.valid.json",
     "https://s3.amazonaws.com/maayan-kg/ingestion/HuBMAP.valid.json",
-    "https://s3.amazonaws.com/maayan-kg/ingestion/metabolomics.valid.json",
-    "https://s3.amazonaws.com/maayan-kg/ingestion/sigcom_lincs.valid.json",
-    "https://s3.amazonaws.com/maayan-kg/ingestion/biogrid_150K.valid.json",
-    "https://s3.amazonaws.com/maayan-kg/ingestion/archs4_coexpression.valid.json",
+    # "https://s3.amazonaws.com/maayan-kg/ingestion/metabolomics.valid.json",
+    # "https://s3.amazonaws.com/maayan-kg/ingestion/sigcom_lincs.valid.json",
+    # "https://s3.amazonaws.com/maayan-kg/ingestion/biogrid_150K.valid.json",
+    # "https://s3.amazonaws.com/maayan-kg/ingestion/archs4_coexpression.valid.json",
     "https://s3.amazonaws.com/maayan-kg/ingestion/GTEx.valid.json",
 ]
 neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']))

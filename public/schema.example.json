@@ -2,15 +2,8 @@
 	"nodes": [
 		{
 			"node": "Drug",
-			"example": {
-				"href": {
-					"pathname": "/",
-					"query": {
-						"start": "Drug",
-						"start_term": "esmolol"
-					}
-				}
-			},
+			"pathname": "/",
+			"example": ["esmolol", "buspirone"],
 			"palette": {
 				"name": "oranges",
 				"main": "#ffb74d",
@@ -37,15 +30,8 @@
 		},
 		{
 			"node": "Gene",
-			"example": {
-				"href": {
-					"pathname": "/",
-					"query": {
-						"start": "Gene",
-						"start_term": "LUM"
-					}
-				}
-			},
+			"pathname": "/",
+			"example": ["LUM", "MAPK1"],
 			"palette": {
 				"name": "greens",
 				"main": "#aed581",
@@ -78,15 +64,8 @@
 		},
 		{
 			"node": "Glycan",
-			"example": {
-				"href": {
-					"pathname": "/",
-					"query": {
-						"start": "Glycan",
-						"start_term": "G00912UN"
-					}
-				}
-			},
+			"pathname": "/",
+			"example": ["G00912UN", "G22140GZ"],
 			"palette": {
 				"name": "purples",
 				"main": "#b39ddb",
@@ -135,15 +114,8 @@
 		},
 		{
 			"node": "Metabolite",
-			"example": {
-				"href": {
-					"pathname": "/",
-					"query": {
-						"start": "Metabolite",
-						"start_term": "L-Glutamate"
-					}
-				}
-			},
+			"pathname": "/",
+			"example": ["L-Glutamate", "Choline"],
 			"palette": {
 				"name": "cyans",
 				"main": "#26c6da",
@@ -169,15 +141,8 @@
 		},
 		{
 			"node": "Cell or Tissue (HuBMAP)",
-			"example": {
-				"href": {
-					"pathname": "/",
-					"query": {
-						"start": "Cell or Tissue (HuBMAP)",
-						"start_term": "Brain"
-					}
-				}
-			},
+			"pathname": "/",
+			"example": ["Brain", "CD4 T cell memory"],
 			"palette": {
 				"name": "teals",
 				"main": "#4db6ac",
@@ -203,15 +168,8 @@
 		},
 		{
 			"node": "Tissue Group (GTEx)",
-			"example": {
-				"href": {
-					"pathname": "/",
-					"query": {
-						"start": "Tissue Group (GTEx)",
-						"start_term": "Liver_subj-age_30-39"
-					}
-				}
-			},
+			"pathname": "/",
+			"example": ["Liver_subj-age_30-39", "Pancreas_subj-age_50-59"],
 			"palette": {
 				"name": "pinks",
 				"main": "#f48fb1",
@@ -244,6 +202,7 @@
 	"edges": [
 		{
 			"match": ["BioGRID"],
+			"selected": true,
 			"order": ["Confidence_Values", "DESC"],
 			"display": [
 				{
@@ -296,6 +255,7 @@
 		},
 		{
 			"match": ["ARCHS4 (negatively correlated)"],
+			"selected": true,
 			"palette": {
 				"main": "#f8bbd0"
 			},
@@ -331,6 +291,7 @@
 		},
 		{
 			"match": ["ARCHS4 (positively correlated)"],
+			"selected": true,
 			"palette": {
 				"main": "#4fc3f7"
 			},
@@ -366,6 +327,7 @@
 		},
 		{
 			"match": ["LINCS (downregulates)"],
+			"selected": true,
 			"palette": {
 				"main": "#f8bbd0"
 			},
@@ -401,6 +363,7 @@
 		},
 		{
 			"match": ["LINCS (upregulates)"],
+			"selected": true,
 			"palette": {
 				"main": "#4fc3f7"
 			},
@@ -436,6 +399,7 @@
 		},
 		{
 			"match": ["Metabolomics Workbench"],
+			"selected": true,
 			"display": [
 				{
 					"label": "Source Label",
@@ -457,6 +421,7 @@
 		},
 		{
 			"match": ["GlyGen"],
+			"selected": true,
 			"display": [
 				{
 					"label": "Source Label",
@@ -478,6 +443,7 @@
 		},
 		{
 			"match": ["HuBMAP"],
+			"selected": true,
 			"display": [
 				{
 					"label": "Source Label",
@@ -499,6 +465,7 @@
 		},
 		{
 			"match": ["GTEx (up)"],
+			"selected": false,
 			"palette": {
 				"main": "#4fc3f7"
 			},
@@ -523,6 +490,7 @@
 		},
 		{
 			"match": ["GTEx (down)"],
+			"selected": false,
 			"palette": {
 				"main": "#f8bbd0"
 			},
@@ -549,6 +517,7 @@
 	"header": {
 		"title": "Gene-Centric CFDE Knowledge Graph",
 		"icon": {
+			"favicon": "${PREFIX}/favicon.ico",
 			"src": "${PREFIX}/static/icons/CFDE-logo.png",
 			"alt": "CFDE logo",
 			"width": 100,
@@ -661,7 +630,7 @@
 			},
 			{
 				"label": "BioGRID",
-				"icon": "${PREFIX}/static/resources/biogrid.jpg",
+				"icon": "${PREFIX}/static/resources/biogrid.png",
 				"height": 80,
 				"width": 80,
 				"onClick": {
