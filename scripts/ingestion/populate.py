@@ -45,7 +45,7 @@ class GraphEx:
 
   def delete(self, id):
     self._begin()
-    self.graph.run("MATCH (n {id: '%s'}) DETACH DELETE n"%id)
+    self.graph.run("MATCH (n {id: '%s'}) DETACH DELETE n"%id.replace("'","\'"))
     self._periodic_commit()
   
   def merge(self, obj):
