@@ -28,6 +28,8 @@ const Cytoscape = dynamic(() => import('../components/Cytoscape'), { ssr: false 
 const CameraAltOutlinedIcon  = dynamic(() => import('@mui/icons-material/CameraAltOutlined'));
 const AddBoxIcon  = dynamic(() => import('@mui/icons-material/AddBox'));
 const IndeterminateCheckBoxIcon = dynamic(() => import('@mui/icons-material/IndeterminateCheckBox'));
+const Avatar = dynamic(() => import('@mui/material/Avatar'));
+
 const NetworkTable =  dynamic(() => import('../components/network_table'))
 const layouts = {
   "Force-directed": {
@@ -137,7 +139,7 @@ const Selector = ({entries, value, onChange, prefix, ...props }) => {
         onChange={(e,v)=>onChange(e.target.value)}
         variant="outlined"
         disableUnderline={true}
-        style={{width: 215, padding: 0, height: 45}}
+        sx={{width: 215, padding: 0, height: 45,}}
         {...props}
         >
         {entries.map(val=>(
@@ -149,14 +151,53 @@ const Selector = ({entries, value, onChange, prefix, ...props }) => {
 
 }
 
-export default function KnowledgeGraph({entries, edges=[], examples=default_examples, schema}) {
+const Legend = ({elements}) => {
+  const colors = {
+    "Search Term": <Grid item xs={12}>
+    <Grid container alignItems={"center"} spacing={2}>
+      <Grid item><Avatar sx={{background: "#F8333C"}}> </Avatar></Grid>
+      <Grid item><Typography>Search Term</Typography></Grid>   
+    </Grid></Grid>     
+  }
+  for (const i of elements) {
+    const {kind, color} = i.data
+    if (colors[kind]===undefined && color !== "#F8333C" && kind !== "Relation") {
+      colors[kind] = <Grid item xs={12}>
+        <Grid container alignItems={"center"} spacing={2}>
+          <Grid item><Avatar sx={{background: color}}> </Avatar></Grid>
+          <Grid item><Typography>{kind}</Typography></Grid>   
+        </Grid></Grid> 
+    }
+  }
+  return (
+    <Box sx={{
+      zIndex: 1,
+      position: 'absolute',
+      top: '70%',
+      left: '10%',
+    }}>
+        <Grid container alignItems={"center"} spacing={1}>
+          <Grid item xs={12}>
+            <Typography variant="h6">
+              <b>Legend</b>
+            </Typography>
+          </Grid>
+          {Object.values(colors)}
+        </Grid>
+    </Box>
+  )
+}
+
+export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema}) {
   if (!schema) schema=default_schema  
   const router = useRouter()
-  const {start_term, end_term, start_field="label", end_field="label", relation, limit=25, order=(Object.keys(schema.order || {}))[0]} = router.query
+  const {start_term, end_term, start_field="label", end_field="label", limit=25, relation=default_relations, order=(Object.keys(schema.order || {}))[0]} = router.query
   let start = router.query.start
   let end = router.query.end
   if (!start) start = schema.nodes[0].node
   if (!end) end = schema.nodes[0].node
+  
+  const current_node = nodes[start]
   const [allStartTerms, setAllStartTerms] = React.useState([])
   const [startTermInput, setStartTermInput] = React.useState(start_term || '')
   const [allEndTerms, setAllEndTerms] = React.useState([])
@@ -190,7 +231,6 @@ export default function KnowledgeGraph({entries, edges=[], examples=default_exam
       query
     }, undefined, {shallow: true})
   }
-
   React.useEffect(() => {
     setStartTermInput(start_term || '')
     setFocused(null)
@@ -202,11 +242,12 @@ export default function KnowledgeGraph({entries, edges=[], examples=default_exam
   }, [end_term])
 
   React.useEffect(()=>{
-    if (!start) {
-      const query = examples[Object.keys(examples)[0]].href.query
-      redirect(query)
-    } else if (!start_term) {
-      const query = examples[start].href.query
+    if (current_node && !start_term) {
+      const query = {
+        start,
+        start_term: current_node.example[0],
+        relation  
+      }
       redirect(query)
     } else if (start && entries[start]) {
       setAllStartTerms(entries[start])
@@ -266,13 +307,14 @@ export default function KnowledgeGraph({entries, edges=[], examples=default_exam
   }
 
   useAsyncEffect(async (isActive) => {
-    if (!start_term) {
+    if (current_node && !start_term) {
       if (elements === undefined) {
         router.push({
           pathname: schema.endpoint || '',
           query: {
             start,
-            start_term: examples[start].href.query.start_term
+            start_term: current_node.example[0],
+            relation
           }
         }, undefined, {shallow: true})
       }
@@ -288,14 +330,12 @@ export default function KnowledgeGraph({entries, edges=[], examples=default_exam
   }, [end_term])
 
   useAsyncEffect(async (isActive) => {
-    if (firstUpdate.current) {
+    if (firstUpdate.current && relation===undefined) {
       firstUpdate.current = false
     } else {
       await  resolve_elements(isActive)
     }
   }, [relation])
-
-  const example = examples[start]
   return (
     <Grid container justifyContent="space-around" spacing={2}>
       <Grid item xs={12}>
@@ -365,21 +405,33 @@ export default function KnowledgeGraph({entries, edges=[], examples=default_exam
                 )}
               />
           </Grid>
-          { example &&
+          <Grid item>
+            <Typography variant="body1">Example:</Typography>
+          </Grid>
+          {((current_node || {}).example || []).map((e,i)=>(
             <React.Fragment>
               <Grid item>
-                <Typography variant="body1">Example:</Typography>
-              </Grid>
-              <Grid item>
                 <Link
-                  href={example.href}
+                  href={{
+                    pathname: current_node.pathname,
+                    query: {
+                      start,
+                      start_term: e,
+                      relation
+                    }
+                  }}
                   shallow
                 >
-                  <Button color={example.palette.name} style={{height: 45}}><Typography variant="body2">{example.href.query.start_term}</Typography></Button>
+                  <Button color={current_node.palette.name} style={{height: 45}}><Typography variant="body2">{e}</Typography></Button>
                 </Link> 
               </Grid>
-            </React.Fragment> 
-          }
+              { i < current_node.example.length - 1 && 
+                <Grid item>
+                  <Typography>/</Typography>
+                </Grid> 
+              }
+            </React.Fragment>
+          ))}
           {!router.query.end && 
             <Grid item>
               <Button onClick={()=>redirect({...router.query, end})} startIcon={<AddBoxIcon />}>
@@ -727,6 +779,7 @@ export default function KnowledgeGraph({entries, edges=[], examples=default_exam
           }}
           />
         }
+        {elements && <Legend elements={elements}/>}
         {(focused || node) && <TooltipCard node={focused || node} schema={schema} tooltip_templates={tooltip_templates} setFocused={setFocused} router={router}/>}
       </Grid>
       <Grid item xs={12}>
@@ -740,11 +793,11 @@ export default function KnowledgeGraph({entries, edges=[], examples=default_exam
 
 
 export async function getStaticProps(ctx) {
-  const examples = {}
 	const entries = {}
   const palettes = {}
-  const nodes = []
+  const nodes = {}
   let edges = []
+  let default_relations = []
   let schema = default_schema
   let s = null
   if (process.env.NEXT_PUBLIC_SCHEMA) {
@@ -755,8 +808,7 @@ export async function getStaticProps(ctx) {
 		const {node, example, palette, search} = i
 		const results = await get_terms(node, search)
     entries[node] = results
-		examples[node] = {...example, palette}
-    nodes.push(node)
+    nodes[node] = i
     const {name, main, light, dark, contrastText} = palette
     palettes[name] = {
       main,
@@ -767,16 +819,19 @@ export async function getStaticProps(ctx) {
 	}
   for (const i of schema.edges) {
     edges = [...edges, ...(i.match || [])]
+    if (i.selected) {
+      default_relations = [...default_relations,  ...(i.match || [])]
+    }
   }
   
   return {
 	  props: {
-        examples,
   	    entries,
         nodes,
         schema: s,
         palettes,
         edges,
+        default_relations: default_relations.join(",")
     },
 	};
 }
