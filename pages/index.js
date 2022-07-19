@@ -191,7 +191,7 @@ const Legend = ({elements}) => {
 export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema}) {
   if (!schema) schema=default_schema  
   const router = useRouter()
-  const {start_term, end_term, start_field="label", end_field="label", limit=25, relation=default_relations, order=(Object.keys(schema.order || {}))[0]} = router.query
+  const {start_term, end_term, start_field="label", end_field="label", limit=25, relation, order=(Object.keys(schema.order || {}))[0]} = router.query
   let start = router.query.start
   let end = router.query.end
   if (!start) start = schema.nodes[0].node
@@ -211,7 +211,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   const [elements, setElements] = React.useState(undefined)
   const [controller, setController] = React.useState(null)
   const [loading, setLoading] = React.useState(false)
-
+  const [selected, setSelected] = React.useState([])
   const firstUpdate = useRef(true);
   const tooltip_templates = {}
   for (const i of schema.nodes) {
@@ -246,7 +246,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       const query = {
         start,
         start_term: current_node.example[0],
-        relation  
+        // relation  
       }
       redirect(query)
     } else if (start && entries[start]) {
@@ -286,6 +286,8 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       }
       if (relation) {
         body.relation = relation
+      } else {
+        body.relation = default_relations.join(",")
       }
       const body_str = Object.entries(body).map(([k,v])=>`${k}=${v}`).join("&")
       
@@ -297,6 +299,13 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       if (!isActive) return
       const results = await res.json()
       if (!isActive) return
+      const selected_edges = []
+      for (const i of results) {
+        if (i.data.relation && selected_edges.indexOf(i.data.relation) === -1) {
+          selected_edges.push(i.data.relation)
+        }
+      }
+      setSelected(selected_edges)
       setElements(results)
       setLoading(false)
       setData(results)
@@ -314,7 +323,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
           query: {
             start,
             start_term: current_node.example[0],
-            relation
+            // relation
           }
         }, undefined, {shallow: true})
       }
@@ -417,7 +426,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                     query: {
                       start,
                       start_term: e,
-                      relation
+                      // relation
                     }
                   }}
                   shallow
@@ -524,7 +533,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
           {edges.length && 
             <Grid item>
               <Selector entries={edges}
-                value={(relation || "").split(",")}
+                value={relation ? relation.split(","): selected.length > 0 ? selected: default_relations}
                 prefix={"edge"}
                 onChange={(e)=>{
                   const relation = e.filter(i=>i!=="").join(",")
@@ -831,7 +840,7 @@ export async function getStaticProps(ctx) {
         schema: s,
         palettes,
         edges,
-        default_relations: default_relations.join(",")
+        default_relations
     },
 	};
 }
