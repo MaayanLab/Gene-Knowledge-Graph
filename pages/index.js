@@ -286,7 +286,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       }
       if (relation) {
         body.relation = relation
-      } else {
+      } else if (!end & !end_term) {
         body.relation = current_node.relation.join(",") || default_relations.join(",")
       }
       const body_str = Object.entries(body).map(([k,v])=>`${k}=${v}`).join("&")

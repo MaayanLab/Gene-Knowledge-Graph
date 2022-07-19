@@ -213,7 +213,6 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 		query = query.replace("[rel]",`[rel:${rels}]`)
 	}
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
-	console.log(query)
 	const results = await session.readTransaction(txc => txc.run(query, { term }))
 	return resolve_results({results, terms: [term], schema, order, score_fields, colors, field})
 }
