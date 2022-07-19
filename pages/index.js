@@ -287,7 +287,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       if (relation) {
         body.relation = relation
       } else {
-        body.relation = default_relations.join(",")
+        body.relation = current_node.relation.join(",") || default_relations.join(",")
       }
       const body_str = Object.entries(body).map(([k,v])=>`${k}=${v}`).join("&")
       
@@ -533,7 +533,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
           {edges.length && 
             <Grid item>
               <Selector entries={edges}
-                value={relation ? relation.split(","): selected.length > 0 ? selected: default_relations}
+                value={relation ? relation.split(","): selected.length > 0 ? selected: current_node.relation || default_relations}
                 prefix={"edge"}
                 onChange={(e)=>{
                   const relation = e.filter(i=>i!=="").join(",")
