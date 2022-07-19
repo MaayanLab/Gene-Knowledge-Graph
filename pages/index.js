@@ -153,7 +153,7 @@ const Selector = ({entries, value, onChange, prefix, ...props }) => {
 
 const Legend = ({elements}) => {
   const colors = {
-    "Search Term": <Grid item xs={12}>
+    "Search Term": <Grid item xs={12} key={"search"}>
     <Grid container alignItems={"center"} spacing={2}>
       <Grid item><Avatar sx={{background: "#F8333C"}}> </Avatar></Grid>
       <Grid item><Typography>Search Term</Typography></Grid>   
@@ -163,7 +163,7 @@ const Legend = ({elements}) => {
     const {kind, color} = i.data
     if (colors[kind]===undefined && color !== "#F8333C" && kind !== "Relation") {
       colors[kind] = <Grid item xs={12}>
-        <Grid container alignItems={"center"} spacing={2}>
+        <Grid container alignItems={"center"} spacing={2} key={kind}>
           <Grid item><Avatar sx={{background: color}}> </Avatar></Grid>
           <Grid item><Typography>{kind}</Typography></Grid>   
         </Grid></Grid> 
@@ -409,7 +409,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
             <Typography variant="body1">Example:</Typography>
           </Grid>
           {((current_node || {}).example || []).map((e,i)=>(
-            <React.Fragment>
+            <React.Fragment key={e}>
               <Grid item>
                 <Link
                   href={{
