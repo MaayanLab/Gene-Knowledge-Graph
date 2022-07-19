@@ -101,7 +101,7 @@ neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.
 if cleanAll:
   print("Clean install")
   neo4graph.delete_all()
-if os.environ["AWS_PREFIX"] and  os.environ["AWS_BUCKET"] and os.environ['ACCESS_KEY'] and os.environ['SECRET_KEY']:
+if os.environ.get("AWS_PREFIX") and  os.environ.get("AWS_BUCKET") and os.environ.get('ACCESS_KEY') and os.environ.get('SECRET_KEY'):
   print("Found AWS credentials...")
   client = boto3.client(
     's3',
