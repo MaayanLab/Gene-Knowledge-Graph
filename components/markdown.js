@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm'
+import { makeTemplate } from '../utils/helper'
 const get_path = (src) => {
+    console.log(src)
     if (src.startsWith("/")) {
         const getUrl = window.location;
-        const baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1]
+        const baseUrl = getUrl .protocol + "//" + getUrl.host
         return `${baseUrl}${src}`
     } else {
         return src
@@ -21,7 +23,7 @@ const Markdown = ({src, markdown}) => {
     const [md, setMD] = useState(null)
     useEffect(()=>{
         const fetch_markdown = async (src) => {
-            const md = await (await fetch(get_path(src))).text()
+            const md = await (await fetch(get_path(makeTemplate(src, {})))).text()
             setMD(md)
         }
         if (markdown) setMD(markdown)

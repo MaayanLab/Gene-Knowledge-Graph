@@ -368,7 +368,7 @@
 				"endpoint": "/downloads",
 				"label": "Download Assets",
 				"type": "markdown",
-				"src": "/markdown/download.md"
+				"src": "${PREFIX}/markdown/download.md"
 			}
 		],
 		"subheader": [
