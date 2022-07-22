@@ -1,118 +1,405 @@
 {
 	"nodes": [
 		{
-			"node": "Gene",
-			"example": {
-				"href": {
-					"pathname": "/",
-					"query": {
-						"start": "Gene",
-						"start_term": "S100A8"
-					}
-				}, 
-				"palette": "greens"
+			"node": "BirthDefect",
+			"pathname": "/",
+			"example": ["Anencephaly", "Trisomy 21"],
+			"palette": {
+				"name": "pinks",
+				"main": "#f48fb1",
+				"contrastText": "#000"
 			},
-			"node_color": "#aed581"
+			"display": [
+				{
+					"label": "ID",
+					"type": "string",
+					"text": "${id}"
+				},
+				{
+					"label": "MEDDRA code",
+					"type": "link",
+					"text": "${meddra_code}",
+					"href": "https://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=${meddra_code}"
+				},
+				{
+					"label": "URI",
+					"type": "link",
+					"text": "link",
+					"href": "${uri}"
+				}
+			],
+			"search": [
+				"label",
+				"id",
+				"meddra_code"
+			]
+		},
+		{
+			"node": "Gene",
+			"order": ["pLI", "DESC"],
+			"pathname": "/",
+			"example": ["SLPI", "CAND2"],
+			"palette": {
+				"name": "greens",
+				"main": "#aed581",
+				"contrastText": "#000"
+			},
+			"display": [
+				{
+					"label": "Gene ID",
+					"type": "string",
+					"text": "${id}"
+				},
+				{
+					"label": "pLI",
+					"type": "number",
+					"text": "${pLI}"
+				},
+				{
+					"label": "Residual Variation Intolerance Score",
+					"type": "number",
+					"text": "${Residual_Variation_Intolerance_Score}"
+				},
+				{
+					"label": "Residual Variation Intolerance Score Percentile",
+					"type": "number",
+					"text": "${Residual_Variation_Intolerance_Score_Percentile}"
+				},
+				{
+					"label": "pHI",
+					"type": "number",
+					"text": "${pHI}"
+				},
+				{
+					"label": "pTS",
+					"type": "number",
+					"text": "${pTS}"
+				},
+				{
+					"label": "ARCHS4",
+					"text": "${label}",
+					"type": "link",
+					"href": "https://maayanlab.cloud/archs4/gene/${label}"
+				},
+				{
+					"label": "GDLPA",
+					"text": "${label}",
+					"type": "link",
+					"href": "https://cfde-gene-pages.cloud/gene/${label}?CF=false&PS=true&Ag=true"
+				}
+			],
+			"search": [
+				"label",
+				"id"
+			]
 		},
 		{
 			"node": "Drug",
-			"example": {
-				"href": {
-					"pathname": "/",
-					"query": {
-						"start": "Drug",
-						"start_term": "Terconazole"
-					}
-				}, 
-				"palette": "oranges"
+			"order": ["placenta_score", "DESC"],
+			"example": ["terconazole", "ketotifen"],
+			"pathname": "/",
+			"palette": {
+				"name": "oranges",
+				"main": "#ffb74d",
+				"contrastText": "#000"
 			},
-			"node_color": "#ffb74d"
-		},
-		{
-			"node": "BirthDefect",
-			"example": {
-				"href": {
-					"pathname": "/",
-					"query": {
-						"start": "BirthDefect",
-						"start_term": "Anencephaly"
-					}
-				}, 
-				"palette": "pinks"
-			},
-			"node_color": "#f8bbd0"
+			"display": [
+				{
+					"label": "Drug ID",
+					"text": "${id}",
+					"type": "link",
+					"href": "https://pubchem.ncbi.nlm.nih.gov/compound/${id.replace('CID:', '')}"
+				},
+				{
+					"label": "Placenta Crossing Likelihood Score",
+					"type": "number",
+					"text": "${placenta_score}"
+				},
+				{
+					"label": "Placenta Crossing Likelihood Rank",
+					"type": "int",
+					"text": "${placenta_rank}"
+				}
+			],
+			"search": [
+				"label",
+				"id"
+			]
 		}
 	],
-	"color": {
-		"mean_CD_Coefficient": {
-			"on": "edge",
-			"field": ["mean_CD_coefficient", "DESC"]
+	"edges": [
+		{
+			"match": ["gene-disease"],
+			"display": [
+				{
+					"label": "ID",
+					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Name",
+					"text": "${label}",
+					"type": "text"
+				},
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "Resource",
+					"text": "${resource}",
+					"href": "https://maayanlab.cloud/${resource}",
+					"type": "link"
+				}	
+			]
 		},
-		"Placenta Crossing Likelihood Score": {
-			"on": "node",
-			"field": ["placenta_score", "DESC"]
+		{
+			"match": ["chemical-disease"],
+			"display": [
+				{
+					"label": "ID",
+					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Name",
+					"text": "${label}",
+					"type": "text"
+				},
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "Resource",
+					"text": "${resource}",
+					"href": "https://maayanlab.cloud/${resource}",
+					"type": "link"
+				}	
+			]
 		},
-		"pLI": {
-			"on": "node",
-			"field": ["pLI", "DESC"]
+		{
+			"match": ["downregulates"],
+			"palette": {
+				"main": "#f8bbd0"
+			},
+			"order": ["mean_CD_coefficient", "ASC"],
+			"display": [
+				{
+					"label": "ID",
+					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Name",
+					"text": "${label}",
+					"type": "text"
+				},
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "Resource",
+					"text": "${resource}",
+					"href": "https://maayanlab.cloud/${resource}",
+					"type": "link"
+				},
+				{
+					"label": "Mean CD Coefficient",
+					"text": "${mean_CD_coefficient}",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"match": ["upregulates"],
+			"palette": {
+				"main": "#4fc3f7"
+			},
+			"order": ["mean_CD_coefficient", "DESC"],
+			"display": [
+				{
+					"label": "ID",
+					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Name",
+					"text": "${label}",
+					"type": "text"
+				},
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "Resource",
+					"text": "${resource}",
+					"href": "https://maayanlab.cloud/${resource}",
+					"type": "link"
+				},
+				{
+					"label": "Mean CD Coefficient",
+					"text": "${mean_CD_coefficient}",
+					"type": "text"
+				}	
+			]
+		},
+		{
+			"match": ["FDA Adverse Event Reporting System (Female)"],
+			"palette": {
+				"main": "#e040fb"
+			},
+			"order": ["llr_ratio", "DESC"],
+			"display": [
+				{
+					"label": "ID",
+					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Name",
+					"text": "${label}",
+					"type": "text"
+				},
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "llr ratio",
+					"text": "${llr_ratio}",
+					"type": "text"
+				},
+				{
+					"label": "level",
+					"text": "${level}",
+					"type": "text"
+				}		
+			]
+		},
+		{
+			"match": ["FDA Adverse Event Reporting System (Male)"],
+			"palette": {
+				"main": "#80cbc4"
+			},
+			"order": ["llr_ratio", "DESC"],
+			"display": [
+				{
+					"label": "ID",
+					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Name",
+					"text": "${label}",
+					"type": "text"
+				},
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "llr ratio",
+					"text": "${llr_ratio}",
+					"type": "text"
+				},
+				{
+					"label": "level",
+					"text": "${level}",
+					"type": "text"
+				}		
+			]
 		}
-	},
-	"tooltip": {
-		"Gene": [
+	],
+	"header": {
+		"title": "Toxicology Screening Knowledge Graph for Structural Birth Defects",
+		"icon": {
+			"favicon": "${PREFIX}/favicon.ico",
+			"src": "${PREFIX}/static/icons/CFDE-logo.png",
+			"alt": "CFDE logo",
+			"width": 100,
+			"height": 100
+		},
+		"tabs": [
 			{
-				"label": "Gene ID",
-				"text": "${id}"
+				"endpoint": "/",
+				"label": "Knowledge Graph",
+				"type": "page"
 			},
 			{
-				"label": "pLI",
-				"text": "${pLI}"
-			},
-			{
-				"label": "Residual Variation Intolerance Score",
-				"text": "${Residual_Variation_Intolerance_Score}"
-			},
-			{
-				"label": "Residual Variation Intolerance Score Percentile",
-				"text": "${Residual_Variation_Intolerance_Score_Percentile}"
-			},
-			{
-				"label": "pHI",
-				"text": "${pHI}"
-			},
-			{
-				"label": "pTS",
-				"text": "${pTS}"
+				"endpoint": "/downloads",
+				"label": "Download Assets",
+				"type": "markdown",
+				"src": "/markdown/download.md"
 			}
 		],
-		"Drug": [
+		"subheader": [
 			{
-				"label": "Drug ID",
-				"text": "${id}"
+				"label": "IDG",
+				"icon": "${PREFIX}/static/resources/idg.png",
+				"height": 100,
+				"width": 100,
+				"href": "https://druggablegenome.net/"
 			},
 			{
-				"label": "Placenta Crossing Likelihood Score",
-				"text": "${placenta_score}"
+				"label": "Kids First",
+				"icon": "${PREFIX}/static/resources/kidsfirst.png",
+				"height": 100,
+				"width": 100,
+				"href": "https://kidsfirstdrc.org/"
 			},
 			{
-				"label": "Placenta Crossing Likelihood Rank",
-				"text": "${placenta_rank}"
-			}
-		],
-		"BirthDefect": [
+				"label": "LINCS",
+				"icon": "${PREFIX}/static/resources/lincs.gif",
+				"height": 120,
+				"width": 120,
+				"href": "https://maayanlab.cloud/sigcom-lincs/"
+			},
 			{
-				"label": "ID",
-				"text": "${id}"
-			}
-		],
-		"Relation": [
-			{
-				"label": "Mean CD Coefficient",
-				"text": "${mean_CD_coefficient}"
+				"label": "SPARC",
+				"icon": "${PREFIX}/static/resources/sparc.png",
+				"height": 100,
+				"width": 100,
+				"href": "https://sparc.science/"
 			}
 		]
-	},
-	"header": {
-		"title": "Reprotox Knowledge Graph",
-		"subheader": []
 	}
 }
