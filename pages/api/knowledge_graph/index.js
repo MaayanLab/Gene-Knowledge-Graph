@@ -124,11 +124,14 @@ const aggregates = async ({session, schema}) => {
 				const order_pref = order === "DESC" ? 'max': 'min'
 				// const q = `WITH ${score_fields.join(", ")}${score_fields.length > 0 ? ",": ""}
 				// 		${order_pref}(rel.${field}) as ${order_pref}_${field}`
-				edge_aggr.push(`${order_pref}(rel.${field}) as ${order_pref}_${field}`)
-				score_fields.push(`${order_pref}_${field}`)
-				for (const i of (s.match || [])) {
-					colors[i].aggr_field = `${order_pref}_${field}`
-					colors[i].field = field
+				const score_var = `${order_pref}_${field}`
+				if (score_fields.indexOf(score_var) === -1){
+					edge_aggr.push(`${order_pref}(rel.${field}) as ${score_var}`)
+					score_fields.push(score_var)
+					for (const j of (s.match || [])) {
+						colors[j].aggr_field = score_var
+						colors[j].field = field
+					}
 				}
 			}
 		}
@@ -138,6 +141,7 @@ const aggregates = async ({session, schema}) => {
 
 		let node_query = ""
 		const node_aggr = []
+		const node_scores_field = []
 		for (const s of schema.nodes) {
 			colors[s.node] = {
 				color: (s.palette || {}).main || default_edge_color,
@@ -145,27 +149,23 @@ const aggregates = async ({session, schema}) => {
 			if (s.order) {
 				const [field, order] = s.order
 				const order_pref = order === "DESC" ? 'max': 'min'
-				const q = `MATCH (st)
-						WITH ${score_fields.join(", ")}${score_fields.length > 0 ? ",": ""}
-						${order_pref}(st.${field}) as ${order_pref}_${field}`
-				node_aggr.push(`${order_pref}(rel.${field}) as ${order_pref}_${field}`)
-				score_fields.push(`${order_pref}_${field}`)
+				node_aggr.push(`${order_pref}(st.${field}) as ${order_pref}_${field}`)
+				node_scores_field.push(`${order_pref}_${field}`)
 						
-				colors[i].aggr_field = `${order_pref}_${field}`
-				colors[i].field = field
+				colors[s.node].aggr_field = `${order_pref}_${field}`
+				colors[s.node].field = field
 			}
 		}
-
 		if (node_aggr.length > 0) {
 			node_query = `MATCH (st) WITH ${score_fields.join(", ")}${score_fields.length > 0 ? ",": ""} ${node_aggr.join(", ")}`
 		}
 		aggr_scores = {}
-		if (score_fields.length > 0) {
+		if ([...score_fields, ...node_scores_field].length > 0) {
 			const query = `${[edge_query, node_query].join("\t")} RETURN *`
 			const results = await session.readTransaction(txc => txc.run(query))
 			
 			results.records.flatMap(record => {
-				for (const i of score_fields) {
+				for (const i of [...score_fields, ...node_scores_field]) {
 					const score = record.get(i)
 					aggr_scores[i] = score
 				}
@@ -176,9 +176,10 @@ const aggregates = async ({session, schema}) => {
 	}
 }
 
-const resolve_two_terms = async ({session, start_term, start_field, start, end_term, end_field, end, limit, order, schema, relation}) => {
+
+const resolve_two_terms = async ({session, start_term, start_field, start, end_term, end_field, end, limit, order, size=4, schema, relation}) => {
 	await aggregates({session, schema})
-	let query = `MATCH p=(a: \`${start}\` {${start_field}: $start_term})-[*1..4]-(b: \`${end}\` {${end_field}: $end_term})
+	let query = `MATCH p=(a: \`${start}\` {${start_field}: $start_term})-[*1..${size}]-(b: \`${end}\` {${end_field}: $end_term})
 		USING INDEX a:\`${start}\`(${start_field})
 		USING INDEX b:\`${end}\`(${end_field})
 		WITH nodes(p) as n, relationships(p) as r
@@ -200,10 +201,10 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 	return resolve_results({results, terms: [start_term, end_term], schema, order, score_fields, colors, start_field, end_field})
 }
 
-const resolve_one_term = async ({session, start, field, term, relation, limit, order, schema}) => {
+const resolve_one_term = async ({session, start, field, term, relation, limit, order, size=1, schema}) => {
 	await aggregates({session, schema})
 	let query = `
-		MATCH p=(st:\`${start}\` { ${field}: $term })-[rel]-(en)
+		MATCH p=(st:\`${start}\` { ${field}: $term })-[*1..${size}]-(en)
 		USING INDEX st:\`${start}\`(${field})
 		WITH nodes(p) as n, relationships(p) as r
 		RETURN * LIMIT ${limit}
@@ -218,7 +219,7 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 }
 
 export default async function query(req, res) {
-  const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=25, order } = await req.query
+  const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=25, size, order } = await req.query
   if (!schema) {
 	schema = default_schema
 	if (process.env.NEXT_PUBLIC_SCHEMA) {
@@ -235,10 +236,10 @@ export default async function query(req, res) {
 		})
 		try {
 			if (start && end && start_term && end_term) {
-				const results = await resolve_two_terms({session, start_term, start_field, start, end_term, end_field, end, relation, limit, schema, order})
+				const results = await resolve_two_terms({session, start_term, start_field, start, end_term, end_field, end, relation, limit, size, schema, order})
 				res.status(200).send(results)
 			} else if (start) {
-				const results = await resolve_one_term({session, start, field: start_field, term: start_term, relation, limit, schema, order})
+				const results = await resolve_one_term({session, start, field: start_field, term: start_term, relation, limit, size, schema, order})
 				res.status(200).send(results)
 			} else {
 				res.status(400).send("Invalid input")
