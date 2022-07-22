@@ -1,6 +1,7 @@
 import sys
 import os
 import json
+import argparse
 import glob
 from py2neo import Graph, Node, Relationship
 import boto3
@@ -60,21 +61,25 @@ class GraphEx:
     return self.graph.run(parameters=parameters, **kwparameters)
 
 
-def process_serialized(serialized):
+def process_serialized(serialized, merge, merged):
   for i in serialized["edges"]:
     source = i["source"]
     node_a_props = serialized["nodes"][source]
     node_a_properties = node_a_props.get("properties", {})
     node_a_type = node_a_props["type"]
     node_a = Node(node_a_type, **node_a_properties)
-    neo4graph.merge(node_a)
+    if (merge == 'y' and source not in merged) or merge == 'n':
+      neo4graph.merge(node_a)
+      merged.add(source)
 
     target = i["target"]
     node_b_props = serialized["nodes"][target]
     node_b_properties = node_b_props.get("properties", {})
     node_b_type = node_b_props["type"]
     node_b = Node(node_b_type, **node_b_properties)
-    neo4graph.merge(node_b)
+    if (merge == 'y' and target not in merged) or merge == 'n':
+      neo4graph.merge(node_b)
+      merged.add(target)
 
     relation = i["relation"]
     relation_properties_dict = i.get("properties", {})
@@ -84,25 +89,38 @@ def delete_nodes(serialized):
   for i in serialized["nodes"]:
     neo4graph.delete(i)
 
-# python populate.py clean (optional) /path/to/files/to/ingest
-vals = sys.argv[1:]
-clean = False
-cleanAll = False
-if len(vals) > 0 and vals[0] == "clean":
-  clean = True
-  directories = vals[1:]
-elif len(vals) > 0 and vals[0] == "clean-all":
-  cleanAll = True
-  directories = vals[1:]
-else:
-  directories = vals
 
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-d', '--dir', help='comma separeated directories to ingest. Input aws to use aws credentials', required=True)
+    parser.add_argument('-c', '--clean', help='Clean nodes', default='n')
+    parser.add_argument('-C', '--clean-all', help='Clean nodes', default='n')
+    parser.add_argument('-m', '--merge', help='Merge nodes with similar ids?', default='y')
+    args = parser.parse_args()
+    return [args.dir, args.clean, args.clean_all, args.merge]
+
+# python populate.py clean (optional) /path/to/files/to/ingest
+# vals = sys.argv[1:]
+# clean = False
+# cleanAll = False
+# if len(vals) > 0 and vals[0] == "clean":
+#   clean = True
+#   directories = vals[1:]
+# elif len(vals) > 0 and vals[0] == "clean-all":
+#   cleanAll = True
+#   directories = vals[1:]
+# else:
+#   directories = vals
+dir, clean, clean_all, merge = parse_args()
 neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']))
-if cleanAll:
+merged = set()
+   
+if clean_all == 'y':
   print("Clean install")
   neo4graph.delete_all()
-if os.environ.get("AWS_PREFIX") and  os.environ.get("AWS_BUCKET") and os.environ.get('ACCESS_KEY') and os.environ.get('SECRET_KEY'):
-  print("Found AWS credentials...")
+if dir == 'aws':
+  print("Using AWS credentials...")
   client = boto3.client(
     's3',
     aws_access_key_id=os.environ['ACCESS_KEY'],
@@ -112,43 +130,46 @@ if os.environ.get("AWS_PREFIX") and  os.environ.get("AWS_BUCKET") and os.environ
   bucket_name = os.environ["AWS_BUCKET"]
   s3 = boto3.resource('s3')
   bucket = s3.Bucket(bucket_name)
+
   try:
-    if clean:
-       for object in bucket.objects.filter(Prefix=prefix):
-        if not object.key.replace("/","") == prefix:
-            url = "https://s3.amazonaws.com/%s/%s"%(bucket_name, object.key)
-            print(object.key)
-            print("Cleaning %s..."%object.key)
-            res = requests.get(url)
-            serialized = res.json()
-            delete_nodes(serialized)
+    if clean == 'y':
+      for object in bucket.objects.filter(Prefix=prefix):
+        if ".valid.json" in object.key:
+          if not object.key.replace("/","") == prefix:
+              url = "https://s3.amazonaws.com/%s/%s"%(bucket_name, object.key)
+              print(object.key)
+              print("Cleaning %s..."%object.key)
+              res = requests.get(url)
+              serialized = res.json()
+              delete_nodes(serialized)
     for object in bucket.objects.filter(Prefix=prefix):
+      if ".valid.json" in object.key:
         if not object.key.replace("/","") == prefix:
             url = "https://s3.amazonaws.com/%s/%s"%(bucket_name, object.key)
             print("Ingesting %s..."%object.key)
             res = requests.get(url)
             serialized = res.json()
             print("Ingesting...")
-            process_serialized(serialized)
+            process_serialized(serialized, merge, merged)
     neo4graph.commit()
   except Exception as e:
     print(e)
 else:
   try:
-    if clean:
-      for directory in directories:
+    if clean == 'y':
+      for directory in dir.split(","):
         for filename in glob.glob(directory + "/*.valid.json"):
           with open(filename) as o:
             print("Cleaning %s..."%filename)
             serialized = json.loads(o.read())
             delete_nodes(serialized)
-    for directory in directories:
+    for directory in dir.split(","):
       for filename in glob.glob(directory + "/*.valid.json"):
         with open(filename) as o:
           print("Ingesting %s..."%filename)
           serialized = json.loads(o.read())
           print("Ingesting...")
-          process_serialized(serialized)
+          process_serialized(serialized, merge, merged)
     neo4graph.commit()
   except Exception as e:
     print(e)
