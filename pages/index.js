@@ -173,7 +173,7 @@ const Legend = ({elements}) => {
     <Box sx={{
       zIndex: 1,
       position: 'absolute',
-      top: '70%',
+      top: '45%',
       left: '10%',
     }}>
         <Grid container alignItems={"center"} spacing={1}>
