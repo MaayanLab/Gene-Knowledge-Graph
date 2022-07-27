@@ -19,4 +19,7 @@ module.exports = {
     outputStandalone: true,
   },
   basePath: process.env.NEXT_PUBLIC_PREFIX || "",
+  images: {
+    domains: process.env.NEXT_PUBLIC_DOMAINS ? process.env.NEXT_PUBLIC_DOMAINS.split(",") : undefined,
+  }
 }
