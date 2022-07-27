@@ -93,12 +93,13 @@ def delete_nodes(serialized):
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-d', '--dir', help='comma separeated directories to ingest. Input aws to use aws credentials', required=True)
+    parser.add_argument('-d', '--dir', help='comma separeated directories to ingest. Input aws to use aws credentials. Use file if using an ingestion file', required=True)
+    parser.add_argument('-i', '--ingest-file', help='Clean nodes', default='n')
     parser.add_argument('-c', '--clean', help='Clean nodes', default='n')
     parser.add_argument('-C', '--clean-all', help='Clean nodes', default='n')
     parser.add_argument('-m', '--merge', help='Merge nodes with similar ids?', default='y')
     args = parser.parse_args()
-    return [args.dir, args.clean, args.clean_all, args.merge]
+    return [args.dir, args.ingest_file, args.clean, args.clean_all, args.merge]
 
 # python populate.py clean (optional) /path/to/files/to/ingest
 # vals = sys.argv[1:]
@@ -112,7 +113,7 @@ def parse_args():
 #   directories = vals[1:]
 # else:
 #   directories = vals
-dir, clean, clean_all, merge = parse_args()
+dir, ingest_file, clean, clean_all, merge = parse_args()
 neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']))
 merged = set()
    
@@ -151,6 +152,26 @@ if dir == 'aws':
             serialized = res.json()
             print("Ingesting...")
             process_serialized(serialized, merge, merged)
+    neo4graph.commit()
+  except Exception as e:
+    print(e)
+elif dir == 'file':
+  print("Using input file...")
+  res = requests.get(ingest_file)
+  files = res.text
+  try:
+    if clean == 'y':
+      for url in files.split("\n"):
+        print("Cleaning %s..."%url)
+        res = requests.get(url)
+        serialized = res.json()
+        delete_nodes(serialized)
+    for url in files.split("\n"):
+      print("Ingesting %s..."%url)
+      res = requests.get(url)
+      serialized = res.json()
+      print("Ingesting...")
+      process_serialized(serialized, merge, merged)
     neo4graph.commit()
   except Exception as e:
     print(e)
