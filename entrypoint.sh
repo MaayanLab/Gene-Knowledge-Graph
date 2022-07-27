@@ -3,7 +3,7 @@
 if [ $INGEST ]
 then
 	cd scripts/ingestion
-	python populate.py $CLEAN data
+	python populate.py $OPTIONS
 	cd ../..
 else
    echo "skipping ingestion..."
@@ -11,4 +11,5 @@ fi
 cd scripts/ingestion
 python indexing.py schema.json
 cd ../..
-node server.js
+npm run build
+npm start

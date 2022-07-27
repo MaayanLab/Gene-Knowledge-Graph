@@ -6,33 +6,21 @@ WORKDIR /app
 COPY package.json /app
 RUN npm install
 
-# Rebuild the source code only when needed
-FROM node:16-alpine AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-RUN npm run build
-
 # Production image, copy all the files and run next
 FROM node:16-alpine AS runner
 WORKDIR /app
 
+COPY --from=deps /app/node_modules ./node_modules
+
 ENV NODE_ENV production
 
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
+# RUN addgroup -g 1001 -S nodejs
+# RUN adduser -S nextjs -u 1001
 
 # You only need to copy next.config.js if you are NOT using the default configuration
-COPY --from=builder /app/next.config.js ./
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package.json ./package.json
+COPY . .
+RUN npm run build
 
-# Automatically leverage output traces to reduce image size 
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-COPY ./scripts ./scripts
 COPY ./public/schema.json ./scripts/ingestion
  
 ENV PYTHONUNBUFFERED=1
@@ -41,11 +29,9 @@ RUN apk add make automake gcc g++ subversion python3-dev
 RUN python3 -m ensurepip
 RUN pip3 install --no-cache --upgrade pip setuptools
 RUN pip3 install -r ./scripts/ingestion/requirements.txt
-USER nextjs
+# USER nextjs
 
 
-ENV NEXT_PUBLIC_DATA_API="https://maayanlab.cloud/sigcom-lincs/data-api"
-ENV NEXT_PUBLIC_METADATA_API="https://maayanlab.cloud/sigcom-lincs/metadata-api"
 ENV PREFIX=/
 ENV NEXT_PUBLIC_PREFIX=/
 ENV PORT=3000
@@ -53,8 +39,8 @@ ENV PORT=3000
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry.
 
-COPY --chown=nextjs:nodejs ./entrypoint.sh ./entrypoint.sh
+# COPY --chown=nextjs:nodejs ./entrypoint.sh ./entrypoint.sh
 ENV NEXT_TELEMETRY_DISABLED 1
 # CMD ["node", "server.js"]
-RUN ["chmod", "+x", "./entrypoint.sh"]
+RUN set -x && chmod +x ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
