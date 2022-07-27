@@ -72,8 +72,8 @@ function MyApp({ Component, pageProps }) {
       <ThemeProvider theme={theme}>
         <Head>
           <meta charSet="utf-8" />
-          <title>{((pageProps.schemas || default_schema).header || {}).title}</title>
-          <link rel="shortcut icon" type="image/x-icon" alt={((pageProps.schemas || default_schema).header || {}).title} href={makeTemplate((((pageProps.schemas || default_schema).header || {}).icon).favicon || '', {})} />
+          <title>{((pageProps.schema || default_schema).header || {}).title}</title>
+          <link rel="shortcut icon" type="image/x-icon" alt={((pageProps.schema || default_schema).header || {}).title} href={makeTemplate((((pageProps.schema || default_schema).header || {}).icon).favicon || '', {})} />
           <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
           <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css" rel="stylesheet" />
           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
