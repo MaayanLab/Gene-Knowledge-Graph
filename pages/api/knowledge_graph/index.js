@@ -187,7 +187,7 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 		
 	if (relation) {
 		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
-		query = query.replace("[*1..4]",`[:${rels}*1..4]`)
+		query = query.replace(`[*1..${size}]`,`[:${rels}*1..${size}]`)
 		// query = `MATCH p=(a: \`${start}\` {${start_field}: $start_term})-[:${rels}]-()-[]-()-[:${rels}]-(b: \`${end}\` {${end_field}: $end_term})
 		// USING INDEX a:\`${start}\`(${start_field})
 		// USING INDEX b:\`${end}\`(${end_field})
@@ -204,15 +204,16 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 const resolve_one_term = async ({session, start, field, term, relation, limit, order, size=1, schema}) => {
 	await aggregates({session, schema})
 	let query = `
-		MATCH p=(st:\`${start}\` { ${field}: $term })-[*1..${size}]-(en)
+		MATCH p=(st:\`${start}\` { ${field}: $term })-[*${size}]-(en)
 		USING INDEX st:\`${start}\`(${field})
 		WITH nodes(p) as n, relationships(p) as r
 		RETURN * LIMIT ${limit}
 		`
 	if (relation) {
 		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
-		query = query.replace("[rel]",`[rel:${rels}]`)
+		query = query.replace(`[*${size}]`,`[:${rels}*${size}]`)
 	}
+	console.log(query)
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 	const results = await session.readTransaction(txc => txc.run(query, { term }))
 	return resolve_results({results, terms: [term], schema, order, score_fields, colors, field})
