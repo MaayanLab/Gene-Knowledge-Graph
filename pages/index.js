@@ -8,6 +8,8 @@ import { precise, makeTemplate, toNumber } from '../utils/helper';
 import fileDownload from 'js-file-download'
 import * as default_schema from '../public/schema.json'
 import Color from 'color'
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Box = dynamic(() => import('@mui/material/Box'));
@@ -66,6 +68,9 @@ const default_examples = {
 }
 
 const TooltipCard = ({node, tooltip_templates, setFocused, router, schema}) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('lg'));
+  
   const elements = []
   const field = node.kind === "Relation" ? node.label : node.kind
   for (const i of tooltip_templates[field] || []) {
@@ -100,7 +105,7 @@ const TooltipCard = ({node, tooltip_templates, setFocused, router, schema}) => {
     <Box sx={{
         zIndex: 'tooltip',
         position: 'absolute',
-        top: '40%',
+        top: matches ? 500: 800,
         right: '10%',
       }}>
       <Card>
@@ -152,6 +157,8 @@ const Selector = ({entries, value, onChange, prefix, ...props }) => {
 }
 
 const Legend = ({elements}) => {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('lg'));
   const colors = {
     "Search Term": <Grid item xs={12} key={"search"}>
     <Grid container alignItems={"center"} spacing={2}>
@@ -173,7 +180,7 @@ const Legend = ({elements}) => {
     <Box sx={{
       zIndex: 1,
       position: 'absolute',
-      top: '45%',
+      top: matches ? 500: 800,
       left: '10%',
     }}>
         <Grid container alignItems={"center"} spacing={1}>
@@ -536,6 +543,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 value={relation ? relation.split(","): selected.length > 0 ? selected: current_node.relation || default_relations}
                 prefix={"edge"}
                 onChange={(e)=>{
+                  console.log(e)
                   const relation = e.filter(i=>i!=="").join(",")
                   if (relation === "") {
                     const {relation, ...query} = router.query
