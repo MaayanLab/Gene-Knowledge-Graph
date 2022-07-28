@@ -557,7 +557,13 @@
 				"endpoint": "/downloads",
 				"label": "Download Assets",
 				"type": "markdown",
-				"src": "${PREFIX}/markdown/download.md"
+				"src": "/markdown/download.md"
+			},
+			{
+				"endpoint": "/about",
+				"label": "About",
+				"type": "markdown",
+				"src": "/markdown/download.md"
 			}
 		],
 		"subheader": [
