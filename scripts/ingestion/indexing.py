@@ -12,7 +12,7 @@ load_dotenv()
 
 with open(sys.argv[1]) as o:
 	schema = json.loads(o.read())
-if os.environ['NEXT_PUBLIC_SCHEMA']:
+if os.environ['NEXT_PUBLIC_SCHEMA'] and not os.environ['NEXT_PUBLIC_SCHEMA']=="":
 	res = requests.get(os.environ['NEXT_PUBLIC_SCHEMA'])
 	schema = res.json()
 
