@@ -20,6 +20,7 @@ module.exports = {
   },
   basePath: process.env.NEXT_PUBLIC_PREFIX || "",
   images: {
+    path: `${process.env.NEXT_PUBLIC_PREFIX || ""}/_next/image`,
     domains: process.env.NEXT_PUBLIC_DOMAINS ? process.env.NEXT_PUBLIC_DOMAINS.split(",") : undefined,
   }
 }

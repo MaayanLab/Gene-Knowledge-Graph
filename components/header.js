@@ -72,7 +72,7 @@ const IconRenderer = ({label, icon, height=100, width=100, onClick, href, router
 				}}
 				sx={buttonStyle}
 			>
-				<div style={{height:100, minWidth: 100, ...buttonStyle}}>
+				<div style={{height, minWidth: width, ...buttonStyle}}>
 					<Image
 						// loader={()=>`/birth-defect-drugs${val.icon}`} 
 						src={makeTemplate(icon, {})}
