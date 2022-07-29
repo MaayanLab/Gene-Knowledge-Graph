@@ -1,7 +1,7 @@
 import sys
 import os
 import json
-import request
+import requests
 from py2neo import Graph, Node, Relationship
 from tqdm import tqdm
 
