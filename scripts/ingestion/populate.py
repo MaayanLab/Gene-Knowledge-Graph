@@ -51,10 +51,7 @@ class GraphEx:
   
   def merge(self, obj):
     self._begin()
-    if obj["id"]:
-      self.tx.merge(obj, primary_label="id", primary_key="id")
-    else:
-      self.tx.merge(obj, primary_label="symbol", primary_key="symbol")
+    self.tx.merge(obj, primary_label="id", primary_key="id")
     self._periodic_commit()
   
   def run(self, parameters=None, **kwparameters):
