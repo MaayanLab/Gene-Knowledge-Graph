@@ -50,8 +50,8 @@ const FooterContents = ({footer}) => {
 						// loader={()=>`/birth-defect-drugs${val.icon}`} 
 						src={makeTemplate(footer.src, {})}
 						alt={footer.alt}
-						width={200}
-						height={100}
+						width={footer.width || 200}
+						height={footer.height || 100}
 					/>
 				</Button>
 			)
