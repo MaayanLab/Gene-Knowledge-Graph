@@ -38,3 +38,5 @@ gene_data
 
 schema.json
 .env.genekg
+
+data-*

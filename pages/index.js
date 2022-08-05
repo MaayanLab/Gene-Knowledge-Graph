@@ -105,7 +105,7 @@ const TooltipCard = ({node, tooltip_templates, setFocused, router, schema}) => {
     <Box sx={{
         zIndex: 'tooltip',
         position: 'absolute',
-        top: matches ? 500: 800,
+        top: matches ? 550: 850,
         right: '10%',
       }}>
       <Card>
@@ -180,8 +180,9 @@ const Legend = ({elements}) => {
     <Box sx={{
       zIndex: 1,
       position: 'absolute',
-      top: matches ? 500: 800,
+      top: matches ? 550: 850,
       left: '10%',
+      pointerEvents: "none"
     }}>
         <Grid container alignItems={"center"} spacing={1}>
           <Grid item xs={12}>
@@ -198,7 +199,7 @@ const Legend = ({elements}) => {
 export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema}) {
   if (!schema) schema=default_schema  
   const router = useRouter()
-  const {start_term, end_term, start_field="label", end_field="label", limit=25, relation, order=(Object.keys(schema.order || {}))[0]} = router.query
+  const {start_term, end_term, start_field="label", end_field="label", limit=25, path_length, relation, order=(Object.keys(schema.order || {}))[0]} = router.query
   let start = router.query.start
   let end = router.query.end
   if (!start) start = schema.nodes[0].node
@@ -291,9 +292,12 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
         body.end_term = end_term
         body.end_field = end_field
       }
+      if (path_length) {
+        body.path_length = path_length
+      }
       if (relation) {
         body.relation = relation
-      } else if (!end & !end_term) {
+      } else {
         body.relation = current_node.relation.join(",") || default_relations.join(",")
       }
       const body_str = Object.entries(body).map(([k,v])=>`${k}=${v}`).join("&")
@@ -340,9 +344,10 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   }, [start_term, limit])
 
   useAsyncEffect(async (isActive) => {
-    if (end_term) {
-      await  resolve_elements(isActive)
-    }
+    // if (end_term) {
+    //   await  resolve_elements(isActive)
+    // }
+    await  resolve_elements(isActive)
   }, [end_term])
 
   useAsyncEffect(async (isActive) => {
@@ -351,7 +356,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
     } else {
       await  resolve_elements(isActive)
     }
-  }, [relation])
+  }, [relation, path_length])
   return (
     <Grid container justifyContent="space-around" spacing={2}>
       <Grid item xs={12}>
@@ -450,7 +455,10 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
           ))}
           {!router.query.end && 
             <Grid item>
-              <Button onClick={()=>redirect({...router.query, end})} startIcon={<AddBoxIcon />}>
+              <Button onClick={()=>{
+                const {path_length, ...rest} = router.query
+                redirect({...rest, end})
+              }} startIcon={<AddBoxIcon />}>
                   Add End Filter
               </Button>
             </Grid>
@@ -565,7 +573,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
             <Selector entries={Object.keys(layouts)}
               value={layout}
               prefix={"layout"}
-              onChange={(e, v)=>setLayout(e.target.value)}
+              onChange={(e, v)=>setLayout(e)}
               />
           </Grid>
           <Grid item>
@@ -579,6 +587,13 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 name="checkedA"
                 inputProps={{ 'aria-label': 'secondary checkbox' }}
               /></Typography>
+          </Grid>          
+          <Grid item>
+            <Button color="blues" onClick={()=>{
+              fileDownload(cyref.current.png({output: "blob"}), "network.png")
+            }}>
+              <CameraAltOutlinedIcon/>
+            </Button>
           </Grid>
           <Grid item>
             <Typography variant="body1"><b>Size:</b></Typography>
@@ -603,13 +618,6 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
           </Grid>
           <Grid item>
             <Typography variant="body1">{limit}</Typography>
-          </Grid>
-          <Grid item>
-            <Button color="blues" onClick={()=>{
-              fileDownload(cyref.current.png({output: "blob"}), "network.png")
-            }}>
-              <CameraAltOutlinedIcon/>
-            </Button>
           </Grid>
         </Grid>
       </Grid>
