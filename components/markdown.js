@@ -2,12 +2,9 @@ import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm'
 import { makeTemplate } from '../utils/helper'
-const get_path = (src) => {
-    console.log(src)
+export const get_path = (src) => {
     if (src.startsWith("/")) {
-        const getUrl = window.location;
-        const baseUrl = getUrl .protocol + "//" + getUrl.host
-        return `${baseUrl}${src}`
+        return `${process.env.NEXT_PUBLIC_HOST}${src}`
     } else {
         return src
     }
