@@ -10,10 +10,10 @@ const Button = dynamic(async () => (await import('@mui/material')).Button);
 const GitHubIcon = dynamic(()=>import('@mui/icons-material/GitHub'));
 const BugReportIcon = dynamic(()=>import('@mui/icons-material/BugReport'));
 
-const FooterContents = ({footer}) => {
+const FooterContents = ({footer, key}) => {
     if (footer.type == "github") {
         return (
-            <Grid item>
+            <Grid item  key={key}>
                 <Grid container direction="column">
 					<Grid item>
 						<Button 
@@ -45,6 +45,7 @@ const FooterContents = ({footer}) => {
 					href={footer.href}
 					target="_blank"
 					rel="noopener noreferrer"
+					key={key}
 				>
 					<Image
 						// loader={()=>`/birth-defect-drugs${val.icon}`} 
@@ -57,7 +58,7 @@ const FooterContents = ({footer}) => {
 			)
 		} else {
 			return (
-				<Grid item>
+				<Grid item key={key}>
 					<Image 
 						// loader={()=>'/birth-defect-drugs/static/CFDE-logo.png'}
 						src={makeTemplate(footer.src, {})}
