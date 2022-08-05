@@ -25,7 +25,15 @@ const function_mapper = {
 			new_selected = selected.filter(s=>s!==label)
 			new_relations = new_relations.filter(i=> (props.selected || []).indexOf(i) === -1)
 		}
-		if (new_relations.length) {
+		if (router.pathname !== "/") {
+			router.push({
+				pathname: '/',
+				query: {
+					...router.query,
+					relation: new_relations.join(",")
+				}
+			  }, undefined, {shallow: true})
+		}else if (new_relations.length) {
 			router.push({
 				pathname: router.route || '/',
 				query: {
