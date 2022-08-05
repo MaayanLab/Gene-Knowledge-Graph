@@ -177,9 +177,9 @@ const aggregates = async ({session, schema}) => {
 }
 
 
-const resolve_two_terms = async ({session, start_term, start_field, start, end_term, end_field, end, limit, order, size=4, schema, relation}) => {
+const resolve_two_terms = async ({session, start_term, start_field, start, end_term, end_field, end, limit, order, path_length=4, schema, relation}) => {
 	await aggregates({session, schema})
-	let query = `MATCH p=(a: \`${start}\` {${start_field}: $start_term})-[*1..${size}]-(b: \`${end}\` {${end_field}: $end_term})
+	let query = `MATCH p=(a: \`${start}\` {${start_field}: $start_term})-[*${path_length}]-(b: \`${end}\` {${end_field}: $end_term})
 		USING INDEX a:\`${start}\`(${start_field})
 		USING INDEX b:\`${end}\`(${end_field})
 		WITH nodes(p) as n, relationships(p) as r
@@ -187,7 +187,7 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 		
 	if (relation) {
 		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
-		query = query.replace(`[*1..${size}]`,`[:${rels}*1..${size}]`)
+		query = query.replace(`[*${path_length}]`,`[:${rels}*${path_length}]`)
 		// query = `MATCH p=(a: \`${start}\` {${start_field}: $start_term})-[:${rels}]-()-[]-()-[:${rels}]-(b: \`${end}\` {${end_field}: $end_term})
 		// USING INDEX a:\`${start}\`(${start_field})
 		// USING INDEX b:\`${end}\`(${end_field})
@@ -201,18 +201,36 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 	return resolve_results({results, terms: [start_term, end_term], schema, order, score_fields, colors, start_field, end_field})
 }
 
-const resolve_one_term = async ({session, start, field, term, relation, limit, order, size=1, schema}) => {
+const resolve_one_term = async ({session, start, field, term, relation, limit, order, path_length=1, schema}) => {
+	console.log
 	await aggregates({session, schema})
 	let query = `
-		MATCH p=(st:\`${start}\` { ${field}: $term })-[*${size}]-(en)
+		MATCH p=(st:\`${start}\` { ${field}: $term })-[*${path_length}]-(en)
 		USING INDEX st:\`${start}\`(${field})
 		WITH nodes(p) as n, relationships(p) as r
 		RETURN * LIMIT ${limit}
 		`
 	if (relation) {
 		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
-		query = query.replace(`[*${size}]`,`[:${rels}*${size}]`)
+		query = query.replace(`[*${path_length}]`,`[:${rels}*${path_length}]`)
 	}
+	// let rels = null
+	// if (relation) {
+	// 	rels = "`" + `${relation.split(",").map(i=>`\`${i}\``).join("|")}` + "`"
+	// }
+
+
+	// let query = `
+	// 	MATCH (st:\`${start}\` { ${field}: $term })
+	// 	CALL apoc.path.expandConfig(st, {
+	// 		maxLevel: ${path_length},
+	// 		relationshipFilter: ${rels}
+	// 	})
+	// 	YIELD path as p
+	// 	RETURN nodes(p) as n, relationships(p) as r, length(p) AS hops
+	// 	ORDER BY hops DESC
+	// 	LIMIT ${limit};
+	// `
 	console.log(query)
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 	const results = await session.readTransaction(txc => txc.run(query, { term }))
@@ -220,7 +238,7 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 }
 
 export default async function query(req, res) {
-  const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=25, size, order } = await req.query
+  const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=25, path_length, order } = await req.query
   if (!schema) {
 	schema = default_schema
 	if (process.env.NEXT_PUBLIC_SCHEMA) {
@@ -237,10 +255,10 @@ export default async function query(req, res) {
 		})
 		try {
 			if (start && end && start_term && end_term) {
-				const results = await resolve_two_terms({session, start_term, start_field, start, end_term, end_field, end, relation, limit, size, schema, order})
+				const results = await resolve_two_terms({session, start_term, start_field, start, end_term, end_field, end, relation, limit, path_length, schema, order})
 				res.status(200).send(results)
 			} else if (start) {
-				const results = await resolve_one_term({session, start, field: start_field, term: start_term, relation, limit, size, schema, order})
+				const results = await resolve_one_term({session, start, field: start_field, term: start_term, relation, limit, path_length, schema, order})
 				res.status(200).send(results)
 			} else {
 				res.status(400).send("Invalid input")

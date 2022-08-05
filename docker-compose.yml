@@ -24,7 +24,7 @@ services:
       - 7474:7474
       - 7687:7687
     volumes:
-      - ./data/neo4j:/data
+      - ./data-gene/neo4j:/data
     networks:
       internal:
         aliases:
