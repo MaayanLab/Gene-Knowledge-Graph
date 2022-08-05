@@ -389,7 +389,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                       start_field,
                       limit
                     }
-                    if (end) {
+                    if (router.query.end) {
                       query.end = end
                       query.end_field = end_field
                     }
