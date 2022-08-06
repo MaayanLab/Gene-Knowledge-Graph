@@ -1,59 +1,81 @@
 {
 	"nodes": [
 		{
-			"node": "Drug",
+			"node": "BirthDefect",
 			"pathname": "/",
-			"example": ["esmolol", "buspirone"],
+			"example": ["Anencephaly", "Trisomy 21"],
 			"palette": {
-				"name": "oranges",
-				"main": "#ffb74d",
+				"name": "pinks",
+				"main": "#f48fb1",
 				"contrastText": "#000"
 			},
-			"relation": ["LINCS (downregulates)", "LINCS (upregulates)"],
+			"relation": [],
 			"display": [
 				{
-					"label": "Drug ID",
-					"text": "${id}",
-					"type": "link",
-					"href": "https://pubchem.ncbi.nlm.nih.gov/compound/${id.replace('CID:', '')}"
+					"label": "ID",
+					"type": "string",
+					"text": "${id}"
 				},
 				{
-					"label": "GDLPA",
-					"text": "${label}",
+					"label": "MEDDRA code",
 					"type": "link",
-					"href": "https://cfde-gene-pages.cloud/drug/${label}?CF=false&PS=true"
+					"text": "${meddra_code}",
+					"href": "https://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=${meddra_code}"
+				},
+				{
+					"label": "URI",
+					"type": "link",
+					"text": "link",
+					"href": "${uri}"
 				}
 			],
 			"search": [
 				"label",
-				"id"
+				"id",
+				"meddra_code"
 			]
 		},
 		{
 			"node": "Gene",
+			"order": ["pLI", "DESC"],
 			"pathname": "/",
-			"example": ["LUM", "MAPK1"],
-			"relation": [
-				"BioGRID",
-				"LINCS (downregulates)",
-				"LINCS (upregulates)",
-				"ARCHS4 (negatively correlated)",
-				"ARCHS4 (positively correlated)",
-				"Metabolomics Workbench",
-				"GlyGen",
-				"HuBMAP"
-			],
+			"example": ["SLPI", "CAND2"],
 			"palette": {
 				"name": "greens",
 				"main": "#aed581",
 				"contrastText": "#000"
 			},
+			"relation": [],
 			"display": [
 				{
 					"label": "Gene ID",
-					"text": "${id}",
-					"type": "link",
-					"href": "https://www.ncbi.nlm.nih.gov/gene/${id}"
+					"type": "string",
+					"text": "${id}"
+				},
+				{
+					"label": "pLI",
+					"type": "number",
+					"text": "${pLI}"
+				},
+				{
+					"label": "Residual Variation Intolerance Score",
+					"type": "number",
+					"text": "${Residual_Variation_Intolerance_Score}"
+				},
+				{
+					"label": "Residual Variation Intolerance Score Percentile",
+					"type": "number",
+					"text": "${Residual_Variation_Intolerance_Score_Percentile}"
+				},
+				{
+					"label": "pHI",
+					"type": "number",
+					"text": "${pHI}"
+				},
+				{
+					"label": "pTS",
+					"type": "number",
+					"text": "${pTS}"
 				},
 				{
 					"label": "ARCHS4",
@@ -74,160 +96,48 @@
 			]
 		},
 		{
-			"node": "Glycan",
+			"node": "Drug",
+			"order": ["placenta_score", "DESC"],
+			"example": ["terconazole", "ketotifen"],
 			"pathname": "/",
-			"example": ["G00912UN", "G22140GZ"],
-			"relation": [
-				"GlyGen"
-			],
+			"relation": [],
 			"palette": {
-				"name": "purples",
-				"main": "#b39ddb",
+				"name": "oranges",
+				"main": "#ffb74d",
 				"contrastText": "#000"
 			},
 			"display": [
 				{
-					"label": "Byonic",
-					"text": "${byonic}",
-					"type": "text"
-				},
-				{
-					"label": "Glycan Type",
-					"text": "${glycan_type}",
-					"type": "text"
-				},
-				{
-					"label": "mass",
-					"text": "${mass}",
-					"type": "text"
-				},
-				{
-					"label": "monosaccharides",
-					"field": "monosaccharides",
-					"type": "int"
-				},
-				{
-					"label": "Glygen page",
-					"href": "${uri}",
-					"text": "${id}",
-					"type": "link"
-				},
-				{
-					"label": "Glytoucan page",
-					"href": "${glytoucan_url}",
-					"text": "${id}",
-					"type": "link"
-				}
-			],
-			"search": [
-				"label",
-				"id",
-				"byonic",
-				"glycan_type"
-			]
-		},
-		{
-			"node": "Metabolite",
-			"pathname": "/",
-			"example": ["L-Glutamate", "Choline"],
-			"relation": [
-				"Metabolomics Workbench"
-			],
-			"palette": {
-				"name": "cyans",
-				"main": "#26c6da",
-				"contrastText": "#000"
-			},
-			"display": [
-				{
-					"label": "Metabolite ID",
+					"label": "Drug ID",
 					"text": "${id}",
 					"type": "link",
-					"href": "https://www.genome.jp/entry/${id}"
+					"href": "https://pubchem.ncbi.nlm.nih.gov/compound/${id.replace('CID:', '')}"
 				},
 				{
-					"label": "Synonyms",
-					"text": "${synonyms.join(', ')}",
-					"type": "text"
+					"label": "Placenta Crossing Likelihood Score",
+					"type": "number",
+					"text": "${placenta_score}"
+				},
+				{
+					"label": "Placenta Crossing Likelihood Rank",
+					"type": "int",
+					"text": "${placenta_rank}"
+				},
+				{
+					"label": "smiles",
+					"type": "text",
+					"text": "${smiles}"
 				}
 			],
 			"search": [
 				"label",
 				"id"
-			]
-		},
-		{
-			"node": "Cell or Tissue (HuBMAP)",
-			"pathname": "/",
-			"example": ["Brain", "CD4 T cell memory"],
-			"relation": [
-				"HuBMAP"
-			],
-			"palette": {
-				"name": "teals",
-				"main": "#4db6ac",
-				"contrastText": "#000"
-			},
-			"display": [
-				{
-					"label": "Ontology ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "Resource",
-					"text": "HuBMAP",
-					"type": "link",
-					"href": "https://hubmapconsortium.github.io/ccf-asct-reporter/"
-				}
-			],
-			"search": [
-				"label",
-				"id"
-			]
-		},
-		{
-			"node": "Tissue Group (GTEx)",
-			"pathname": "/",
-			"example": ["Liver_subj-age_30-39", "Pancreas_subj-age_50-59"],
-			"relation": [
-				"GTEx (up)",
-				"GTEx (down)"
-			],
-			"palette": {
-				"name": "pinks",
-				"main": "#f48fb1",
-				"contrastText": "#000"
-			},
-			"display": [
-				{
-					"label": "Tissue",
-					"text": "${tissue}",
-					"type": "text"
-				},
-				{
-					"label": "Ontology ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "Age group",
-					"text": "${age_group}",
-					"type": "text"
-				}
-			],
-			"search": [
-				"label",
-				"tissue",
-				"age_group"
 			]
 		}
 	],
 	"edges": [
 		{
-			"match": ["BioGRID"],
-			"selected": true,
-			"order": ["Confidence_Values", "DESC"],
+			"match": ["Geneshot"],
 			"display": [
 				{
 					"label": "ID",
@@ -250,44 +160,24 @@
 					"type": "text"
 				},
 				{
-					"label": "Interaction Detection Method",
-					"text": "${Interaction_Detection_Method}",
-					"type": "text"
-				},
-				{
-					"label": "Pubmed",
-					"text": "${Publication_Identifiers}",
-					"type": "text"
-				},
-				{
-					"label": "Publication First Author",
-					"text": "${Publication_1st_Author}",
-					"type": "text"
-				},
-				{
-					"label": "Confidence Value",
-					"text": "${Confidence_Values}",
-					"type": "text"
-				},
-				{
 					"label": "Resource",
-					"text": "BioGRID",
-					"href": "https://thebiogrid.org/",
+					"text": "${resource}",
+					"href": "https://maayanlab.cloud/${resource}",
 					"type": "link"
 				}	
 			]
 		},
 		{
-			"match": ["ARCHS4 (negatively correlated)"],
-			"selected": true,
-			"palette": {
-				"main": "#f8bbd0"
-			},
-			"order": ["correlation_coefficient", "ASC"],
+			"match": ["Drugshot", "DrugEnrichr"],
 			"display": [
 				{
 					"label": "ID",
 					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Name",
+					"text": "${label}",
 					"type": "text"
 				},
 				{
@@ -301,57 +191,15 @@
 					"type": "text"
 				},
 				{
-					"label": "Correlation Coefficient",
-					"text": "${correlation_coefficient}",
-					"type": "number"
-				},
-				{
 					"label": "Resource",
-					"text": "ARCHS4",
-					"href": "https://maayanlab.cloud/archs4/",
+					"text": "${resource}",
+					"href": "https://maayanlab.cloud/${resource}",
 					"type": "link"
 				}	
 			]
 		},
 		{
-			"match": ["ARCHS4 (positively correlated)"],
-			"selected": true,
-			"palette": {
-				"main": "#4fc3f7"
-			},
-			"order": ["correlation_coefficient", "DESC"],
-			"display": [
-				{
-					"label": "ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "Target Label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "Correlation Coefficient",
-					"text": "${correlation_coefficient}",
-					"type": "number"
-				},
-				{
-					"label": "Resource",
-					"text": "ARCHS4",
-					"href": "https://maayanlab.cloud/archs4/",
-					"type": "link"
-				}		
-			]
-		},
-		{
-			"match": ["LINCS (downregulates)"],
-			"selected": true,
+			"match": ["SigCom LINCS Drug-to-Gene (downregulates)"],
 			"palette": {
 				"main": "#f8bbd0"
 			},
@@ -363,6 +211,11 @@
 					"type": "text"
 				},
 				{
+					"label": "Name",
+					"text": "${label}",
+					"type": "text"
+				},
+				{
 					"label": "Source Label",
 					"text": "${source_label}",
 					"type": "text"
@@ -373,21 +226,20 @@
 					"type": "text"
 				},
 				{
-					"label": "Correlation Coefficient",
-					"text": "${mean_CD_coefficient}",
-					"type": "number"
+					"label": "Resource",
+					"text": "${resource}",
+					"href": "https://maayanlab.cloud/sigcom-lincs",
+					"type": "link"
 				},
 				{
-					"label": "Resource",
-					"text": "SigCom LINCS",
-					"href": "https://maayanlab.cloud/sigcom-lincs/",
-					"type": "link"
-				}	
+					"label": "Mean CD Coefficient",
+					"text": "${mean_CD_coefficient}",
+					"type": "text"
+				}
 			]
 		},
 		{
-			"match": ["LINCS (upregulates)"],
-			"selected": true,
+			"match": ["SigCom LINCS Drug-to-Gene (upregulates)"],
 			"palette": {
 				"main": "#4fc3f7"
 			},
@@ -399,6 +251,11 @@
 					"type": "text"
 				},
 				{
+					"label": "Name",
+					"text": "${label}",
+					"type": "text"
+				},
+				{
 					"label": "Source Label",
 					"text": "${source_label}",
 					"type": "text"
@@ -409,140 +266,190 @@
 					"type": "text"
 				},
 				{
-					"label": "Correlation Coefficient",
+					"label": "Resource",
+					"text": "${resource}",
+					"href": "https://maayanlab.cloud/sigcom-lincs",
+					"type": "link"
+				},
+				{
+					"label": "Mean CD Coefficient",
 					"text": "${mean_CD_coefficient}",
+					"type": "text"
+				}	
+			]
+		},
+		{
+			"match": ["LINCS Drugs Cosine Similarity"],
+			"order": ["cosine_similarity", "DESC"],
+			"display": [
+				{
+					"label": "ID",
+					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Name",
+					"text": "${label}",
+					"type": "text"
+				},
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "Resource",
+					"text": "${resource}",
+					"href": "https://maayanlab.cloud/sigcom-lincs",
+					"type": "link"
+				},
+				{
+					"label": "Cosine Similarity",
+					"text": "${cosine_similarity}",
+					"type": "text"
+				}	
+			]
+		},
+		{
+			"match": ["FDA Adverse Event Reporting System (Female)"],
+			"palette": {
+				"main": "#e040fb"
+			},
+			"order": ["llr_ratio", "DESC"],
+			"display": [
+				{
+					"label": "ID",
+					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Name",
+					"text": "${label}",
+					"type": "text"
+				},
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "llr ratio",
+					"text": "${llr_ratio}",
+					"type": "text"
+				},
+				{
+					"label": "level",
+					"text": "${level}",
+					"type": "text"
+				}		
+			]
+		},
+		{
+			"match": ["FDA Adverse Event Reporting System (Male)"],
+			"palette": {
+				"main": "#80cbc4"
+			},
+			"order": ["llr_ratio", "DESC"],
+			"display": [
+				{
+					"label": "ID",
+					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Name",
+					"text": "${label}",
+					"type": "text"
+				},
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "llr ratio",
+					"text": "${llr_ratio}",
+					"type": "text"
+				},
+				{
+					"label": "level",
+					"text": "${level}",
+					"type": "text"
+				}		
+			]
+		},
+		{
+			"match": ["IDG (Drug Target)"],
+			"order": ["act_value", "DESC"],
+			"display": [
+				{
+					"label": "ID",
+					"text": "${id}",
+					"type": "text"
+				},
+				{
+					"label": "Name",
+					"text": "${label}",
+					"type": "text"
+				},
+				{
+					"label": "Source Label",
+					"text": "${source_label}",
+					"type": "text"
+				},
+				{
+					"label": "Target Label",
+					"text": "${target_label}",
+					"type": "text"
+				},
+				{
+					"label": "act value",
+					"text": "${act_value}",
 					"type": "number"
 				},
 				{
-					"label": "Resource",
-					"text": "SigCom LINCS",
-					"href": "https://maayanlab.cloud/sigcom-lincs/",
-					"type": "link"
-				}	
-			]
-		},
-		{
-			"match": ["Metabolomics Workbench"],
-			"selected": true,
-			"display": [
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
+					"label": "act comment",
+					"text": "${act_comment}",
 					"type": "text"
 				},
 				{
-					"label": "Target Label",
-					"text": "${target_label}",
+					"label": "act type",
+					"text": "${act_type}",
 					"type": "text"
 				},
 				{
-					"label": "Resource",
-					"text": "Metabolomics Workbench",
-					"href": "https://www.metabolomicsworkbench.org/",
-					"type": "link"
-				}	
-			]
-		},
-		{
-			"match": ["GlyGen"],
-			"selected": true,
-			"display": [
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
+					"label": "act relation",
+					"text": "${act_relation}",
 					"type": "text"
-				},
+                },
 				{
-					"label": "Target Label",
-					"text": "${target_label}",
+					"label": "act source",
+					"text": "${act_source}",
 					"type": "text"
-				},
-				{
-					"label": "Resource",
-					"text": "GlyGen",
-					"href": "https://glygen.org",
-					"type": "link"
-				}	
-			]
-		},
-		{
-			"match": ["HuBMAP"],
-			"selected": true,
-			"display": [
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "Target Label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "Resource",
-					"text": "HuBMAP",
-					"href": "https://hubmapconsortium.github.io/ccf-asct-reporter/",
-					"type": "link"
-				}	
-			]
-		},
-		{
-			"match": ["GTEx (up)"],
-			"selected": false,
-			"palette": {
-				"main": "#4fc3f7"
-			},
-			"display": [
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "Target Label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "Resource",
-					"text": "GTEx",
-					"href": "https://gtexportal.org/home/",
-					"type": "link"
-				}	
-			]
-		},
-		{
-			"match": ["GTEx (down)"],
-			"selected": false,
-			"palette": {
-				"main": "#f8bbd0"
-			},
-			"display": [
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "Target Label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "Resource",
-					"text": "GTEx",
-					"href": "https://gtexportal.org/home/",
-					"type": "link"
-				}
+                }	
 			]
 		}
-	],	
+	],
 	"header": {
-		"title": "Gene-Centric CFDE Knowledge Graph",
+		"title": "Toxicology Screening Knowledge Graph for Structural Birth Defects",
 		"icon": {
-			"favicon": "${PREFIX}/favicon.ico",
-			"src": "${PREFIX}/static/icons/CFDE-logo.png",
+			"favicon": "https://github.com/MaayanLab/Reprotox-KG/raw/main/Reprotox.png",
+			"src": "https://github.com/MaayanLab/Reprotox-KG/raw/main/Reprotox.png",
 			"alt": "CFDE logo",
 			"width": 100,
 			"height": 100
@@ -557,132 +464,37 @@
 				"endpoint": "/downloads",
 				"label": "Download Assets",
 				"type": "markdown",
-				"src": "/markdown/download.md"
-			},
-			{
-				"endpoint": "/about",
-				"label": "About",
-				"type": "markdown",
-				"src": "/markdown/download.md"
+				"src": "https://raw.githubusercontent.com/MaayanLab/reprotox-kg/main/markdown/download.md"
 			}
 		],
 		"subheader": [
 			{
 				"label": "LINCS",
 				"icon": "${PREFIX}/static/resources/lincs.gif",
-				"height": 120,
-				"width": 120,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["LINCS (downregulates)", "LINCS (upregulates)"]
-				}
-			},
-			{
-				"label": "Metabolomics Workbench",
-				"icon": "${PREFIX}/static/resources/metabolomics.png",
 				"height": 100,
-				"width": 100,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["Metabolomics Workbench"]
-				}
-			},
-			{
-				"label": "GlyGen",
-				"icon": "${PREFIX}/static/resources/glygen.png",
-				"height": 100,
-				"width": 100,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["GlyGen"]
-				}
-			},
-			{
-				"label": "GTEx",
-				"icon": "${PREFIX}/static/resources/gtex.png",
-				"height": 80,
-				"width": 80,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["GTEx (up)", "GTEx (down)"]
-				}
+				"width": 150,
+				"href": "https://maayanlab.cloud/sigcom-lincs/"
 			},
 			{
 				"label": "IDG",
 				"icon": "${PREFIX}/static/resources/idg.png",
 				"height": 100,
 				"width": 100,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["IDG"]
-				}
+				"href": "https://druggablegenome.net/"
 			},
 			{
-				"label": "HuBMAP",
-				"icon": "${PREFIX}/static/resources/hubmap.png",
+				"label": "Kids First",
+				"icon": "${PREFIX}/static/resources/kidsfirst.png",
 				"height": 100,
 				"width": 100,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["HuBMAP"]
-				}
+				"href": "https://kidsfirstdrc.org/"
 			},
 			{
-				"label": "ERCC",
-				"icon": "${PREFIX}/static/resources/exrna.png",
+				"label": "SPARC",
+				"icon": "${PREFIX}/static/resources/sparc.png",
 				"height": 100,
 				"width": 100,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["ERCC"]
-				}
-			},
-			{
-				"label": "BioGRID",
-				"icon": "${PREFIX}/static/resources/biogrid.png",
-				"height": 80,
-				"width": 80,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["BioGRID"]
-				}
-			},
-			{
-				"label": "ARCHS4",
-				"icon": "${PREFIX}/static/resources/archs.png",
-				"height": 100,
-				"width": 100,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["ARCHS4 (negatively correlated)", "ARCHS4 (positively correlated)"]
-				}
+				"href": "https://sparc.science/"
 			}
 		]
 	},
@@ -691,7 +503,7 @@
 			"type": "github",
 			"key": "github",
 			"code": "https://github.com/maayanLab/gene-knowledge-graph",
-			"issues": "https://github.com/MaayanLab/Gene-Knowledge-Graph/issues"
+			"issues": "https://github.com/MaayanLab/Reprotox-KG/issues"
 		},
 		{
 			"type": "icon",
@@ -699,8 +511,8 @@
 			"src": "${PREFIX}/static/icons/CFDE-logo.png",
 			"alt": "CFDE",
 			"href": "https://www.nih-cfde.org/",
-			"height": 100,
-			"width": 100
+			"height": 70,
+			"width": 130
 		}
 	]
 }
