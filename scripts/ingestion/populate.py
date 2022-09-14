@@ -59,28 +59,44 @@ class GraphEx:
 
 
 def process_serialized(serialized, merge, merged):
-  for i in serialized["edges"]:
-    source = i["source"]
-    node_a_props = serialized["nodes"][source]
-    node_a_properties = node_a_props.get("properties", {})
-    node_a_type = node_a_props["type"]
-    node_a = Node(node_a_type, **node_a_properties)
-    if (merge == 'y' and source not in merged) or merge == 'n':
-      neo4graph.merge(node_a)
-      merged.add(source)
+  if "edges" not in serialized:
+    print("No edges found, updating nodes...")
+    count = 0
+    for k,v in serialized["nodes"].items():
+      node_properties = v.get("properties", {})
+      node_type = v["type"]
+      node = Node(node_type, **node_properties)
+      neo4graph.merge(node)
+      count += 1
+    print("Updated %d nodes"%count)
+  else:
+    ingested_nodes = set()
+    for i in serialized["edges"]:
+      source = i["source"]
+      node_a_props = serialized["nodes"][source]
+      node_a_properties = node_a_props.get("properties", {})
+      node_a_type = node_a_props["type"]
+      node_a = Node(node_a_type, **node_a_properties)
+      if (merge == 'y' and source not in merged) or merge == 'n':
+        if source not in ingested_nodes:
+          neo4graph.merge(node_a)
+          merged.add(source)
+          ingested_nodes.add(source)
 
-    target = i["target"]
-    node_b_props = serialized["nodes"][target]
-    node_b_properties = node_b_props.get("properties", {})
-    node_b_type = node_b_props["type"]
-    node_b = Node(node_b_type, **node_b_properties)
-    if (merge == 'y' and target not in merged) or merge == 'n':
-      neo4graph.merge(node_b)
-      merged.add(target)
+      target = i["target"]
+      node_b_props = serialized["nodes"][target]
+      node_b_properties = node_b_props.get("properties", {})
+      node_b_type = node_b_props["type"]
+      node_b = Node(node_b_type, **node_b_properties)
+      if (merge == 'y' and target not in merged) or merge == 'n':
+        if target not in ingested_nodes:
+          neo4graph.merge(node_b)
+          merged.add(target)
+          ingested_nodes.add(target)
 
-    relation = i["relation"]
-    relation_properties_dict = i.get("properties", {})
-    neo4graph.merge(Relationship(node_a, relation, node_b, **relation_properties_dict))
+      relation = i["relation"]
+      relation_properties_dict = i.get("properties", {})
+      neo4graph.merge(Relationship(node_a, relation, node_b, **relation_properties_dict))
 
 def delete_nodes(serialized):
   for i in serialized["nodes"]:
