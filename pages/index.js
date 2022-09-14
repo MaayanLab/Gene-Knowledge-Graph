@@ -70,7 +70,8 @@ const default_examples = {
 const TooltipCard = ({node, tooltip_templates, setFocused, router, schema}) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('lg'));
-  
+  const sm = useMediaQuery(theme.breakpoints.down('sm'));
+
   const elements = []
   const field = node.kind === "Relation" ? node.label : node.kind
   for (const i of tooltip_templates[field] || []) {
@@ -91,7 +92,6 @@ const TooltipCard = ({node, tooltip_templates, setFocused, router, schema}) => {
       }
     } else {
       let e = makeTemplate(i.text, node.properties)
-      if (i.type === "int") e = toNumber(node.properties[i.field])
       if (e !== 'undefined') {
         elements.push(
           <Typography key={i.label} variant="subtitle2">
@@ -105,7 +105,7 @@ const TooltipCard = ({node, tooltip_templates, setFocused, router, schema}) => {
     <Box sx={{
         zIndex: 'tooltip',
         position: 'absolute',
-        top: matches ? 550: 850,
+        top: matches ? 550: sm ? 1050: 850,
         right: '10%',
       }}>
       <Card>
@@ -159,6 +159,8 @@ const Selector = ({entries, value, onChange, prefix, ...props }) => {
 const Legend = ({elements}) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('lg'));
+  const sm = useMediaQuery(theme.breakpoints.down('sm'));
+
   const colors = {
     "Search Term": <Grid item xs={12} key={"search"}>
     <Grid container alignItems={"center"} spacing={2}>
@@ -180,7 +182,7 @@ const Legend = ({elements}) => {
     <Box sx={{
       zIndex: 1,
       position: 'absolute',
-      top: matches ? 550: 850,
+      top: matches ? 550: sm ? 1050: 850,
       left: '10%',
       pointerEvents: "none"
     }}>
