@@ -36,8 +36,9 @@ const NetworkTable = ({data, schema}) => {
 					if ( processed[key] === undefined) {
 						if (relation) edge_tabs.push(key)
 						else node_tabs.push(key)
-						processed[key] = {header: [], data: {}}
+						processed[key] = {header: [], data: {}, columnVisibilityModel: {}}
 						const header = []
+						const columnVisibilityModel = {}
 						if (display[key]) {
 							header.push({
 								field: 'label',
@@ -49,6 +50,7 @@ const NetworkTable = ({data, schema}) => {
 							})
 							for (const prop of display[key]) {
 								const field = prop.label
+								columnVisibilityModel[field] = !(prop.hide)
 								if (prop.type === "link") {
 									header.push({
 										field,
@@ -106,6 +108,7 @@ const NetworkTable = ({data, schema}) => {
 							}
 						}
 						processed[key].header = header
+						processed[key].columnVisibilityModel = columnVisibilityModel
 					}
 					if (processed[key].data[properties.id] === undefined) {
 						processed[key].data[properties.id] = {id: properties.id || `${source}_${target}`}
@@ -166,7 +169,7 @@ const NetworkTable = ({data, schema}) => {
 	}, [data])
 	if (processedData === null) return null
 	else {
-		const {data={}, header=[]} = processedData[tab] || {}
+		const {data={}, header=[], columnVisibilityModel} = processedData[tab] || {}
 		return (
 			<Grid container justifyContent={"center"}>
 				<Grid item xs={12}>
@@ -186,6 +189,11 @@ const NetworkTable = ({data, schema}) => {
 				<Grid item xs={12}>
 					<DataGrid
 						key={tab}
+						initialState={{
+							columns: {
+							  columnVisibilityModel
+							},
+						  }}
 						components={{ Toolbar: GridToolbar }}
 						sortingOrder={['desc', 'asc']}
 						rows={Object.values(data)}
