@@ -4,6 +4,7 @@ import Head from 'next/head'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as default_schema from '../public/schema.json'
 import { makeTemplate } from '../utils/helper';
+import { isIFrame } from '../utils/helper';
 import '../styles/kg.css'
 const Container = dynamic(() => import('@mui/material/Container'));
 const Header = dynamic(() => import('../components/header'));
@@ -79,13 +80,13 @@ function MyApp({ Component, pageProps }) {
           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
           <script async defer src="https://buttons.github.io/buttons.js"></script>
         </Head>
-        <Container style={{marginTop: 20}} maxWidth="xl">
-          <Header {...pageProps}/>
+        <Container style={{marginTop: 20}} maxWidth={isIFrame() ? "lg" :"xl"}>
+          {isIFrame() ? null : <Header {...pageProps}/>}
           <Component 
             {...pageProps}
           />
         </Container>
-        <Footer {...pageProps}/>
+        {isIFrame() ? null : <Footer {...pageProps}/>}
       </ThemeProvider>
   )
 }

@@ -34,3 +34,12 @@ export function toNumber(value) {
   
 	return low + res
   }
+
+  export const isIFrame = () => {
+	try {
+		if ( window.location !== window.parent.location ) return true
+    	else false	
+	} catch (error) {
+		return false
+	}
+}

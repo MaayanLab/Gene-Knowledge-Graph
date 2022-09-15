@@ -10,6 +10,7 @@ import * as default_schema from '../public/schema.json'
 import Color from 'color'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { isIFrame } from '../utils/helper';
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Box = dynamic(() => import('@mui/material/Box'));
@@ -455,7 +456,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
               }
             </React.Fragment>
           ))}
-          {!router.query.end && 
+          {(!router.query.end && !isIFrame()) && 
             <Grid item>
               <Button onClick={()=>{
                 const {path_length, ...rest} = router.query
@@ -597,32 +598,75 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
               <CameraAltOutlinedIcon/>
             </Button>
           </Grid>
-          <Grid item>
-            <Typography variant="body1"><b>Size:</b></Typography>
-          </Grid>
-          <Grid item xs={2}>
-            <Slider 
-              value={limit}
-              color="blues"
-              onChange={(e, nv)=>{
-                router.push({
-                  pathname: schema.endpoint || '',
-                  query: {
-                    ...router.query,
-                    limit: nv
-                  }
-                }, undefined, { shallow: true })
-              }}
-              style={{marginBottom: -5}}
-              min={10}
-              max={100}
-              aria-labelledby="continuous-slider" />
-          </Grid>
-          <Grid item>
-            <Typography variant="body1">{limit}</Typography>
-          </Grid>
+          {isIFrame() ? null:
+          <React.Fragment>
+            <Grid item>
+              <Typography variant="body1"><b>Size:</b></Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Slider 
+                value={limit}
+                color="blues"
+                onChange={(e, nv)=>{
+                  router.push({
+                    pathname: schema.endpoint || '',
+                    query: {
+                      ...router.query,
+                      limit: nv
+                    }
+                  }, undefined, { shallow: true })
+                }}
+                style={{marginBottom: -5}}
+                min={10}
+                max={100}
+                aria-labelledby="continuous-slider" />
+            </Grid>
+            <Grid item>
+              <Typography variant="body1">{limit}</Typography>
+            </Grid>
+          </React.Fragment>}
         </Grid>
       </Grid>
+      {isIFrame() && 
+        <Grid item xs={12}>
+          <Grid container spacing={1} alignItems="center" justifyContent="flex-start">
+            <Grid item>
+              <Typography variant="body1"><b>Size:</b></Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Slider 
+                value={limit}
+                color="blues"
+                onChange={(e, nv)=>{
+                  router.push({
+                    pathname: schema.endpoint || '',
+                    query: {
+                      ...router.query,
+                      limit: nv
+                    }
+                  }, undefined, { shallow: true })
+                }}
+                style={{marginBottom: -5}}
+                min={10}
+                max={100}
+                aria-labelledby="continuous-slider" />
+            </Grid>
+            <Grid item>
+              <Typography variant="body1">{limit}</Typography>
+            </Grid>
+            {(!router.query.end) && 
+              <Grid item>
+                <Button onClick={()=>{
+                  const {path_length, ...rest} = router.query
+                  redirect({...rest, end})
+                }} startIcon={<AddBoxIcon />}>
+                    Add End Filter
+                </Button>
+              </Grid>
+            }
+          </Grid>
+        </Grid>
+      }
       <Grid item xs={12} style={{minHeight: 500}}>
         {(elements === undefined) ? (
           <CircularProgress/>
