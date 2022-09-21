@@ -199,6 +199,10 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 		RETURN * LIMIT TOINTEGER($limit)`
 		
 	if (relation) {
+		const edges = schema.edges.reduce((acc, i)=>([
+			...acc,
+			...i.match
+		  ]), [])
 		for (const i of relation.split(",")) {
 			if (edges.indexOf(i) === -1) throw {message: "Invalid relationship"}
 		}
