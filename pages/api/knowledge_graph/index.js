@@ -57,9 +57,8 @@ const process_properties = (properties) => {
 	return props
 }
 
-const resolve_results = ({results, terms, colors, field, start_field, end_field, aggr_scores}) => (
+export const resolve_results = ({results, terms, colors, field, start_field, end_field, aggr_scores}) => (
 	results.records.flatMap(record => {
-		console.log(colors)
 		const relations = record.get('r')
 		const nodes = record.get('n').reduce((acc, i)=>({
 			...acc,
@@ -193,7 +192,6 @@ export default async function query(req, res) {
 				res.status(400).send("Invalid input")
 			}
 		  } catch (e) {
-			console.log(e)
 			res.status(400).send(e.message)
 		  } finally {
 			session.close()
