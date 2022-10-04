@@ -119,72 +119,82 @@ const resolve_results = ({results, terms, colors, field, start_field, end_field}
 )
 
 const aggregates = async ({session, schema}) => {
-	if (aggr_scores === null) {
-		score_fields = []	
-		colors = {}
-		let edge_query = ""
-		const edge_aggr = []
-		for (const s of schema.edges) {
-			
-			for (const i of (s.match || [])) {
-				colors[i] = {
-					color: (s.palette || {}).main || default_edge_color,
+	try {
+		if (aggr_scores === null) {
+			aggr_scores = {}
+			score_fields = []	
+			colors = {}
+			for (const s of schema.edges) {	
+				for (const i of (s.match || [])) {
+					colors[i] = {
+						color: (s.palette || {}).main || default_edge_color,
+					}
 				}
-			}
-			if (s.order) {
-				const [field, order] = s.order
-				const order_pref = order === "DESC" ? 'max': 'min'
-				// const q = `WITH ${score_fields.join(", ")}${score_fields.length > 0 ? ",": ""}
-				// 		${order_pref}(rel.${field}) as ${order_pref}_${field}`
-				const score_var = `${order_pref}_${field}`
-				if (score_fields.indexOf(score_var) === -1){
-					edge_aggr.push(`${order_pref}(rel.${field}) as ${score_var}`)
-					score_fields.push(score_var)
+				if (s.order) {
+					const [field, order] = s.order
+					let query
+					let score_var
+					if (order === "DESC") {
+						const order_pref = 'max'
+						score_var = `${order_pref}_${field}`
+						query = `MATCH (st)-[rel]-(en)
+							WHERE rel.${field} IS NOT NULL 
+							RETURN ${order_pref}(rel.${field}) as ${score_var}`	
+					} else {
+						const order_pref = 'min'
+						score_var = `${order_pref}_${field}`
+						query = `MATCH (st)-[rel]-(en)
+							RETURN ${order_pref}(rel.${field}) as ${score_var}`
+					}
+					console.log(query)
+					const results = await session.readTransaction(txc => txc.run(query))
+					results.records.flatMap(record => {
+						const score = record.get(score_var)
+						aggr_scores[score_var] = score
+					})
 					for (const j of (s.match || [])) {
 						colors[j].aggr_field = score_var
 						colors[j].field = field
 					}
 				}
 			}
-		}
-		if (edge_aggr.length > 0) {
-			edge_query = `MATCH (st)-[rel]-(en) WITH ${edge_aggr.join(", ")}`
-		}
-
-		let node_query = ""
-		const node_aggr = []
-		const node_scores_field = []
-		for (const s of schema.nodes) {
-			colors[s.node] = {
-				color: (s.palette || {}).main || default_edge_color,
-			}
-			if (s.order) {
-				const [field, order] = s.order
-				const order_pref = order === "DESC" ? 'max': 'min'
-				node_aggr.push(`${order_pref}(st.${field}) as ${order_pref}_${field}`)
-				node_scores_field.push(`${order_pref}_${field}`)
-						
-				colors[s.node].aggr_field = `${order_pref}_${field}`
-				colors[s.node].field = field
-			}
-		}
-		if (node_aggr.length > 0) {
-			node_query = `MATCH (st) WITH ${score_fields.join(", ")}${score_fields.length > 0 ? ",": ""} ${node_aggr.join(", ")}`
-		}
-		aggr_scores = {}
-		if ([...score_fields, ...node_scores_field].length > 0) {
-			const query = `${[edge_query, node_query].join("\t")} RETURN *`
-			const results = await session.readTransaction(txc => txc.run(query))
-			
-			results.records.flatMap(record => {
-				for (const i of [...score_fields, ...node_scores_field]) {
-					const score = record.get(i)
-					aggr_scores[i] = score
+			for (const s of schema.nodes) {
+				colors[s.node] = {
+					color: (s.palette || {}).main || default_edge_color,
 				}
-			})
-		}
-	} else {
-		console.log("Aggregate score is already cached!")
+				if (s.order) {
+					const [field, order] = s.order
+					let query
+					let score_var
+					if (order === "DESC") {
+						const order_pref = 'max'
+						score_var = `${order_pref}_${field}`
+						query = `MATCH (st)
+							WHERE st.${field} IS NOT NULL 
+							RETURN ${order_pref}(st.${field}) as ${score_var}`	
+					} else {
+						const order_pref = 'min'
+						score_var = `${order_pref}_${field}`
+						query = `MATCH (st)
+							RETURN ${order_pref}(st.${field}) as ${score_var}`
+					}
+					const results = await session.readTransaction(txc => txc.run(query))
+					results.records.flatMap(record => {
+						const score = record.get(score_var)
+						aggr_scores[score_var] = score
+					})
+					
+					colors[s.node].aggr_field = score_var
+					colors[s.node].field = field
+				}
+			}
+			console.log(aggr_scores)
+		} else {
+			console.log(aggr_scores)
+			console.log("Aggregate score is already cached!")
+		}	
+	} catch (error) {
+		aggr_scores = null
 	}
 }
 
