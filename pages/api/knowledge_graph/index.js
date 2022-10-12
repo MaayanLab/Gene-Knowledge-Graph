@@ -57,7 +57,7 @@ const process_properties = (properties) => {
 	return props
 }
 
-export const resolve_results = ({results, terms, colors, field, start_field, end_field, aggr_scores}) => (
+export const resolve_results = ({results, terms, colors, field, start_field, end_field, aggr_scores, properties = {}}) => (
 	results.records.flatMap(record => {
 		const relations = record.get('r')
 		const nodes = record.get('n').reduce((acc, i)=>({
@@ -76,7 +76,10 @@ export const resolve_results = ({results, terms, colors, field, start_field, end
 					id: start_node.properties.id,
 					kind: start_type,
 					label: start_node.properties.label || start_node.properties.id,
-					properties: process_properties(start_node.properties),
+					properties: {
+						...process_properties(start_node.properties),
+						...properties[start_node.properties.label || start_node.properties.id] || {}
+					},
 					...(get_node_color_and_type({node: start_node, terms, record, fields: [field, start_field, end_field], aggr_scores,
 						 ...colors[start_type]}))
 				} 
@@ -93,6 +96,7 @@ export const resolve_results = ({results, terms, colors, field, start_field, end
 						label: relation_type,
 						source_label: start_node.properties.label,
 						target_label: end_node.properties.label,
+						...properties[`${start_node.properties.label}_${end_node.properties.label}`] || {},
 						...process_properties(relation.properties),
 					},
 					...(get_edge_color({relation, record, aggr_scores, ...colors[relation_type]})),
@@ -104,7 +108,10 @@ export const resolve_results = ({results, terms, colors, field, start_field, end
 					id: end_node.properties.id,
 					kind: end_type,
 					label: end_node.properties.label || end_node.properties.id,
-					properties: process_properties(end_node.properties),
+					properties: {
+						...process_properties(end_node.properties),
+						...properties[end_node.properties.label || end_node.properties.id] || {}
+					},
 					...(get_node_color_and_type({node: end_node, terms, record, aggr_scores, fields: [field, start_field, end_field],
 						...colors[end_type]}))
 				} 
