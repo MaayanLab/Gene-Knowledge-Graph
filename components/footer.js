@@ -77,7 +77,12 @@ const Footer = ({schema}) => {
 	if (schema === undefined || schema.footer === undefined) return null
 
     return (
-        <Paper square style={{boxShadow: "none", height: 180, marginTop: 20, background: "lightgray", paddingTop: 40}}>
+        <Paper square style={{boxShadow: "none",
+			height: 180,
+			background: "lightgray",
+			paddingTop: 40,
+			flexShrink: 0
+		}}>
             <Grid container justifyContent="space-around">
                 {schema.footer.map(footer=><FooterContents key={footer.icon} footer={footer}/>)}
             </Grid>
