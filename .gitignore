@@ -41,3 +41,4 @@ schema.json
 
 data-*
 dumps
+.env.deploy
