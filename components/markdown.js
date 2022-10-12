@@ -27,7 +27,7 @@ const Markdown = ({src, markdown}) => {
         else if (src) {
             fetch_markdown(src)
         }
-    }, [src])
+    }, [src, markdown])
 
     if (md === null) return null
     else {
