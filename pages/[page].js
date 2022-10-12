@@ -6,17 +6,23 @@ import { get_path } from "../components/markdown";
 import { makeTemplate } from "../utils/helper";
 
 const Markdown = dynamic(()=>import("../components/markdown"), {ssr: false});
+const Enrichment = dynamic(()=>import("../components/Enrichment"));
 
-const ExtraPage = ({schema, markdown}) => {
+const components = {
+  Enrichment: (props) => <Enrichment {...props}/>
+}
+
+const ExtraPage = ({schema, markdown, type, component, props}) => {
     if (!schema) schema=default_schema  
     const router = useRouter()
     const {asPath: endpoint} = router
-    const {type, src} = schema.header.tabs.filter(i=>i.endpoint === endpoint)[0] || {}
-    if (type !== 'markdown') {
-        console.error("Component must be a markdown")
-        router.push(`/${endpoint[0]}`)
+    if (type === 'markdown') {
+        return <Markdown markdown={markdown}/>
+    } else if (type === "page" && components[component] !== undefined){
+        return components[component]({schema, ...props})
     } else {
-        return <Markdown markdown={markdown} src={src}/>
+      console.error("Invalid component")
+      router.push(`/${endpoint[0]}`)
     }
 }
 
@@ -47,9 +53,8 @@ export async function getStaticProps(ctx) {
       schema = await fetch_kg_schema()
       s = schema
     }
-    console.log(ctx.res)
     const endpoint = `/${ctx.params.page}`
-    const {type, src, markdown: md} = schema.header.tabs.filter(i=>i.endpoint === endpoint)[0] || {}
+    const {type, src, markdown: md, component=null, props=null} = schema.header.tabs.filter(i=>i.endpoint === endpoint)[0] || {}
     let markdown = md
     if (src && type === "markdown") {
       markdown = await (await fetch(get_path(makeTemplate(src, {})))).text()
@@ -57,7 +62,10 @@ export async function getStaticProps(ctx) {
     return {
         props: {
           schema: s,
-          markdown
+          markdown: markdown || null,
+          component,
+          props,
+          type,
       },
       };
   }

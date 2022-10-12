@@ -4,37 +4,30 @@ import Link from 'next/link'
 import useAsyncEffect from 'use-async-effect'
 import { useRouter } from 'next/router'
 import { fetch_kg_schema, get_terms } from '../utils/initialize';
-import { precise, makeTemplate, toNumber } from '../utils/helper';
 import fileDownload from 'js-file-download'
 import * as default_schema from '../public/schema.json'
 import Color from 'color'
-import { useTheme } from '@mui/material/styles'
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { isIFrame } from '../utils/helper';
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Box = dynamic(() => import('@mui/material/Box'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
-const FormControl = dynamic(() => import('@mui/material/FormControl'));
-const Select = dynamic(() => import('@mui/material/Select'));
-const MenuItem = dynamic(() => import('@mui/material/MenuItem'));
 const TextField = dynamic(() => import('@mui/material/TextField'));
 const Button = dynamic(() => import('@mui/material/Button'));
 const Autocomplete = dynamic(() => import('@mui/material/Autocomplete'));
 const Switch = dynamic(() => import('@mui/material/Switch'));
-const Card = dynamic(() => import('@mui/material/Card'));
-const CardContent = dynamic(() => import('@mui/material/CardContent'));
 const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
 const Slider = dynamic(() => import('@mui/material/Slider'));
-const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
 const Cytoscape = dynamic(() => import('../components/Cytoscape'), { ssr: false })
 const CameraAltOutlinedIcon  = dynamic(() => import('@mui/icons-material/CameraAltOutlined'));
 const AddBoxIcon  = dynamic(() => import('@mui/icons-material/AddBox'));
 const IndeterminateCheckBoxIcon = dynamic(() => import('@mui/icons-material/IndeterminateCheckBox'));
-const Avatar = dynamic(() => import('@mui/material/Avatar'));
+const TooltipCard = dynamic(async () => (await import('../components/misc')).TooltipCard);
+const Legend = dynamic(async () => (await import('../components/misc')).Legend);
+const Selector = dynamic(async () => (await import('../components/misc')).Selector);
 
 const NetworkTable =  dynamic(() => import('../components/network_table'))
-const layouts = {
+export const layouts = {
   "Force-directed": {
     name: 'fcose',
     animate: true,
@@ -54,150 +47,8 @@ const layouts = {
   },
 }
 
-const default_examples = {
-  Gene: {
-	  href: {
-        pathname: "/knowledge_graph",
-        query: {
-			start: "Gene",
-			start_term: "CAND2",
-		  }
-      },
-	  color: "greens"
 
-  } 
-}
 
-const TooltipCard = ({node, tooltip_templates, setFocused, router, schema}) => {
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('lg'));
-  const sm = useMediaQuery(theme.breakpoints.down('sm'));
-
-  const elements = []
-  const field = node.kind === "Relation" ? node.label : node.kind
-  for (const i of tooltip_templates[field] || []) {
-    if (i.type === "link") {
-      const text = makeTemplate(i.text, node.properties)
-      const href = makeTemplate(i.href, node.properties)
-      if (text !== 'undefined') {
-        elements.push(
-          <Typography key={i.label} variant="subtitle2">
-            <b>{i.label}</b> <Button size='small' 
-                style={{padding: 0}} 
-                href={href}
-								target="_blank"
-								rel="noopener noreferrer"
-            >{text}</Button>
-          </Typography>  
-        )
-      }
-    } else {
-      let e = makeTemplate(i.text, node.properties)
-      if (e !== 'undefined') {
-        elements.push(
-          <Typography key={i.label} variant="subtitle2">
-            <b>{i.label}</b> {i.type === "text" ? e: precise(e)}
-          </Typography>  
-        )
-      }
-    }
-  }
-  return(
-    <Box sx={{
-        zIndex: 'tooltip',
-        position: 'absolute',
-        top: matches ? 550: sm ? 1050: 850,
-        right: '10%',
-      }}>
-      <Card>
-        <CardContent>
-          <Typography variant="h6">
-            <b>{node.label}</b>
-          </Typography>
-          {elements}
-          {node.kind !== "Relation" && <Button
-            variant="outlined"
-            onClick={()=>{
-              setFocused(null)
-              router.push({
-                pathname: schema.endpoint || '',
-                query: {
-                  start: node.kind,
-                  start_term: node.label
-                }
-              }, undefined, { shallow: true })
-            }}
-          >Expand</Button>}
-        </CardContent>
-      </Card>
-    </Box>
-  )
-}
-
-const Selector = ({entries, value, onChange, prefix, ...props }) => {
-  if (entries.length === 1) return null
-  else return (
-    <FormControl>
-      <Select
-        labelId={`${prefix}layouts-select`}
-        id={`${prefix}-label`}
-        value={value}
-        onChange={(e,v)=>onChange(e.target.value)}
-        variant="outlined"
-        disableUnderline={true}
-        sx={{width: 215, padding: 0, height: 45,}}
-        {...props}
-        >
-        {entries.map(val=>(
-          <MenuItem key={val} value={val}>{props.multiple && <Checkbox checked={value.indexOf(val)>-1}/>}{val.replace(/_/g," ")}</MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  )
-
-}
-
-const Legend = ({elements}) => {
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('lg'));
-  const sm = useMediaQuery(theme.breakpoints.down('sm'));
-
-  const colors = {
-    "Search Term": <Grid item xs={12} key={"search"}>
-    <Grid container alignItems={"center"} spacing={2}>
-      <Grid item><Avatar sx={{background: "#F8333C"}}> </Avatar></Grid>
-      <Grid item><Typography>Search Term</Typography></Grid>   
-    </Grid></Grid>     
-  }
-  for (const i of elements) {
-    const {kind, color} = i.data
-    if (colors[kind]===undefined && color !== "#F8333C" && kind !== "Relation") {
-      colors[kind] = <Grid item xs={12}>
-        <Grid container alignItems={"center"} spacing={2} key={kind}>
-          <Grid item><Avatar sx={{background: color}}> </Avatar></Grid>
-          <Grid item><Typography>{kind}</Typography></Grid>   
-        </Grid></Grid> 
-    }
-  }
-  return (
-    <Box sx={{
-      zIndex: 1,
-      position: 'absolute',
-      top: matches ? 550: sm ? 1050: 850,
-      left: '10%',
-      pointerEvents: "none"
-    }}>
-        <Grid container alignItems={"center"} spacing={1}>
-          <Grid item xs={12}>
-            <Typography variant="h6">
-              <b>Legend</b>
-            </Typography>
-          </Grid>
-          {Object.values(colors)}
-        </Grid>
-    </Box>
-  )
-}
 
 export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema}) {
   if (!schema) schema=default_schema  

@@ -7,6 +7,12 @@ services:
     env_file: .env
     ports:
       - 3002:3000
+  kg-arm:
+    build: .
+    image: maayanlab/knowledge_graph:0.3.1_mac
+    env_file: .env
+    ports:
+      - 3002:3000
   ingest:
     build: scripts/ingestion
     image: maayanlab/kg-ingest:0.1.5
@@ -24,7 +30,7 @@ services:
       - 7474:7474
       - 7687:7687
     volumes:
-      - ./data/neo4j:/data
+      - ./data-enrichr/neo4j:/data
     networks:
       internal:
         aliases:
