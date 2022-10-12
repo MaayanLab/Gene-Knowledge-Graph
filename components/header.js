@@ -184,7 +184,7 @@ const Header = ({schema, ...rest}) => {
 	if (schema === undefined || schema.header === undefined) return null
 	
 	return(
-	<Grid container justifyContent={"center"} alignItems={"center"} spacing={2} style={{marginBottom: 20}}>
+	<Grid container justifyContent={"center"} alignItems={"center"} spacing={2} style={{marginBottom: 20, marginTop: 20}}>
 		<Grid item xs={12} align="center">
 			{ schema.header.icon ?
 				<Grid container justifyContent={"center"} alignItems={"center"} spacing={2}>
