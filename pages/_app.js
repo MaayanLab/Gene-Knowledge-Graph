@@ -7,6 +7,8 @@ import { makeTemplate } from '../utils/helper';
 import { isIFrame } from '../utils/helper';
 import '../styles/kg.css'
 const Container = dynamic(() => import('@mui/material/Container'));
+const Grid = dynamic(() => import('@mui/material/Grid'));
+
 const Header = dynamic(() => import('../components/header'));
 const Footer = dynamic(() => import('../components/footer'));
 
@@ -80,13 +82,15 @@ function MyApp({ Component, pageProps }) {
           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
           <script async defer src="https://buttons.github.io/buttons.js"></script>
         </Head>
-        <Container style={{marginTop: 20}} maxWidth={isIFrame() ? "lg" :"xl"}>
+        <Container id={"main"} maxWidth={isIFrame() ? "lg" :"xl"}>
           {isIFrame() ? null : <Header {...pageProps}/>}
           <Component 
             {...pageProps}
           />
         </Container>
-        {isIFrame() ? null : <Footer {...pageProps}/>}
+        {isIFrame() ? null :
+          <Footer {...pageProps}/>
+        }
       </ThemeProvider>
   )
 }
