@@ -279,7 +279,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         </Grid>
                         <FormLabel>Pick up to five libraries</FormLabel>
                         {libraries_list.map(library=>(
-                            <React.Fragment>
+                            <React.Fragment key="library">
                                 <FormControlLabel
                                     control={
                                             <Checkbox checked={checked_libraries[library] !== undefined} 
