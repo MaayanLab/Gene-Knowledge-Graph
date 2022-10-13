@@ -50,7 +50,7 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 const Enrichment = ({default_options, libraries: libraries_list, schema, ...props}) => {
     const router = useRouter()
     const default_term_limit = default_options.term_limit
-    const {userListId, gene_limit=default_options.gene_limit, min_lib=default_options.min_lib, page} = router.query
+    const {userListId, gene_limit=default_options.gene_limit, min_lib=default_options.min_lib, gene_degree=default_options.gene_degree, page} = router.query
     const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : default_options.selected
     const [genes, setGenes] = useState([])
     const [geneStr, setGeneStr] = useState('')
@@ -142,8 +142,20 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
             setGeneStr(genes.join("\n"))
             setGenes(genes)
         }
-        if (userListId) resolve_genes()
+
+        const get_shortId = async () => {
+            const {link_id} = await (
+                await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
+            ).json()
+            setShortId(link_id)
+        }
+        if (userListId) {
+            resolve_genes()
+            get_shortId()
+        }
+        setCollapsed(userListId!==undefined)
     }, [userListId])
+    
     useEffect(()=>{
         const fetch_kg = async () => {
             try {
@@ -159,6 +171,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         libraries,
                         min_lib,
                         gene_limit,
+                        gene_degree,
                     }),
                     signal: controller.signal
                 })
@@ -183,9 +196,6 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
          }
     }, [router.query, error])
 
-    useEffect(()=>{
-        setCollapsed(userListId!==undefined)
-    }, [userListId])
     return (
         <Grid container spacing={2} style={{marginBottom: 10}}>
             {!collapsed && <Grid item xs={12} md={3}>
@@ -255,7 +265,37 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                             <Grid item>
                                 <Typography>
                                     {min_lib || 1}
-                                    <Tooltip title={`Set this parameter to prioritize genes that appear on multiple libraries.`}>
+                                    <Tooltip title={`Filter out genes that are not in multiple libraries.`}>
+                                        <IconButton size="small">
+                                            <InfoIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
+                            <Grid item><Typography>Gene Connectivity</Typography></Grid>
+                            <Grid item style={{ flexGrow: 1 }}>
+                                <Slider 
+                                    value={gene_degree || 1}
+                                    color="blues"
+                                    onChange={(e, nv)=>{
+                                        const {page, ...query} = router.query
+                                        query.gene_degree = nv
+                                        router.push({
+                                            pathname: `/${page}`,
+                                            query,
+                                            }, undefined, { shallow: true })
+                                    }}
+                                    style={{width: "100%"}}
+                                    min={1}
+                                    max={libraries.reduce((acc, i)=>(acc+i.term_limit), 0)}
+                                    aria-labelledby="continuous-slider" />
+                            </Grid>
+                            <Grid item>
+                                <Typography>
+                                    {gene_degree || 1}
+                                    <Tooltip title={`Filter out genes with fewer connections`}>
                                         <IconButton size="small">
                                             <InfoIcon />
                                         </IconButton>
