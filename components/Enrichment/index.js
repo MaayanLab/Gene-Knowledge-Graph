@@ -6,8 +6,16 @@ import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery';
 import fileDownload from 'js-file-download'
 import Tooltip from '@mui/material/Tooltip';
+import Avatar from '@mui/material/Avatar';
+
 import IconButton from '@mui/material/IconButton'
 import InfoIcon from '@mui/icons-material/Info'
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import LinkIcon from '@mui/icons-material/Link';
+
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
@@ -48,13 +56,16 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
     const [geneStr, setGeneStr] = useState('')
     const [error, setError] = useState(null)
     const [openError, setOpenError] = useState(false)
-    const [elements, setElements] = useState(undefined)
+    const [elements, setElements] = useState(null)
     const [node, setNode] = useState(null)
     const [focused, setFocused] = useState(null)
     const [loading, setLoading] = useState(false)
     const [description, setDescription] = useState('')
     const [edgeStyle, setEdgeStyle] = useState({label: 'data(label)'})
-    const [layout, setLayout] = React.useState(Object.keys(layouts)[0])
+    const [layout, setLayout] = useState(Object.keys(layouts)[0])
+    const [anchorEl, setAnchorEl] = useState(null)
+    const [collapsed, setCollapsed] = useState(false)
+    const [shortId, setShortId] = useState(null)
     const cyref = useRef(null);
     const tableref = useRef(null);
 
@@ -106,6 +117,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                 signal: controller.signal
             })
         ).json()
+        setShortId(shortId)
         const {page, ...query} = router.query
         query.userListId = userListId
         router.push({
@@ -113,6 +125,13 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
             query,
             }, undefined, { shallow: true })
     }
+
+    const handleClickMenu = (e) => {
+		setAnchorEl(e.currentTarget);
+	  };
+	const handleCloseMenu = () => {
+		setAnchorEl(null);
+	};
 
     useEffect(()=> {
         const resolve_genes = async () => {
@@ -125,7 +144,6 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         }
         if (userListId) resolve_genes()
     }, [userListId])
-
     useEffect(()=>{
         const fetch_kg = async () => {
             try {
@@ -145,12 +163,16 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     signal: controller.signal
                 })
                 const results = (await res.json())
-                setOpenError(false)
-                setError(null)
-                setLoading(false)
-                setElements(results)
+                if (results.message) {
+                    setError({message: "Error connecting to Enrichr, trying again...", type: "error"})
+                    setOpenError(true)
+                } else {
+                    setOpenError(false)
+                    setError(null)
+                    setLoading(false)
+                    setElements(results)
+                }
             } catch (error) {
-                console.error(error)
                 setError({message: "Error connecting to Enrichr, trying again...", type: "error"})
                 setOpenError(true)
             }
@@ -160,20 +182,13 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
             fetch_kg()
          }
     }, [router.query, error])
+
+    useEffect(()=>{
+        setCollapsed(userListId!==undefined)
+    }, [userListId])
     return (
         <Grid container spacing={2} style={{marginBottom: 10}}>
-            <Grid item xs={12} md={3}>
-                <Snackbar open={openError}
-					anchorOrigin={{ vertical:"top", horizontal:"right" }}
-					autoHideDuration={3000}
-					onClose={()=>setOpenError(false)}
-					message={(error || {}).message}
-					action={
-                        <IconButton size="small" onClick={()=>setOpenError(false)}>
-                            <HighlightOffIcon/>
-                        </IconButton>
-					}
-				/>
+            {!collapsed && <Grid item xs={12} md={3}>
                 <Markdown markdown={props.description || ''}/>
                 <TextField multiline
                     rows={10}
@@ -213,12 +228,13 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                     }
                                 }}
                                 variant="contained"
+                                disabled={genes.length===0}
                             >Submit</Button>
                         </Grid>
                     </Grid>
                     <FormGroup>
                         <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5, marginTop: 5}}>
-                            <Grid item><Typography>Minimum Libraries</Typography></Grid>
+                            <Grid item><Typography>Gene Library Connectivity</Typography></Grid>
                             <Grid item style={{ flexGrow: 1 }}>
                                 <Slider 
                                     value={min_lib || 1}
@@ -233,7 +249,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                     }}
                                     style={{width: "100%"}}
                                     min={1}
-                                    max={libraries.length}
+                                    max={libraries_list.length}
                                     aria-labelledby="continuous-slider" />
                             </Grid>
                             <Grid item>
@@ -381,15 +397,80 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         </Stack>
                     </FormGroup>
                 </FormControl>
-            </Grid>
-            <Grid item xs={12} md={9} style={{height: 1000}}>
-                <Button color="blues" onClick={()=>{
-                fileDownload(cyref.current.png({output: "blob"}), "network.png")
-                }}>
-                <CameraAltOutlinedIcon/>
+                <Button variant='contained'
+                    disabled={elements===null}
+                    onClick={()=>{
+                        setElements(null)
+                        router.push({
+                            pathname: `/${page}`,
+                        }, undefined, { shallow: true })
+                    }}
+                >
+                    Clear Graph
                 </Button>
+            </Grid>
+            }
+            <Grid item xs={12} md={collapsed ? 12: 9} style={{height: 1000}}>
+                {/* <Snackbar open={openError}
+					anchorOrigin={{ vertical:"top", horizontal:"right" }}
+					autoHideDuration={3000}
+					onClose={()=>setOpenError(false)}
+					message={(error || {}).message}
+					action={
+                        <IconButton size="small" onClick={()=>setOpenError(false)}>
+                            <HighlightOffIcon/>
+                        </IconButton>
+					}
+				/> */}
+                {elements && 
+                    <React.Fragment>
+                        <Tooltip title={collapsed ? "Show filters": "Hide filters"}>
+                            <IconButton onClick={()=>setCollapsed(!collapsed)}>
+                                {collapsed ? <VisibilityIcon/> : <VisibilityOffIcon/>}
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title={"Download graph as an image file"}>
+                            <IconButton onClick={handleClickMenu}
+                                aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={anchorEl!==null ? 'true' : undefined}
+                            ><CameraAltOutlinedIcon/></IconButton>
+                        </Tooltip>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={anchorEl!==null}
+                            onClose={handleCloseMenu}
+                            MenuListProps={{
+                                'aria-labelledby': 'basic-button',
+                            }}
+                        >
+                            <MenuItem key={'png'} onClick={()=> {
+                                handleCloseMenu()
+                                fileDownload(cyref.current.png({output: "blob"}), "network.png")
+                            }}>PNG</MenuItem>
+                            <MenuItem key={'jpg'} onClick={()=> {
+                                handleCloseMenu()
+                                fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
+                            }}>JPG</MenuItem>
+                            <MenuItem key={'svg'} onClick={()=> {
+                                handleCloseMenu()
+                                fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
+                            }}>SVG</MenuItem>
+                        </Menu>
+                        <Tooltip title={"View in Enrichr"}>
+                            <IconButton onClick={()=>setCollapsed(!collapsed)} 
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href={`https://maayanlab.cloud/Enrichr/enrich?dataset=${shortId}`}
+                            >
+                                <LinkIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    </React.Fragment>
+                }
                 { (userListId === undefined) ? null 
-                : (elements === undefined) ? (
+                : (elements === null) ? (
                 <CircularProgress/>
                 ) : elements.length === 0 ? (
                 <div>No results</div>
@@ -572,7 +653,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     }}
                     />
                 }
-                {elements && <Legend elements={elements} left={sm ? "10%": "30%"} top={sm ? 2000: 550}/>}
+                {elements && <Legend elements={elements} left={(sm || collapsed) ? "10%": "30%"} top={sm ? 2000: 550}/>}
                 {(focused || node) && <TooltipCard 
                     node={focused || node}
                     schema={schema}

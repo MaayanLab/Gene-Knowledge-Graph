@@ -104,11 +104,10 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
   
   }
   
-  export const Legend = ({elements, left, top}) => {
+  export const Legend = ({elements=[], left, top}) => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('lg'));
     const sm = useMediaQuery(theme.breakpoints.down('sm'));
-  
     const colors = {
       "Search Term": <Grid item xs={12} key={"search"}>
       <Grid container alignItems={"center"} spacing={2}>

@@ -22,6 +22,7 @@
     "cytoscape-avsdf": "^1.0.0",
     "cytoscape-fcose": "^2.1.0",
     "cytoscape-popper": "^2.0.0",
+    "cytoscape-svg": "^0.4.0",
     "isomorphic-unfetch": "^3.1.0",
     "js-file-download": "^0.4.12",
     "memory-cache": "^0.2.0",
