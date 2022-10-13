@@ -31,7 +31,7 @@ const enrichr_query = async ({userListId, library, term_limit}) => {
 
 // gene_limit: limits top genes
 // min_lib: Filters for genes that appear on multiple libraries
-const enrichment = async ({userListId, libraries, gene_limit, min_lib, session, res}) => {
+const enrichment = async ({userListId, libraries, gene_limit, min_lib, gene_degree, session, res}) => {
     try {
         const results = await Promise.all(libraries.map(async ({library, term_limit})=>
             await enrichr_query({userListId, term_limit, library})
@@ -56,6 +56,9 @@ const enrichment = async ({userListId, libraries, gene_limit, min_lib, session, 
         if (min_lib) {
             genes = Object.keys(gene_counts).filter(gene=>gene_counts[gene].libraries >= min_lib)
         } 
+        if (gene_degree) {
+            genes = genes.filter(gene=>gene_counts[gene].count >= gene_degree)
+        }
         if (gene_limit) {
             genes = genes.sort((a,b)=>gene_counts[b].count - gene_counts[a].count).slice(0,gene_limit)
             console.log(genes)
