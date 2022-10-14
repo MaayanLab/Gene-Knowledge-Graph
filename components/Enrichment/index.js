@@ -53,7 +53,6 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
     const default_term_limit = default_options.term_limit
     const {userListId, gene_limit=default_options.gene_limit, min_lib=default_options.min_lib, gene_degree=default_options.gene_degree, page} = router.query
     const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : default_options.selected
-    const [genes, setGenes] = useState([])
     const [geneStr, setGeneStr] = useState('')
     const [error, setError] = useState(null)
     const [openError, setOpenError] = useState(false)
@@ -100,32 +99,30 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         [i.library]: i.term_limit
     }), {})
     const addList = async () => {
-        setLoading(true)
-        // const {userListId} = await (await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment/addList`, {
-        //     method: "POST",
-        //     body: JSON.stringify({
-        //         genes
-        //     })
-        // })).json()
-        const formData = new FormData();
-        const gene_list = genes.join("\n")
-        formData.append('list', (null, gene_list))
-        formData.append('description', (null, description))
-        const controller = get_controller()
-        const {shortId, userListId} = await (
-            await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/addList`, {
-                method: 'POST',
-                body: formData,
-                signal: controller.signal
-            })
-        ).json()
-        setShortId(shortId)
-        const {page, ...query} = router.query
-        query.userListId = userListId
-        router.push({
-            pathname: `/${page}`,
-            query,
-            }, undefined, { shallow: true })
+        try {
+            setLoading(true)
+            const formData = new FormData();
+            const gene_list = geneStr.trim().split(/[\t\r\n;]+/).join("\n")
+            formData.append('list', (null, gene_list))
+            formData.append('description', (null, description))
+            const controller = get_controller()
+            const {shortId, userListId} = await (
+                await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/addList`, {
+                    method: 'POST',
+                    body: formData,
+                    signal: controller.signal
+                })
+            ).json()
+            setShortId(shortId)
+            const {page, ...query} = router.query
+            query.userListId = userListId
+            router.push({
+                pathname: `/${page}`,
+                query,
+                }, undefined, { shallow: true })
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     const handleClickMenu = (e) => {
@@ -142,7 +139,6 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
             ).json()
             setDescription(description)
             setGeneStr(genes.join("\n"))
-            setGenes(genes)
         }
 
         const get_shortId = async () => {
@@ -208,14 +204,13 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     fullWidth
                     value={geneStr}
                     onChange={(e)=>{
-                        setGenes(e.target.value.split(/[\t\r\n;]+/))
+                        setGeneStr(e.target.value)
                     }}
                 />
                 <div align="center">
                     <Button 
                         onClick={()=>{
                             setGeneStr(props.example)
-                            setGenes(props.example.split(/[\t\r\n;]+/))
                         }}
                         
                     >Try an Example</Button>
@@ -235,12 +230,12 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         <Grid item>
                             <Button 
                                 onClick={()=>{
-                                    if (genes.length > 0) {
+                                    if (geneStr.trim()!=='') {
                                         addList()
                                     }
                                 }}
                                 variant="contained"
-                                disabled={genes.length===0}
+                                disabled={geneStr.trim()===''}
                             >Submit</Button>
                         </Grid>
                     </Grid>
@@ -309,7 +304,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                             <Grid item><Typography>Top Gene Limit</Typography></Grid>
                             <Grid item style={{ flexGrow: 1 }}>
                                 <Slider 
-                                    value={gene_limit || genes.length || 100}
+                                    value={gene_limit || geneStr.split(/[\t\r\n;]+/).length || 100}
                                     color="blues"
                                     onChange={(e, nv)=>{
                                         const {page, ...query} = router.query
@@ -321,12 +316,12 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                     }}
                                     style={{width: "100%"}}
                                     min={1}
-                                    max={genes.length || 100}
+                                    max={geneStr.split(/[\t\r\n;]+/).length || 100}
                                     aria-labelledby="continuous-slider" />
                             </Grid>
                             <Grid item>
                                 <Typography>
-                                    {gene_limit || genes.length || 100}
+                                    {gene_limit || geneStr.split(/[\t\r\n;]+/).length || 100}
                                     <Tooltip title={`Set this parameter to prioritize the top genes with most connections. (Set to all genes by default)`}>
                                         <IconButton size="small">
                                             <InfoIcon />
@@ -443,6 +438,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     disabled={elements===null}
                     onClick={()=>{
                         setElements(null)
+                        setGeneStr('')
                         router.push({
                             pathname: `/${page}`,
                         }, undefined, { shallow: true })
