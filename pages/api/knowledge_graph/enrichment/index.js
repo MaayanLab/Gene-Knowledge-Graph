@@ -13,10 +13,16 @@ const enrichr_query = async ({userListId, library, term_limit}) => {
         for (const i of results[library].slice(0,term_limit)) {
             const label = i[1]
             const pval = i[2]
+            const zscore = i[3]
+            const combined_score = i[4]
             const overlapping_genes = i[5]
+            const qval = i[6]
             if (terms[label] === undefined){
                 terms[label] ={
-                    pval
+                    pval,
+                    zscore,
+                    combined_score,
+                    qval
                 }
             }
             for (const gene of overlapping_genes) {
