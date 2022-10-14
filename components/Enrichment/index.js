@@ -6,18 +6,21 @@ import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery';
 import fileDownload from 'js-file-download'
 import Tooltip from '@mui/material/Tooltip';
-import Avatar from '@mui/material/Avatar';
+import ShareIcon from '@mui/icons-material/Share';
 
 import IconButton from '@mui/material/IconButton'
 import InfoIcon from '@mui/icons-material/Info'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import LinkIcon from '@mui/icons-material/Link';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Modal from '@mui/material/Modal';
+import Grid from '@mui/material/Grid';
 
-const Grid = dynamic(() => import('@mui/material/Grid'));
+// const Grid = dynamic(() => import('@mui/material/Grid'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
 const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
 const FormLabel = dynamic(()=>import('@mui/material/FormLabel'))
@@ -32,10 +35,8 @@ const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'))
 const TextField = dynamic(() => import('@mui/material/TextField'));
 const Slider = dynamic(() => import('@mui/material/Slider'));
 const Snackbar = dynamic(() => import('@mui/material/Snackbar'));
-const Alert = dynamic(() => import('@mui/material/Alert'));
 
 const CameraAltOutlinedIcon  = dynamic(() => import('@mui/icons-material/CameraAltOutlined'));
-const HighlightOffIcon = dynamic(()=>import('@mui/icons-material/HighlightOff'));
 
 const Cytoscape = dynamic(() => import('../Cytoscape'), { ssr: false })
 const TooltipCard = dynamic(async () => (await import('../misc')).TooltipCard);
@@ -66,6 +67,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
     const [anchorEl, setAnchorEl] = useState(null)
     const [collapsed, setCollapsed] = useState(false)
     const [shortId, setShortId] = useState(null)
+    const [openShare, setOpenShare] = useState(false)
     const cyref = useRef(null);
     const tableref = useRef(null);
 
@@ -155,7 +157,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         }
         setCollapsed(userListId!==undefined)
     }, [userListId])
-    
+
     useEffect(()=>{
         const fetch_kg = async () => {
             try {
@@ -499,7 +501,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                             }}>SVG</MenuItem>
                         </Menu>
                         <Tooltip title={"View in Enrichr"}>
-                            <IconButton onClick={()=>setCollapsed(!collapsed)} 
+                            <IconButton 
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 href={`https://maayanlab.cloud/Enrichr/enrich?dataset=${shortId}`}
@@ -507,6 +509,48 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                 <LinkIcon/>
                             </IconButton>
                         </Tooltip>
+                        <Tooltip title={"Share"}>
+                            <IconButton onClick={()=>setOpenShare(true)}>
+                                <ShareIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        <Modal
+                            open={openShare}
+                            onClose={()=>{
+                                setOpenShare(false)}
+                            }
+                            aria-labelledby="child-modal-title"
+                            aria-describedby="child-modal-description"
+                        >
+                        <Grid container
+                            sx={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                width: 800,
+                                bgcolor: 'background.paper',
+                                border: '1px solid #000',
+                                boxShadow: 15,
+                                pt: 2,
+                                px: 4,
+                                pb: 3,
+                              }}
+                        >
+                            <Grid item xs={12}>
+                                <Typography variant='h6'><b>Share Link</b></Typography>
+                            </Grid>
+                            <Grid item xs={11}>
+                                <TextField size='small'
+                                    value={window.location}
+                                    style={{width: "100%"}}
+                                />
+                            </Grid>
+                            <Grid item xs={1}>
+                                <IconButton onClick={()=>setOpenShare(false)}><HighlightOffIcon/></IconButton>
+                            </Grid>
+                        </Grid>
+                    </Modal>
                     </React.Fragment>
                 }
                 { (userListId === undefined) ? null 
