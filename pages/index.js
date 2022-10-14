@@ -31,6 +31,7 @@ export const layouts = {
   "Force-directed": {
     name: 'fcose',
     animate: true,
+    nodeSeparation: 100,
     nodeRepulsion: node => 10000,
     // Ideal edge (non nested) length
     idealEdgeLength: edge => 150
