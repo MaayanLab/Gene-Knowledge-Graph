@@ -74,8 +74,10 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
     const [collapsed, setCollapsed] = useState(false)
     const [shortId, setShortId] = useState(null)
     const [openShare, setOpenShare] = useState(false)
-    const [query, setQuery] = useState({})
+    const [query, setQuery] = useState(rest||{})
     const [inputError, setInputError] = useState(false)
+    const [id, setId] = useState(0)
+
     const {
         userListId,
         gene_limit=default_options.gene_limit,
@@ -161,7 +163,14 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
             }
             setCollapsed(true)
             setInputError(false)
+            setId(id+1)
             const controller = get_controller()
+            const {
+                userListId,
+                gene_limit=default_options.gene_limit,
+                min_lib=default_options.min_lib,
+                gene_degree=default_options.gene_degree} = router.query
+            const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : default_options.selected
             const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment`,
             {
                 method: "POST",
@@ -190,10 +199,10 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         }
     }
 
-    // useEffect(()=>{
-    //     const {page, ...rest} = router.query
-    //     setQuery(rest)
-    // }, [router.query])
+    useEffect(()=>{
+        const {page, ...rest} = router.query
+        setQuery(rest)
+    }, [router.query])
 
     useEffect(()=> {
         const resolve_genes = async () => {
@@ -486,12 +495,22 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                             pathname: `/${page}`,
                         }, undefined, { shallow: true })
                     }}
+                    style={{marginRight: 5}}
                 >
                     Clear Graph
                 </Button>
+                <Button variant='contained'
+                    disabled={elements===null}
+                    onClick={()=>{
+                        setId(id+1)
+                    }}
+                    style={{marginLeft: 5}}
+                >
+                    Re-orient Graph
+                </Button>
             </Grid>
             }
-            <Grid item xs={12} md={collapsed ? 12: 9} style={{height: 1000}}>
+            <Grid item xs={12} md={collapsed ? 12: 9} style={{height: 1400}}>
                 {/* <Snackbar open={openError}
 					anchorOrigin={{ vertical:"top", horizontal:"right" }}
 					autoHideDuration={3000}
@@ -600,7 +619,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                 ) : loading ? 
                 <CircularProgress/>:
                     <Cytoscape
-                        key={JSON.stringify(router.query)}
+                        key={id}
                         wheelSensitivity={0.1}
                         style={{
                         width: '100%',
