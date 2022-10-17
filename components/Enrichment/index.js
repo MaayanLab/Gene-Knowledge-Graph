@@ -137,11 +137,9 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                 })
             ).json()
             setShortId(shortId)
-            const {page, ...rest} = query
-            rest.userListId = userListId
             router.push({
                 pathname: `/${page}`,
-                query: rest,
+                query: {...query, userListId},
                 }, undefined, { shallow: true })
         } catch (error) {
             console.error(error)
@@ -155,10 +153,10 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
 		setAnchorEl(null);
 	};
 
-    useEffect(()=>{
-        const {page, ...rest} = router.query
-        setQuery(rest)
-    }, [router.query])
+    // useEffect(()=>{
+    //     const {page, ...rest} = router.query
+    //     setQuery(rest)
+    // }, [router.query])
 
     useEffect(()=> {
         const resolve_genes = async () => {
@@ -185,7 +183,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
     }, [userListId])
 
     useEffect(()=>{
-        const fetch_kg = async () => {
+        const fetch_kg = async (userListId) => {
             try {
                 if (error !== null) {
                     await delay(5000);
@@ -218,9 +216,12 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                 setOpenError(true)
             }
         }
+        const {page, ...rest} = router.query
+        setQuery(rest)
+        const userListId = rest.userListId
         if (userListId || (error !== null && error.type === "error")) {
             setLoading(true)
-            fetch_kg()
+            fetch_kg(userListId)
          }
     }, [router.query, error])
 
@@ -266,7 +267,6 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         <Grid item>
                             <Button 
                                 onClick={()=>{
-                                    console.log(same_prev_input())
                                     if (!same_prev_input()) {
                                         if (input.genes.length > 0) {
                                             addList()
