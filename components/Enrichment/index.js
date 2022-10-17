@@ -75,6 +75,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
     const [shortId, setShortId] = useState(null)
     const [openShare, setOpenShare] = useState(false)
     const [query, setQuery] = useState({})
+    const [inputError, setInputError] = useState(false)
     const {
         userListId,
         gene_limit=default_options.gene_limit,
@@ -153,6 +154,42 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
 		setAnchorEl(null);
 	};
 
+    const fetch_kg = async (userListId) => {
+        try {
+            if (error !== null) {
+                await delay(5000);
+            }
+            setCollapsed(true)
+            setInputError(false)
+            const controller = get_controller()
+            const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment`,
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    userListId,
+                    libraries,
+                    min_lib,
+                    gene_limit,
+                    gene_degree,
+                }),
+                signal: controller.signal
+            })
+            const results = (await res.json())
+            if (results.message) {
+                setError({message: "Error connecting to Enrichr, trying again...", type: "error"})
+                setOpenError(true)
+            } else {
+                setOpenError(false)
+                setError(null)
+                setLoading(false)
+                setElements(results)
+            }
+        } catch (error) {
+            setError({message: "Error connecting to Enrichr, trying again...", type: "error"})
+            setOpenError(true)
+        }
+    }
+
     // useEffect(()=>{
     //     const {page, ...rest} = router.query
     //     setQuery(rest)
@@ -182,49 +219,25 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         // setCollapsed(userListId!==undefined)
     }, [userListId])
 
-    useEffect(()=>{
-        const fetch_kg = async (userListId) => {
-            try {
-                if (error !== null) {
-                    await delay(5000);
-                }
-                setCollapsed(true)
-                const controller = get_controller()
-                const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment`,
-                {
-                    method: "POST",
-                    body: JSON.stringify({
-                        userListId,
-                        libraries,
-                        min_lib,
-                        gene_limit,
-                        gene_degree,
-                    }),
-                    signal: controller.signal
-                })
-                const results = (await res.json())
-                if (results.message) {
-                    setError({message: "Error connecting to Enrichr, trying again...", type: "error"})
-                    setOpenError(true)
-                } else {
-                    setOpenError(false)
-                    setError(null)
-                    setLoading(false)
-                    setElements(results)
-                }
-            } catch (error) {
-                setError({message: "Error connecting to Enrichr, trying again...", type: "error"})
-                setOpenError(true)
-            }
-        }
+    useEffect(()=>{    
         const {page, ...rest} = router.query
         setQuery(rest)
         const userListId = rest.userListId
-        if (userListId || (error !== null && error.type === "error")) {
+        if (userListId) {
             setLoading(true)
             fetch_kg(userListId)
          }
-    }, [router.query, error])
+    }, [router.query])
+
+    useEffect(()=>{ 
+        const {page, ...rest} = router.query
+        setQuery(rest)
+        const userListId = rest.userListId
+        if (userListId && (error !== null && error.type === "error")) {
+            setLoading(true)
+            fetch_kg(userListId)
+         }
+    }, [error])
 
     return (
         <Grid container spacing={2} style={{marginBottom: 10}}>
@@ -367,7 +380,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                 </Typography>
                             </Grid>
                         </Grid>
-                        <FormLabel>Pick up to five libraries</FormLabel>
+                        <FormLabel error={inputError}>Pick up to five libraries</FormLabel>
                         {libraries_list.map(library=>(
                             <React.Fragment key="library">
                                 <FormControlLabel
@@ -380,13 +393,15 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                                             new_query.libraries = JSON.stringify(libraries.filter(i=>i.library !== library))
                                                             setQuery(new_query)
                                                         }
-                                                    } else {
+                                                    } else if (libraries.length < 5 ){
                                                         const new_query = {...query}
                                                         new_query.libraries = JSON.stringify([...libraries, {
                                                             library,
                                                             term_limit: default_term_limit
                                                         }])
                                                         setQuery(new_query)
+                                                    } else {
+                                                        setInputError(true)
                                                     }
                                                 }} 
                                                 name={library}
