@@ -179,7 +179,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
             resolve_genes()
             get_shortId()
         }
-        setCollapsed(userListId!==undefined)
+        // setCollapsed(userListId!==undefined)
     }, [userListId])
 
     useEffect(()=>{
@@ -188,6 +188,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                 if (error !== null) {
                     await delay(5000);
                 }
+                setCollapsed(true)
                 const controller = get_controller()
                 const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment`,
                 {
