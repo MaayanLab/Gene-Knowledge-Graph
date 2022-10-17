@@ -30,11 +30,10 @@ const NetworkTable =  dynamic(() => import('../components/network_table'))
 export const layouts = {
   "Force-directed": {
     name: 'fcose',
+    quality: 'proof',
+    randomize: 'false',
     animate: true,
-    nodeSeparation: 100,
-    // Ideal edge (non nested) length
     idealEdgeLength: edge => 150,
-    edgeElasticity: edge => 0.6,
   },
   "Hierarchical Layout": {
     name: "breadthfirst",
