@@ -48,32 +48,47 @@ const NetworkTable =  dynamic(() => import('../network_table'))
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
+// https://blog.logrocket.com/accessing-previous-props-state-react-hooks/
+const usePrevious = (value) => {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value; //assign the value of ref to the argument
+    },[value]); //this code will run when the value of 'value' changes
+    return ref.current; //in the end, return the current ref value.
+  }
+
 const Enrichment = ({default_options, libraries: libraries_list, schema, ...props}) => {
     const router = useRouter()
     const default_term_limit = default_options.term_limit
-    const {userListId, gene_limit=default_options.gene_limit, min_lib=default_options.min_lib, gene_degree=default_options.gene_degree, page} = router.query
-    const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : default_options.selected
-    const [geneStr, setGeneStr] = useState('')
+    const {page, ...rest} = router.query
     const [error, setError] = useState(null)
     const [openError, setOpenError] = useState(false)
     const [elements, setElements] = useState(null)
     const [node, setNode] = useState(null)
     const [focused, setFocused] = useState(null)
     const [loading, setLoading] = useState(false)
-    const [description, setDescription] = useState('')
+    const [input, setInput] = useState({genes: [], description: ''})
     const [edgeStyle, setEdgeStyle] = useState({label: 'data(label)'})
     const [layout, setLayout] = useState(Object.keys(layouts)[0])
     const [anchorEl, setAnchorEl] = useState(null)
     const [collapsed, setCollapsed] = useState(false)
     const [shortId, setShortId] = useState(null)
     const [openShare, setOpenShare] = useState(false)
+    const [query, setQuery] = useState({})
+    const {
+        userListId,
+        gene_limit=default_options.gene_limit,
+        min_lib=default_options.min_lib,
+        gene_degree=default_options.gene_degree} = query
+    const libraries = query.libraries ? JSON.parse(query.libraries) : default_options.selected
+    
     const cyref = useRef(null);
     const tableref = useRef(null);
+    const prevInput = usePrevious(input)
 
     const [controller, setController] = React.useState(null)
 
     const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.up('lg'));
     const sm = useMediaQuery(theme.breakpoints.down('md'));
 
     const tooltip_templates = {}
@@ -85,6 +100,12 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         for (const i of e.match) {
         tooltip_templates[i] = e.display
         }
+    }
+
+    const same_prev_input = () => {
+        if (prevInput.genes.join('\n')!==input.genes.join('\n')) return false
+        else if (prevInput.description !== input.description) return false
+        else return true
     }
 
     const get_controller = () => {
@@ -102,7 +123,9 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         try {
             setLoading(true)
             const formData = new FormData();
-            const gene_list = geneStr.trim().split(/[\t\r\n;]+/).join("\n")
+            // const gene_list = geneStr.trim().split(/[\t\r\n;]+/).join("\n")
+            const {genes, description} = input
+            const gene_list = genes.join("\n")
             formData.append('list', (null, gene_list))
             formData.append('description', (null, description))
             const controller = get_controller()
@@ -114,11 +137,11 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                 })
             ).json()
             setShortId(shortId)
-            const {page, ...query} = router.query
-            query.userListId = userListId
+            const {page, ...rest} = query
+            rest.userListId = userListId
             router.push({
                 pathname: `/${page}`,
-                query,
+                query: rest,
                 }, undefined, { shallow: true })
         } catch (error) {
             console.error(error)
@@ -132,13 +155,20 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
 		setAnchorEl(null);
 	};
 
+    useEffect(()=>{
+        const {page, ...rest} = router.query
+        setQuery(rest)
+    }, [router.query])
+
     useEffect(()=> {
         const resolve_genes = async () => {
             const {genes, description} = await (
                 await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/view?userListId=${userListId}`)
             ).json()
-            setDescription(description)
-            setGeneStr(genes.join("\n"))
+            setInput({
+                genes,
+                description
+            })
         }
 
         const get_shortId = async () => {
@@ -202,15 +232,21 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     rows={10}
                     placeholder={props.placeholder}
                     fullWidth
-                    value={geneStr}
+                    value={input.genes.join("\n")}
                     onChange={(e)=>{
-                        setGeneStr(e.target.value)
+                        setInput({
+                            ...input,
+                            genes: e.target.value.split(/[\t\r\n;]+/)
+                        })
                     }}
                 />
                 <div align="center">
                     <Button 
                         onClick={()=>{
-                            setGeneStr(props.example)
+                            setInput({
+                                genes: props.example.split(/[\t\r\n;]+/),
+                                description: "Sample Input"
+                            })
                         }}
                         
                     >Try an Example</Button>
@@ -220,9 +256,9 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         <Grid item style={{ flexGrow: 1 }}>
                             <TextField
                                 variant='outlined'
-                                value={description}
+                                value={input.description}
                                 size="small"
-                                onChange={e=>setDescription(e.target.value)}
+                                onChange={e=>setInput({...input, description: e.target.value.trim().split(/[\t\r\n;]+/)})}
                                 placeholder="Description"
                                 style={{width: "100%"}}
                             />
@@ -230,12 +266,21 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         <Grid item>
                             <Button 
                                 onClick={()=>{
-                                    if (geneStr.trim()!=='') {
-                                        addList()
+                                    console.log(same_prev_input())
+                                    if (!same_prev_input()) {
+                                        if (input.genes.length > 0) {
+                                            addList()
+                                        }
+                                    } else {
+                                        router.push({
+                                            pathname: `/${page}`,
+                                            query,
+                                            }, undefined, { shallow: true }
+                                        )
                                     }
                                 }}
                                 variant="contained"
-                                disabled={geneStr.trim()===''}
+                                disabled={input.genes.length === 0}
                             >Submit</Button>
                         </Grid>
                     </Grid>
@@ -247,12 +292,9 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                     value={min_lib || 1}
                                     color="blues"
                                     onChange={(e, nv)=>{
-                                        const {page, ...query} = router.query
-                                        query.min_lib = nv
-                                        router.push({
-                                            pathname: `/${page}`,
-                                            query,
-                                            }, undefined, { shallow: true })
+                                        const new_query = {...query}
+                                        new_query.min_lib = nv
+                                        setQuery(new_query)
                                     }}
                                     style={{width: "100%"}}
                                     min={1}
@@ -277,12 +319,9 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                     value={gene_degree || 1}
                                     color="blues"
                                     onChange={(e, nv)=>{
-                                        const {page, ...query} = router.query
-                                        query.gene_degree = nv
-                                        router.push({
-                                            pathname: `/${page}`,
-                                            query,
-                                            }, undefined, { shallow: true })
+                                        const new_query = {...query}
+                                        new_query.gene_degree = nv
+                                        setQuery(new_query)
                                     }}
                                     style={{width: "100%"}}
                                     min={1}
@@ -304,24 +343,21 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                             <Grid item><Typography>Top Gene Limit</Typography></Grid>
                             <Grid item style={{ flexGrow: 1 }}>
                                 <Slider 
-                                    value={gene_limit || geneStr.split(/[\t\r\n;]+/).length || 100}
+                                    value={gene_limit || input.genes.length || 100}
                                     color="blues"
                                     onChange={(e, nv)=>{
-                                        const {page, ...query} = router.query
-                                        query.gene_limit = nv
-                                        router.push({
-                                            pathname: `/${page}`,
-                                            query,
-                                            }, undefined, { shallow: true })
+                                        const new_query = {...query}
+                                        new_query.gene_limit = nv
+                                        setQuery(new_query)
                                     }}
                                     style={{width: "100%"}}
                                     min={1}
-                                    max={geneStr.split(/[\t\r\n;]+/).length || 100}
+                                    max={input.genes.length || 100}
                                     aria-labelledby="continuous-slider" />
                             </Grid>
                             <Grid item>
                                 <Typography>
-                                    {gene_limit || geneStr.split(/[\t\r\n;]+/).length || 100}
+                                    {gene_limit || input.genes.length || 100}
                                     <Tooltip title={`Set this parameter to prioritize the top genes with most connections. (Set to all genes by default)`}>
                                         <IconButton size="small">
                                             <InfoIcon />
@@ -339,23 +375,17 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                                 onChange={()=>{
                                                     if (checked_libraries[library]) {
                                                         if (libraries.length > 1) {
-                                                            const {page, ...query} = router.query
-                                                            query.libraries = JSON.stringify(libraries.filter(i=>i.library !== library))
-                                                            router.push({
-                                                                pathname: `/${page}`,
-                                                                query,
-                                                            }, undefined, { shallow: true })
+                                                            const new_query = {...query}
+                                                            new_query.libraries = JSON.stringify(libraries.filter(i=>i.library !== library))
+                                                            setQuery(new_query)
                                                         }
                                                     } else {
-                                                        const {page, ...query} = router.query
-                                                        query.libraries = JSON.stringify([...libraries, {
+                                                        const new_query = {...query}
+                                                        new_query.libraries = JSON.stringify([...libraries, {
                                                             library,
                                                             term_limit: default_term_limit
                                                         }])
-                                                        router.push({
-                                                            pathname: `/${page}`,
-                                                            query,
-                                                          }, undefined, { shallow: true })
+                                                        setQuery(new_query)
                                                     }
                                                 }} 
                                                 name={library}
@@ -389,12 +419,9 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                                         })
                                                         else new_libraries.push(i)
                                                     }
-                                                    const {page, ...query} = router.query
-                                                    query.libraries = JSON.stringify(new_libraries)
-                                                    router.push({
-                                                        pathname: `/${page}`,
-                                                        query,
-                                                    }, undefined, { shallow: true })
+                                                    const new_query = {...query}
+                                                    new_query.libraries = JSON.stringify(new_libraries)
+                                                    setQuery(new_query)
                                                 }}
                                                 style={{marginBottom: -5, width: "100%"}}
                                                 min={1}
@@ -438,7 +465,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     disabled={elements===null}
                     onClick={()=>{
                         setElements(null)
-                        setGeneStr('')
+                        setInput({})
                         router.push({
                             pathname: `/${page}`,
                         }, undefined, { shallow: true })
