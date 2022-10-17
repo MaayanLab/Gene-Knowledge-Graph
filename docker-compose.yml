@@ -2,9 +2,9 @@ version: '2'
 services:
   kg:
     build: .
-    image: maayanlab/knowledge_graph:0.4.0
+    image: maayanlab/knowledge_graph:0.4.1
     platform: linux/x86_64
-    env_file: .env
+    env_file: .env.deploy
     ports:
       - 3002:3000
   ingest:
