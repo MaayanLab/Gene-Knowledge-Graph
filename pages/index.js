@@ -32,15 +32,16 @@ export const layouts = {
     name: 'fcose',
     animate: true,
     nodeSeparation: 100,
-    nodeRepulsion: node => 10000,
     // Ideal edge (non nested) length
-    idealEdgeLength: edge => 150
+    idealEdgeLength: edge => 150,
+    edgeElasticity: edge => 0.6,
   },
   "Hierarchical Layout": {
     name: "breadthfirst",
     animate: true,
     spacingFactor: 1,
-    padding: 15
+    padding: 15,
+    avoidOverlap: true,
   },
   Geometric: {
     name: 'avsdf',
