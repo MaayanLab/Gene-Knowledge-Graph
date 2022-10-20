@@ -82,7 +82,7 @@ function MyApp({ Component, pageProps }) {
           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
           <script async defer src="https://buttons.github.io/buttons.js"></script>
         </Head>
-        <Container id={"main"} maxWidth={isIFrame() ? "lg" :"xl"}>
+        <Container id={"main"} maxWidth={"lg"}>
           {isIFrame() ? null : <Header {...pageProps}/>}
           <Component 
             {...pageProps}
