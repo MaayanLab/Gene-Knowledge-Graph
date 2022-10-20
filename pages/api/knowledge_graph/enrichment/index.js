@@ -86,23 +86,24 @@ const enrichment = async ({
             WHERE a.label IN ${JSON.stringify(Object.keys(terms))} 
             AND b.label IN ${JSON.stringify(genes)}
         `
-        if (remove) {
+        if (remove.length) {
             query = query + `
-                AND NOT a.id in ${JSON.stringify(remove)}
-                AND NOT b.id in ${JSON.stringify(remove)}
+                AND NOT a.id in ${remove}
+                AND NOT b.id in ${remove}
             `
         }
         query = query + `RETURN p, nodes(p) as n, relationships(p) as r`
 
         // remove has precedence on expand
-        const expand = (e || []).filter(i=>(remove || []).indexOf(i) === -1)
-        if (expand) {
+        const expand = (JSON.parse(e || "[]")).filter(i=>(remove || []).indexOf(i) === -1)
+        if (expand.length) {
             query = query + `
                 UNION
                 MATCH p = (c)--(d)
                 WHERE c.id in ${JSON.stringify(expand)}
                 RETURN p, nodes(p) as n, relationships(p) as r`
         }
+        console.error(query)
         const rs = await session.readTransaction(txc => txc.run(query))
         return resolve_results({results: rs, schema,  aggr_scores, colors, properties: terms})
     } catch (error) {
