@@ -9,6 +9,19 @@ import * as default_schema from '../public/schema.json'
 import Color from 'color'
 import { isIFrame } from '../utils/helper';
 import { usePrevious, shouldUpdateId } from '../components/Enrichment';
+
+import Tooltip from '@mui/material/Tooltip';
+
+import IconButton from '@mui/material/IconButton'
+
+import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
+
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Box = dynamic(() => import('@mui/material/Box'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
@@ -19,7 +32,6 @@ const Switch = dynamic(() => import('@mui/material/Switch'));
 const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
 const Slider = dynamic(() => import('@mui/material/Slider'));
 const Cytoscape = dynamic(() => import('../components/Cytoscape'), { ssr: false })
-const CameraAltOutlinedIcon  = dynamic(() => import('@mui/icons-material/CameraAltOutlined'));
 const AddBoxIcon  = dynamic(() => import('@mui/icons-material/AddBox'));
 const IndeterminateCheckBoxIcon = dynamic(() => import('@mui/icons-material/IndeterminateCheckBox'));
 const TooltipCard = dynamic(async () => (await import('../components/misc')).TooltipCard);
@@ -68,11 +80,12 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   const [node, setNode] = React.useState(null)
   const [data, setData] = React.useState(null)
   const [focused, setFocused] = React.useState(null)
-  const [layout, setLayout] = React.useState(Object.keys(layouts)[0])
+  const [layout, setLayout] = React.useState(0)
   const [edgeStyle, setEdgeStyle] = React.useState({label: 'data(label)'})
   const [id, setId] = React.useState(0)
   const [elements, setElements] = React.useState(undefined)
   const [controller, setController] = React.useState(null)
+  const [anchorEl, setAnchorEl] = React.useState(null)
   const [loading, setLoading] = React.useState(false)
   const [selected, setSelected] = React.useState([])
   const firstUpdate = useRef(true);
@@ -132,6 +145,13 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
     setController(c)
     return c
   }
+
+  const handleClickMenu = (e) => {
+		setAnchorEl(e.currentTarget);
+	  };
+	const handleCloseMenu = () => {
+		setAnchorEl(null);
+	};
   
   const resolve_elements = async (isActive) => {
     try {
@@ -439,39 +459,12 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 multiple={true}/>
             </Grid>
           }
-          <Grid item><Typography variant="body1"><b>Layout:</b></Typography></Grid>
-          <Grid item>
-            <Selector entries={Object.keys(layouts)}
-              value={layout}
-              prefix={"layout"}
-              onChange={(e, v)=>setLayout(e)}
-              />
-          </Grid>
-          <Grid item>
-            <Typography variant="body1"><b>Relationship labels:</b><Switch
-                color="blues"
-                checked={edgeStyle.label}
-                onChange={()=>{
-                  if (edgeStyle.label) setEdgeStyle({})
-                  else setEdgeStyle({label: 'data(label)'})
-                }}
-                name="checkedA"
-                inputProps={{ 'aria-label': 'secondary checkbox' }}
-              /></Typography>
-          </Grid>          
-          <Grid item>
-            <Button color="blues" onClick={()=>{
-              fileDownload(cyref.current.png({output: "blob"}), "network.png")
-            }}>
-              <CameraAltOutlinedIcon/>
-            </Button>
-          </Grid>
           {isIFrame() ? null:
           <React.Fragment>
             <Grid item>
               <Typography variant="body1"><b>Size:</b></Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={1}>
               <Slider 
                 value={limit}
                 color="blues"
@@ -493,7 +486,67 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
               <Typography variant="body1">{limit}</Typography>
             </Grid>
           </React.Fragment>}
+          <Grid item>
+              <Tooltip title="Switch Graph Layout">
+                  <IconButton variant='contained'
+                      disabled={elements===null}
+                      onClick={()=>{
+                          setLayout(layout + 1 === Object.keys(layouts).length ? 0: layout+1)
+                      }}
+                      style={{marginLeft: 5}}
+                  >
+                      <FlipCameraAndroidIcon/>
+                  </IconButton>
+              </Tooltip>
+          </Grid>
+          <Grid item>
+            <Tooltip title={edgeStyle.label ? "Hide edges": "Show edges"}>
+                <IconButton variant='contained'
+                    disabled={elements===null}
+                    onClick={()=>{
+                        if (edgeStyle.label) setEdgeStyle({})
+                        else setEdgeStyle({label: 'data(label)'})
+                    }}
+                    style={{marginLeft: 5}}
+                >
+                    {edgeStyle.label ? <VisibilityOffIcon/>: <VisibilityIcon/>}
+                </IconButton>
+            </Tooltip>
+          </Grid>          
+          <Grid item>
+            <Tooltip title={"Download graph as an image file"}>
+              <IconButton onClick={handleClickMenu}
+                  aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={anchorEl!==null ? 'true' : undefined}
+              ><CameraAltOutlinedIcon/></IconButton>
+            </Tooltip>
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={anchorEl!==null}
+                onClose={handleCloseMenu}
+                MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                }}
+            >
+                <MenuItem key={'png'} onClick={()=> {
+                    handleCloseMenu()
+                    fileDownload(cyref.current.png({output: "blob"}), "network.png")
+                }}>PNG</MenuItem>
+                <MenuItem key={'jpg'} onClick={()=> {
+                    handleCloseMenu()
+                    fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
+                }}>JPG</MenuItem>
+                <MenuItem key={'svg'} onClick={()=> {
+                    handleCloseMenu()
+                    fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
+                }}>SVG</MenuItem>
+            </Menu>
+          </Grid>
         </Grid>
+          
+          
       </Grid>
       {isIFrame() && 
         <Grid item xs={12}>
@@ -634,7 +687,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
               }
             ]}
             elements={elements}
-            layout={layouts[layout]}
+            layout={Object.values(layouts)[layout]}
             cy={(cy) => {
               cyref.current = cy
               cy.on('click', 'node', function (evt) {

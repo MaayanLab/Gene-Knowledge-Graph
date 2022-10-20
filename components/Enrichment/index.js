@@ -504,7 +504,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
     
     return (
         <Grid container spacing={2} style={{marginBottom: 10}} alignItems="center" justifyContent={"space-between"}>
-            <Grid item>
+            { elements !== null && <Grid item>
                 <Tooltip title={collapsed ? "Show filters": "Hide filters"}>
                     <Button onClick={handleClickFilter}
                         startIcon={<InputIcon/>}
@@ -527,6 +527,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     <CardContent style={{width: 1000}}><GeneSetForm /></CardContent>
                 </Menu>
             </Grid>
+            }
             { elements !== null && 
                 <Grid item>
                     <Grid container direction={"row"} justifyContent="flex-end">
@@ -677,7 +678,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                 </Grid>
             }
             
-            <Grid item xs={12} style={{height: userListId ? 800: 400}}>
+            <Grid item xs={12} style={{height: userListId ? 800: 600}}>
                 {/* <Snackbar open={openError}
 					anchorOrigin={{ vertical:"top", horizontal:"right" }}
 					autoHideDuration={3000}
@@ -689,7 +690,10 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         </IconButton>
 					}
 				/> */}
-                { (userListId === undefined) ? <Grid item xs="12" align="center" style={{marginTop: "10%"}}><Markdown markdown={props.description || ''}/> </Grid>
+                { (userListId === undefined) ? <Grid item xs="12" align="center">
+                    <Markdown markdown={props.description || ''}/>
+                    <GeneSetForm />
+                </Grid>
                 : (elements === null) ? (
                 <CircularProgress/>
                 ) : elements.length === 0 ? (
