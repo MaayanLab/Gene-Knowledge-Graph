@@ -121,14 +121,12 @@ export const resolve_results = ({results, terms, colors, field, start_field, end
 	  })
 )
 
-const resolve_two_terms = async ({session, start_term, start_field, start, end_term, end_field, end, limit, order, path_length=4, schema, relation, aggr_scores, colors}) => {
+const resolve_two_terms = async ({session, start_term, start_field, start, end_term, end_field, end, limit, order, path_length=4, schema, relation, aggr_scores, colors, remove, expand: e}) => {
 	if (!parseInt(path_length)) throw {message: "Path length is not a number"}
 	let query = `MATCH p=(a: \`${start}\` {${start_field}: $start_term})-[*${path_length}]-(b: \`${end}\` {${end_field}: $end_term})
 		USING INDEX a:\`${start}\`(${start_field})
 		USING INDEX b:\`${end}\`(${end_field})
-		WITH nodes(p) as n, relationships(p) as r
-		RETURN * LIMIT TOINTEGER($limit)`
-		
+	`		
 	if (relation) {
 		const edges = schema.edges.reduce((acc, i)=>([
 			...acc,
@@ -145,6 +143,24 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 		// WITH nodes(p) as n, relationships(p) as r
 		// RETURN * LIMIT ${limit}`
 	} 
+	if (remove.length) {
+		query = query + `
+			WHERE NOT a.id in ${JSON.stringify(remove)}
+			AND NOT b.id in ${JSON.stringify(remove)}
+		`
+	}
+	query = query + `RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
+
+	// remove has precedence on expand
+	const expand = (e || []).filter(i=>(remove || []).indexOf(i) === -1)
+	if (expand.length) {
+		query = query + `
+			UNION
+			MATCH p = (c)--(d)
+			WHERE c.id in ${JSON.stringify(expand)}
+			RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
+	}
+
 	
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 	// query = `${query} RETURN * ORDER BY rand() LIMIT ${limit}`
@@ -152,13 +168,12 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 	return resolve_results({results, terms: [start_term, end_term], schema, order, score_fields,  aggr_scores, colors, start_field, end_field})
 }
 
-const resolve_one_term = async ({session, start, field, term, relation, limit, order, path_length=1, schema, aggr_scores, colors}) => {
+const resolve_one_term = async ({session, start, field, term, relation, limit, order, path_length=1, schema, aggr_scores, colors, expand: e, remove}) => {
 	if (!parseInt(path_length)) throw {message: "Path length is not a number"}
 	let query = `
 		MATCH p=(st:\`${start}\` { ${field}: $term })-[*${path_length}]-(en)
 		USING INDEX st:\`${start}\`(${field})
-		WITH nodes(p) as n, relationships(p) as r
-		RETURN * LIMIT TOINTEGER($limit)
+		WITH p, st, en
 		`
 	if (relation) {
 		const edges = schema.edges.reduce((acc, i)=>([
@@ -171,13 +186,29 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
 		query = query.replace(`[*${path_length}]`,`[:${rels}*${path_length}]`)
 	}
+	if (remove.length) {
+		query = query + `
+			WHERE NOT st.id in ${JSON.stringify(remove)}
+			AND NOT en.id in ${JSON.stringify(remove)}
+		`
+	}
+	query = query + `RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
 
+	// remove has precedence on expand
+	const expand = (e || []).filter(i=>(remove || []).indexOf(i) === -1)
+	if (expand.length) {
+		query = query + `
+			UNION
+			MATCH p = (c)--(d)
+			WHERE c.id in ${JSON.stringify(expand)}
+			RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
+	}
 	const results = await session.readTransaction(txc => txc.run(query, { term, limit }))
 	return resolve_results({results, terms: [term], schema, order, score_fields,  aggr_scores, colors, field})
 }
 
 export default async function query(req, res) {
-  const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=25, path_length, order } = await req.query
+  const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=25, path_length, order, remove, expand } = await req.query
   const schema = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/schema`)).json()
   const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/aggregate`)).json()
   const nodes = schema.nodes.map(i=>i.node)
@@ -190,10 +221,10 @@ export default async function query(req, res) {
 		})
 		try {
 			if (start && end && start_term && end_term) {
-				const results = await resolve_two_terms({session, start_term, start_field, start, end_term, end_field, end, relation, limit, path_length, schema, order, aggr_scores, colors})
+				const results = await resolve_two_terms({session, start_term, start_field, start, end_term, end_field, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : []})
 				res.status(200).send(results)
 			} else if (start) {
-				const results = await resolve_one_term({session, start, field: start_field, term: start_term, relation, limit, path_length, schema, order, aggr_scores, colors})
+				const results = await resolve_one_term({session, start, field: start_field, term: start_term, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : []})
 				res.status(200).send(results)
 			} else {
 				res.status(400).send("Invalid input")

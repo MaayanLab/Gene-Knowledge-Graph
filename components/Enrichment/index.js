@@ -9,10 +9,16 @@ import Tooltip from '@mui/material/Tooltip';
 import ShareIcon from '@mui/icons-material/Share';
 
 import IconButton from '@mui/material/IconButton'
+import Button from '@mui/material/Button'
+import Slider from '@mui/material/Slider'
+
 import InfoIcon from '@mui/icons-material/Info'
+import LinkIcon from '@mui/icons-material/Link';
+import InputIcon from '@mui/icons-material/Input';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import LinkIcon from '@mui/icons-material/Link';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 import Menu from '@mui/material/Menu';
@@ -29,12 +35,13 @@ const FormGroup = dynamic(()=>import('@mui/material/FormGroup'))
 const FormControlLabel = dynamic(()=>import('@mui/material/FormControlLabel'))
 const Stack = dynamic(()=>import('@mui/material/Stack'))
 const Switch = dynamic(()=>import('@mui/material/Switch'))
-const Button = dynamic(() => import('@mui/material/Button'));
 const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
 
 const TextField = dynamic(() => import('@mui/material/TextField'));
-const Slider = dynamic(() => import('@mui/material/Slider'));
-const Snackbar = dynamic(() => import('@mui/material/Snackbar'));
+const Card = dynamic(() => import('@mui/material/Card'));
+const CardContent = dynamic(() => import('@mui/material/CardContent'));
+const Tabs = dynamic(() => import('@mui/material/Tabs'));
+const Tab = dynamic(() => import('@mui/material/Tab'));
 
 const CameraAltOutlinedIcon  = dynamic(() => import('@mui/icons-material/CameraAltOutlined'));
 
@@ -46,16 +53,25 @@ const Selector = dynamic(async () => (await import('../misc')).Selector);
 const Markdown = dynamic(()=>import("../markdown"), {ssr: false});
 const NetworkTable =  dynamic(() => import('../network_table'))
 
+
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 // https://blog.logrocket.com/accessing-previous-props-state-react-hooks/
-const usePrevious = (value) => {
+export const usePrevious = (value) => {
     const ref = useRef();
     useEffect(() => {
       ref.current = value; //assign the value of ref to the argument
     },[value]); //this code will run when the value of 'value' changes
     return ref.current; //in the end, return the current ref value.
   }
+  
+export const shouldUpdateId = (query, prev_query) => {
+    const {remove: curr_remove, page: curr_page, ...curr} = query
+    const {remove: prev_remove, page: prev_page, ...prev} = prev_query
+    console.log(JSON.stringify(curr), JSON.stringify(prev), JSON.stringify(curr) !== JSON.stringify(prev))
+    if (JSON.stringify(curr) !== JSON.stringify(prev)) return true
+    else return false
+}
 
 const Enrichment = ({default_options, libraries: libraries_list, schema, ...props}) => {
     const router = useRouter()
@@ -69,9 +85,9 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState({genes: [], description: ''})
     const [edgeStyle, setEdgeStyle] = useState({label: 'data(label)'})
-    const [layout, setLayout] = useState(Object.keys(layouts)[0])
+    const [layout, setLayout] = useState(0)
     const [anchorEl, setAnchorEl] = useState(null)
-    const [collapsed, setCollapsed] = useState(false)
+    const [collapsed, setCollapsed] = useState(null)
     const [shortId, setShortId] = useState(null)
     const [openShare, setOpenShare] = useState(false)
     const [query, setQuery] = useState(rest||{})
@@ -88,6 +104,8 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
     const cyref = useRef(null);
     const tableref = useRef(null);
     const prevInput = usePrevious(input)
+    const prevQuery = usePrevious(router.query)
+
 
     const [controller, setController] = React.useState(null)
 
@@ -156,20 +174,28 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
 		setAnchorEl(null);
 	};
 
-    const fetch_kg = async (userListId) => {
+    const handleClickFilter = (e) => {
+		setCollapsed(e.currentTarget);
+	  };
+	const handleCloseFilter = () => {
+		setCollapsed(null);
+	};
+    const fetch_kg = async () => {
         try {
             if (error !== null) {
                 await delay(5000);
             }
-            setCollapsed(true)
+            setCollapsed(null)
             setInputError(false)
-            setId(id+1)
             const controller = get_controller()
             const {
                 userListId,
                 gene_limit=default_options.gene_limit,
                 min_lib=default_options.min_lib,
-                gene_degree=default_options.gene_degree} = router.query
+                gene_degree=default_options.gene_degree,
+                expand,
+                remove
+            } = router.query
             const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : default_options.selected
             const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment`,
             {
@@ -180,10 +206,14 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     min_lib,
                     gene_limit,
                     gene_degree,
+                    expand: expand,
+                    remove: remove,
                 }),
                 signal: controller.signal
             })
             const results = (await res.json())
+            if (shouldUpdateId(router.query, prevQuery)) setId(id+1)
+            // setId(id+1)
             if (results.message) {
                 setError({message: "Error connecting to Enrichr, trying again...", type: "error"})
                 setOpenError(true)
@@ -191,6 +221,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                 setOpenError(false)
                 setError(null)
                 setLoading(false)
+                console.log(results)
                 setElements(results)
             }
         } catch (error) {
@@ -233,8 +264,8 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         setQuery(rest)
         const userListId = rest.userListId
         if (userListId) {
-            setLoading(true)
-            fetch_kg(userListId)
+            // setLoading(true)
+            fetch_kg()
          }
     }, [router.query])
 
@@ -244,39 +275,30 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         const userListId = rest.userListId
         if (userListId && (error !== null && error.type === "error")) {
             setLoading(true)
-            fetch_kg(userListId)
+            fetch_kg()
          }
     }, [error])
-
-    return (
-        <Grid container spacing={2} style={{marginBottom: 10}}>
-            {!collapsed && <Grid item xs={12} md={3}>
-                <Markdown markdown={props.description || ''}/>
-                <TextField multiline
-                    rows={10}
-                    placeholder={props.placeholder}
-                    fullWidth
-                    value={input.genes.join("\n")}
-                    onChange={(e)=>{
-                        setInput({
-                            ...input,
-                            genes: e.target.value.split(/[\t\r\n;]+/)
-                        })
-                    }}
-                />
-                <div align="center">
-                    <Button 
-                        onClick={()=>{
-                            setInput({
-                                genes: props.example.split(/[\t\r\n;]+/),
-                                description: "Sample Input"
-                            })
-                        }}
-                        
-                    >Try an Example</Button>
-                </div>
-                <FormControl sx={{ marginTop: 2 }} component="fieldset" variant="standard">
-                    <Grid container alignItems={"stretch"}>
+    
+    const GeneSetForm = () => (
+        <FormGroup>
+            <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                    <Grid container alignItems={"stretch"} spacing={1}>
+                        <Grid item xs={12} sx={{marginBottom: 2}}>
+                            <TextField multiline
+                                rows={10}
+                                placeholder={props.placeholder}
+                                fullWidth
+                                value={input.genes.join("\n")}
+                                label="Gene Set"
+                                onChange={(e)=>{
+                                    setInput({
+                                        ...input,
+                                        genes: e.target.value.split(/[\t\r\n;]+/)
+                                    })
+                                }}
+                            />
+                        </Grid>
                         <Grid item style={{ flexGrow: 1 }}>
                             <TextField
                                 variant='outlined'
@@ -284,6 +306,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                 size="small"
                                 onChange={e=>setInput({...input, description: e.target.value.trim().split(/[\t\r\n;]+/)})}
                                 placeholder="Description"
+                                label="Description"
                                 style={{width: "100%"}}
                             />
                         </Grid>
@@ -306,35 +329,48 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                 disabled={input.genes.length === 0}
                             >Submit</Button>
                         </Grid>
-                    </Grid>
-                    <FormGroup>
-                        <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5, marginTop: 5}}>
-                            <Grid item><Typography>Gene Library Connectivity</Typography></Grid>
-                            <Grid item style={{ flexGrow: 1 }}>
-                                <Slider 
-                                    value={min_lib || 1}
-                                    color="blues"
-                                    onChange={(e, nv)=>{
-                                        const new_query = {...query}
-                                        new_query.min_lib = nv
-                                        setQuery(new_query)
-                                    }}
-                                    style={{width: "100%"}}
-                                    min={1}
-                                    max={libraries_list.length}
-                                    aria-labelledby="continuous-slider" />
-                            </Grid>
-                            <Grid item>
-                                <Typography>
-                                    {min_lib || 1}
-                                    <Tooltip title={`Filter out genes that are not in multiple libraries.`}>
-                                        <IconButton size="small">
-                                            <InfoIcon />
-                                        </IconButton>
-                                    </Tooltip>
-                                </Typography>
+                        <Grid item xs={12} align="center">
+                            <Button 
+                                onClick={()=>{
+                                    setInput({
+                                        genes: props.example.split(/[\t\r\n;]+/),
+                                        description: "Sample Input"
+                                    })
+                                }}
+                                
+                            >Try an Example</Button>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
+                                <Grid item><Typography>Gene Library Connectivity</Typography></Grid>
+                                <Grid item style={{ flexGrow: 1 }}>
+                                    <Slider 
+                                        value={min_lib || 1}
+                                        color="blues"
+                                        onChange={(e, nv)=>{
+                                            const new_query = {...query}
+                                            new_query.min_lib = nv
+                                            setQuery(new_query)
+                                        }}
+                                        style={{width: "100%"}}
+                                        min={1}
+                                        max={libraries_list.length}
+                                        aria-labelledby="continuous-slider" />
+                                </Grid>
+                                <Grid item>
+                                    <Typography>
+                                        {min_lib || 1}
+                                        <Tooltip title={`Filter out genes that are not in multiple libraries.`}>
+                                            <IconButton size="small">
+                                                <InfoIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </Typography>
+                                </Grid>
                             </Grid>
                         </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
                         <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
                             <Grid item><Typography>Gene Connectivity</Typography></Grid>
                             <Grid item style={{ flexGrow: 1 }}>
@@ -362,6 +398,8 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                 </Typography>
                             </Grid>
                         </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
                         <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
                             <Grid item><Typography>Top Gene Limit</Typography></Grid>
                             <Grid item style={{ flexGrow: 1 }}>
@@ -389,49 +427,47 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                 </Typography>
                             </Grid>
                         </Grid>
-                        <FormLabel error={inputError}>Pick up to five libraries</FormLabel>
-                        {libraries_list.map(library=>(
-                            <React.Fragment key="library">
+                    </Grid>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <FormLabel error={inputError}>Pick up to five libraries</FormLabel>
+                    <Grid container>
+                    {libraries_list.map(library=>(
+                        <Grid item xs={12} key={library}>
+                            <Stack direction="row" spacing={1}>
                                 <FormControlLabel
                                     control={
-                                            <Checkbox checked={checked_libraries[library] !== undefined} 
-                                                onChange={()=>{
-                                                    if (checked_libraries[library]) {
-                                                        if (libraries.length > 1) {
-                                                            const new_query = {...query}
-                                                            new_query.libraries = JSON.stringify(libraries.filter(i=>i.library !== library))
-                                                            setQuery(new_query)
-                                                        }
-                                                    } else if (libraries.length < 5 ){
+                                        <Checkbox checked={checked_libraries[library] !== undefined} 
+                                            onChange={()=>{
+                                                if (checked_libraries[library]) {
+                                                    if (libraries.length > 1) {
                                                         const new_query = {...query}
-                                                        new_query.libraries = JSON.stringify([...libraries, {
-                                                            library,
-                                                            term_limit: default_term_limit
-                                                        }])
+                                                        new_query.libraries = JSON.stringify(libraries.filter(i=>i.library !== library))
                                                         setQuery(new_query)
-                                                    } else {
-                                                        setInputError(true)
                                                     }
-                                                }} 
-                                                name={library}
-                                            />
+                                                } else if (libraries.length < 5 ){
+                                                    const new_query = {...query}
+                                                    new_query.libraries = JSON.stringify([...libraries, {
+                                                        library,
+                                                        term_limit: default_term_limit
+                                                    }])
+                                                    setQuery(new_query)
+                                                } else {
+                                                    setInputError(true)
+                                                }
+                                            }} 
+                                            name={library}
+                                        />
                                     }
                                     label={
                                     <Typography>
                                         {library.replaceAll("_", " ")}
-                                        { checked_libraries[library] !== undefined && 
-                                            <Tooltip title={`Number of top ${library.replaceAll("_", " ")} terms to include`}>
-                                                <IconButton size="small">
-                                                    <InfoIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                        }
                                     </Typography>}
+                                    style={{width: "100%"}}
                                 />
-                                { checked_libraries[library] !== undefined && 
-                                    <Grid container alignItems={"center"} spacing={2}>
-                                        <Grid item><Typography>Term Limit :</Typography></Grid>
-                                        <Grid item style={{ flexGrow: 1 }}>
+                                {checked_libraries[library] !== undefined &&
+                                    <React.Fragment>
+                                        <Tooltip title={`Number of top ${library.replaceAll("_", " ")} terms to include`}>
                                             <Slider 
                                                 value={checked_libraries[library]}
                                                 color="blues"
@@ -448,69 +484,200 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                                     new_query.libraries = JSON.stringify(new_libraries)
                                                     setQuery(new_query)
                                                 }}
-                                                style={{marginBottom: -5, width: "100%"}}
+                                                style={{width: "100%"}}
                                                 min={1}
                                                 max={50}
                                                 aria-labelledby="continuous-slider" />
-                                        </Grid>
-                                        <Grid item>
-                                            <Typography>{checked_libraries[library] || default_term_limit}</Typography>
-                                        </Grid>
-                                    </Grid>
+                                        </Tooltip>   
+                                        <Typography>{checked_libraries[library] || default_term_limit}</Typography>
+                                    </React.Fragment>
                                 }
-                            </React.Fragment>
-                        ))}
-
-                    </FormGroup>
-                    <FormGroup>
-                        <Stack>
-                            <Typography variant="body1"><b>Relationship labels:</b><Switch
-                                color="blues"
-                                checked={edgeStyle.label}
-                                onChange={()=>{
-                                if (edgeStyle.label) setEdgeStyle({})
-                                else setEdgeStyle({label: 'data(label)'})
-                                }}
-                                name="checkedA"
-                                inputProps={{ 'aria-label': 'secondary checkbox' }}
-                            /></Typography>
-                        </Stack>
-                        <Stack>
-                            <Typography>Graph Layout:</Typography>
-                            <Selector entries={Object.keys(layouts)}
-                                value={layout}
-                                prefix={"layout"}
-                                onChange={(e, v)=>setLayout(e)}
-                                sx={{width: "100%", marginBottom: 2}}
-                            />
-                        </Stack>
-                    </FormGroup>
-                </FormControl>
-                <Button variant='contained'
-                    disabled={elements===null}
-                    onClick={()=>{
-                        setElements(null)
-                        setInput({})
-                        router.push({
-                            pathname: `/${page}`,
-                        }, undefined, { shallow: true })
-                    }}
-                    style={{marginRight: 5}}
-                >
-                    Clear Graph
-                </Button>
-                <Button variant='contained'
-                    disabled={elements===null}
-                    onClick={()=>{
-                        setId(id+1)
-                    }}
-                    style={{marginLeft: 5}}
-                >
-                    Re-orient Graph
-                </Button>
+                            </Stack>
+                        </Grid>
+                    ))}
+                    </Grid>
+                </Grid>
             </Grid>
+        </FormGroup>
+    )
+
+    
+    return (
+        <Grid container spacing={2} style={{marginBottom: 10}} alignItems="center" justifyContent={"space-between"}>
+            <Grid item>
+                <Tooltip title={collapsed ? "Show filters": "Hide filters"}>
+                    <Button onClick={handleClickFilter}
+                        startIcon={<InputIcon/>}
+                        variant="contained"
+                        size="large"
+                        color="primary"
+                    >
+                        Input Gene Set
+                    </Button>
+                </Tooltip>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={collapsed}
+                    open={collapsed!==null}
+                    onClose={handleCloseFilter}
+                    MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    <CardContent style={{width: 1000}}><GeneSetForm /></CardContent>
+                </Menu>
+            </Grid>
+            { elements !== null && 
+                <Grid item>
+                    <Grid container direction={"row"} justifyContent="flex-end">
+                        <Grid item>
+                            <Tooltip title="Re-orient graph">
+                                <IconButton variant='contained'
+                                    disabled={elements===null}
+                                    onClick={()=>{
+                                        setId(id+1)
+                                    }}
+                                    style={{marginLeft: 5}}
+                                >
+                                    <RefreshIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
+                        <Grid item>
+                            <Tooltip title="Clear Graph">
+                                <IconButton variant='contained'
+                                    disabled={elements===null}
+                                    onClick={()=>{
+                                        setElements(null)
+                                        setInput({})
+                                        router.push({
+                                            pathname: `/${page}`,
+                                        }, undefined, { shallow: true })
+                                    }}
+                                    style={{marginLeft: 5}}
+                                >
+                                    <HighlightOffIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
+                        <Grid item>
+                            <Tooltip title="Switch Graph Layout">
+                                <IconButton variant='contained'
+                                    disabled={elements===null}
+                                    onClick={()=>{
+                                        setLayout(layout + 1 === Object.keys(layouts).length ? 0: layout+1)
+                                    }}
+                                    style={{marginLeft: 5}}
+                                >
+                                    <FlipCameraAndroidIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
+                        <Grid item>
+                            <Tooltip title={edgeStyle.label ? "Hide edges": "Show edges"}>
+                                <IconButton variant='contained'
+                                    disabled={elements===null}
+                                    onClick={()=>{
+                                        if (edgeStyle.label) setEdgeStyle({})
+                                        else setEdgeStyle({label: 'data(label)'})
+                                    }}
+                                    style={{marginLeft: 5}}
+                                >
+                                    {edgeStyle.label ? <VisibilityOffIcon/>: <VisibilityIcon/>}
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
+                        <Grid item>
+                            <Tooltip title={"Download graph as an image file"}>
+                                <IconButton onClick={handleClickMenu}
+                                    aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={anchorEl!==null ? 'true' : undefined}
+                                ><CameraAltOutlinedIcon/></IconButton>
+                            </Tooltip>
+                            <Menu
+                                id="basic-menu"
+                                anchorEl={anchorEl}
+                                open={anchorEl!==null}
+                                onClose={handleCloseMenu}
+                                MenuListProps={{
+                                    'aria-labelledby': 'basic-button',
+                                }}
+                            >
+                                <MenuItem key={'png'} onClick={()=> {
+                                    handleCloseMenu()
+                                    fileDownload(cyref.current.png({output: "blob"}), "network.png")
+                                }}>PNG</MenuItem>
+                                <MenuItem key={'jpg'} onClick={()=> {
+                                    handleCloseMenu()
+                                    fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
+                                }}>JPG</MenuItem>
+                                <MenuItem key={'svg'} onClick={()=> {
+                                    handleCloseMenu()
+                                    fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
+                                }}>SVG</MenuItem>
+                            </Menu>
+                        </Grid>
+                        <Grid item>
+                            <Tooltip title={"View in Enrichr"}>
+                                <IconButton 
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href={`https://maayanlab.cloud/Enrichr/enrich?dataset=${shortId}`}
+                                >
+                                    <LinkIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
+                        <Grid item>
+                            <Tooltip title={"Share"}>
+                                <IconButton onClick={()=>setOpenShare(true)}>
+                                    <ShareIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Modal
+                                open={openShare}
+                                onClose={()=>{
+                                    setOpenShare(false)}
+                                }
+                                aria-labelledby="child-modal-title"
+                                aria-describedby="child-modal-description"
+                            >
+                                <Grid container
+                                    sx={{
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        transform: 'translate(-50%, -50%)',
+                                        width: 800,
+                                        bgcolor: 'background.paper',
+                                        border: '1px solid #000',
+                                        boxShadow: 15,
+                                        pt: 2,
+                                        px: 4,
+                                        pb: 3,
+                                        }}
+                                >
+                                    <Grid item xs={12}>
+                                        <Typography variant='h6'><b>Share Link</b></Typography>
+                                    </Grid>
+                                    <Grid item xs={11}>
+                                        <TextField size='small'
+                                            value={window.location}
+                                            style={{width: "100%"}}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={1}>
+                                        <IconButton onClick={()=>setOpenShare(false)}><HighlightOffIcon/></IconButton>
+                                    </Grid>
+                                </Grid>
+                            </Modal>
+                        </Grid>
+                    </Grid>
+                </Grid>
             }
-            <Grid item xs={12} md={collapsed ? 12: 9} style={{height: 1400}}>
+            
+            <Grid item xs={12} style={{height: userListId ? 800: 400}}>
                 {/* <Snackbar open={openError}
 					anchorOrigin={{ vertical:"top", horizontal:"right" }}
 					autoHideDuration={3000}
@@ -522,96 +689,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         </IconButton>
 					}
 				/> */}
-                {elements && 
-                    <React.Fragment>
-                        <Tooltip title={collapsed ? "Show filters": "Hide filters"}>
-                            <IconButton onClick={()=>setCollapsed(!collapsed)}>
-                                {collapsed ? <VisibilityIcon/> : <VisibilityOffIcon/>}
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title={"Download graph as an image file"}>
-                            <IconButton onClick={handleClickMenu}
-                                aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
-                                aria-haspopup="true"
-                                aria-expanded={anchorEl!==null ? 'true' : undefined}
-                            ><CameraAltOutlinedIcon/></IconButton>
-                        </Tooltip>
-                        <Menu
-                            id="basic-menu"
-                            anchorEl={anchorEl}
-                            open={anchorEl!==null}
-                            onClose={handleCloseMenu}
-                            MenuListProps={{
-                                'aria-labelledby': 'basic-button',
-                            }}
-                        >
-                            <MenuItem key={'png'} onClick={()=> {
-                                handleCloseMenu()
-                                fileDownload(cyref.current.png({output: "blob"}), "network.png")
-                            }}>PNG</MenuItem>
-                            <MenuItem key={'jpg'} onClick={()=> {
-                                handleCloseMenu()
-                                fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
-                            }}>JPG</MenuItem>
-                            <MenuItem key={'svg'} onClick={()=> {
-                                handleCloseMenu()
-                                fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
-                            }}>SVG</MenuItem>
-                        </Menu>
-                        <Tooltip title={"View in Enrichr"}>
-                            <IconButton 
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href={`https://maayanlab.cloud/Enrichr/enrich?dataset=${shortId}`}
-                            >
-                                <LinkIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title={"Share"}>
-                            <IconButton onClick={()=>setOpenShare(true)}>
-                                <ShareIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        <Modal
-                            open={openShare}
-                            onClose={()=>{
-                                setOpenShare(false)}
-                            }
-                            aria-labelledby="child-modal-title"
-                            aria-describedby="child-modal-description"
-                        >
-                        <Grid container
-                            sx={{
-                                position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                transform: 'translate(-50%, -50%)',
-                                width: 800,
-                                bgcolor: 'background.paper',
-                                border: '1px solid #000',
-                                boxShadow: 15,
-                                pt: 2,
-                                px: 4,
-                                pb: 3,
-                              }}
-                        >
-                            <Grid item xs={12}>
-                                <Typography variant='h6'><b>Share Link</b></Typography>
-                            </Grid>
-                            <Grid item xs={11}>
-                                <TextField size='small'
-                                    value={window.location}
-                                    style={{width: "100%"}}
-                                />
-                            </Grid>
-                            <Grid item xs={1}>
-                                <IconButton onClick={()=>setOpenShare(false)}><HighlightOffIcon/></IconButton>
-                            </Grid>
-                        </Grid>
-                    </Modal>
-                    </React.Fragment>
-                }
-                { (userListId === undefined) ? null 
+                { (userListId === undefined) ? <Grid item xs="12" align="center" style={{marginTop: "10%"}}><Markdown markdown={props.description || ''}/> </Grid>
                 : (elements === null) ? (
                 <CircularProgress/>
                 ) : elements.length === 0 ? (
@@ -711,7 +789,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         }
                         ]}
                         elements={elements}
-                        layout={layouts[layout]}
+                        layout={Object.values(layouts)[layout]}
                         cy={(cy) => {
                         cyref.current = cy
                         cy.on('click', 'node', function (evt) {
@@ -795,7 +873,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     }}
                     />
                 }
-                {elements && <Legend elements={elements} left={(sm || collapsed) ? "10%": "30%"} top={sm ? 2000: 550}/>}
+                {elements && <Legend elements={elements} top={sm ? 2000: 550}/>}
                 {(focused || node) && <TooltipCard 
                     node={focused || node}
                     schema={schema}
@@ -803,11 +881,12 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     setFocused={setFocused}
                     router={router}
                     top={sm ? 1500: 550}
+                    endpoint={`/${page}`}
                     />}
             </Grid>
             <Grid item xs={12}>
                 <div ref={tableref}>
-                <NetworkTable data={elements} schema={schema}/>
+                    <NetworkTable data={elements} schema={schema}/>,
                 </div>
             </Grid>
         </Grid>

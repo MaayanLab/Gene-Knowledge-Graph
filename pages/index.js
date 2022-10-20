@@ -8,7 +8,7 @@ import fileDownload from 'js-file-download'
 import * as default_schema from '../public/schema.json'
 import Color from 'color'
 import { isIFrame } from '../utils/helper';
-
+import { usePrevious, shouldUpdateId } from '../components/Enrichment';
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Box = dynamic(() => import('@mui/material/Box'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
@@ -54,7 +54,7 @@ export const layouts = {
 export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema}) {
   if (!schema) schema=default_schema  
   const router = useRouter()
-  const {start_term, end_term, start_field="label", end_field="label", limit=25, path_length, relation, order=(Object.keys(schema.order || {}))[0]} = router.query
+  const {start_term, end_term, start_field="label", end_field="label", limit=25, path_length, relation, order=(Object.keys(schema.order || {}))[0], remove, expand} = router.query
   let start = router.query.start
   let end = router.query.end
   if (!start) start = schema.nodes[0].node
@@ -76,6 +76,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   const [loading, setLoading] = React.useState(false)
   const [selected, setSelected] = React.useState([])
   const firstUpdate = useRef(true);
+  const prevQuery = usePrevious(router.query)
   const tooltip_templates = {}
   for (const i of schema.nodes) {
     tooltip_templates[i.node] = i.display
@@ -134,7 +135,6 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   
   const resolve_elements = async (isActive) => {
     try {
-      setLoading(true)
       const controller = get_controller()
       const body = {
         start,
@@ -155,6 +155,13 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       } else if (!end_term){
         body.relation = current_node.relation.join(",") || default_relations.join(",")
       }
+      if (remove) {
+        body.remove = remove
+      }
+      if (expand) {
+        body.expand = expand
+      }
+      
       const body_str = Object.entries(body).map(([k,v])=>`${k}=${v}`).join("&")
       
       const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph?${body_str}`,
@@ -175,7 +182,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       setElements(results)
       setLoading(false)
       setData(results)
-      setId(id => id+1)
+      if (shouldUpdateId(router.query, prevQuery)) setId(id+1)
     } catch (error) {
       console.error(error)
     }
@@ -194,6 +201,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
         }, undefined, {shallow: true})
       }
     } else {
+      setLoading(true)
       await  resolve_elements(isActive)
     }
   }, [start_term, limit])
@@ -202,13 +210,22 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
     // if (end_term) {
     //   await  resolve_elements(isActive)
     // }
+    setLoading(true)
     await  resolve_elements(isActive)
   }, [end_term])
+
+  useAsyncEffect(async (isActive) => {
+    // if (end_term) {
+    //   await  resolve_elements(isActive)
+    // }
+    if (remove || expand) await  resolve_elements(isActive)
+  }, [remove, expand])
 
   useAsyncEffect(async (isActive) => {
     if (firstUpdate.current && relation===undefined) {
       firstUpdate.current = false
     } else {
+      setLoading(true)
       await  resolve_elements(isActive)
     }
   }, [relation, path_length])
@@ -406,7 +423,6 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 value={relation ? relation.split(","): selected.length > 0 ? selected: current_node.relation || default_relations}
                 prefix={"edge"}
                 onChange={(e)=>{
-                  console.log(e)
                   const relation = e.filter(i=>i!=="").join(",")
                   if (relation === "") {
                     const {relation, ...query} = router.query

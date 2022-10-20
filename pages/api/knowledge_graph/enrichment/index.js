@@ -37,7 +37,17 @@ const enrichr_query = async ({userListId, library, term_limit}) => {
 
 // gene_limit: limits top genes
 // min_lib: Filters for genes that appear on multiple libraries
-const enrichment = async ({userListId, libraries, gene_limit, min_lib, gene_degree, session, res}) => {
+const enrichment = async ({
+    userListId,
+    libraries,
+    gene_limit,
+    min_lib,
+    gene_degree,
+    session,
+    remove,
+    expand:e,
+    res
+}) => {
     try {
         const results = await Promise.all(libraries.map(async ({library, term_limit})=>
             await enrichr_query({userListId, term_limit, library})
@@ -70,12 +80,29 @@ const enrichment = async ({userListId, libraries, gene_limit, min_lib, gene_degr
         } 
         const schema = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/schema`)).json()
         const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/aggregate`)).json()
-        const query = `
+            
+        let query = `
             MATCH p = (a)--(b) 
             WHERE a.label IN ${JSON.stringify(Object.keys(terms))} 
             AND b.label IN ${JSON.stringify(genes)}
-            RETURN p, nodes(p) as n, relationships(p) as r
         `
+        if (remove) {
+            query = query + `
+                AND NOT a.id in ${JSON.stringify(remove)}
+                AND NOT b.id in ${JSON.stringify(remove)}
+            `
+        }
+        query = query + `RETURN p, nodes(p) as n, relationships(p) as r`
+
+        // remove has precedence on expand
+        const expand = (e || []).filter(i=>(remove || []).indexOf(i) === -1)
+        if (expand) {
+            query = query + `
+                UNION
+                MATCH p = (c)--(d)
+                WHERE c.id in ${JSON.stringify(expand)}
+                RETURN p, nodes(p) as n, relationships(p) as r`
+        }
         const rs = await session.readTransaction(txc => txc.run(query))
         return resolve_results({results: rs, schema,  aggr_scores, colors, properties: terms})
     } catch (error) {
