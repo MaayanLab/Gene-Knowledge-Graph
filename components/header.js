@@ -9,6 +9,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
+const Stack = dynamic(() => import('@mui/material/Stack'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
 const Button = dynamic(() => import('@mui/material/Button'));
 const MenuIcon = dynamic(import('@mui/icons-material/Menu'));
@@ -158,15 +159,13 @@ const Header = ({schema, ...rest}) => {
 	const selection_rules = {}
 	for (const i of ((schema.header || {}).subheader||[])) {
 		icon_buttons.push(
-			<Grid item key={i.label} style={{marginLeft: 10, marginRight: 10}}>
-				<IconRenderer
-					router={router}
-					setSelected={setSelected}
-					selected={selected}
-					relation={relation}
-					{...i}
-				/>
-			</Grid>
+			<IconRenderer
+				router={router}
+				setSelected={setSelected}
+				selected={selected}
+				relation={relation}
+				{...i}
+			/>
 		)
 		for (const s of (i.props || {}).selected || []) {
 			selection_rules[s] = i.label
@@ -233,7 +232,9 @@ const Header = ({schema, ...rest}) => {
 			}
 			
 		</Grid>
-		{icon_buttons}
+		<Grid item xs={12} align="center">
+			<Stack direction={"row"} spacing={1}>{icon_buttons}</Stack>
+		</Grid>
 	</Grid>
 )}
 export default Header
