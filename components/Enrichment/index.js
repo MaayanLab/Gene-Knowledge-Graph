@@ -41,7 +41,7 @@ const Legend = dynamic(async () => (await import('../misc')).Legend);
 const NetworkTable =  dynamic(() => import('../network_table'))
 
 
-const delay = ms => new Promise(res => setTimeout(res, ms));
+export const delay = ms => new Promise(res => setTimeout(res, ms));
 
 // https://blog.logrocket.com/accessing-previous-props-state-react-hooks/
 export const usePrevious = (value) => {

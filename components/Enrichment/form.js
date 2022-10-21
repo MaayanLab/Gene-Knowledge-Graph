@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 import React, { useEffect, useState, useRef } from 'react';
 import Tooltip from '@mui/material/Tooltip';
-import { usePrevious } from '.';
+import { usePrevious, delay } from '.';
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import Slider from '@mui/material/Slider'
@@ -20,7 +20,6 @@ const Stack = dynamic(()=>import('@mui/material/Stack'))
 const TextField = dynamic(() => import('@mui/material/TextField'));
 
 
-const delay = ms => new Promise(res => setTimeout(res, ms));
 
 const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_controller, ...props}) => {
     const default_term_limit = default_options.term_limit
@@ -101,7 +100,15 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
         setQuery(rest)
     }, [router.query])
 
-    
+    useEffect(()=>{
+        const delayed_reset = async () => {
+            await delay(1000)
+            setInputError(false)
+        }
+        if (inputError) {
+            delayed_reset()
+        }
+    }, [inputError])
 
     return (
         <FormGroup>
