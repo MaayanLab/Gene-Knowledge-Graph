@@ -18,11 +18,13 @@ import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Modal from '@mui/material/Modal';
 import Grid from '@mui/material/Grid';
+import { Stack } from '@mui/material';
 
 // const Grid = dynamic(() => import('@mui/material/Grid'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
@@ -282,7 +284,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                             </Tooltip>
                         </Grid>
                         <Grid item>
-                            <Tooltip title={edgeStyle.label ? "Hide edges": "Show edges"}>
+                            <Tooltip title={edgeStyle.label ? "Hide edge labels": "Show edge labels"}>
                                 <IconButton variant='contained'
                                     disabled={elements===null}
                                     onClick={()=>{
@@ -376,7 +378,14 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                         />
                                     </Grid>
                                     <Grid item xs={1}>
-                                        <IconButton onClick={()=>setOpenShare(false)}><HighlightOffIcon/></IconButton>
+                                        <Stack direction={"row"}>
+                                            <Tooltip title="Copy Link">
+                                                <IconButton onClick={()=>navigator.clipboard.writeText(window.location)}><ContentCopyIcon/></IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Close">
+                                                <IconButton onClick={()=>setOpenShare(false)}><HighlightOffIcon/></IconButton>
+                                            </Tooltip>
+                                        </Stack>
                                     </Grid>
                                 </Grid>
                             </Modal>
@@ -590,7 +599,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     }}
                     />
                 }
-                {elements && <Legend elements={elements} top={sm ? 2000: 550}/>}
+                {(elements && userListId) && <Legend elements={elements} search={false} top={sm ? 2000: 550}/>}
                 {(focused || node) && <TooltipCard 
                     node={focused || node}
                     schema={schema}
