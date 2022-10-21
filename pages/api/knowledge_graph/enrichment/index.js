@@ -104,7 +104,6 @@ const enrichment = async ({
                 MATCH p = (c)--(d)
                 WHERE c.id in ${JSON.stringify(expand)}
                 RETURN p, nodes(p) as n, relationships(p) as r
-                LIMIT TOINTEGER($limit)
                 `
         }
         const rs = await session.readTransaction(txc => txc.run(query, {limit: expand_limit}))
