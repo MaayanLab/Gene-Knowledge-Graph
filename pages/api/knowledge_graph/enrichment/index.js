@@ -103,7 +103,6 @@ const enrichment = async ({
                 WHERE c.id in ${JSON.stringify(expand)}
                 RETURN p, nodes(p) as n, relationships(p) as r`
         }
-        console.error(query)
         const rs = await session.readTransaction(txc => txc.run(query))
         return resolve_results({results: rs, schema,  aggr_scores, colors, properties: terms})
     } catch (error) {

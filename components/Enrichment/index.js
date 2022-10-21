@@ -10,10 +10,8 @@ import ShareIcon from '@mui/icons-material/Share';
 
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
-import Slider from '@mui/material/Slider'
 
-import InfoIcon from '@mui/icons-material/Info'
-import LinkIcon from '@mui/icons-material/Link';
+import LinkIcon from '@mui/icons-material/Link'
 import InputIcon from '@mui/icons-material/Input';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
@@ -28,29 +26,18 @@ import Grid from '@mui/material/Grid';
 
 // const Grid = dynamic(() => import('@mui/material/Grid'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
-const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
-const FormLabel = dynamic(()=>import('@mui/material/FormLabel'))
-const FormControl = dynamic(()=>import('@mui/material/FormControl'))
-const FormGroup = dynamic(()=>import('@mui/material/FormGroup'))
-const FormControlLabel = dynamic(()=>import('@mui/material/FormControlLabel'))
-const Stack = dynamic(()=>import('@mui/material/Stack'))
-const Switch = dynamic(()=>import('@mui/material/Switch'))
 const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
 
 const TextField = dynamic(() => import('@mui/material/TextField'));
-const Card = dynamic(() => import('@mui/material/Card'));
 const CardContent = dynamic(() => import('@mui/material/CardContent'));
-const Tabs = dynamic(() => import('@mui/material/Tabs'));
-const Tab = dynamic(() => import('@mui/material/Tab'));
+const Link = dynamic(() => import('@mui/material/Link'));
 
 const CameraAltOutlinedIcon  = dynamic(() => import('@mui/icons-material/CameraAltOutlined'));
 
+const GeneSetForm = dynamic(() => import('./form'), {ssr: false})
 const Cytoscape = dynamic(() => import('../Cytoscape'), { ssr: false })
 const TooltipCard = dynamic(async () => (await import('../misc')).TooltipCard);
 const Legend = dynamic(async () => (await import('../misc')).Legend);
-const Selector = dynamic(async () => (await import('../misc')).Selector);
-
-const Markdown = dynamic(()=>import("../markdown"), {ssr: false});
 const NetworkTable =  dynamic(() => import('../network_table'))
 
 
@@ -75,7 +62,6 @@ export const shouldUpdateId = (query, prev_query) => {
 
 const Enrichment = ({default_options, libraries: libraries_list, schema, ...props}) => {
     const router = useRouter()
-    const default_term_limit = default_options.term_limit
     const {page, ...rest} = router.query
     const [error, setError] = useState(null)
     const [openError, setOpenError] = useState(false)
@@ -91,20 +77,14 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
     const [shortId, setShortId] = useState(null)
     const [openShare, setOpenShare] = useState(false)
     const [query, setQuery] = useState(rest||{})
-    const [inputError, setInputError] = useState(false)
     const [id, setId] = useState(0)
+    const prevQuery = usePrevious(router.query)
 
-    const {
-        userListId,
-        gene_limit=default_options.gene_limit,
-        min_lib=default_options.min_lib,
-        gene_degree=default_options.gene_degree} = query
-    const libraries = query.libraries ? JSON.parse(query.libraries) : default_options.selected
+
+    const {userListId} = router.query
     
     const cyref = useRef(null);
     const tableref = useRef(null);
-    const prevInput = usePrevious(input)
-    const prevQuery = usePrevious(router.query)
 
 
     const [controller, setController] = React.useState(null)
@@ -123,11 +103,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         }
     }
 
-    const same_prev_input = () => {
-        if (prevInput.genes.join('\n')!==input.genes.join('\n')) return false
-        else if (prevInput.description !== input.description) return false
-        else return true
-    }
+    
 
     const get_controller = () => {
         if (controller) controller.abort()
@@ -135,37 +111,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         setController(c)
         return c
       }
-
-    const checked_libraries = libraries.reduce((acc, i)=>({
-        ...acc,
-        [i.library]: i.term_limit
-    }), {})
-    const addList = async () => {
-        try {
-            setLoading(true)
-            const formData = new FormData();
-            // const gene_list = geneStr.trim().split(/[\t\r\n;]+/).join("\n")
-            const {genes, description} = input
-            const gene_list = genes.join("\n")
-            formData.append('list', (null, gene_list))
-            formData.append('description', (null, description))
-            const controller = get_controller()
-            const {shortId, userListId} = await (
-                await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/addList`, {
-                    method: 'POST',
-                    body: formData,
-                    signal: controller.signal
-                })
-            ).json()
-            setShortId(shortId)
-            router.push({
-                pathname: `/${page}`,
-                query: {...query, userListId},
-                }, undefined, { shallow: true })
-        } catch (error) {
-            console.error(error)
-        }
-    }
+    
 
     const handleClickMenu = (e) => {
 		setAnchorEl(e.currentTarget);
@@ -186,7 +132,6 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                 await delay(5000);
             }
             setCollapsed(null)
-            setInputError(false)
             const controller = get_controller()
             const {
                 userListId,
@@ -230,22 +175,9 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         }
     }
 
-    useEffect(()=>{
-        const {page, ...rest} = router.query
-        setQuery(rest)
-    }, [router.query])
+    
 
     useEffect(()=> {
-        const resolve_genes = async () => {
-            const {genes, description} = await (
-                await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/view?userListId=${userListId}`)
-            ).json()
-            setInput({
-                genes,
-                description
-            })
-        }
-
         const get_shortId = async () => {
             const {link_id} = await (
                 await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
@@ -253,7 +185,6 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
             setShortId(link_id)
         }
         if (userListId) {
-            resolve_genes()
             get_shortId()
         }
         // setCollapsed(userListId!==undefined)
@@ -261,7 +192,6 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
 
     useEffect(()=>{    
         const {page, ...rest} = router.query
-        setQuery(rest)
         const userListId = rest.userListId
         if (userListId) {
             // setLoading(true)
@@ -278,229 +208,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
             fetch_kg()
          }
     }, [error])
-    
-    const GeneSetForm = () => (
-        <FormGroup>
-            <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                    <Grid container alignItems={"stretch"} spacing={1}>
-                        <Grid item xs={12} sx={{marginBottom: 2}}>
-                            <TextField multiline
-                                rows={10}
-                                placeholder={props.placeholder}
-                                fullWidth
-                                value={input.genes.join("\n")}
-                                label="Gene Set"
-                                onChange={(e)=>{
-                                    setInput({
-                                        ...input,
-                                        genes: e.target.value.split(/[\t\r\n;]+/)
-                                    })
-                                }}
-                            />
-                        </Grid>
-                        <Grid item style={{ flexGrow: 1 }}>
-                            <TextField
-                                variant='outlined'
-                                value={input.description}
-                                size="small"
-                                onChange={e=>setInput({...input, description: e.target.value.trim().split(/[\t\r\n;]+/)})}
-                                placeholder="Description"
-                                label="Description"
-                                style={{width: "100%"}}
-                            />
-                        </Grid>
-                        <Grid item>
-                            <Button 
-                                onClick={()=>{
-                                    if (!same_prev_input()) {
-                                        if (input.genes.length > 0) {
-                                            addList()
-                                        }
-                                    } else {
-                                        router.push({
-                                            pathname: `/${page}`,
-                                            query,
-                                            }, undefined, { shallow: true }
-                                        )
-                                    }
-                                }}
-                                variant="contained"
-                                disabled={input.genes.length === 0}
-                            >Submit</Button>
-                        </Grid>
-                        <Grid item xs={12} align="center">
-                            <Button 
-                                onClick={()=>{
-                                    setInput({
-                                        genes: props.example.split(/[\t\r\n;]+/),
-                                        description: "Sample Input"
-                                    })
-                                }}
-                                
-                            >Try an Example</Button>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
-                                <Grid item><Typography>Gene Library Connectivity</Typography></Grid>
-                                <Grid item style={{ flexGrow: 1 }}>
-                                    <Slider 
-                                        value={min_lib || 1}
-                                        color="blues"
-                                        onChange={(e, nv)=>{
-                                            const new_query = {...query}
-                                            new_query.min_lib = nv
-                                            setQuery(new_query)
-                                        }}
-                                        style={{width: "100%"}}
-                                        min={1}
-                                        max={libraries_list.length}
-                                        aria-labelledby="continuous-slider" />
-                                </Grid>
-                                <Grid item>
-                                    <Typography>
-                                        {min_lib || 1}
-                                        <Tooltip title={`Filter out genes that are not in multiple libraries.`}>
-                                            <IconButton size="small">
-                                                <InfoIcon />
-                                            </IconButton>
-                                        </Tooltip>
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
-                            <Grid item><Typography>Gene Connectivity</Typography></Grid>
-                            <Grid item style={{ flexGrow: 1 }}>
-                                <Slider 
-                                    value={gene_degree || 1}
-                                    color="blues"
-                                    onChange={(e, nv)=>{
-                                        const new_query = {...query}
-                                        new_query.gene_degree = nv
-                                        setQuery(new_query)
-                                    }}
-                                    style={{width: "100%"}}
-                                    min={1}
-                                    max={libraries.reduce((acc, i)=>(acc+i.term_limit), 0)}
-                                    aria-labelledby="continuous-slider" />
-                            </Grid>
-                            <Grid item>
-                                <Typography>
-                                    {gene_degree || 1}
-                                    <Tooltip title={`Filter out genes with fewer connections`}>
-                                        <IconButton size="small">
-                                            <InfoIcon />
-                                        </IconButton>
-                                    </Tooltip>
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
-                            <Grid item><Typography>Top Gene Limit</Typography></Grid>
-                            <Grid item style={{ flexGrow: 1 }}>
-                                <Slider 
-                                    value={gene_limit || input.genes.length || 100}
-                                    color="blues"
-                                    onChange={(e, nv)=>{
-                                        const new_query = {...query}
-                                        new_query.gene_limit = nv
-                                        setQuery(new_query)
-                                    }}
-                                    style={{width: "100%"}}
-                                    min={1}
-                                    max={input.genes.length || 100}
-                                    aria-labelledby="continuous-slider" />
-                            </Grid>
-                            <Grid item>
-                                <Typography>
-                                    {gene_limit || input.genes.length || 100}
-                                    <Tooltip title={`Set this parameter to prioritize the top genes with most connections. (Set to all genes by default)`}>
-                                        <IconButton size="small">
-                                            <InfoIcon />
-                                        </IconButton>
-                                    </Tooltip>
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <FormLabel error={inputError}>Pick up to five libraries</FormLabel>
-                    <Grid container>
-                    {libraries_list.map(library=>(
-                        <Grid item xs={12} key={library}>
-                            <Stack direction="row" spacing={1}>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox checked={checked_libraries[library] !== undefined} 
-                                            onChange={()=>{
-                                                if (checked_libraries[library]) {
-                                                    if (libraries.length > 1) {
-                                                        const new_query = {...query}
-                                                        new_query.libraries = JSON.stringify(libraries.filter(i=>i.library !== library))
-                                                        setQuery(new_query)
-                                                    }
-                                                } else if (libraries.length < 5 ){
-                                                    const new_query = {...query}
-                                                    new_query.libraries = JSON.stringify([...libraries, {
-                                                        library,
-                                                        term_limit: default_term_limit
-                                                    }])
-                                                    setQuery(new_query)
-                                                } else {
-                                                    setInputError(true)
-                                                }
-                                            }} 
-                                            name={library}
-                                        />
-                                    }
-                                    label={
-                                    <Typography>
-                                        {library.replaceAll("_", " ")}
-                                    </Typography>}
-                                    style={{width: "100%"}}
-                                />
-                                {checked_libraries[library] !== undefined &&
-                                    <React.Fragment>
-                                        <Tooltip title={`Number of top ${library.replaceAll("_", " ")} terms to include`}>
-                                            <Slider 
-                                                value={checked_libraries[library]}
-                                                color="blues"
-                                                onChange={(e, nv)=>{
-                                                    const new_libraries = []
-                                                    for (const i of libraries) {
-                                                        if (i.library === library) new_libraries.push({
-                                                            library,
-                                                            term_limit: nv
-                                                        })
-                                                        else new_libraries.push(i)
-                                                    }
-                                                    const new_query = {...query}
-                                                    new_query.libraries = JSON.stringify(new_libraries)
-                                                    setQuery(new_query)
-                                                }}
-                                                style={{width: "100%"}}
-                                                min={1}
-                                                max={50}
-                                                aria-labelledby="continuous-slider" />
-                                        </Tooltip>   
-                                        <Typography>{checked_libraries[library] || default_term_limit}</Typography>
-                                    </React.Fragment>
-                                }
-                            </Stack>
-                        </Grid>
-                    ))}
-                    </Grid>
-                </Grid>
-            </Grid>
-        </FormGroup>
-    )
-
+    console.log(default_options)
     
     return (
         <Grid container spacing={2} style={{marginBottom: 10}} alignItems="center" justifyContent={"space-between"}>
@@ -524,7 +232,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         'aria-labelledby': 'basic-button',
                     }}
                 >
-                    <CardContent style={{width: 1000}}><GeneSetForm /></CardContent>
+                    <CardContent style={{width: 1000}}><GeneSetForm router={router} default_options={default_options} setLoading={setLoading} libraries_list={libraries_list} get_controller={get_controller} {...props}/></CardContent>
                 </Menu>
             </Grid>
             }
@@ -550,7 +258,6 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                     disabled={elements===null}
                                     onClick={()=>{
                                         setElements(null)
-                                        setInput({})
                                         router.push({
                                             pathname: `/${page}`,
                                         }, undefined, { shallow: true })
@@ -678,7 +385,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                 </Grid>
             }
             
-            <Grid item xs={12} style={{height: userListId ? 800: 600}}>
+            <Grid item xs={12} style={{height: userListId ? 800: "100%"}}>
                 {/* <Snackbar open={openError}
 					anchorOrigin={{ vertical:"top", horizontal:"right" }}
 					autoHideDuration={3000}
@@ -690,10 +397,16 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         </IconButton>
 					}
 				/> */}
-                { (userListId === undefined) ? <Grid item xs="12" align="center">
-                    <Markdown markdown={props.description || ''}/>
-                    <GeneSetForm />
-                </Grid>
+                { (userListId === undefined) ? <div align="center">
+                    <Typography sx={{marginBottom: 3}}>Enter a set of Entrez gene symbols to perform enrichment analysis with &nbsp;
+                        <Link href="https://maayanlab.cloud/Enrichr/" 
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Enrichr
+                        </Link>.</Typography>
+                    <GeneSetForm router={router} default_options={default_options} setLoading={setLoading} libraries_list={libraries_list} get_controller={get_controller} {...props}/>
+                </div>
                 : (elements === null) ? (
                 <CircularProgress/>
                 ) : elements.length === 0 ? (
