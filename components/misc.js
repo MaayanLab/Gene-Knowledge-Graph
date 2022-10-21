@@ -151,16 +151,18 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
   
   }
   
-  export const Legend = ({elements=[], left, top}) => {
+  export const Legend = ({elements=[], search=true, left, top}) => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('lg'));
     const sm = useMediaQuery(theme.breakpoints.down('sm'));
-    const colors = {
-      "Search Term": <Grid item xs={12} key={"search"}>
+    const colors = {  
+    }
+    if (search) {
+      colors["Search Term"] = <Grid item xs={12} key={"search"}>
       <Grid container alignItems={"center"} spacing={2}>
         <Grid item><Avatar sx={{background: "#F8333C", width: 55, height: 55}}> </Avatar></Grid>
         <Grid item><Typography>Search Term</Typography></Grid>   
-      </Grid></Grid>     
+      </Grid></Grid>   
     }
     for (const i of elements) {
       const {kind, color} = i.data
