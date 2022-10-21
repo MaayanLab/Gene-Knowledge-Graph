@@ -83,7 +83,7 @@ const Footer = ({schema}) => {
 			paddingTop: 40,
 			flexShrink: 0
 		}}>
-            <Grid container justifyContent="space-around">
+            <Grid container justifyContent="space-around" alignItems={"center"}>
                 {schema.footer.map(footer=><FooterContents key={footer.icon} footer={footer}/>)}
             </Grid>
         </Paper>
