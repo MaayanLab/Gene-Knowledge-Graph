@@ -500,7 +500,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
               </Tooltip>
           </Grid>
           <Grid item>
-            <Tooltip title={edgeStyle.label ? "Hide edges": "Show edges"}>
+            <Tooltip title={edgeStyle.label ? "Hide edge labels": "Show edge labels"}>
                 <IconButton variant='contained'
                     disabled={elements===null}
                     onClick={()=>{
