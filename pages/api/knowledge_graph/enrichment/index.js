@@ -46,6 +46,7 @@ const enrichment = async ({
     session,
     remove,
     expand:e,
+    expand_limit=10,
     res
 }) => {
     try {
@@ -95,15 +96,18 @@ const enrichment = async ({
         query = query + `RETURN p, nodes(p) as n, relationships(p) as r`
 
         // remove has precedence on expand
+        // TODO: ensure that expand is checked
         const expand = (JSON.parse(e || "[]")).filter(i=>(remove || []).indexOf(i) === -1)
         if ((expand || []).length) {
             query = query + `
                 UNION
                 MATCH p = (c)--(d)
                 WHERE c.id in ${JSON.stringify(expand)}
-                RETURN p, nodes(p) as n, relationships(p) as r`
+                RETURN p, nodes(p) as n, relationships(p) as r
+                LIMIT TOINTEGER($limit)
+                `
         }
-        const rs = await session.readTransaction(txc => txc.run(query))
+        const rs = await session.readTransaction(txc => txc.run(query, {limit: expand_limit}))
         return resolve_results({results: rs, schema,  aggr_scores, colors, properties: terms})
     } catch (error) {
         console.log(error)
