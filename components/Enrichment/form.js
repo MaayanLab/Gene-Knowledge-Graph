@@ -157,7 +157,7 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                     }
                                 }}
                                 variant="contained"
-                                disabled={input.genes.length === 0}
+                                // disabled={input.genes.length === 0}
                             >Submit</Button>
                         </Grid>
                         <Grid item xs={12} align="center">
@@ -175,28 +175,25 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                             <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
                                 <Grid item><Typography>Gene Library Connectivity</Typography></Grid>
                                 <Grid item style={{ flexGrow: 1 }}>
-                                    <Slider 
-                                        value={min_lib || 1}
-                                            onChange={(e, nv)=>{
-                                            const new_query = {...query}
-                                            new_query.min_lib = nv
-                                            setQuery(new_query)
-                                        }}
-                                        style={{width: "100%"}}
-                                        min={1}
-                                        max={libraries_list.length}
-                                        marks
-                                        valueLabelDisplay='auto'
-                                        aria-labelledby="gene-slider" />
+                                    <Tooltip title={`Filter out genes that are not in multiple libraries.`}>
+                                        <Slider 
+                                            value={min_lib || 1}
+                                                onChange={(e, nv)=>{
+                                                const new_query = {...query}
+                                                new_query.min_lib = nv
+                                                setQuery(new_query)
+                                            }}
+                                            style={{width: "100%"}}
+                                            min={1}
+                                            max={libraries_list.length}
+                                            marks
+                                            valueLabelDisplay='auto'
+                                            aria-labelledby="gene-slider" />
+                                        </Tooltip>
                                 </Grid>
-                                <Grid item>
+                                <Grid item xs={1}>
                                     <Typography>
                                         {min_lib || 1}
-                                        <Tooltip title={`Filter out genes that are not in multiple libraries.`}>
-                                            <IconButton size="small">
-                                                <InfoIcon />
-                                            </IconButton>
-                                        </Tooltip>
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -206,28 +203,25 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                         <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
                             <Grid item><Typography>Gene Connectivity</Typography></Grid>
                             <Grid item style={{ flexGrow: 1 }}>
-                                <Slider 
-                                    value={gene_degree || 1}
-                                    onChange={(e, nv)=>{
-                                        const new_query = {...query}
-                                        new_query.gene_degree = nv
-                                        setQuery(new_query)
-                                    }}
-                                    style={{width: "100%"}}
-                                    min={1}
-                                    max={libraries.reduce((acc, i)=>(acc+i.term_limit), 0)}
-                                    marks
-                                    valueLabelDisplay='auto'
-                                    aria-labelledby="degree-slider" />
+                                <Tooltip title={`Filter out genes with fewer connections`}>
+                                    <Slider 
+                                        value={gene_degree || 1}
+                                        onChange={(e, nv)=>{
+                                            const new_query = {...query}
+                                            new_query.gene_degree = nv
+                                            setQuery(new_query)
+                                        }}
+                                        style={{width: "100%"}}
+                                        min={1}
+                                        max={libraries.reduce((acc, i)=>(acc+i.term_limit), 0)}
+                                        marks
+                                        valueLabelDisplay='auto'
+                                        aria-labelledby="degree-slider" />
+                                    </Tooltip>
                             </Grid>
-                            <Grid item>
+                            <Grid item xs={1}>
                                 <Typography>
                                     {gene_degree || 1}
-                                    <Tooltip title={`Filter out genes with fewer connections`}>
-                                        <IconButton size="small">
-                                            <InfoIcon />
-                                        </IconButton>
-                                    </Tooltip>
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -236,27 +230,24 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                         <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
                             <Grid item><Typography>Top Gene Limit</Typography></Grid>
                             <Grid item style={{ flexGrow: 1 }}>
-                                <Slider 
-                                    value={query.gene_limit || input.genes.length || 100}
-                                    onChange={(e, nv)=>{
-                                        const new_query = {...query}
-                                        new_query.gene_limit = nv
-                                        setQuery(new_query)
-                                    }}
-                                    style={{width: "100%"}}
-                                    min={1}
-                                    max={input.genes.length || 100}
-                                    valueLabelDisplay='auto'
-                                    aria-labelledby="top-gene-slider" />
-                            </Grid>
-                            <Grid item>
-                                <Typography>
-                                    {gene_limit || input.genes.length || 100}
-                                    <Tooltip title={`Set this parameter to prioritize the top genes with most connections. (Set to all genes by default)`}>
-                                        <IconButton size="small">
-                                            <InfoIcon />
-                                        </IconButton>
+                                <Tooltip title={`Set this parameter to prioritize the top genes with most connections. (Set to all genes by default)`}>
+                                    <Slider 
+                                        value={query.gene_limit || input.genes.length || 100}
+                                        onChange={(e, nv)=>{
+                                            const new_query = {...query}
+                                            new_query.gene_limit = nv
+                                            setQuery(new_query)
+                                        }}
+                                        style={{width: "100%"}}
+                                        min={1}
+                                        max={input.genes.length || 100}
+                                        valueLabelDisplay='auto'
+                                        aria-labelledby="top-gene-slider" />
                                     </Tooltip>
+                            </Grid>
+                            <Grid item xs={1}>
+                                <Typography>
+                                    {query.gene_limit || input.genes.length || 100}
                                 </Typography>
                             </Grid>
                         </Grid>
