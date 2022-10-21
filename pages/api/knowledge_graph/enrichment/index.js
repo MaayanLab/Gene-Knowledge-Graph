@@ -86,7 +86,7 @@ const enrichment = async ({
             WHERE a.label IN ${JSON.stringify(Object.keys(terms))} 
             AND b.label IN ${JSON.stringify(genes)}
         `
-        if (remove.length) {
+        if ((remove || []).length) {
             query = query + `
                 AND NOT a.id in ${remove}
                 AND NOT b.id in ${remove}
@@ -96,7 +96,7 @@ const enrichment = async ({
 
         // remove has precedence on expand
         const expand = (JSON.parse(e || "[]")).filter(i=>(remove || []).indexOf(i) === -1)
-        if (expand.length) {
+        if ((expand || []).length) {
             query = query + `
                 UNION
                 MATCH p = (c)--(d)

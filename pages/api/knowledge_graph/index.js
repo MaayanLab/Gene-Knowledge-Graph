@@ -143,7 +143,7 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 		// WITH nodes(p) as n, relationships(p) as r
 		// RETURN * LIMIT ${limit}`
 	} 
-	if (remove.length) {
+	if ((remove || []).length) {
 		query = query + `
 			WHERE NOT a.id in ${JSON.stringify(remove)}
 			AND NOT b.id in ${JSON.stringify(remove)}
@@ -153,7 +153,7 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 
 	// remove has precedence on expand
 	const expand = (e || []).filter(i=>(remove || []).indexOf(i) === -1)
-	if (expand.length) {
+	if ((expand || []).length) {
 		query = query + `
 			UNION
 			MATCH p = (c)--(d)
@@ -186,7 +186,7 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
 		query = query.replace(`[*${path_length}]`,`[:${rels}*${path_length}]`)
 	}
-	if (remove.length) {
+	if ((remove || []).length) {
 		query = query + `
 			WHERE NOT st.id in ${JSON.stringify(remove)}
 			AND NOT en.id in ${JSON.stringify(remove)}
@@ -196,7 +196,7 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 
 	// remove has precedence on expand
 	const expand = (e || []).filter(i=>(remove || []).indexOf(i) === -1)
-	if (expand.length) {
+	if ((expand || []).length) {
 		query = query + `
 			UNION
 			MATCH p = (c)--(d)
