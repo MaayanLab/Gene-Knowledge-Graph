@@ -71,7 +71,6 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
     const [node, setNode] = useState(null)
     const [focused, setFocused] = useState(null)
     const [loading, setLoading] = useState(false)
-    const [input, setInput] = useState({genes: [], description: ''})
     const [edgeStyle, setEdgeStyle] = useState({label: 'data(label)'})
     const [layout, setLayout] = useState(0)
     const [anchorEl, setAnchorEl] = useState(null)
@@ -159,17 +158,18 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                 signal: controller.signal
             })
             const results = (await res.json())
-            if (shouldUpdateId(router.query, prevQuery)) setId(id+1)
             // setId(id+1)
             if (results.message) {
                 setError({message: "Error connecting to Enrichr, trying again...", type: "error"})
                 setOpenError(true)
+                if (shouldUpdateId(router.query, prevQuery)) setId(id+1)
             } else {
                 setOpenError(false)
                 setError(null)
                 setLoading(false)
-                console.log(results)
                 setElements(results)
+                if (shouldUpdateId(router.query, prevQuery)) setId(id+1)
+            
             }
         } catch (error) {
             setError({message: "Error connecting to Enrichr, trying again...", type: "error"})
