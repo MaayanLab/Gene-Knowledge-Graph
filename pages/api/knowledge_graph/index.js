@@ -186,24 +186,43 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
 		query = query.replace(`[*${path_length}]`,`[:${rels}*${path_length}]`)
 	}
+	const vars = {}
 	if ((remove || []).length) {
-		query = query + `
-			WHERE NOT st.id in ${JSON.stringify(remove)}
-			AND NOT en.id in ${JSON.stringify(remove)}
-		`
+		for (const ind in remove) {
+			vars[`remove_${ind}`] = remove[ind]
+			if (ind === "0") {
+				query = query + `
+					WHERE NOT st.id = $remove_${ind}
+					AND NOT en.id = $remove_${ind}
+				`
+			}
+			else {
+				query = query + `
+					AND NOT st.id = $remove_${ind}
+					AND NOT en.id = $remove_${ind}
+				`
+			}
+		}
 	}
 	query = query + `RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
 
 	// remove has precedence on expand
 	const expand = (e || []).filter(i=>(remove || []).indexOf(i) === -1)
 	if ((expand || []).length) {
-		query = query + `
-			UNION
-			MATCH p = (c)--(d)
-			WHERE c.id in ${JSON.stringify(expand)}
-			RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
+		for (const ind in expand) {
+			vars[`expand_${ind}`] = expand[ind]
+			query = query + `
+				UNION
+				MATCH p = (c)--(d)
+				WHERE c.id = $expand_${ind}
+				RETURN p, nodes(p) as n, relationships(p) as r
+				LIMIT 10
+			`   
+		}
 	}
-	const results = await session.readTransaction(txc => txc.run(query, { term, limit }))
+	console.log(query)
+	console.log(vars)
+	const results = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
 	return resolve_results({results, terms: [term], schema, order, score_fields,  aggr_scores, colors, field})
 }
 

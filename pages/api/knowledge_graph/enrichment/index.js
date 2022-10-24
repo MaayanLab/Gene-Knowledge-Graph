@@ -44,7 +44,7 @@ const enrichment = async ({
     min_lib,
     gene_degree,
     session,
-    remove,
+    remove: r,
     expand:e,
     expand_limit=10,
     res
@@ -87,11 +87,17 @@ const enrichment = async ({
             WHERE a.label IN ${JSON.stringify(Object.keys(terms))} 
             AND b.label IN ${JSON.stringify(genes)}
         `
+        const vars = {}
+        const remove = (JSON.parse(r || "[]"))
         if ((remove || []).length) {
-            query = query + `
-                AND NOT a.id in ${remove}
-                AND NOT b.id in ${remove}
+            for (const ind in remove) {
+                vars[`remove_${ind}`] = remove[ind]
+                query = query + `
+                AND NOT a.id = $remove_${ind}
+                AND NOT b.id = $remove_${ind}
             `
+            }
+            
         }
         query = query + `RETURN p, nodes(p) as n, relationships(p) as r`
 
@@ -99,14 +105,20 @@ const enrichment = async ({
         // TODO: ensure that expand is checked
         const expand = (JSON.parse(e || "[]")).filter(i=>(remove || []).indexOf(i) === -1)
         if ((expand || []).length) {
-            query = query + `
-                UNION
-                MATCH p = (c)--(d)
-                WHERE c.id in ${JSON.stringify(expand)}
-                RETURN p, nodes(p) as n, relationships(p) as r
-                `
+            for (const ind in expand) {
+                vars[`expand_${ind}`] = expand[ind]
+                query = query + `
+                    UNION
+                    MATCH p = (c)--(d)
+                    WHERE c.id = $expand_${ind}
+                    RETURN p, nodes(p) as n, relationships(p) as r
+                    LIMIT 10
+                `   
+            }
         }
-        const rs = await session.readTransaction(txc => txc.run(query, {limit: expand_limit}))
+        console.log(query)
+        console.log(vars)
+        const rs = await session.readTransaction(txc => txc.run(query, {limit: expand_limit, ...vars}))
         return resolve_results({results: rs, schema,  aggr_scores, colors, properties: terms})
     } catch (error) {
         console.log(error)
