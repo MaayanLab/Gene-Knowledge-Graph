@@ -13,6 +13,7 @@ const Stack = dynamic(() => import('@mui/material/Stack'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
 const Button = dynamic(() => import('@mui/material/Button'));
 const MenuIcon = dynamic(import('@mui/icons-material/Menu'));
+const Counter = dynamic(import('./counter'));
 
 const function_mapper = {
 	filter_relation: ({router, selected, relation, label, props})=>{
@@ -183,7 +184,7 @@ const Header = ({schema, ...rest}) => {
 	if (schema === undefined || schema.header === undefined) return null
 	
 	return(
-	<Grid container justifyContent={"center"} alignItems={"center"} spacing={2} style={{marginBottom: 20, marginTop: 20}}>
+	<Grid container style={{paddingBottom: 20, paddingTop: 20}}>
 		<Grid item xs={12} align="center">
 			{ schema.header.icon ?
 				<Grid container justifyContent={"center"} alignItems={"center"} spacing={2}>
@@ -234,6 +235,11 @@ const Header = ({schema, ...rest}) => {
 		</Grid>
 		<Grid item xs={12} align="center">
 			<Stack direction={"row"} spacing={1}>{icon_buttons}</Stack>
+		</Grid>
+		<Grid item xs={12}>
+			<Grid container justifyContent={"flex-start"}>
+				<Grid item><Counter/></Grid>
+			</Grid>
 		</Grid>
 	</Grid>
 )}

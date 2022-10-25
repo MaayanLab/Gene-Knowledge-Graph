@@ -143,6 +143,7 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 		// WITH nodes(p) as n, relationships(p) as r
 		// RETURN * LIMIT ${limit}`
 	} 
+	const vars = {}
 	if ((remove || []).length) {
 		query = query + `
 			WHERE NOT a.id in ${JSON.stringify(remove)}
@@ -153,18 +154,24 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 
 	// remove has precedence on expand
 	const expand = (e || []).filter(i=>(remove || []).indexOf(i) === -1)
+
 	if ((expand || []).length) {
-		query = query + `
-			UNION
-			MATCH p = (c)--(d)
-			WHERE c.id in ${JSON.stringify(expand)}
-			RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
+		for (const ind in expand) {
+			vars[`expand_${ind}`] = expand[ind]
+			query = query + `
+				UNION
+				MATCH p = (c)--(d)
+				WHERE c.id = $expand_${ind}
+				RETURN p, nodes(p) as n, relationships(p) as r
+				LIMIT 10
+			`   
+		}
 	}
 
 	
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 	// query = `${query} RETURN * ORDER BY rand() LIMIT ${limit}`
-	const results = await session.readTransaction(txc => txc.run(query, { start_term, end_term, limit }))
+	const results = await session.readTransaction(txc => txc.run(query, { start_term, end_term, limit, ...vars }))
 	return resolve_results({results, terms: [start_term, end_term], schema, order, score_fields,  aggr_scores, colors, start_field, end_field})
 }
 
@@ -220,8 +227,6 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 			`   
 		}
 	}
-	console.log(query)
-	console.log(vars)
 	const results = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
 	return resolve_results({results, terms: [term], schema, order, score_fields,  aggr_scores, colors, field})
 }
@@ -241,9 +246,11 @@ export default async function query(req, res) {
 		try {
 			if (start && end && start_term && end_term) {
 				const results = await resolve_two_terms({session, start_term, start_field, start, end_term, end_field, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : []})
+				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
 				res.status(200).send(results)
 			} else if (start) {
 				const results = await resolve_one_term({session, start, field: start_field, term: start_term, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : []})
+				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
 				res.status(200).send(results)
 			} else {
 				res.status(400).send("Invalid input")

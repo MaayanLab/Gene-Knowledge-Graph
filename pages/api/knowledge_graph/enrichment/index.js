@@ -116,9 +116,8 @@ const enrichment = async ({
                 `   
             }
         }
-        console.log(query)
-        console.log(vars)
         const rs = await session.readTransaction(txc => txc.run(query, {limit: expand_limit, ...vars}))
+        fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
         return resolve_results({results: rs, schema,  aggr_scores, colors, properties: terms})
     } catch (error) {
         console.log(error)
