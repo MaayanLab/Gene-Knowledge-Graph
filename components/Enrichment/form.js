@@ -39,9 +39,15 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
     
     const prevInput = usePrevious(input)
 
-    const same_prev_input = () => {
+    const same_prev_input = async () => {
+        if (!userListId) return false
+        const {genes, description} = await (
+            await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/view?userListId=${userListId}`)
+        ).json()
+        if (genes.join("\n") !== input.genes.join('\n')) return false
+        if (description !== input.description) return false
         if (prevInput.genes.join('\n')!==input.genes.join('\n')) return false
-        else if (prevInput.description !== input.description) return false
+        if (prevInput.description !== input.description) return false
         else return true
     }
 
@@ -57,8 +63,8 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
             // const gene_list = geneStr.trim().split(/[\t\r\n;]+/).join("\n")
             const {genes, description} = input
             const gene_list = genes.join("\n")
-            formData.append('list', (null, gene_list))
-            formData.append('description', (null, description))
+            formData.append('list', gene_list)
+            formData.append('description', description)
             const controller = get_controller()
             const {shortId, userListId} = await (
                 await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/addList`, {
@@ -143,8 +149,8 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                         </Grid>
                         <Grid item>
                             <Button 
-                                onClick={()=>{
-                                    if (!same_prev_input()) {
+                                onClick={async ()=>{
+                                    if (!(await same_prev_input())) {
                                         if (input.genes.length > 0) {
                                             addList()
                                         }
