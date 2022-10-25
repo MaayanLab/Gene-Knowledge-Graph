@@ -228,9 +228,9 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                     </Grid>
                     <Grid item xs={12}>
                         <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
-                            <Grid item><Typography>Top Gene Limit</Typography></Grid>
+                            <Grid item><Typography>Gene Limit</Typography></Grid>
                             <Grid item style={{ flexGrow: 1 }}>
-                                <Tooltip title={`Set this parameter to prioritize the top genes with most connections. (Set to all genes by default)`}>
+                                <Tooltip title={`How many genes should the knowledge graph return? (Prioritized by gene connectivity)`}>
                                     <Slider 
                                         value={query.gene_limit || input.genes.length || 100}
                                         onChange={(e, nv)=>{
