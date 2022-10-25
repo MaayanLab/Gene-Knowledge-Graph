@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { makeTemplate } from "../utils/helper";
-
+import { precise } from "../utils/helper";
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Button = dynamic(() => import('@mui/material/Button'));
 const DataGrid = dynamic(async () => (await import('@mui/x-data-grid')).DataGrid);
@@ -123,7 +123,7 @@ const NetworkTable = ({data, schema}) => {
 							}
 						} else {
 							const val = makeTemplate(i.text, properties)
-							processed[key].data[properties.id][i.field] = val === "undefined" ? "": val
+							processed[key].data[properties.id][i.field] = val === "undefined" ? "": precise(val)
 						}
 					}
 					if (processed[key].data[properties.id]["label"] === "") processed[key].data[properties.id]["label"] = label
