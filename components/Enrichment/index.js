@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router';
 import React, { useEffect, useState, useRef } from 'react';
-import { layouts } from '../../pages';
+import { layouts } from '../kg';
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery';
 import fileDownload from 'js-file-download'
