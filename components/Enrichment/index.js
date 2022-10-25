@@ -57,7 +57,6 @@ export const usePrevious = (value) => {
 export const shouldUpdateId = (query, prev_query) => {
     const {remove: curr_remove, page: curr_page, ...curr} = query
     const {remove: prev_remove, page: prev_page, ...prev} = prev_query
-    console.log(JSON.stringify(curr), JSON.stringify(prev), JSON.stringify(curr) !== JSON.stringify(prev))
     if (JSON.stringify(curr) !== JSON.stringify(prev)) return true
     else return false
 }
@@ -210,10 +209,9 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
             fetch_kg()
          }
     }, [error])
-    console.log(default_options)
     
     return (
-        <Grid container spacing={2} style={{marginBottom: 10}} alignItems="center" justifyContent={"space-between"}>
+        <Grid container spacing={2} style={{paddingBottom: 10}} alignItems="center" justifyContent={"space-between"}>
             { elements !== null && <Grid item>
                 <Tooltip title={collapsed ? "Show filters": "Hide filters"}>
                     <Button onClick={handleClickFilter}
