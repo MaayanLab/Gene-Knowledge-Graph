@@ -79,11 +79,13 @@ const Footer = ({schema}) => {
     return (
         <Paper square style={{boxShadow: "none",
 			height: 180,
-			background: "lightgray",
-			paddingTop: 40,
+			background: "#ffd79a",
 			flexShrink: 0
 		}}>
-            <Grid container justifyContent="space-around" alignItems={"center"}>
+            <Grid container justifyContent="space-around" alignItems={"center"} style={{
+				marginTop: "auto",
+				marginBottom: "auto",
+			}}>
                 {schema.footer.map(footer=><FooterContents key={footer.icon} footer={footer}/>)}
             </Grid>
         </Paper>
