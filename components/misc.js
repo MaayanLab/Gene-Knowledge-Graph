@@ -63,7 +63,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
           zIndex: 'tooltip',
           position: 'absolute',
           top: top || (matches ? 550: sm ? 1050: 850),
-          right: right || '10%',
+          right: right || '20%',
         }}>
         <Card>
           <CardContent>
