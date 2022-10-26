@@ -63,7 +63,7 @@ export const layouts = {
 export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema}) {
   if (!schema) schema=default_schema  
   const router = useRouter()
-  const {start_term, end_term, start_field="label", end_field="label", limit=25, path_length, relation, order=(Object.keys(schema.order || {}))[0], remove, expand} = router.query
+  const {page, start_term, end_term, start_field="label", end_field="label", limit=25, path_length, relation, order=(Object.keys(schema.order || {}))[0], remove, expand} = router.query
   let start = router.query.start
   let end = router.query.end
   if (!start) start = schema.nodes[0].node
@@ -101,7 +101,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   const tableref = useRef(null);
   const redirect = (query) => {
     router.push({
-      pathname: schema.endpoint || '',
+      pathname: `/${page || ''}`,
       query
     }, undefined, {shallow: true})
   }
@@ -209,7 +209,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
     if (current_node && !start_term) {
       if (elements === undefined) {
         router.push({
-          pathname: schema.endpoint || '',
+          pathname: `/${page || ''}`,
           query: {
             start,
             start_term: current_node.example[0],
@@ -286,7 +286,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                       query.relation = relation
                     }
                     router.push({
-                      pathname:  schema.endpoint || '',
+                      pathname: `/${page || ''}`,
                       query
                     }, undefined, { shallow: true })
                   }
@@ -393,7 +393,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                   }
                   if (relation) query.relation = relation
                   router.push({
-                    pathname:  schema.endpoint || '',
+                    pathname: `/${page || ''}`,
                     query,
                   }, undefined, { shallow: true })
                 }}
@@ -467,7 +467,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 color="blues"
                 onChange={(e, nv)=>{
                   router.push({
-                    pathname: schema.endpoint || '',
+                    pathname: `/${page || ''}`,
                     query: {
                       ...router.query,
                       limit: nv
@@ -557,7 +557,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 color="blues"
                 onChange={(e, nv)=>{
                   router.push({
-                    pathname: schema.endpoint || '',
+                    pathname: `/${page || ''}`,
                     query: {
                       ...router.query,
                       limit: nv
