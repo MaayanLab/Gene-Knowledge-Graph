@@ -1,55 +1,40 @@
-import React from 'react';
-import dynamic from 'next/dynamic'
-import { fetch_kg_schema, get_terms } from '../utils/initialize';
-import * as default_schema from '../public/schema.json'
-import Color from 'color'
+import { useRouter } from 'next/router';
+import { init_function, fetch_kg_schema } from '../utils/initialize';
 
-const KnowledgeGraph = dynamic(() => import('../components/kg'));
+import {components} from '../components/ComponentSelector'
 
-export default function Home(props){
-  return <KnowledgeGraph {...props}/>
+export default function Home({schema, component, ...props}){
+  const router = useRouter()
+  if (components[component] !== undefined){
+      return components[component]({schema, ...props})
+  } else {
+    console.error("Invalid component")
+    router.push(`/error`)
+  }
 }
 
 export async function getStaticProps(ctx) {
-	const entries = {}
-  const palettes = {}
-  const nodes = {}
-  let edges = []
-  let default_relations = []
-  let schema = default_schema
-  let s = null
-  if (process.env.NEXT_PUBLIC_SCHEMA) {
-    schema = await fetch_kg_schema()
-    s = schema
+  const schema = await fetch_kg_schema()
+
+  const {type, component=null, props={}} = schema.header.tabs.filter(i=>i.endpoint === "/")[0] || {}
+  const src = props.src
+  let markdown
+  if (src && type === "markdown") {
+    markdown = await (await fetch(get_path(makeTemplate(src, {})))).text()
   }
-	for (const i of schema.nodes) {
-		const {node, example, palette, search} = i
-		const results = await get_terms(node, search)
-    entries[node] = results
-    nodes[node] = i
-    const {name, main, light, dark, contrastText} = palette
-    palettes[name] = {
-      main,
-      light: light || Color(main).lighten(0.25).hex(),
-      dark: dark || Color(main).darken(0.25).hex(),
-      contrastText: contrastText || "#000"
-    }
-	}
-  for (const i of schema.edges) {
-    edges = [...edges, ...(i.match || [])]
-    if (i.selected) {
-      default_relations = [...default_relations,  ...(i.match || [])]
-    }
+  const {init_function: init, ...rest} = props
+  let initialized={}
+  if (init) {
+    initialized = await init_function[init]()
   }
-  
+
   return {
 	  props: {
-  	    entries,
-        nodes,
-        schema: s,
-        palettes,
-        edges,
-        default_relations
-    },
+      schema,
+      markdown: markdown || null,
+      component,
+      ...rest,
+      ...initialized,
+    }
 	};
 }

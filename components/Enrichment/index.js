@@ -259,7 +259,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                     onClick={()=>{
                                         setElements(null)
                                         router.push({
-                                            pathname: `/${page}`,
+                                            pathname: `/${page || ''}`,
                                         }, undefined, { shallow: true })
                                     }}
                                     style={{marginLeft: 5}}

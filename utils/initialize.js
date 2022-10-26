@@ -3,10 +3,10 @@ import { neo4jDriver } from "./neo4j"
 import fetch from 'isomorphic-unfetch'
 import * as default_schema from '../public/schema.json'
 import { toNumber } from "./helper"
+import Color from 'color'
 
 export async function get_terms(node, search) {
   try {
-	console.log(`Connecting to ${process.env.NEO4J_URL}`)
     const session = neo4jDriver.session({
       defaultAccessMode: neo4j.session.READ
     })
@@ -69,16 +69,62 @@ export async function get_terms(node, search) {
 }
 
 export const fetch_kg_schema = async () => {
-	const r = await fetch(process.env.NEXT_PUBLIC_SCHEMA)
-	if (!r.ok) {
-		throw new Error(`Error communicating with ${process.env.NEXT_PUBLIC_SCHEMA}`)
-	}
-	return await r.json()
-  }
-export const fetch_schema = async () => {
 	let schema = default_schema
 	if (process.env.NEXT_PUBLIC_SCHEMA) {
-		schema = await fetch_kg_schema()
+		const r = await fetch(`${process.env.NEXT_PUBLIC_SCHEMA}`)
+		if (!r.ok) {
+			throw new Error(`Error communicating with ${process.env.NEXT_PUBLIC_SCHEMA}`)
+		}
+		schema = await r.json()
 	}
+	
 	return schema
+	// const r = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/knowledge_graph/schema`)
+	// if (!r.ok) {
+	// 	throw new Error(`Error communicating with {process.env.NEXT_PUBLIC_HOST}/api/knowledge_graph/schema`)
+	// }
+	// else return await r.json()
+  }
+
+
+export const initialize_kg = async () => {
+	const entries = {}
+	const palettes = {}
+	const nodes = {}
+	let edges = []
+	let default_relations = []
+	let schema = await fetch_kg_schema()
+  
+	for (const i of schema.nodes) {
+		const {node, example, palette, search} = i
+		const results = await get_terms(node, search)
+		entries[node] = results
+		nodes[node] = i
+		const {name, main, light, dark, contrastText} = palette
+		palettes[name] = {
+		main,
+		light: light || Color(main).lighten(0.25).hex(),
+		dark: dark || Color(main).darken(0.25).hex(),
+		contrastText: contrastText || "#000"
+		}
+	}
+  for (const i of schema.edges) {
+    edges = [...edges, ...(i.match || [])]
+    if (i.selected) {
+      default_relations = [...default_relations,  ...(i.match || [])]
+    }
+  }
+  
+  return {
+  	    entries,
+        nodes,
+        schema,
+        palettes,
+        edges,
+        default_relations
+	}
+}
+
+export const init_function = {
+	initialize_kg
 }

@@ -74,7 +74,7 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                 })
             ).json()
             router.push({
-                pathname: `/${page}`,
+                pathname: `/${page || ''}`,
                 query: {...query, userListId},
                 }, undefined, { shallow: true })
         } catch (error) {
@@ -156,7 +156,7 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                         }
                                     } else {
                                         router.push({
-                                            pathname: `/${page}`,
+                                            pathname: `/${page || ''}`,
                                             query,
                                             }, undefined, { shallow: true }
                                         )
