@@ -46,7 +46,7 @@ const NetworkTable = ({data, schema}) => {
 								flex: 1,
 								style: {flexDirection: "row"},
 								align: "left",
-								type: relation ? "edge": "node"
+								type: relation ? "edge": "node",
 							})
 							for (const prop of display[key]) {
 								const field = prop.label
@@ -62,7 +62,8 @@ const NetworkTable = ({data, schema}) => {
 										href: prop.href,
 										renderCell: ({row, field})=>{
 											return <Button href={row[field].href}>{row[field].text}</Button>
-										}
+										},
+										count: 0
 									})
 
 								} else {
@@ -72,7 +73,8 @@ const NetworkTable = ({data, schema}) => {
 										flex: 1,
 										style: {flexDirection: "row"},
 										align: "left",
-										text: prop.text
+										text: prop.text,
+										count: 0
 									})
 								}
 							}
@@ -85,7 +87,7 @@ const NetworkTable = ({data, schema}) => {
 								flex: 1,
 								style: {flexDirection: "row"},
 								align: "left",
-								type: relation ? "edge": "node"
+								type: relation ? "edge": "node",
 							})
 							header.push({
 								field: 'label',
@@ -93,7 +95,7 @@ const NetworkTable = ({data, schema}) => {
 								flex: 1,
 								style: {flexDirection: "row"},
 								align: "left",
-								type: relation ? "edge": "node"
+								type: relation ? "edge": "node",
 							})
 							for (const field of Object.keys(rest)) {
 								const headerName = field.replaceAll(".", " ")
@@ -104,6 +106,7 @@ const NetworkTable = ({data, schema}) => {
 									style: {flexDirection: "row"},
 									align: "left",
 									type: relation ? "edge": "node",
+									count: 0
 								})
 							}
 						}
@@ -121,9 +124,15 @@ const NetworkTable = ({data, schema}) => {
 								text: val === "undefined" ? "": val,
 								href: href === "undefined" ? "": href
 							}
+							if (val !== "undefined") {
+								i.count = i.count + 1
+							}
 						} else {
 							const val = makeTemplate(i.text, properties)
 							processed[key].data[properties.id][i.field] = val === "undefined" ? "": precise(val)
+							if (val !== "undefined") {
+								i.count = i.count + 1
+							}
 						}
 					}
 					if (processed[key].data[properties.id]["label"] === "") processed[key].data[properties.id]["label"] = label
@@ -197,7 +206,7 @@ const NetworkTable = ({data, schema}) => {
 						components={{ Toolbar: GridToolbar }}
 						sortingOrder={['desc', 'asc']}
 						rows={Object.values(data)}
-						columns={header}
+						columns={header.filter(i=>i.count === undefined || i.count > 0)}
 						autoPageSize
 						disableColumnMenu
 						autoHeight
