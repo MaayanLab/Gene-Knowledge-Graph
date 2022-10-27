@@ -606,6 +606,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     router={router}
                     top={sm ? 1500: 550}
                     endpoint={`/${page || ''}`}
+                    expand={false}
                     />}
             </Grid>
             <Grid item xs={12}>
