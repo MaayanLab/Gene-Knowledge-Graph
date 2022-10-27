@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import Image from 'next/image'
 import { makeTemplate } from "../utils/helper";
 import * as default_schema from '../public/schema.json'
+import React from "react";
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Paper = dynamic(() => import('@mui/material/Paper'));
@@ -86,7 +87,7 @@ const Footer = ({schema}) => {
 				marginTop: "auto",
 				marginBottom: "auto",
 			}}>
-                {schema.footer.map(footer=><FooterContents key={footer.icon} footer={footer}/>)}
+                {schema.footer.map((footer, i)=><React.Fragment  key={`footer-${i}`}><FooterContents footer={footer}/></React.Fragment>)}
             </Grid>
         </Paper>
     )
