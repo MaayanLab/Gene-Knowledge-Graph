@@ -17,21 +17,22 @@ const Counter = dynamic(import('./counter'));
 
 const function_mapper = {
 	filter_relation: ({router, relation})=>{
-		const old_relation = router.query.relation ? router.query.relation.split(","): []
+		const {page, relation: old_rel, ...query} = router.query
+		const old_relation = old_rel ? old_rel.split(","): []
 
 		const updated_relation = []
-		for (i of old_relation) {
+		for (const i of old_relation) {
 			if (relation.indexOf(i) === -1) {
 				updated_relation.push(i)
 			}
 		}
-		for (i of relation) {
+		for (const i of relation) {
 			if (old_relation.indexOf(i) === -1) {
 				updated_relation.push(i)
 			}
 		}
 
-		if (updated_relation.length) query.relation = updated_libraries.join(",")
+		if (updated_relation.length) query.relation = updated_relation.join(",")
 		router.push({
 			pathname: `/${page || ''}`,
 			query
@@ -88,7 +89,7 @@ const styles = {
 	}
   }
 
-const IconRenderer = ({label, icon, height=100, width=100, href, router, relation, subheader, props}) => {
+const IconRenderer = ({label, icon, height=100, width=100, href, router, relation, subheader={}, props}) => {
 	let selected
 	let for_selection
 	if (subheader.field) {
@@ -102,7 +103,8 @@ const IconRenderer = ({label, icon, height=100, width=100, href, router, relatio
 				for_selection.push(i[subheader.list_field])
 			}
 		} else {
-			selected = router.query[subheader.field].split(",")
+			selected = router.query[subheader.field] ? router.query[subheader.field].split(","): []
+			for_selection = props[subheader.field]
 		}
 	}
 	let buttonStyle = styles.enabled
@@ -157,6 +159,7 @@ const IconRenderer = ({label, icon, height=100, width=100, href, router, relatio
 		return (
 			<Button 
 				sx={buttonStyle}
+				href={"/"}
 			>
 				<div style={{height, minWidth: width}}>
 					<Image
