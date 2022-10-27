@@ -16,39 +16,58 @@ const MenuIcon = dynamic(import('@mui/icons-material/Menu'));
 const Counter = dynamic(import('./counter'));
 
 const function_mapper = {
-	filter_relation: ({router, selected, relation, label, props})=>{
-		let new_selected = selected
-		let new_relations = relation ? relation.split(",") : []
-		if (selected.indexOf(label)=== -1){ 
-			new_selected = [...selected, label]
-			new_relations = [...new_relations, ...(props.selected || [])]
+	filter_relation: ({router, relation})=>{
+		const old_relation = router.query.relation ? router.query.relation.split(","): []
+
+		const updated_relation = []
+		for (i of old_relation) {
+			if (relation.indexOf(i) === -1) {
+				updated_relation.push(i)
+			}
 		}
-		else {
-			new_selected = selected.filter(s=>s!==label)
-			new_relations = new_relations.filter(i=> (props.selected || []).indexOf(i) === -1)
+		for (i of relation) {
+			if (old_relation.indexOf(i) === -1) {
+				updated_relation.push(i)
+			}
 		}
-		if (router.pathname !== "/") {
+
+		if (updated_relation.length) query.relation = updated_libraries.join(",")
+		router.push({
+			pathname: `/${page || ''}`,
+			query
+		}, undefined, {shallow: true})
+	},
+	add_library: ({router, libraries}) => {
+		const {page, libraries: old_lib, ...query} = router.query
+		const old_libraries = JSON.parse(old_lib || "[]").reduce((acc, i)=>({
+			...acc,
+			[i.library]: i
+		}), {})
+		const new_libraries = libraries.reduce((acc, i)=>({
+			...acc,
+			[i.library]: i
+		}), {})
+		const updated_libraries = []
+		for (const i of Object.keys(old_libraries)) {
+			if (new_libraries[i] === undefined) {
+				updated_libraries.push(old_libraries[i])
+			}
+		}
+		for (const i of Object.keys(new_libraries)) {
+			if (old_libraries[i] === undefined) {
+				updated_libraries.push(new_libraries[i])
+			}
+		}
+		if (updated_libraries.length) {
+			query.libraries = JSON.stringify(updated_libraries)
 			router.push({
-				pathname: '/',
-				query: {
-					...router.query,
-					relation: new_relations.join(",")
-				}
-			  }, undefined, {shallow: true})
-		}else if (new_relations.length) {
-			router.push({
-				pathname: router.route || '/',
-				query: {
-					...router.query,
-					relation: new_relations.join(",")
-				}
-			  }, undefined, {shallow: true})
-		} else {
-			const {relation: popped, ...query} = router.query
-			router.push({
-				pathname: router.route || '/',
+				pathname: `/${page || ''}`,
 				query
-			  }, undefined, {shallow: true})
+			}, undefined, {shallow: true})
+		} else {
+			router.push({
+				pathname: `/${page || ''}`,
+			}, undefined, {shallow: true})
 		}
 	}
 }
@@ -69,15 +88,34 @@ const styles = {
 	}
   }
 
-const IconRenderer = ({label, icon, height=100, width=100, onClick, href, router, selected, relation, props}) => {
+const IconRenderer = ({label, icon, height=100, width=100, href, router, relation, subheader, props}) => {
+	let selected
+	let for_selection
+	if (subheader.field) {
+		if (subheader.list_field) {
+			selected = []
+			for_selection = []
+			for (const i of JSON.parse(router.query[subheader.field] || "[]")) {
+				selected.push(i[subheader.list_field])
+			}
+			for (const i of props[subheader.field]) {
+				for_selection.push(i[subheader.list_field])
+			}
+		} else {
+			selected = router.query[subheader.field].split(",")
+		}
+	}
 	let buttonStyle = styles.enabled
-	if (selected.length && selected.indexOf(label) > -1) buttonStyle = styles.active
-	else if (selected.length && selected.indexOf(label) === -1) buttonStyle = styles.disabled
-	if (onClick !== undefined) {
+	if (selected !== undefined) {
+		const isSelected = selected.filter(i=>for_selection.indexOf(i) > -1)
+		if (selected.length && isSelected.length > 0) buttonStyle = styles.active
+		else if (selected.length && isSelected.length === 0) buttonStyle = styles.disabled	
+	}
+	if (subheader.onClick !== undefined) {
 		return (
 			<Button 
 				onClick={()=>{
-					function_mapper[onClick.name](({...onClick.props, router, selected, label, relation, props}))
+					function_mapper[subheader.onClick](({router, ...props}))
 					
 				}}
 				sx={buttonStyle}
@@ -143,7 +181,7 @@ const Header = ({schema, ...rest}) => {
   	const open = Boolean(anchorEl);
 	const router = useRouter()
 	const relation = router.query.relation
-
+	
 	useEffect(()=>{
 		if (relation === undefined) setSelected([])
 	}, [relation])
@@ -165,7 +203,9 @@ const Header = ({schema, ...rest}) => {
 				setSelected={setSelected}
 				selected={selected}
 				relation={relation}
+				key={i}
 				{...i}
+				{...rest}
 			/>
 		)
 		for (const s of (i.props || {}).selected || []) {
@@ -181,13 +221,24 @@ const Header = ({schema, ...rest}) => {
 		}
 		setSelected(new_selected)
 	},[relation])
+
+	useEffect(()=>{
+		const libraries = JSON.parse(router.query.libraries || '[]')
+		if (libraries.length) {
+			const new_selected = []
+			for (const {library} of libraries) {
+				new_selected.push(library)
+			}
+			setSelected(new_selected)
+		}
+	}, [router.query.libraries])
 	if (schema === undefined || schema.header === undefined) return null
 	
 	return(
 	<Grid container style={{paddingBottom: 20, paddingTop: 20}}>
 		<Grid item xs={12} align="center">
 			{ schema.header.icon ?
-				<Grid container justifyContent={"center"} alignItems={"center"} spacing={2}>
+				<Grid container justifyContent={"center"} alignItems={"center"} spacing={2} style={{marginBottom: 5}}>
 					<Grid item>
 						<div style={{height: schema.header.icon.height || 30, 
 							minWidth: schema.header.icon.width || 30}}>
@@ -234,7 +285,7 @@ const Header = ({schema, ...rest}) => {
 			
 		</Grid>
 		<Grid item xs={12} align="center">
-			<Stack direction={"row"} spacing={1}>{icon_buttons}</Stack>
+			<Stack direction={"row"} sx={{ display: { xs: 'block'} }} spacing={1}>{icon_buttons}</Stack>
 		</Grid>
 		<Grid item xs={12}>
 			<Grid container justifyContent={"flex-start"}>

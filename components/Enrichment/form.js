@@ -73,9 +73,13 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                     signal: controller.signal
                 })
             ).json()
+            if (query.libraries === undefined) query.libraries = JSON.stringify(default_options.selected)
             router.push({
                 pathname: `/${page || ''}`,
-                query: {...query, userListId},
+                query: {
+                    ...query,
+                    userListId
+                },
                 }, undefined, { shallow: true })
         } catch (error) {
             console.error(error)
