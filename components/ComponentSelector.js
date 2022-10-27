@@ -7,5 +7,5 @@ const Markdown = dynamic(()=>import("./markdown"), {ssr: false});
 export const components = {
   Enrichment: (props) => <Enrichment {...props}/>,
   KnowledgeGraph: (props) => <KnowledgeGraph {...props}/>,
-  Markdown: (props) => <Markdown props />
+  Markdown: (props) => <Markdown {...props} />
 }
