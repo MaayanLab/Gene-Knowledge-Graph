@@ -10,12 +10,15 @@ export const Counter = () => {
     const [timer, setTimer] = useState(0)
 
 
-    const query_counter = async () => {
-        await delay(5000)
+    const query_counter = async (delay_time=5000) => {
+        await delay(delay_time)
         const {count} = await ( await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter`)).json()
         setCount(count)
         setTimer(timer + 1)
     }
+    useEffect(()=>{
+        query_counter(0)
+    }, [])
 
     useEffect(()=>{
         query_counter()
