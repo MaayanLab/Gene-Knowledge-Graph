@@ -24,7 +24,7 @@ const CardActions = dynamic(() => import('@mui/material/CardActions'));
 const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
 const Avatar = dynamic(() => import('@mui/material/Avatar'));
 
-export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema, top, right, endpoint="/"}) => {
+export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema, top, right, endpoint="/", expand=true}) => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('lg'));
     const sm = useMediaQuery(theme.breakpoints.down('sm'));
@@ -90,7 +90,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
                   }}
                 ><DeleteIcon/></IconButton>
               </Tooltip>}
-              <Tooltip title="Expand Node">
+              { expand && <Tooltip title="Expand Node">
                 <IconButton
                   onClick={()=>{
                     setFocused(null)
@@ -105,7 +105,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
                     }, undefined, { shallow: true })
                   }}
                 ><AllOutIcon/></IconButton>
-              </Tooltip>
+              </Tooltip>}
               <Tooltip title="Go to node">
                 <IconButton
                   onClick={()=>{
@@ -159,7 +159,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
     }
     if (search) {
       colors["Search Term"] = <Grid item xs={12} key={"search"}>
-      <Grid container alignItems={"center"} spacing={2}>
+      <Grid container alignItems={"center"} spacing={2} key="term">
         <Grid item><Avatar sx={{background: "#F8333C", width: 55, height: 55}}> </Avatar></Grid>
         <Grid item><Typography>Search Term</Typography></Grid>   
       </Grid></Grid>   
@@ -167,8 +167,8 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
     for (const i of elements) {
       const {kind, color} = i.data
       if (colors[kind]===undefined && color !== "#F8333C" && kind !== "Relation") {
-        colors[kind] = <Grid item xs={12}>
-          <Grid container alignItems={"center"} spacing={2} key={kind}>
+        colors[kind] = <Grid item xs={12} key={kind}>
+          <Grid container alignItems={"center"} spacing={2}>
             <Grid item><Avatar sx={{background: color, width: elements.length < 100 ? 55: elements.length < 200 ? 40: 30, height: elements.length < 100 ? 55: elements.length < 200 ? 40: 30}}> </Avatar></Grid>
             <Grid item><Typography>{kind}</Typography></Grid>   
           </Grid></Grid> 
@@ -178,8 +178,8 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
       <Box sx={{
         zIndex: 1,
         position: 'absolute',
-        top: top || (matches ? 550: sm ? 1050: 850),
-        left: left || '20%',
+        top: top || (matches ? 400: sm ? 1050: 850),
+        left: left || '15%',
         pointerEvents: "none"
       }}>
           <Grid container alignItems={"center"} spacing={1}>
