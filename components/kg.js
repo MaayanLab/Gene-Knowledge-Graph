@@ -69,7 +69,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   if (!start) start = schema.nodes[0].node
   if (!end) end = schema.nodes[0].node
   
-  const current_node = nodes[start]
+  const current_node = nodes[start] || Object.values(nodes)[0]
   const [allStartTerms, setAllStartTerms] = React.useState([])
   const [startTermInput, setStartTermInput] = React.useState(start_term || '')
   const [allEndTerms, setAllEndTerms] = React.useState([])
@@ -97,7 +97,6 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       tooltip_templates[i] = e.display
     }
   }
-
   const tableref = useRef(null);
   const redirect = (query) => {
     router.push({
@@ -207,16 +206,14 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
 
   useAsyncEffect(async (isActive) => {
     if (current_node && !start_term) {
-      if (elements === undefined) {
-        router.push({
-          pathname: `/${page || ''}`,
-          query: {
-            start,
-            start_term: current_node.example[0],
-            // relation
-          }
-        }, undefined, {shallow: true})
-      }
+      router.push({
+        pathname: `/${page || ''}`,
+        query: {
+          start,
+          start_term: current_node.example[0],
+          // relation
+        }
+      }, undefined, {shallow: true})
     } else {
       setLoading(true)
       await  resolve_elements(isActive)
