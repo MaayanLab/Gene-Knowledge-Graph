@@ -7,11 +7,15 @@ import {resolve_results} from '../index'
 const enrichr_query = async ({userListId, library, term_limit}) => {
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/enrich?userListId=${userListId}&backgroundType=${library}`)
+        const regex = {}
+        for (const [k,v] of Object.entries(await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment/getRegex`)).json())) {
+            regex[k] = new RegExp(v)
+        }
         const results = await res.json()
         const genes = {}
         const terms = {}
         for (const i of results[library].slice(0,term_limit)) {
-            const label = i[1]
+            const label = regex[library] !== undefined ? regex[library].exec(i[1]).groups.label:i[1]
             const pval = i[2]
             const zscore = i[3]
             const combined_score = i[4]
