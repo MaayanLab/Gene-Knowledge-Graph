@@ -8,7 +8,6 @@ import {components} from '../components/ComponentSelector'
 
 export default function Page({schema, component, ...props}){
   const router = useRouter()
-  console.log(component)
   if (components[component] !== undefined){
       return components[component]({schema, ...props})
   } else {
