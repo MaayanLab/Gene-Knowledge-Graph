@@ -232,7 +232,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         'aria-labelledby': 'basic-button',
                     }}
                 >
-                    <CardContent style={{width: 1000}}><GeneSetForm router={router} default_options={default_options} setLoading={setLoading} libraries_list={libraries_list} get_controller={get_controller} {...props}/></CardContent>
+                    <CardContent style={{width: 1000}}><GeneSetForm router={router} default_options={default_options} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} {...props}/></CardContent>
                 </Menu>
             </Grid>
             }
@@ -412,7 +412,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         >
                             Enrichr
                         </Link>.</Typography>
-                    <GeneSetForm router={router} default_options={default_options} setLoading={setLoading} libraries_list={libraries_list} get_controller={get_controller} {...props}/>
+                    <GeneSetForm router={router} default_options={default_options} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} {...props}/>
                 </div>
                 : (elements === null) ? (
                 <CircularProgress/>
@@ -597,7 +597,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     }}
                     />
                 }
-                {(elements && userListId) && <Legend elements={elements} search={false} top={sm ? 2000: 550}/>}
+                {(elements && userListId) && <Legend elements={elements} search={false} top={900}/>}
                 {(focused || node) && <TooltipCard 
                     node={focused || node}
                     schema={schema}
@@ -605,7 +605,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     setFocused={setFocused}
                     router={router}
                     top={sm ? 1500: 550}
-                    endpoint={`/${page}`}
+                    endpoint={`/${page || ''}`}
                     />}
             </Grid>
             <Grid item xs={12}>

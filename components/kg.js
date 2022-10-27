@@ -769,7 +769,13 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
           />
         }
         {elements && <Legend elements={elements}/>}
-        {(focused || node) && <TooltipCard node={focused || node} schema={schema} tooltip_templates={tooltip_templates} setFocused={setFocused} router={router}/>}
+        {(focused || node) && <TooltipCard 
+          node={focused || node}
+          schema={schema}
+          tooltip_templates={tooltip_templates}
+          setFocused={setFocused}
+          router={router} 
+          endpoint={`/${page || ''}`}/>}
       </Grid>
       <Grid item xs={12}>
         <div ref={tableref}>
