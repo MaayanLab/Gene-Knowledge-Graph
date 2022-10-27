@@ -89,7 +89,7 @@ const styles = {
 	}
   }
 
-const IconRenderer = ({label, icon, height=100, width=100, href, router, relation, subheader={}, props}) => {
+const IconRenderer = ({label, icon, height=100, width=100, href, router, subheader={}, props}) => {
 	let selected
 	let for_selection
 	if (subheader.field) {
@@ -179,15 +179,9 @@ const IconRenderer = ({label, icon, height=100, width=100, href, router, relatio
 
 
 const Header = ({schema, ...rest}) => {
-	const [selected, setSelected] = useState([])
 	const [anchorEl, setAnchorEl] = useState(null);
   	const open = Boolean(anchorEl);
 	const router = useRouter()
-	const relation = router.query.relation
-	
-	useEffect(()=>{
-		if (relation === undefined) setSelected([])
-	}, [relation])
 
 	const handleClickMenu = (e) => {
 		setAnchorEl(e.currentTarget);
@@ -203,10 +197,7 @@ const Header = ({schema, ...rest}) => {
 		icon_buttons.push(
 			<IconRenderer
 				router={router}
-				setSelected={setSelected}
-				selected={selected}
-				relation={relation}
-				key={i}
+				key={i.label}
 				{...i}
 				{...rest}
 			/>
@@ -215,26 +206,7 @@ const Header = ({schema, ...rest}) => {
 			selection_rules[s] = i.label
 		}
 	}
-	useEffect(()=>{
-		const new_selected = []
-		if (relation) {
-			for (const i of (relation).split(",")) {
-				new_selected.push(selection_rules[i])
-			}	
-		}
-		setSelected(new_selected)
-	},[relation])
-
-	useEffect(()=>{
-		const libraries = JSON.parse(router.query.libraries || '[]')
-		if (libraries.length) {
-			const new_selected = []
-			for (const {library} of libraries) {
-				new_selected.push(library)
-			}
-			setSelected(new_selected)
-		}
-	}, [router.query.libraries])
+	
 	if (schema === undefined || schema.header === undefined) return null
 	
 	return(
