@@ -21,7 +21,7 @@ const TextField = dynamic(() => import('@mui/material/TextField'));
 
 
 
-const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_controller, ...props}) => {
+const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_controller, loading, ...props}) => {
     const default_term_limit = default_options.term_limit
     const {page, ...rest} = router.query
     const [query, setQuery] = useState(rest||{})
@@ -131,13 +131,18 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                 placeholder={props.placeholder}
                                 fullWidth
                                 value={input.genes.join("\n")}
-                                label="Gene Set"
+                                label={"Gene Set"}
                                 onChange={(e)=>{
                                     setInput({
                                         ...input,
                                         genes: e.target.value.split(/[\t\r\n;]+/)
                                     })
                                 }}
+                                InputProps={{
+                                    style: {
+                                      fontSize: 14,
+                                    },
+                                  }}
                             />
                         </Grid>
                         <Grid item style={{ flexGrow: 1 }}>
@@ -149,6 +154,11 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                 placeholder="Description"
                                 label="Description"
                                 style={{width: "100%"}}
+                                InputProps={{
+                                    style: {
+                                      fontSize: 14,
+                                    },
+                                  }}
                             />
                         </Grid>
                         <Grid item>
@@ -166,9 +176,10 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                         )
                                     }
                                 }}
+                                disabled={loading}
                                 variant="contained"
                                 // disabled={input.genes.length === 0}
-                            >Submit</Button>
+                            >{loading ? "Searching...": "Submit"}</Button>
                         </Grid>
                         <Grid item xs={12} align="center">
                             <Button 
@@ -179,11 +190,11 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                     })
                                 }}
                                 
-                            >Try an Example</Button>
+                            ><Typography variant='subtitle2'>Try an example</Typography></Button>
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
-                                <Grid item><Typography>Gene Library Connectivity</Typography></Grid>
+                                <Grid item><Typography variant='subtitle2'>Minimum libraries per gene</Typography></Grid>
                                 <Grid item style={{ flexGrow: 1 }}>
                                     <Tooltip title={`Filter out genes that are not in multiple libraries.`}>
                                         <Slider 
@@ -202,7 +213,7 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                         </Tooltip>
                                 </Grid>
                                 <Grid item xs={1}>
-                                    <Typography>
+                                    <Typography variant='subtitle2'>
                                         {min_lib || 1}
                                     </Typography>
                                 </Grid>
@@ -211,7 +222,7 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                     </Grid>
                     <Grid item xs={12}>
                         <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
-                            <Grid item><Typography>Gene Connectivity</Typography></Grid>
+                            <Grid item><Typography variant='subtitle2'>Minimum links per gene</Typography></Grid>
                             <Grid item style={{ flexGrow: 1 }}>
                                 <Tooltip title={`Filter out genes with fewer connections`}>
                                     <Slider 
@@ -230,7 +241,7 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                     </Tooltip>
                             </Grid>
                             <Grid item xs={1}>
-                                <Typography>
+                                <Typography variant='subtitle2'>
                                     {gene_degree || 1}
                                 </Typography>
                             </Grid>
@@ -238,7 +249,7 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                     </Grid>
                     <Grid item xs={12}>
                         <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
-                            <Grid item><Typography>Gene Limit</Typography></Grid>
+                            <Grid item><Typography variant='subtitle2'>Subgraph size limit</Typography></Grid>
                             <Grid item style={{ flexGrow: 1 }}>
                                 <Tooltip title={`How many genes should the knowledge graph return? (Prioritized by gene connectivity)`}>
                                     <Slider 
@@ -256,7 +267,7 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                     </Tooltip>
                             </Grid>
                             <Grid item xs={1}>
-                                <Typography>
+                                <Typography variant='subtitle2'>
                                     {query.gene_limit || input.genes.length || 100}
                                 </Typography>
                             </Grid>
@@ -264,71 +275,77 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                     </Grid>
                 </Grid>
                 <Grid item xs={12} md={6} align="left">
-                    <FormLabel error={inputError}>Pick up to five libraries</FormLabel>
+                    
                     <Grid container>
-                    {libraries_list.map(library=>(
-                        <Grid item xs={12} key={library}>
-                            <Stack direction="row" spacing={1}>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox checked={checked_libraries[library] !== undefined} 
-                                            onChange={()=>{
-                                                if (checked_libraries[library]) {
-                                                    if (libraries.length > 1) {
-                                                        const new_query = {...query}
-                                                        new_query.libraries = JSON.stringify(libraries.filter(i=>i.library !== library))
-                                                        setQuery(new_query)
-                                                    }
-                                                } else if (libraries.length < 5 ){
-                                                    const new_query = {...query}
-                                                    new_query.libraries = JSON.stringify([...libraries, {
-                                                        library,
-                                                        term_limit: default_term_limit
-                                                    }])
-                                                    setQuery(new_query)
-                                                } else {
-                                                    setInputError(true)
-                                                }
-                                            }} 
-                                            name={library}
-                                        />
-                                    }
-                                    label={
-                                    <Typography>
-                                        {library.replaceAll("_", " ")}
-                                    </Typography>}
-                                    style={{width: "100%"}}
-                                />
-                                {checked_libraries[library] !== undefined &&
-                                    <React.Fragment>
-                                        <Tooltip title={`Top ${library.replaceAll("_", " ")} terms to include`}>
-                                            <Slider 
-                                                value={checked_libraries[library]}
-                                                            onChange={(e, nv)=>{
-                                                    const new_libraries = []
-                                                    for (const i of libraries) {
-                                                        if (i.library === library) new_libraries.push({
-                                                            library,
-                                                            term_limit: nv
-                                                        })
-                                                        else new_libraries.push(i)
-                                                    }
-                                                    const new_query = {...query}
-                                                    new_query.libraries = JSON.stringify(new_libraries)
-                                                    setQuery(new_query)
-                                                }}
-                                                style={{width: "100%"}}
-                                                valueLabelDisplay='auto'
-                                                min={1}
-                                                max={50}
-                                                aria-labelledby="limit-slider" />
-                                        </Tooltip>   
-                                        <Typography>{checked_libraries[library] || default_term_limit}</Typography>
-                                    </React.Fragment>
-                                }
-                            </Stack>
+                        <Grid item xs={12} md={6} align="left">
+                            <FormLabel error={inputError}><Typography variant="subtitle2">Select maximum of five libraries</Typography></FormLabel>
                         </Grid>
-                    ))}
+                        <Grid item xs={12} md={6} align="left">
+                            <FormLabel><Typography variant="subtitle2">Top terms to include</Typography></FormLabel>
+                        </Grid>
+                        {libraries_list.map(library=>(
+                            <Grid item xs={12} key={library}>
+                                <Stack direction="row" spacing={1}>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox checked={checked_libraries[library] !== undefined} 
+                                                onChange={()=>{
+                                                    if (checked_libraries[library]) {
+                                                        if (libraries.length > 1) {
+                                                            const new_query = {...query}
+                                                            new_query.libraries = JSON.stringify(libraries.filter(i=>i.library !== library))
+                                                            setQuery(new_query)
+                                                        }
+                                                    } else if (libraries.length < 5 ){
+                                                        const new_query = {...query}
+                                                        new_query.libraries = JSON.stringify([...libraries, {
+                                                            library,
+                                                            term_limit: default_term_limit
+                                                        }])
+                                                        setQuery(new_query)
+                                                    } else {
+                                                        setInputError(true)
+                                                    }
+                                                }} 
+                                                name={library}
+                                            />
+                                        }
+                                        label={
+                                        <Typography variant='subtitle2'>
+                                            {library.replaceAll("_", " ")}
+                                        </Typography>}
+                                        style={{width: "100%"}}
+                                    />
+                                    {checked_libraries[library] !== undefined &&
+                                        <React.Fragment>
+                                            <Tooltip title={`Top ${library.replaceAll("_", " ")} terms to include`}>
+                                                <Slider 
+                                                    value={checked_libraries[library]}
+                                                                onChange={(e, nv)=>{
+                                                        const new_libraries = []
+                                                        for (const i of libraries) {
+                                                            if (i.library === library) new_libraries.push({
+                                                                library,
+                                                                term_limit: nv
+                                                            })
+                                                            else new_libraries.push(i)
+                                                        }
+                                                        const new_query = {...query}
+                                                        new_query.libraries = JSON.stringify(new_libraries)
+                                                        setQuery(new_query)
+                                                    }}
+                                                    style={{width: "100%"}}
+                                                    valueLabelDisplay='auto'
+                                                    min={1}
+                                                    max={50}
+                                                    aria-labelledby="limit-slider" />
+                                            </Tooltip>   
+                                            <Typography variant='subtitle2'>{checked_libraries[library] || default_term_limit}</Typography>
+                                        </React.Fragment>
+                                    }
+                                </Stack>
+                            </Grid>
+                        ))}
                     </Grid>
                 </Grid>
             </Grid>
