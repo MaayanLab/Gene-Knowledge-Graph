@@ -47,25 +47,18 @@ const aggregates = async ({session, schema}) => {
         }
         if (s.order) {
             const [field, order] = s.order
-            let query
-            let score_var
-            if (order === "DESC") {
-                const order_pref = 'max'
-                score_var = `${order_pref}_${field}`
-                query = `MATCH (st)
+            for (const order_pref of ['max', 'min']) {
+                const score_var = `${order_pref}_${field}`
+                const query = `MATCH (st)
                     WHERE st.${field} IS NOT NULL 
                     RETURN ${order_pref}(st.${field}) as ${score_var}`	
-            } else {
-                const order_pref = 'min'
-                score_var = `${order_pref}_${field}`
-                query = `MATCH (st)
-                    RETURN ${order_pref}(st.${field}) as ${score_var}`
+                const results = await session.readTransaction(txc => txc.run(query))
+                results.records.flatMap(record => {
+                    const score = record.get(score_var)
+                    aggr_scores[score_var] = score
+                })
             }
-            const results = await session.readTransaction(txc => txc.run(query))
-            results.records.flatMap(record => {
-                const score = record.get(score_var)
-                aggr_scores[score_var] = score
-            })
+            
             
             colors[s.node].aggr_field = score_var
             colors[s.node].field = field
