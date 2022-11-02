@@ -16,7 +16,7 @@ const default_color = '#48ACF0'
 const highlight_color = '#F8333C'
 const default_edge_color = '#e0e0e0'
 
-const get_node_color_and_type = ({node, terms, color=default_color, aggr_scores, field, aggr_field, fields}) => {
+export const default_get_node_color_and_type = ({node, terms, color=default_color, aggr_scores, field, aggr_field, fields}) => {
 	// if(terms.indexOf(node.properties.label) > -1){
 	if (fields.filter(i=>i && terms.indexOf(node.properties[i]) > -1).length > 0) {
 		return {color: highlight_color, node_type: 1}
@@ -33,7 +33,7 @@ const get_node_color_and_type = ({node, terms, color=default_color, aggr_scores,
 	}		
 }
 
-const get_edge_color = ({relation, color, aggr_field, field, aggr_scores}) => {
+export const default_get_edge_color = ({relation, color, aggr_field, field, aggr_scores}) => {
 	if (relation.properties[field] && aggr_field) {
 		const aggr_score = aggr_scores[aggr_field]
 		return {
@@ -57,7 +57,16 @@ const process_properties = (properties) => {
 	return props
 }
 
-export const resolve_results = ({results, terms, colors, field, start_field, end_field, aggr_scores, properties = {}}) => (
+export const resolve_results = ({results,
+	terms,
+	colors,
+	field,
+	start_field,
+	end_field,
+	aggr_scores,
+	get_node_color_and_type=default_get_node_color_and_type,
+	get_edge_color=default_get_edge_color,
+	properties = {}}) => (
 	results.records.flatMap(record => {
 		const relations = record.get('r')
 		const nodes = record.get('n').reduce((acc, i)=>({
@@ -80,7 +89,13 @@ export const resolve_results = ({results, terms, colors, field, start_field, end
 						...process_properties(start_node.properties),
 						...properties[start_node.properties.label || start_node.properties.id] || {}
 					},
-					...(get_node_color_and_type({node: start_node, terms, record, fields: [field, start_field, end_field], aggr_scores,
+					...(get_node_color_and_type({node: {
+						...start_node,
+						properties: {
+							...start_node.properties,
+							...properties[start_node.properties.label || start_node.properties.id] || {}
+						}
+					}, terms, record, fields: [field, start_field, end_field], aggr_scores,
 						 ...colors[start_type]}))
 				} 
 			})
@@ -112,7 +127,13 @@ export const resolve_results = ({results, terms, colors, field, start_field, end
 						...process_properties(end_node.properties),
 						...properties[end_node.properties.label || end_node.properties.id] || {}
 					},
-					...(get_node_color_and_type({node: end_node, terms, record, aggr_scores, fields: [field, start_field, end_field],
+					...(get_node_color_and_type({node: {
+						...end_node,
+						properties: {
+							...end_node.properties,
+							...properties[end_node.properties.label || end_node.properties.id] || {}
+						}
+					}, terms, record, aggr_scores, fields: [field, start_field, end_field],
 						...colors[end_type]}))
 				} 
 			})

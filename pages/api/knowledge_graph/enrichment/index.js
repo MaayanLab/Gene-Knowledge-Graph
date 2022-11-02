@@ -1,8 +1,36 @@
 import fetch from "node-fetch";
 import neo4j from "neo4j-driver"
 import { neo4jDriver } from "../../../../utils/neo4j"
+import { default_get_node_color_and_type } from "../index";
+import Color from 'color'
 
 import {resolve_results} from '../index'
+
+const color_map = {}
+
+const get_color = ({color, darken}) => {
+	if (!color_map[color]) color_map[color] = Color(color)
+
+	if (darken) return color_map[color].darken(darken*2).hex()
+	else return color_map[color].hex()
+}
+
+const get_node_color_and_type = ({node, terms, color=default_color, aggr_scores, field, aggr_field, fields}) => {
+    if (node.properties.pval === undefined) return default_get_node_color_and_type(({node, terms, color, aggr_scores, field, aggr_field, fields}))
+    else {
+        if (node.properties.pval > 0.05) return {node_type: 0, color: "#bdbdbd"}
+        else {
+            const max_pval = aggr_scores.max_pval
+            const min_pval = aggr_scores.min_pval
+            const darken =  Math.abs((node.properties.pval - min_pval)/(max_pval-min_pval))
+            // console.log(node.properties.label, max_pval, min_pval, darken)
+            return {
+                color: get_color({color, darken}),
+                node_type: 0
+            }
+        }
+    }	
+}
 
 const enrichr_query = async ({userListId, library, term_limit}) => {
     try {
@@ -14,6 +42,8 @@ const enrichr_query = async ({userListId, library, term_limit}) => {
         const results = await res.json()
         const genes = {}
         const terms = {}
+        let max_pval = 0
+        let min_pval = 1
         for (const i of results[library].slice(0,term_limit)) {
             const label = regex[library] !== undefined ? regex[library].exec(i[1]).groups.label:i[1]
             const pval = i[2]
@@ -22,18 +52,21 @@ const enrichr_query = async ({userListId, library, term_limit}) => {
             const overlapping_genes = i[5]
             const qval = i[6]
             if (terms[label] === undefined){
+                if (pval > max_pval) max_pval = pval
+                if (pval < min_pval) min_pval = pval
                 terms[label] ={
                     pval,
                     zscore,
                     combined_score,
-                    qval
+                    qval,
+                    logpval: -Math.log(pval)
                 }
             }
             for (const gene of overlapping_genes) {
                 genes[gene] = (genes[gene] || 0) + 1
             }
         }
-        return {genes, terms}
+        return {genes, terms, max_pval, min_pval}
     } catch (error) {
         console.log(error)
     }
@@ -59,8 +92,12 @@ const enrichment = async ({
         ))
         const gene_counts = {}
         let terms = {}
-        for (const {genes: lib_genes, terms: lib_terms} of results) {
+        let max_pval = 0
+        let min_pval = 1
+        for (const {genes: lib_genes, terms: lib_terms, max_pval: lib_max_pval, min_pval: lib_min_pval} of results) {
             terms = {...terms, ...lib_terms}
+            if (max_pval < lib_max_pval) max_pval = lib_max_pval
+            if (min_pval > lib_min_pval) min_pval = lib_min_pval
             for (const gene in lib_genes) {
                 if (gene_counts[gene] === undefined) {
                     gene_counts[gene] = {
@@ -85,7 +122,8 @@ const enrichment = async ({
         } 
         const schema = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/schema`)).json()
         const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/aggregate`)).json()
-            
+        aggr_scores.max_pval = max_pval
+        aggr_scores.min_pval = min_pval
         let query = `
             MATCH p = (a)--(b) 
             WHERE a.label IN ${JSON.stringify(Object.keys(terms))} 
@@ -122,7 +160,7 @@ const enrichment = async ({
         }
         const rs = await session.readTransaction(txc => txc.run(query, {limit: expand_limit, ...vars}))
         fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
-        return resolve_results({results: rs, schema,  aggr_scores, colors, properties: terms})
+        return resolve_results({results: rs, schema,  aggr_scores, colors, properties: terms, get_node_color_and_type})
     } catch (error) {
         console.log(error)
         res.status(500).send({message: 'Error communicating with Enrichr'})
