@@ -21,7 +21,7 @@ const FooterContents = ({footer, key}) => {
 							// variant="contained"
 							startIcon={<GitHubIcon/>}
 							href={footer.code}
-							style={{textTransform: "none", color: "#000"}}
+							style={{textTransform: "none", color: "#FFF"}}
 						>
 							Github Repository
 						</Button>
@@ -31,7 +31,7 @@ const FooterContents = ({footer, key}) => {
 							// variant="contained"
 							startIcon={<BugReportIcon/>}
 							href={footer.issues}
-							style={{textTransform: "none", color: "#000"}}
+							style={{textTransform: "none", color: "#FFF"}}
 						>
 							Report a bug
 						</Button>
@@ -80,8 +80,9 @@ const Footer = ({schema}) => {
     return (
         <Paper square style={{boxShadow: "none",
 			height: 180,
-			background: "#ffd79a",
-			flexShrink: 0
+			background: "#000",
+			flexShrink: 0,
+			paddingTop: 30
 		}}>
             <Grid container justifyContent="space-around" alignItems={"center"} style={{
 				marginTop: "auto",
