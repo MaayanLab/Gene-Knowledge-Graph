@@ -151,26 +151,27 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
   
   }
   
-  export const Legend = ({elements=[], search=true, left, top}) => {
+  export const Legend = ({elements=[], search=true, left, top, legendSize=0}) => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('lg'));
     const sm = useMediaQuery(theme.breakpoints.down('sm'));
     const colors = {  
     }
+    const sizes = [15, 20, 30, 40, 50]
     if (search) {
       colors["Search Term"] = <Grid item xs={12} key={"search"}>
       <Grid container alignItems={"center"} spacing={2} key="term">
-        <Grid item><Avatar sx={{background: "#F8333C", width: 55, height: 55}}> </Avatar></Grid>
-        <Grid item><Typography>Search Term</Typography></Grid>   
+        <Grid item><Avatar sx={{background: "#F8333C", width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar></Grid>
+        <Grid item><Typography variant="subtitle1">Search Term</Typography></Grid>   
       </Grid></Grid>   
     }
     for (const i of elements) {
       const {kind, color} = i.data
       if (colors[kind]===undefined && color !== "#F8333C" && kind !== "Relation") {
         colors[kind] = <Grid item xs={12} key={kind}>
-          <Grid container alignItems={"center"} spacing={2}>
-            <Grid item><Avatar sx={{background: color, width: elements.length < 100 ? 55: elements.length < 200 ? 40: 30, height: elements.length < 100 ? 55: elements.length < 200 ? 40: 30}}> </Avatar></Grid>
-            <Grid item><Typography>{kind}</Typography></Grid>   
+          <Grid container alignItems={"center"} spacing={1}>
+            <Grid item><Avatar sx={{background: color, width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar></Grid>
+            <Grid item><Typography variant="subtitle1">{kind}</Typography></Grid>   
           </Grid></Grid> 
       }
     }
@@ -179,7 +180,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
         zIndex: 1,
         position: 'absolute',
         top: top || (matches ? 400: sm ? 1050: 850),
-        left: left || '15%',
+        left: left || '20%',
         pointerEvents: "none"
       }}>
           <Grid container alignItems={"center"} spacing={1}>

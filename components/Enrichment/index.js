@@ -19,6 +19,10 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import LabelIcon from '@mui/icons-material/Label';
+import LabelOffIcon from '@mui/icons-material/LabelOff';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -40,7 +44,7 @@ const GeneSetForm = dynamic(() => import('./form'), {ssr: false})
 const Cytoscape = dynamic(() => import('../Cytoscape'), { ssr: false })
 const TooltipCard = dynamic(async () => (await import('../misc')).TooltipCard);
 const Legend = dynamic(async () => (await import('../misc')).Legend);
-const NetworkTable =  dynamic(() => import('../network_table'))
+const TermViz =  dynamic(() => import('./TermViz'))
 
 
 export const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -78,6 +82,8 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
     const [openShare, setOpenShare] = useState(false)
     const [query, setQuery] = useState(rest||{})
     const [id, setId] = useState(0)
+    const [legendVisibility, setLegendVisibility] = useState(false)
+    const [legendSize, setLegendSize] = useState(0)
     const prevQuery = usePrevious(router.query)
 
 
@@ -102,8 +108,6 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         tooltip_templates[i] = e.display
         }
     }
-
-    
 
     const get_controller = () => {
         if (controller) controller.abort()
@@ -232,13 +236,41 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         'aria-labelledby': 'basic-button',
                     }}
                 >
-                    <CardContent style={{width: 1000}}><GeneSetForm router={router} default_options={default_options} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} {...props}/></CardContent>
+                    <CardContent style={{width: 1000}}><GeneSetForm router={router} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} {...props}/></CardContent>
                 </Menu>
             </Grid>
             }
             { elements !== null && 
                 <Grid item>
                     <Grid container direction={"row"} justifyContent="flex-end">
+                        {legendVisibility &&
+                            <Grid item>
+                                <Tooltip title="Adjust legend size">
+                                    <IconButton variant='contained'
+                                        disabled={elements===null}
+                                        onClick={()=>{
+                                            setLegendSize((legendSize+1)%5)
+                                        }}
+                                        style={{marginLeft: 5}}
+                                    >
+                                        {legendSize < 4 ? <ZoomInIcon/>: <ZoomOutIcon/>}
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                        }
+                        <Grid item>
+                            <Tooltip title={!legendVisibility ? "Show legend": "Hide legend"}>
+                                <IconButton variant='contained'
+                                    disabled={elements===null}
+                                    onClick={()=>{
+                                        setLegendVisibility(!legendVisibility)
+                                    }}
+                                    style={{marginLeft: 5}}
+                                >
+                                    {!legendVisibility ? <LabelIcon />: <LabelOffIcon />}
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
                         <Grid item>
                             <Tooltip title="Re-orient graph">
                                 <IconButton variant='contained'
@@ -412,7 +444,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         >
                             Enrichr
                         </Link>.</Typography>
-                    <GeneSetForm router={router} default_options={default_options} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} {...props}/>
+                    <GeneSetForm router={router} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} {...props}/>
                 </div>
                 : (elements === null) ? (
                 <CircularProgress/>
@@ -597,7 +629,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     }}
                     />
                 }
-                {(elements && userListId) && <Legend elements={elements} search={false} top={900}/>}
+                {(elements && userListId && legendVisibility) && <Legend elements={elements} search={false} top={400} legendSize={legendSize}/>}
                 {(focused || node) && <TooltipCard 
                     node={focused || node}
                     schema={schema}
@@ -611,7 +643,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
             </Grid>
             <Grid item xs={12}>
                 <div ref={tableref}>
-                    <NetworkTable data={elements} schema={schema}/>,
+                    <TermViz data={elements} schema={schema}/>
                 </div>
             </Grid>
         </Grid>

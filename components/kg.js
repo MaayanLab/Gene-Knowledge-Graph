@@ -20,6 +20,11 @@ import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
+import LabelIcon from '@mui/icons-material/Label';
+import LabelOffIcon from '@mui/icons-material/LabelOff';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
+
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Box = dynamic(() => import('@mui/material/Box'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
@@ -85,7 +90,11 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [loading, setLoading] = React.useState(false)
   const [selected, setSelected] = React.useState([])
+  const [legendVisibility, setLegendVisibility] = React.useState(false)
+  const [legendSize, setLegendSize] = React.useState(0)
+
   const firstUpdate = useRef(true);
+  
   const prevQuery = usePrevious(router.query)
   const tooltip_templates = {}
   for (const i of schema.nodes) {
@@ -481,17 +490,17 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
             </Grid>
           </React.Fragment>}
           <Grid item>
-              <Tooltip title="Switch Graph Layout">
-                  <IconButton variant='contained'
-                      disabled={elements===null}
-                      onClick={()=>{
-                          setLayout(layout + 1 === Object.keys(layouts).length ? 0: layout+1)
-                      }}
-                      style={{marginLeft: 5}}
-                  >
-                      <FlipCameraAndroidIcon/>
-                  </IconButton>
-              </Tooltip>
+            <Tooltip title="Switch Graph Layout">
+                <IconButton variant='contained'
+                    disabled={elements===null}
+                    onClick={()=>{
+                        setLayout(layout + 1 === Object.keys(layouts).length ? 0: layout+1)
+                    }}
+                    style={{marginLeft: 5}}
+                >
+                    <FlipCameraAndroidIcon/>
+                </IconButton>
+            </Tooltip>
           </Grid>
           <Grid item>
             <Tooltip title={edgeStyle.label ? "Hide edge labels": "Show edge labels"}>
@@ -538,6 +547,34 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 }}>SVG</MenuItem>
             </Menu>
           </Grid>
+          <Grid item>
+              <Tooltip title={!legendVisibility ? "Show legend": "Hide legend"}>
+                  <IconButton variant='contained'
+                      disabled={elements===null}
+                      onClick={()=>{
+                          setLegendVisibility(!legendVisibility)
+                      }}
+                      style={{marginLeft: 5}}
+                  >
+                      {!legendVisibility ? <LabelIcon />: <LabelOffIcon />}
+                  </IconButton>
+              </Tooltip>
+          </Grid>
+          {legendVisibility &&
+              <Grid item>
+                  <Tooltip title="Adjust legend size">
+                      <IconButton variant='contained'
+                          disabled={elements===null}
+                          onClick={()=>{
+                              setLegendSize((legendSize+1)%5)
+                          }}
+                          style={{marginLeft: 5}}
+                      >
+                          {legendSize < 4 ? <ZoomInIcon/>: <ZoomOutIcon/>}
+                      </IconButton>
+                  </Tooltip>
+              </Grid>
+          }
         </Grid>
           
           
@@ -765,7 +802,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
           }}
           />
         }
-        {elements && <Legend elements={elements}/>}
+        {(elements && legendVisibility) && <Legend elements={elements} legendSize={legendSize}/>}
         {(focused || node) && <TooltipCard 
           node={focused || node}
           schema={schema}
