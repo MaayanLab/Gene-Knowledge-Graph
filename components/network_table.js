@@ -8,6 +8,8 @@ const DataGrid = dynamic(async () => (await import('@mui/x-data-grid')).DataGrid
 const GridToolbar = dynamic(async () => (await import('@mui/x-data-grid')).GridToolbar);
 const Tabs = dynamic(() => import('@mui/material/Tabs'));
 const Tab = dynamic(() => import('@mui/material/Tab'));
+const Card = dynamic(() => import('@mui/material/Card'));
+const CardContent = dynamic(() => import('@mui/material/CardContent'));
 
 const NetworkTable = ({data, schema}) => {
 	const [processedData, setProcessedData] = useState(null)
@@ -180,41 +182,45 @@ const NetworkTable = ({data, schema}) => {
 	else {
 		const {data={}, header=[], columnVisibilityModel} = processedData[tab] || {}
 		return (
-			<Grid container justifyContent={"center"} style={{paddingBottom: 10}}>
-				<Grid item xs={12}>
-					<Tabs
-						value={tab}
-						variant="scrollable"
-        				scrollButtons="auto"
-						onChange={(e, val)=>setTab(val)}
-						aria-label="tab"
-						fullWidth
-					>
-					{tabs.map(k=>(
-						<Tab value={k} aria-label="left aligned" key={`tab-${k}`} label={k}/>
-					))}
-					</Tabs>
-				</Grid>
-				<Grid item xs={12}>
-					<DataGrid
-						key={tab}
-						initialState={{
-							columns: {
-							  columnVisibilityModel
-							},
-						  }}
-						components={{ Toolbar: GridToolbar }}
-						sortingOrder={['desc', 'asc']}
-						rows={Object.values(data)}
-						columns={header.filter(i=>i.count === undefined || i.count > 0)}
-						autoPageSize
-						disableColumnMenu
-						autoHeight
-						pageSize={10}
-						rowsPerPageOptions={[5, 10, 25]}
-					/>
-				</Grid>
-			</Grid>
+			<Card>
+				<CardContent>
+					<Grid container justifyContent={"center"} style={{paddingBottom: 10}}>
+						<Grid item xs={12}>
+							<Tabs
+								value={tab}
+								variant="scrollable"
+								scrollButtons="auto"
+								onChange={(e, val)=>setTab(val)}
+								aria-label="tab"
+								fullWidth
+							>
+							{tabs.map(k=>(
+								<Tab value={k} aria-label="left aligned" key={`tab-${k}`} label={k}/>
+							))}
+							</Tabs>
+						</Grid>
+						<Grid item xs={12}>
+							<DataGrid
+								key={tab}
+								initialState={{
+									columns: {
+									columnVisibilityModel
+									},
+								}}
+								components={{ Toolbar: GridToolbar }}
+								sortingOrder={['desc', 'asc']}
+								rows={Object.values(data)}
+								columns={header.filter(i=>i.count === undefined || i.count > 0)}
+								autoPageSize
+								disableColumnMenu
+								autoHeight
+								pageSize={10}
+								rowsPerPageOptions={[5, 10, 25]}
+							/>
+						</Grid>
+					</Grid>
+				</CardContent>
+			</Card>
 		)
 	}
 }
