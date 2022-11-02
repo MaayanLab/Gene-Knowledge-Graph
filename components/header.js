@@ -85,7 +85,8 @@ const styles = {
 		background: "#e0e0e0",
 		"&:hover": {
 			background: "#9e9e9e",
-		}
+		},
+		verticalAlign: "center"
 	}
   }
 
@@ -122,7 +123,7 @@ const IconRenderer = ({label, icon, height=100, width=100, href, router, subhead
 				}}
 				sx={buttonStyle}
 			>
-				<div style={{height, minWidth: width, ...buttonStyle}}>
+				<div style={{height: 100, minWidth: width, ...buttonStyle}}>
 					<Image
 						// loader={()=>`/birth-defect-drugs${val.icon}`} 
 						src={makeTemplate(icon, {})}
@@ -255,17 +256,17 @@ const Header = ({schema, ...rest}) => {
 							</Menu>
 						</Grid>
 					}
+					<Grid item>
+						<Grid container justifyContent={"flex-start"}>
+							<Grid item><Counter/></Grid>
+						</Grid>
+					</Grid>
 				</Grid>:<Typography variant="h4"><b>{schema.header.title}</b></Typography>
 			}
 			
 		</Grid>
 		<Grid item xs={12} align="center">
 			<Stack direction={"row"} sx={{ display: { xs: 'block'} }} spacing={1}>{icon_buttons}</Stack>
-		</Grid>
-		<Grid item xs={12}>
-			<Grid container justifyContent={"flex-start"}>
-				<Grid item><Counter/></Grid>
-			</Grid>
 		</Grid>
 	</Grid>
 )}
