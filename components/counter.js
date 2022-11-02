@@ -26,7 +26,7 @@ export const Counter = () => {
 
     return (
         <Stack direction={"row"}>
-            <Typography>Queries Submitted: <b>{count}</b></Typography>
+            <Typography variant="cap">Queries Submitted: <b>{count}</b></Typography>
         </Stack>
     )
 }
