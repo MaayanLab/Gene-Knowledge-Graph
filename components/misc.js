@@ -165,9 +165,19 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
         <Grid item><Typography variant="subtitle1">Search Term</Typography></Grid>   
       </Grid></Grid>   
     }
+    const color_sum = {}
     for (const i of elements) {
       const {kind, color} = i.data
       if (colors[kind]===undefined && color !== "#F8333C" && kind !== "Relation") {
+        color_sum[kind] = color
+        colors[kind] = <Grid item xs={12} key={kind}>
+          <Grid container alignItems={"center"} spacing={1}>
+            <Grid item><Avatar sx={{background: color, width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar></Grid>
+            <Grid item><Typography variant="subtitle1">{kind}</Typography></Grid>   
+          </Grid></Grid> 
+      }
+      if (colors[kind]!==undefined && color_sum[kind] === "#bdbdbd" && color !== "#F8333C" && kind !== "Relation") {
+        color_sum[kind] = color
         colors[kind] = <Grid item xs={12} key={kind}>
           <Grid container alignItems={"center"} spacing={1}>
             <Grid item><Avatar sx={{background: color, width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar></Grid>
