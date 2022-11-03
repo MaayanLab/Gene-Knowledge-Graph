@@ -48,11 +48,12 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                 setError({message: "Error resolving previous input. Try again in a while.", type: "fail"})
             }
             else if (! request.ok && counter < 4) {
-                setError({message: `Error resolving previous input. Trying again in ${counter + 5} seconds`, type: "retry"})
+                setError({message: `Error resolving previous input. Trying again in ${counter + 5} seconds...`, type: "retry"})
                 await delay((counter + 5)*1000)
             } 
             else {    
                 const {genes, description} = await request.json()
+                setError(null)
                 if (genes.join("\n") !== input.genes.join('\n')) return false
                 if (description !== input.description) return false
                 if (prevInput.genes.join('\n')!==input.genes.join('\n')) return false
@@ -107,7 +108,7 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                     setError({message: "Error resolving genes. Try again in a while.", type: "fail"})
                 }
                 else if (! request.ok && counter < 4) {
-                    setError({message: `Error resolving genes. Trying again in ${counter + 5} seconds`, type: "retry"})
+                    setError({message: `Error resolving genes. Trying again in ${counter + 5} seconds...`, type: "retry"})
                     await delay((counter + 5)*1000)
                 } 
                 else {

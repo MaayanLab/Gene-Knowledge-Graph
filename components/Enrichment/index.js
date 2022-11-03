@@ -166,7 +166,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     setError({message: "Error fetching enrichment. Try again in a while.", type: "fail"})
                 }
                 else if (! res.ok && counter < 4) {
-                    setError({message: `Error fetching enrichment. Trying again in ${counter + 5} seconds`, type: "retry"})
+                    setError({message: `Error fetching enrichment. Trying again in ${counter + 5} seconds...`, type: "retry"})
                     await delay((counter + 5)*1000)
                 } 
                 else {
@@ -195,7 +195,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     setError({message: "Error fetching Enrichr Link. Try again in a while.", type: "fail"})
                 }
                 else if (! request.ok && counter < 4) {
-                    setError({message: `Error fetching Enrichr Link. Trying again in ${counter + 5} seconds`, type: "retry"})
+                    setError({message: `Error fetching Enrichr Link. Trying again in ${counter + 5} seconds...`, type: "retry"})
                     await delay((counter + 5)*1000)
                 } 
                 else {
@@ -209,6 +209,8 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         }
         if (userListId) {
             get_shortId()
+        } else {
+            setError(null)
         }
         // setCollapsed(userListId!==undefined)
     }, [userListId])
@@ -444,17 +446,36 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
             
             <Grid item xs={12} style={{height: userListId ? 800: "100%"}}>
                 <Snackbar open={error!==null}
-					anchorOrigin={{ vertical:"top", horizontal:"right" }}
-					autoHideDuration={3000}
-					onClose={()=>setError(null)}
+					anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
+					autoHideDuration={4500}
+					onClose={()=>{
+                        if ((error || {} ).type === "fail") {
+                            router.push({
+                                pathname: `/${page || ''}`,
+                            }, undefined, { shallow: true })
+                        } else {
+                            setError(null)
+                        }
+                    }}
 				>
                     { error!==null && 
                         <Alert 
-                            onClose={()=>setError(null)}
+                            onClose={()=>{
+                                if ((error || {} ).type === "fail") {
+                                    router.push({
+                                        pathname: `/${page || ''}`,
+                                    }, undefined, { shallow: true })
+                                    setError(null)
+                                } else {
+                                    setError(null)
+                                }
+                            }}
                             severity={(error || {} ).type === "fail" ? "error": "warning"}
                             sx={{ width: '100%' }} 
+                            variant="filled"
+                            elevation={6}
                             action={
-                                <IconButton size="small" onClick={()=>setError(false)} color={(error || {} ).type === "fail" ? "error": "warning"}>
+                                <IconButton size="small" onClick={()=>setError(null)} color={(error || {} ).type === "fail" ? "error": "warning"}>
                                     <HighlightOffIcon/>
                                 </IconButton>
                             }
