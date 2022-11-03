@@ -47,7 +47,7 @@ const tabs = {
 		component: ({entries})=><EnrichmentBar data={entries}
 			max={entries[0].value}
 			min={entries[entries.length - 1].value}
-			width={700}
+			width={900}
 		/>
 	},
 	table: {
@@ -107,6 +107,7 @@ const TermViz = ({data}) => {
 								onChange={(e, val)=>setTab(val)}
 								aria-label="tab"
 								fullWidth
+								centered
 							>
 							{Object.entries(tabs).map(([k,v])=>(
 								<Tab value={k} aria-label="left aligned" key={`tab-${k}`} label={v.label}/>
