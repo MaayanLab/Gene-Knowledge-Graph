@@ -15,12 +15,12 @@ const get_color = ({color, darken}) => {
 	else return color_map[color].hex()
 }
 
-const get_node_color_and_type = ({node, terms, color=default_color, aggr_scores, field, aggr_field, fields}) => {
+const get_node_color_and_type = ({node, terms, color, aggr_scores, field, aggr_field, fields}) => {
     if (node.properties.pval === undefined) return default_get_node_color_and_type(({node, terms, color, aggr_scores, field, aggr_field, fields}))
     else {
         if (node.properties.pval > 0.05) return {node_type: 0, color: "#bdbdbd"}
         else {
-            const max_pval = aggr_scores.max_pval
+            const max_pval = aggr_scores.max_pval //aggr_scores.max_pval > 0.05 ? aggr_scores.max_pval: 0.05
             const min_pval = aggr_scores.min_pval
             const darken =  Math.abs((node.properties.pval - min_pval)/(max_pval-min_pval))
             // console.log(node.properties.label, max_pval, min_pval, darken)
@@ -33,43 +33,46 @@ const get_node_color_and_type = ({node, terms, color=default_color, aggr_scores,
 }
 
 const enrichr_query = async ({userListId, library, term_limit}) => {
-    try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/enrich?userListId=${userListId}&backgroundType=${library}`)
-        const regex = {}
-        for (const [k,v] of Object.entries(await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment/getRegex`)).json())) {
-            regex[k] = new RegExp(v)
-        }
-        const results = await res.json()
-        const genes = {}
-        const terms = {}
-        let max_pval = 0
-        let min_pval = 1
-        for (const i of results[library].slice(0,term_limit)) {
-            const label = regex[library] !== undefined ? regex[library].exec(i[1]).groups.label:i[1]
-            const pval = i[2]
-            const zscore = i[3]
-            const combined_score = i[4]
-            const overlapping_genes = i[5]
-            const qval = i[6]
-            if (terms[label] === undefined){
-                if (pval > max_pval) max_pval = pval
-                if (pval < min_pval) min_pval = pval
-                terms[label] ={
-                    pval,
-                    zscore,
-                    combined_score,
-                    qval,
-                    logpval: -Math.log(pval)
-                }
-            }
-            for (const gene of overlapping_genes) {
-                genes[gene] = (genes[gene] || 0) + 1
-            }
-        }
-        return {genes, terms, max_pval, min_pval}
-    } catch (error) {
-        console.log(error)
+    const res = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/enrich?userListId=${userListId}&backgroundType=${library}`)
+    if (res.ok !== true) {
+        throw new Error(`Error communicating with Enrichr`)
     }
+    const regex = {}
+    const reg = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment/getRegex`)
+    if (reg.ok !== true) {
+        throw new Error(`Error fetching Regex`)
+    }
+    for (const [k,v] of Object.entries(await reg.json())) {
+        regex[k] = new RegExp(v)
+    }
+    const results = await res.json()
+    const genes = {}
+    const terms = {}
+    let max_pval = 0
+    let min_pval = 1
+    for (const i of results[library].slice(0,term_limit)) {
+        const label = regex[library] !== undefined ? regex[library].exec(i[1]).groups.label:i[1]
+        const pval = i[2]
+        const zscore = i[3]
+        const combined_score = i[4]
+        const overlapping_genes = i[5]
+        const qval = i[6]
+        if (terms[label] === undefined){
+            if (pval > max_pval) max_pval = pval
+            if (pval < min_pval) min_pval = pval
+            terms[label] ={
+                pval,
+                zscore,
+                combined_score,
+                qval,
+                logpval: -Math.log(pval)
+            }
+        }
+        for (const gene of overlapping_genes) {
+            genes[gene] = (genes[gene] || 0) + 1
+        }
+    }
+    return {genes, terms, max_pval, min_pval}
 }
 
 // gene_limit: limits top genes
@@ -163,7 +166,7 @@ const enrichment = async ({
         return resolve_results({results: rs, schema,  aggr_scores, colors, properties: terms, get_node_color_and_type})
     } catch (error) {
         console.log(error)
-        res.status(500).send({message: 'Error communicating with Enrichr'})
+        res.status(500).send({message: error.message})
     }
 }
 

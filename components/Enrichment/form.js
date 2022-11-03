@@ -21,7 +21,7 @@ const TextField = dynamic(() => import('@mui/material/TextField'));
 
 
 
-const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_controller, loading, ...props}) => {
+const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_controller, loading, setError, ...props}) => {
     const default_term_limit = default_options.term_limit
     const {page, ...rest} = router.query
     const [query, setQuery] = useState(rest||{})
@@ -41,14 +41,26 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
 
     const same_prev_input = async () => {
         if (!userListId) return false
-        const {genes, description} = await (
-            await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/view?userListId=${userListId}`)
-        ).json()
-        if (genes.join("\n") !== input.genes.join('\n')) return false
-        if (description !== input.description) return false
-        if (prevInput.genes.join('\n')!==input.genes.join('\n')) return false
-        if (prevInput.description !== input.description) return false
-        else return true
+        let counter = 0
+        while (counter < 5) {
+            const request = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/view?userListId=${userListId}`)
+            if (! request.ok && counter === 4) {
+                setError({message: "Error resolving previous input. Try again in a while.", type: "fail"})
+            }
+            else if (! request.ok && counter < 4) {
+                setError({message: `Error resolving previous input. Trying again in ${counter + 5} seconds`, type: "retry"})
+                await delay((counter + 5)*1000)
+            } 
+            else {    
+                const {genes, description} = await request.json()
+                if (genes.join("\n") !== input.genes.join('\n')) return false
+                if (description !== input.description) return false
+                if (prevInput.genes.join('\n')!==input.genes.join('\n')) return false
+                if (prevInput.description !== input.description) return false
+                else return true
+            }
+            counter = counter + 1
+        }
     }
 
     const checked_libraries = libraries.reduce((acc, i)=>({
@@ -88,13 +100,27 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
 
     useEffect(()=> {
         const resolve_genes = async () => {
-            const {genes, description} = await (
-                await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/view?userListId=${userListId}`)
-            ).json()
-            setInput({
-                genes,
-                description
-            })
+            let counter = 0
+            while (counter < 5) {
+                const request = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/view?userListId=${userListId}`)
+                if (! request.ok && counter === 4) {
+                    setError({message: "Error resolving genes. Try again in a while.", type: "fail"})
+                }
+                else if (! request.ok && counter < 4) {
+                    setError({message: `Error resolving genes. Trying again in ${counter + 5} seconds`, type: "retry"})
+                    await delay((counter + 5)*1000)
+                } 
+                else {
+                    const {genes, description} = await request.json()
+                    setError(null)
+                    setInput({
+                        genes,
+                        description
+                    })
+                    break
+                }
+                counter = counter + 1
+            }
         }
         if (userListId) {
             resolve_genes()

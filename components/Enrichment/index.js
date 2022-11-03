@@ -28,10 +28,14 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Modal from '@mui/material/Modal';
 import Grid from '@mui/material/Grid';
-import { Stack } from '@mui/material';
+
+import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
 
 // const Grid = dynamic(() => import('@mui/material/Grid'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
+const Snackbar = dynamic(() => import('@mui/material/Snackbar'));
+
 const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
 
 const TextField = dynamic(() => import('@mui/material/TextField'));
@@ -69,7 +73,6 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
     const router = useRouter()
     const {page, ...rest} = router.query
     const [error, setError] = useState(null)
-    const [openError, setOpenError] = useState(false)
     const [elements, setElements] = useState(null)
     const [node, setNode] = useState(null)
     const [focused, setFocused] = useState(null)
@@ -132,9 +135,6 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
 	};
     const fetch_kg = async () => {
         try {
-            if (error !== null) {
-                await delay(5000);
-            }
             setCollapsed(null)
             const controller = get_controller()
             const {
@@ -146,37 +146,41 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                 remove
             } = router.query
             const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : default_options.selected
-            const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment`,
-            {
-                method: "POST",
-                body: JSON.stringify({
-                    userListId,
-                    libraries,
-                    min_lib,
-                    gene_limit,
-                    gene_degree,
-                    expand: expand,
-                    remove: remove,
-                }),
-                signal: controller.signal
-            })
-            const results = (await res.json())
-            // setId(id+1)
-            if (results.message) {
-                setError({message: "Error connecting to Enrichr, trying again...", type: "error"})
-                setOpenError(true)
-                if (shouldUpdateId(router.query, prevQuery)) setId(id+1)
-            } else {
-                setOpenError(false)
-                setError(null)
-                setLoading(false)
-                setElements(results)
-                if (shouldUpdateId(router.query, prevQuery)) setId(id+1)
-            
+            let counter = 0
+            while (counter < 5) {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment`,
+                    {
+                        method: "POST",
+                        body: JSON.stringify({
+                            userListId,
+                            libraries,
+                            min_lib,
+                            gene_limit,
+                            gene_degree,
+                            expand: expand,
+                            remove: remove,
+                        }),
+                        signal: controller.signal
+                    })
+                if (! res.ok && counter === 4) {
+                    setError({message: "Error fetching enrichment. Try again in a while.", type: "fail"})
+                }
+                else if (! res.ok && counter < 4) {
+                    setError({message: `Error fetching enrichment. Trying again in ${counter + 5} seconds`, type: "retry"})
+                    await delay((counter + 5)*1000)
+                } 
+                else {
+                    const results = (await res.json())
+                    setError(null)
+                    setLoading(false)
+                    setElements(results)
+                    if (shouldUpdateId(router.query, prevQuery)) setId(id+1)
+                    break
+                }
+                counter = counter + 1
             }
         } catch (error) {
-            setError({message: "Error connecting to Enrichr, trying again...", type: "error"})
-            setOpenError(true)
+            console.error(error)
         }
     }
 
@@ -184,10 +188,24 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
 
     useEffect(()=> {
         const get_shortId = async () => {
-            const {link_id} = await (
-                await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
-            ).json()
-            setShortId(link_id)
+            let counter = 0
+            while (counter < 5) {
+                const request = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
+                if (! request.ok && counter === 4) {
+                    setError({message: "Error fetching Enrichr Link. Try again in a while.", type: "fail"})
+                }
+                else if (! request.ok && counter < 4) {
+                    setError({message: `Error fetching Enrichr Link. Trying again in ${counter + 5} seconds`, type: "retry"})
+                    await delay((counter + 5)*1000)
+                } 
+                else {
+                    const {link_id} = await request.json()
+                    setError(null)
+                    setShortId(link_id)
+                    break
+                }
+                counter = counter + 1
+            } 
         }
         if (userListId) {
             get_shortId()
@@ -236,7 +254,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         'aria-labelledby': 'basic-button',
                     }}
                 >
-                    <CardContent style={{width: 1000}}><GeneSetForm router={router} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} {...props}/></CardContent>
+                    <CardContent style={{width: 1000}}><GeneSetForm setError={setError} router={router} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} {...props}/></CardContent>
                 </Menu>
             </Grid>
             }
@@ -272,7 +290,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                             </Tooltip>
                         </Grid>
                         <Grid item>
-                            <Tooltip title="Re-orient graph">
+                            <Tooltip title="Refresh graph">
                                 <IconButton variant='contained'
                                     disabled={elements===null}
                                     onClick={()=>{
@@ -425,17 +443,26 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
             }
             
             <Grid item xs={12} style={{height: userListId ? 800: "100%"}}>
-                {/* <Snackbar open={openError}
+                <Snackbar open={error!==null}
 					anchorOrigin={{ vertical:"top", horizontal:"right" }}
 					autoHideDuration={3000}
-					onClose={()=>setOpenError(false)}
-					message={(error || {}).message}
-					action={
-                        <IconButton size="small" onClick={()=>setOpenError(false)}>
-                            <HighlightOffIcon/>
-                        </IconButton>
-					}
-				/> */}
+					onClose={()=>setError(null)}
+				>
+                    { error!==null && 
+                        <Alert 
+                            onClose={()=>setError(null)}
+                            severity={(error || {} ).type === "fail" ? "error": "warning"}
+                            sx={{ width: '100%' }} 
+                            action={
+                                <IconButton size="small" onClick={()=>setError(false)} color={(error || {} ).type === "fail" ? "error": "warning"}>
+                                    <HighlightOffIcon/>
+                                </IconButton>
+                            }
+                        >
+                            {( error || {}).message || ""}
+                        </Alert>
+                    }
+                </Snackbar>
                 { (userListId === undefined) ? <div align="center">
                     <Typography sx={{marginBottom: 3}}>Enter a set of Entrez gene symbols to perform enrichment analysis with &nbsp;
                         <Link href="https://maayanlab.cloud/Enrichr/" 
@@ -444,7 +471,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                         >
                             Enrichr
                         </Link>.</Typography>
-                    <GeneSetForm router={router} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} {...props}/>
+                    <GeneSetForm setError={setError} router={router} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} {...props}/>
                 </div>
                 : (elements === null) ? (
                 <CircularProgress/>
@@ -629,7 +656,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                     }}
                     />
                 }
-                {(elements && userListId && legendVisibility) && <Legend elements={elements} search={false} top={400} legendSize={legendSize}/>}
+                {(elements && userListId && legendVisibility) && <Legend elements={elements.filter(a=>a.data.properties.pval).sort((a,b)=>(a.data.properties.pval-b.data.properties.pval))} search={false} top={400} legendSize={legendSize}/>}
                 {(focused || node) && <TooltipCard 
                     node={focused || node}
                     schema={schema}
