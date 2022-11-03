@@ -210,6 +210,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         if (userListId) {
             get_shortId()
         } else {
+            setLoading(false)
             setError(null)
         }
         // setCollapsed(userListId!==undefined)
@@ -474,13 +475,13 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                             sx={{ width: '100%' }} 
                             variant="filled"
                             elevation={6}
-                            action={
-                                <IconButton size="small" onClick={()=>setError(null)} color={(error || {} ).type === "fail" ? "error": "warning"}>
-                                    <HighlightOffIcon/>
-                                </IconButton>
-                            }
+                            // action={
+                            //     <IconButton size="small" onClick={()=>setError(null)} style={{color: "#FFF"}}>
+                            //         <HighlightOffIcon/>
+                            //     </IconButton>
+                            // }
                         >
-                            {( error || {}).message || ""}
+                            <Typography>{( error || {}).message || ""}</Typography>
                         </Alert>
                     }
                 </Snackbar>
