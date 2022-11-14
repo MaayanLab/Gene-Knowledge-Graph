@@ -50,7 +50,6 @@ const enrichr_query = async ({userListId, library, term_limit, term_degree}) => 
     const terms = {}
     let max_pval = 0
     let min_pval = 1
-    console.log(term_degree)
     for (const i of results[library].slice(0,term_limit)) {
         const label = regex[library] !== undefined ? regex[library].exec(i[1]).groups.label:i[1]
         const pval = i[2]
@@ -185,7 +184,6 @@ export default async function query(req, res) {
                 defaultAccessMode: neo4j.session.READ
             })
             const body = typeof req.body === "string" ? JSON.parse(req.body): req.body
-            console.log(body)
             const results = await enrichment({session, ...body, res})
             res.status(200).send(results)
             
