@@ -94,6 +94,7 @@ const TermViz = ({data}) => {
 		}
 	}, [data])
 	if (entries === null) return null
+	else if (entries.length === 0) return null
 	else {
 		return (
 			<Card>
