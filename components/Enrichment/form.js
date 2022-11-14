@@ -32,7 +32,9 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
         userListId,
         gene_limit=default_options.gene_limit,
         min_lib=default_options.min_lib,
-        gene_degree=default_options.gene_degree} = query
+        gene_degree=default_options.gene_degree,
+        term_degree=default_options.term_degree,
+    } = query
     
     const libraries = query.libraries ? JSON.parse(query.libraries) : default_options.selected
     
@@ -270,6 +272,33 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                             <Grid item xs={1}>
                                 <Typography variant='subtitle2'>
                                     {gene_degree || 1}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
+                            <Grid item><Typography variant='subtitle2'>Minimum links per term</Typography></Grid>
+                            <Grid item style={{ flexGrow: 1 }}>
+                                <Tooltip title={`Filter out terms with fewer connections`}>
+                                    <Slider 
+                                        value={term_degree || 1}
+                                        onChange={(e, nv)=>{
+                                            const new_query = {...query}
+                                            new_query.term_degree = nv
+                                            setQuery(new_query)
+                                        }}
+                                        style={{width: "100%"}}
+                                        min={1}
+                                        max={20}
+                                        marks
+                                        valueLabelDisplay='auto'
+                                        aria-labelledby="degree-slider" />
+                                    </Tooltip>
+                            </Grid>
+                            <Grid item xs={1}>
+                                <Typography variant='subtitle2'>
+                                    {term_degree || 1}
                                 </Typography>
                             </Grid>
                         </Grid>

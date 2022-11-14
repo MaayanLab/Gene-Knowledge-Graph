@@ -32,7 +32,7 @@ const get_node_color_and_type = ({node, terms, color, aggr_scores, field, aggr_f
     }	
 }
 
-const enrichr_query = async ({userListId, library, term_limit}) => {
+const enrichr_query = async ({userListId, library, term_limit, term_degree}) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/enrich?userListId=${userListId}&backgroundType=${library}`)
     if (res.ok !== true) {
         throw new Error(`Error communicating with Enrichr`)
@@ -50,6 +50,7 @@ const enrichr_query = async ({userListId, library, term_limit}) => {
     const terms = {}
     let max_pval = 0
     let min_pval = 1
+    console.log(term_degree)
     for (const i of results[library].slice(0,term_limit)) {
         const label = regex[library] !== undefined ? regex[library].exec(i[1]).groups.label:i[1]
         const pval = i[2]
@@ -57,19 +58,22 @@ const enrichr_query = async ({userListId, library, term_limit}) => {
         const combined_score = i[4]
         const overlapping_genes = i[5]
         const qval = i[6]
-        if (terms[label] === undefined){
-            if (pval > max_pval) max_pval = pval
-            if (pval < min_pval) min_pval = pval
-            terms[label] ={
-                pval,
-                zscore,
-                combined_score,
-                qval,
-                logpval: -Math.log(pval)
+        if (term_degree===undefined || overlapping_genes.length >= term_degree) {
+            if (terms[label] === undefined){
+                if (pval > max_pval) max_pval = pval
+                if (pval < min_pval) min_pval = pval
+                terms[label] ={
+                    pval,
+                    zscore,
+                    combined_score,
+                    qval,
+                    logpval: -Math.log(pval),
+                    overlap: overlapping_genes.length,
+                }
             }
-        }
-        for (const gene of overlapping_genes) {
-            genes[gene] = (genes[gene] || 0) + 1
+            for (const gene of overlapping_genes) {
+                genes[gene] = (genes[gene] || 0) + 1
+            }
         }
     }
     return {genes, terms, max_pval, min_pval}
@@ -81,6 +85,7 @@ const enrichment = async ({
     userListId,
     libraries,
     gene_limit,
+    term_degree,
     min_lib,
     gene_degree,
     session,
@@ -91,7 +96,7 @@ const enrichment = async ({
 }) => {
     try {
         const results = await Promise.all(libraries.map(async ({library, term_limit})=>
-            await enrichr_query({userListId, term_limit, library})
+            await enrichr_query({userListId, term_limit, library, term_degree})
         ))
         const gene_counts = {}
         let terms = {}
@@ -180,6 +185,7 @@ export default async function query(req, res) {
                 defaultAccessMode: neo4j.session.READ
             })
             const body = typeof req.body === "string" ? JSON.parse(req.body): req.body
+            console.log(body)
             const results = await enrichment({session, ...body, res})
             res.status(200).send(results)
             

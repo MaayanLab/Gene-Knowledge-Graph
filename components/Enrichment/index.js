@@ -142,6 +142,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                 gene_limit=default_options.gene_limit,
                 min_lib=default_options.min_lib,
                 gene_degree=default_options.gene_degree,
+                term_degree=default_options.term_degree,
                 expand,
                 remove
             } = router.query
@@ -157,6 +158,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                             min_lib,
                             gene_limit,
                             gene_degree,
+                            term_degree,
                             expand: expand,
                             remove: remove,
                         }),
