@@ -16,15 +16,32 @@ const default_color = '#48ACF0'
 const highlight_color = '#F8333C'
 const default_edge_color = '#e0e0e0'
 
-export const default_get_node_color_and_type = ({node, terms, color=default_color, aggr_scores, field, aggr_field, fields}) => {
+export const default_get_node_color_and_type = ({node, terms, color=default_color, aggr_scores, field, aggr_field, aggr_type, fields}) => {
 	// if(terms.indexOf(node.properties.label) > -1){
 	if (fields.filter(i=>i && terms.indexOf(node.properties[i]) > -1).length > 0) {
 		return {color: highlight_color, node_type: 1}
-	} else if (node.properties[field] && aggr_field!==undefined) {
-		const aggr_score = aggr_scores[aggr_field] || 1
-		return {
-			color: get_color({color, darken: 1-Math.abs(node.properties[field]/aggr_score)}),
-			node_type: 0
+	} else if (node.properties[field] && aggr_field!==undefined && aggr_type!==undefined) {
+		const max = aggr_scores[`max_${field}`] || 0
+		const min = aggr_scores[`min_${field}`] || 0
+		const score = node.properties[field]
+		// it's not neg to pos
+		if ((min >= 0 && max >= 0) || (min < 0 && max <= 0)) {
+			const ext_diff = Math.abs(max-min)
+			const comp = aggr_type === "max" ? max: min
+			const val_diff = Math.abs(score-comp)
+			return {
+				color: get_color({color, darken: 1-(val_diff/ext_diff)}),
+				node_type: 0
+			}
+		} else {
+			// two sided
+			const comp = score > 0 ? max: min
+			const val_diff = Math.abs(score-comp)
+			const ext_diff = Math.abs(comp)
+			return {
+				color: get_color({color, darken: 1-(val_diff/ext_diff)}),
+				node_type: 0
+			}
 		}
 	}
 	return {
@@ -277,6 +294,7 @@ export default async function query(req, res) {
 				res.status(400).send("Invalid input")
 			}
 		  } catch (e) {
+			console.log(e.message)
 			res.status(400).send(e.message)
 		  } finally {
 			session.close()

@@ -11,7 +11,7 @@ const color_map = {}
 const get_color = ({color, darken}) => {
 	if (!color_map[color]) color_map[color] = Color(color)
 
-	if (darken) return color_map[color].darken(darken*2).hex()
+	if (darken) return color_map[color].darken(darken*0.5).hex()
 	else return color_map[color].hex()
 }
 
