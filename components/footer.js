@@ -11,7 +11,7 @@ const Button = dynamic(async () => (await import('@mui/material')).Button);
 const GitHubIcon = dynamic(()=>import('@mui/icons-material/GitHub'));
 const BugReportIcon = dynamic(()=>import('@mui/icons-material/BugReport'));
 
-const FooterContents = ({footer, key}) => {
+const FooterContents = ({footer, key, schema}) => {
     if (footer.type == "github") {
         return (
             <Grid item  key={key}>
@@ -21,7 +21,7 @@ const FooterContents = ({footer, key}) => {
 							// variant="contained"
 							startIcon={<GitHubIcon/>}
 							href={footer.code}
-							style={{textTransform: "none", color: "#FFF"}}
+							style={{textTransform: "none", color: (schema.ui || {}).footer_buttons === "light" ? "#000": "#FFF"}}
 						>
 							Github Repository
 						</Button>
@@ -31,7 +31,7 @@ const FooterContents = ({footer, key}) => {
 							// variant="contained"
 							startIcon={<BugReportIcon/>}
 							href={footer.issues}
-							style={{textTransform: "none", color: "#FFF"}}
+							style={{textTransform: "none", color: (schema.ui || {}).footer_buttons === "light" ? "#000": "#FFF"}}
 						>
 							Report a bug
 						</Button>
@@ -80,7 +80,7 @@ const Footer = ({schema}) => {
     return (
         <Paper square style={{boxShadow: "none",
 			height: 180,
-			background: "#000",
+			background: (schema.ui || {}).footer_background || "#000",
 			flexShrink: 0,
 			paddingTop: 30
 		}}>
@@ -88,7 +88,7 @@ const Footer = ({schema}) => {
 				marginTop: "auto",
 				marginBottom: "auto",
 			}}>
-                {schema.footer.map((footer, i)=><React.Fragment  key={`footer-${i}`}><FooterContents footer={footer}/></React.Fragment>)}
+                {schema.footer.map((footer, i)=><React.Fragment  key={`footer-${i}`}><FooterContents footer={footer} schema={schema}/></React.Fragment>)}
             </Grid>
         </Paper>
     )

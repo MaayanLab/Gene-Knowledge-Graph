@@ -69,6 +69,7 @@ const theme_object = {
 
 function MyApp({ Component, pageProps }) {
   const palettes = pageProps.palettes
+  const schema = pageProps.schema
   theme_object.palette = {...theme_object.palette, ...palettes}
   const theme = createTheme(theme_object)
   return (
@@ -82,7 +83,7 @@ function MyApp({ Component, pageProps }) {
           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
           <script async defer src="https://buttons.github.io/buttons.js"></script>
         </Head>
-        <div style={{backgroundColor: "#C5F8F8"}}>
+        <div style={{backgroundColor: ((schema || {}).ui || {}).background || "#C5F8F8"}}>
           <Container id={"main"} maxWidth={"lg"} style={{background: "#fff"}}>
             {isIFrame() ? null : <Header {...pageProps}/>}
             <Component 
