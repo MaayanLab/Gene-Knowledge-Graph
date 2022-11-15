@@ -229,7 +229,7 @@ const Header = ({schema, ...rest}) => {
 						</div>
 					</Grid>
 					<Grid item>
-						<Typography variant="h4"><b>{schema.header.title}</b></Typography>
+						<Typography variant="h5"><b>{schema.header.title}</b></Typography>
 					</Grid>
 					{schema.header.tabs && 
 						<Grid item align="left">
