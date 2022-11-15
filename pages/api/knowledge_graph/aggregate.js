@@ -17,27 +17,28 @@ const aggregates = async ({session, schema}) => {
         if (s.order) {
             const [field, order] = s.order
             let query
-            let score_var
+            let edge_score_var
             if (order === "DESC") {
                 const order_pref = 'max'
-                score_var = `${order_pref}_${field}`
+                edge_score_var = `${order_pref}_${field}`
                 query = `MATCH (st)-[rel]-(en)
                     WHERE rel.${field} IS NOT NULL 
-                    RETURN ${order_pref}(rel.${field}) as ${score_var}`	
+                    RETURN ${order_pref}(rel.${field}) as ${edge_score_var}`	
             } else {
                 const order_pref = 'min'
-                score_var = `${order_pref}_${field}`
+                edge_score_var = `${order_pref}_${field}`
                 query = `MATCH (st)-[rel]-(en)
-                    RETURN ${order_pref}(rel.${field}) as ${score_var}`
+                    RETURN ${order_pref}(rel.${field}) as ${edge_score_var}`
             }
             const results = await session.readTransaction(txc => txc.run(query))
             results.records.flatMap(record => {
-                const score = record.get(score_var)
-                aggr_scores[score_var] = score
+                const score = record.get(edge_score_var)
+                aggr_scores[edge_score_var] = score
             })
             for (const j of (s.match || [])) {
-                colors[j].aggr_field = score_var
+                colors[j].aggr_field = edge_score_var
                 colors[j].field = field
+                colors[j].aggr_type = order
             }
         }
     }
@@ -47,8 +48,9 @@ const aggregates = async ({session, schema}) => {
         }
         if (s.order) {
             const [field, order] = s.order
+            let score_var
             for (const order_pref of ['max', 'min']) {
-                const score_var = `${order_pref}_${field}`
+                score_var = `${order_pref}_${field}`
                 const query = `MATCH (st)
                     WHERE st.${field} IS NOT NULL 
                     RETURN ${order_pref}(st.${field}) as ${score_var}`	
@@ -61,10 +63,12 @@ const aggregates = async ({session, schema}) => {
             
             
             colors[s.node].aggr_field = score_var
+            colors[s.node].aggr_type = order
             colors[s.node].field = field
         }
     }
-
+    console.log(colors)
+    console.log(aggr_scores)
     return {aggr_scores, colors}
 }
 
@@ -82,6 +86,7 @@ export default async function query(req, res) {
             cache.put("aggregate", val);
             res.status(200).send(val) 
         } catch (error) {
+            console.log(error)
             res.status(500).send(error) 
         }
     }

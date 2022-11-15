@@ -73,7 +73,6 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   let end = router.query.end
   if (!start) start = schema.nodes[0].node
   if (!end) end = schema.nodes[0].node
-  
   const current_node = nodes[start] || Object.values(nodes)[0]
   const [allStartTerms, setAllStartTerms] = React.useState([])
   const [startTermInput, setStartTermInput] = React.useState(start_term || '')
