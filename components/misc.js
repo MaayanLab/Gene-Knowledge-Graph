@@ -113,7 +113,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
                     const {page, expand: e, ...query} = router.query
                     const expand = e !== undefined ? JSON.parse(e) : []
                     router.push({
-                      pathname: schema.endpoint || '/',
+                      pathname: (schema.endpoint.header.tabs.filter(i=>i.component === 'KnowledgeGraph')[0] || {}).endpoint || '/',
                       query: {
                         start: node.kind,
                         start_term: node.label
