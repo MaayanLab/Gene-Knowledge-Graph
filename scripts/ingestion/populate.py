@@ -7,6 +7,7 @@ from py2neo import Graph, Node, Relationship
 import boto3
 import requests
 from dotenv import load_dotenv
+from tqdm import tqdm
 
 load_dotenv()
 
@@ -57,12 +58,12 @@ class GraphEx:
   def run(self, parameters=None, **kwparameters):
     return self.graph.run(parameters=parameters, **kwparameters)
 
-
+ingested_nodes = set()    
 def process_serialized(serialized, merge, merged):
   if "edges" not in serialized:
     print("No edges found, updating nodes...")
     count = 0
-    for k,v in serialized["nodes"].items():
+    for k,v in tqdm(serialized["nodes"].items()):
       node_properties = v.get("properties", {})
       node_type = v["type"]
       node = Node(node_type, **node_properties)
@@ -70,8 +71,7 @@ def process_serialized(serialized, merge, merged):
       count += 1
     print("Updated %d nodes"%count)
   else:
-    ingested_nodes = set()
-    for i in serialized["edges"]:
+    for i in tqdm(serialized["edges"]):
       source = i["source"]
       node_a_props = serialized["nodes"][source]
       node_a_properties = node_a_props.get("properties", {})
@@ -129,7 +129,10 @@ def parse_args():
 dir, ingest_file, clean, clean_all, merge = parse_args()
 neo4graph = GraphEx(os.environ['NEO4J_URL'], auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD']))
 merged = set()
-   
+serialized_all = {
+  "nodes": {},
+  "edges": []
+}
 if clean_all == 'y':
   print("Clean install")
   neo4graph.delete_all()
@@ -202,8 +205,13 @@ else:
         with open(filename) as o:
           print("Ingesting %s..."%filename)
           serialized = json.loads(o.read())
-          print("Ingesting...")
-          process_serialized(serialized, merge, merged)
+          serialized_all["nodes"] = {
+            **serialized_all["nodes"],
+            **serialized["nodes"],
+          }
+          serialized_all["edges"] = serialized_all["edges"] + serialized["edges"]
+      print("Ingesting...")
+      process_serialized(serialized_all, merge, merged)
     neo4graph.commit()
   except Exception as e:
     print(e)
