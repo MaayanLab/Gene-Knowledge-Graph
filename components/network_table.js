@@ -25,6 +25,7 @@ const NetworkTable = ({data, schema}) => {
 			display[m] = i.display
 		}
 	}
+
 	useEffect(()=>{
 		if (data) {
 			const processed = {}
@@ -42,14 +43,14 @@ const NetworkTable = ({data, schema}) => {
 						const header = []
 						const columnVisibilityModel = {}
 						if (display[key]) {
-							header.push({
-								field: 'label',
-								headerName: "Label",
-								flex: 1,
-								style: {flexDirection: "row"},
-								align: "left",
-								type: relation ? "edge": "node",
-							})
+							// header.push({
+							// 	field: 'label',
+							// 	headerName: "Label",
+							// 	// flex: 1,
+							// 	style: {flexDirection: "row"},
+							// 	align: "left",
+							// 	type: relation ? "edge": "node",
+							// })
 							for (const prop of display[key]) {
 								const field = prop.label
 								columnVisibilityModel[field] = !(prop.hide)
@@ -104,7 +105,7 @@ const NetworkTable = ({data, schema}) => {
 								header.push({
 									field,
 									headerName: headerName.charAt(0).toUpperCase() + headerName.slice(1),
-									flex: 1,
+									// flex: 1,
 									style: {flexDirection: "row"},
 									align: "left",
 									type: relation ? "edge": "node",
