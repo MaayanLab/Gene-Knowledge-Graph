@@ -7,11 +7,12 @@ import { useRouter } from 'next/router'
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Tooltip  from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Stack = dynamic(() => import('@mui/material/Stack'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
-const Button = dynamic(() => import('@mui/material/Button'));
 const MenuIcon = dynamic(import('@mui/icons-material/Menu'));
 const Counter = dynamic(import('./counter'));
 
@@ -116,64 +117,70 @@ const IconRenderer = ({label, icon, height=100, width=100, href, router, subhead
 	}
 	if (subheader.onClick !== undefined) {
 		return (
-			<Button 
-				onClick={()=>{
-					function_mapper[subheader.onClick](({router, ...props}))
-					
-				}}
-				sx={buttonStyle}
-			>
-				<div style={{height: 100, minWidth: width, ...buttonStyle}}>
-					<Image
-						// loader={()=>`/birth-defect-drugs${val.icon}`} 
-						src={makeTemplate(icon, {})}
-						height={height}
-						width={width}
-						layout="responsive"
-						objectFit="contain"
-						alt={label}
-					/>
-				</div>
-			</Button>
+			<Tooltip title={label}>
+				<Button 
+					onClick={()=>{
+						function_mapper[subheader.onClick](({router, ...props}))
+						
+					}}
+					sx={buttonStyle}
+				>
+					<div style={{height: 100, minWidth: width, ...buttonStyle}}>
+						<Image
+							// loader={()=>`/birth-defect-drugs${val.icon}`} 
+							src={makeTemplate(icon, {})}
+							height={height}
+							width={width}
+							layout="responsive"
+							objectFit="contain"
+							alt={label}
+						/>
+					</div>
+				</Button>
+			</Tooltip>
 		)
 	} else if (href !== undefined) {
 		return (
-			<Button 
-				href={href}
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				<div style={{height, minWidth: width}}>
-					<Image
-						// loader={()=>`/birth-defect-drugs${val.icon}`} 
-						src={makeTemplate(icon, {})}
-						height={height}
-						width={width}
-						layout="responsive"
-						objectFit="contain"
-						alt={label}
-					/>
-				</div>
-			</Button>
+			<Tooltip title={label}>
+				<Button 
+					href={href}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<div style={{height, minWidth: width}}>
+						<Image
+							// loader={()=>`/birth-defect-drugs${val.icon}`} 
+							src={makeTemplate(icon, {})}
+							height={height}
+							width={width}
+							layout="responsive"
+							objectFit="contain"
+							alt={label}
+						/>
+					</div>
+				</Button>
+			</Tooltip>
 		)
 	} else {
 		return (
-			<Button 
-				sx={buttonStyle}
-				href={"/"}
-			>
-				<div style={{height, minWidth: width}}>
-					<Image
-						// loader={()=>`/birth-defect-drugs${val.icon}`} 
-						src={makeTemplate(icon, {})}
-						height={height}
-						width={width}
-						layout="responsive"
-						objectFit="contain"
-						alt={label}
-					/>
-				</div>
-			</Button>
+			<Tooltip title={label}>
+				<Button 
+					sx={buttonStyle}
+					href={"/"}
+				>
+					<div style={{height, minWidth: width}}>
+						<Image
+							// loader={()=>`/birth-defect-drugs${val.icon}`} 
+							src={makeTemplate(icon, {})}
+							height={height}
+							width={width}
+							layout="responsive"
+							objectFit="contain"
+							alt={label}
+						/>
+					</div>
+				</Button>
+			</Tooltip>
 		)
 	}
 }
@@ -196,12 +203,14 @@ const Header = ({schema, ...rest}) => {
 	const selection_rules = {}
 	for (const i of ((schema.header || {}).subheader||[])) {
 		icon_buttons.push(
-			<IconRenderer
-				router={router}
-				key={i.label}
-				{...i}
-				{...rest}
-			/>
+			<Grid item>
+				<IconRenderer
+					router={router}
+					key={i.label}
+					{...i}
+					{...rest}
+				/>
+			</Grid>
 		)
 		for (const s of (i.props || {}).selected || []) {
 			selection_rules[s] = i.label
@@ -211,7 +220,7 @@ const Header = ({schema, ...rest}) => {
 	if (schema === undefined || schema.header === undefined) return null
 	
 	return(
-	<Grid container style={{paddingBottom: 20, paddingTop: 20}}>
+	<Grid container style={{paddingBottom: 20, paddingTop: 20}} justifyContent="center">
 		<Grid item xs={12} align="center">
 			{ schema.header.icon ?
 				<Grid container justifyContent={"center"} alignItems={"center"} spacing={2} style={{marginBottom: 5}}>
@@ -265,9 +274,7 @@ const Header = ({schema, ...rest}) => {
 			}
 			
 		</Grid>
-		<Grid item xs={12} align="center">
-			<Stack direction={"row"} sx={{ display: { xs: 'block'} }} spacing={1}>{icon_buttons}</Stack>
-		</Grid>
+		{icon_buttons}
 	</Grid>
 )}
 export default Header
