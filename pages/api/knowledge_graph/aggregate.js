@@ -71,8 +71,6 @@ const aggregates = async ({session, schema}) => {
             colors[s.node].field = field
         }
     }
-    console.log(colors)
-    console.log(aggr_scores)
     return {aggr_scores, colors}
 }
 

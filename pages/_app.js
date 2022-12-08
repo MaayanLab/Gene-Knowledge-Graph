@@ -94,13 +94,15 @@ function MyApp({ Component, pageProps }) {
           </Container>
           :
           <div style={{backgroundColor: ((schema || {}).ui || {}).background || "#C5F8F8"}}>
-            <Container id={"main"} maxWidth={"lg"} style={{background: "#fff"}}>
-              <Header {...pageProps}/>
-              <Component 
-                {...pageProps}
-              />
+            <Container id={"main"} maxWidth={"lg"} style={{background: "#fff", padding: 0}}>
+              <div style={{padding: 25}}>
+                <Header {...pageProps}/>
+                <Component 
+                  {...pageProps}
+                />
+              </div>
+              <Footer {...pageProps}/>
             </Container>
-            <Footer {...pageProps}/>
           </div>
         }
       </ThemeProvider>

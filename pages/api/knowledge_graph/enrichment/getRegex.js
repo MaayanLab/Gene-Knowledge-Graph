@@ -13,7 +13,6 @@ export default async function query(req, res) {
         const enrichment = ((schema.header || {}).tabs || []).filter(i=>i.component === "Enrichment")[0] || {}
         const libraries = {}
         for ( const l of ((enrichment.props || {}).libraries || [])) {
-            console.log(l)
             if (l.regex) {
                 libraries[l.name] = l.regex
             }
