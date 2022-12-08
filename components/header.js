@@ -117,7 +117,7 @@ const IconRenderer = ({label, icon, height=100, width=100, href, router, subhead
 	}
 	if (subheader.onClick !== undefined) {
 		return (
-			<Tooltip title={label}>
+			<Tooltip title={label} key={label}>
 				<Button 
 					onClick={()=>{
 						function_mapper[subheader.onClick](({router, ...props}))
@@ -141,7 +141,7 @@ const IconRenderer = ({label, icon, height=100, width=100, href, router, subhead
 		)
 	} else if (href !== undefined) {
 		return (
-			<Tooltip title={label}>
+			<Tooltip title={label} key={label}>
 				<Button 
 					href={href}
 					target="_blank"
@@ -163,7 +163,7 @@ const IconRenderer = ({label, icon, height=100, width=100, href, router, subhead
 		)
 	} else {
 		return (
-			<Tooltip title={label}>
+			<Tooltip title={label} key={label}>
 				<Button 
 					sx={buttonStyle}
 					href={"/"}
