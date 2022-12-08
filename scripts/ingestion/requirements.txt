@@ -4,4 +4,3 @@ python-dotenv
 rdflib
 boto3
 requests
-pandas
