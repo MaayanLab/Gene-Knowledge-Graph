@@ -23,6 +23,8 @@ import LabelIcon from '@mui/icons-material/Label';
 import LabelOffIcon from '@mui/icons-material/LabelOff';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -62,14 +64,14 @@ export const usePrevious = (value) => {
     return ref.current; //in the end, return the current ref value.
   }
   
-export const shouldUpdateId = (query, prev_query) => {
+export const shouldUpdateId = (query, prev_query={}) => {
     const {remove: curr_remove, page: curr_page, ...curr} = query
     const {remove: prev_remove, page: prev_page, ...prev} = prev_query
     if (JSON.stringify(curr) !== JSON.stringify(prev)) return true
     else return false
 }
 
-const Enrichment = ({default_options, libraries: libraries_list, schema, ...props}) => {
+const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     const router = useRouter()
     const {page, ...rest} = router.query
     const [error, setError] = useState(null)
@@ -88,6 +90,9 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
     const [legendVisibility, setLegendVisibility] = useState(false)
     const [legendSize, setLegendSize] = useState(0)
     const prevQuery = usePrevious(router.query)
+    const libraries_list = l.sort(function(a, b) {
+        return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+     })
 
 
     const {userListId} = router.query
@@ -222,7 +227,7 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
         const {page, ...rest} = router.query
         const userListId = rest.userListId
         if (userListId) {
-            // setLoading(true)
+            setLoading(true)
             fetch_kg()
          }
     }, [router.query])
@@ -442,6 +447,23 @@ const Enrichment = ({default_options, libraries: libraries_list, schema, ...prop
                                     </Grid>
                                 </Grid>
                             </Modal>
+                        </Grid>
+                        <Grid item>
+                            <Tooltip title={router.query.fullscreen ? "Exit full screen": "Full screen"}>
+                                <IconButton variant='contained'
+                                    onClick={()=>{
+                                    const {fullscreen=false, ...query} = router.query
+                                    if (!fullscreen) query.fullscreen = 'true'
+                                    router.push({
+                                        pathname: `/${page || ''}`,
+                                        query
+                                        }, undefined, { shallow: true })
+                                    }}
+                                    style={{marginLeft: 5}}
+                                >
+                                    {router.query.fullscreen ? <FullscreenExitIcon/>: <FullscreenIcon/>}
+                                </IconButton>
+                            </Tooltip>
                         </Grid>
                     </Grid>
                 </Grid>

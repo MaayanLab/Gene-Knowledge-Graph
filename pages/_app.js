@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import dynamic from 'next/dynamic';
 import Head from 'next/head'
+import { useRouter } from 'next/router';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as default_schema from '../public/schema.json'
 import { makeTemplate } from '../utils/helper';
@@ -72,6 +73,8 @@ function MyApp({ Component, pageProps }) {
   const schema = pageProps.schema
   theme_object.palette = {...theme_object.palette, ...palettes}
   const theme = createTheme(theme_object)
+  const router = useRouter()
+  const {fullscreen="false"} = router.query
   return (
       <ThemeProvider theme={theme}>
         <Head>
@@ -83,16 +86,22 @@ function MyApp({ Component, pageProps }) {
           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
           <script async defer src="https://buttons.github.io/buttons.js"></script>
         </Head>
-        <div style={{backgroundColor: ((schema || {}).ui || {}).background || "#C5F8F8"}}>
-          <Container id={"main"} maxWidth={"lg"} style={{background: "#fff"}}>
-            {isIFrame() ? null : <Header {...pageProps}/>}
+        {(fullscreen.toLowerCase() !== "false" || isIFrame())  ? 
+          <Container id={"main"} maxWidth={"xl"} style={{background: "#fff", marginTop: 10}}>
             <Component 
               {...pageProps}
             />
           </Container>
-        </div>
-        {isIFrame() ? null :
-          <Footer {...pageProps}/>
+          :
+          <div style={{backgroundColor: ((schema || {}).ui || {}).background || "#C5F8F8"}}>
+            <Container id={"main"} maxWidth={"lg"} style={{background: "#fff"}}>
+              <Header {...pageProps}/>
+              <Component 
+                {...pageProps}
+              />
+            </Container>
+            <Footer {...pageProps}/>
+          </div>
         }
       </ThemeProvider>
   )

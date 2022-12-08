@@ -24,6 +24,8 @@ import LabelIcon from '@mui/icons-material/Label';
 import LabelOffIcon from '@mui/icons-material/LabelOff';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Box = dynamic(() => import('@mui/material/Box'));
@@ -68,7 +70,7 @@ export const layouts = {
 export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema}) {
   if (!schema) schema=default_schema  
   const router = useRouter()
-  const {page, start_term, end_term, start_field="label", end_field="label", limit=25, path_length, relation, order=(Object.keys(schema.order || {}))[0], remove, expand} = router.query
+  const {page, start_term, end_term, start_field="label", end_field="label", limit=25, path_length, relation, order=(Object.keys(schema.order || {}))[0], remove, expand, fullscreen=false} = router.query
   let start = router.query.start
   let end = router.query.end
   if (!start) start = schema.nodes[0].node
@@ -251,6 +253,8 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       await  resolve_elements(isActive)
     }
   }, [relation, path_length])
+
+                      
   return (
     <Grid container justifyContent="space-around" spacing={2}>
       <Grid item xs={12}>
@@ -337,7 +341,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                   }}
                   shallow
                 >
-                  <Button color={current_node.palette.name} style={{height: 45}}><Typography variant="body2">{e}</Typography></Button>
+                  <Button style={{height: 45}}><Typography variant="body2">{e}</Typography></Button>
                 </Link> 
               </Grid>
               { i < current_node.example.length - 1 && 
@@ -488,6 +492,23 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
               <Typography variant="body1">{limit}</Typography>
             </Grid>
           </React.Fragment>}
+          <Grid item>
+            <Tooltip title={fullscreen ? "Exit full screen": "Full screen"}>
+                <IconButton variant='contained'
+                    onClick={()=>{
+                      const {fullscreen=false, ...query} = router.query
+                      if (!fullscreen) query.fullscreen = 'true'
+                      router.push({
+                          pathname: `/${page || ''}`,
+                          query
+                        }, undefined, { shallow: true })
+                      }}
+                    style={{marginLeft: 5}}
+                >
+                    {fullscreen ? <FullscreenExitIcon/>: <FullscreenIcon/>}
+                </IconButton>
+            </Tooltip>
+          </Grid>
           <Grid item>
             <Tooltip title="Switch Graph Layout">
                 <IconButton variant='contained'
