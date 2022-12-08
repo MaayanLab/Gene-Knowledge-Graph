@@ -91,7 +91,7 @@ export const initialize_kg = async () => {
 	const entries = {}
 	const palettes = {}
 	const nodes = {}
-	let edges = []
+	const edges = []
 	let default_relations = []
 	let schema = await fetch_kg_schema()
   
@@ -100,27 +100,33 @@ export const initialize_kg = async () => {
 		const results = await get_terms(node, search)
 		entries[node] = results
 		nodes[node] = i
-		const {name, main, light, dark, contrastText} = palette
-		palettes[name] = {
-		main,
-		light: light || Color(main).lighten(0.25).hex(),
-		dark: dark || Color(main).darken(0.25).hex(),
-		contrastText: contrastText || "#000"
-		}
+		// const {name, main, light, dark, contrastText} = palette
+		// palettes[name] = {
+		// main,
+		// light: light || Color(main).lighten(0.25).hex(),
+		// dark: dark || Color(main).darken(0.25).hex(),
+		// contrastText: contrastText || "#000"
+		// }
 	}
   for (const i of schema.edges) {
-    edges = [...edges, ...(i.match || [])]
+	for (const e of i.match) {
+		if (edges.indexOf(e) === -1) edges.push(e)
+	}
+    // edges = [...edges, ...(i.match || [])]
     if (i.selected) {
       default_relations = [...default_relations,  ...(i.match || [])]
     }
   }
+
   
   return {
   	    entries,
         nodes,
         schema,
         palettes,
-        edges,
+        edges: edges.sort(function(a, b) {
+			return a.toLowerCase().localeCompare(b.toLowerCase());
+		 }),
         default_relations
 	}
 }

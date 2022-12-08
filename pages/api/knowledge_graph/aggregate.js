@@ -2,8 +2,7 @@ import neo4j from "neo4j-driver"
 import { neo4jDriver } from "../../../utils/neo4j"
 import cache from "memory-cache";
 import fetch from "node-fetch";
-
-const default_edge_color = '#e0e0e0'
+import { default_color } from "../../../utils/colors";
 
 const aggregates = async ({session, schema}) => {
 	const aggr_scores = {}
@@ -11,7 +10,7 @@ const aggregates = async ({session, schema}) => {
     for (const s of schema.edges) {	
         for (const i of (s.match || [])) {
             colors[i] = {
-                color: (s.palette || {}).main || default_edge_color,
+                color: s.color || default_color,
             }
         }
         if (s.order) {
@@ -43,9 +42,14 @@ const aggregates = async ({session, schema}) => {
         }
     }
     for (const s of schema.nodes) {
-        colors[s.node] = {
-            color: (s.palette || {}).main || default_edge_color,
+        if (s.color) {
+            colors[s.node] = {
+                color: s.color
+            }
+        } else {
+            colors[s.node] = {}
         }
+            
         if (s.order) {
             const [field, order] = s.order
             let score_var

@@ -3,6 +3,7 @@ import { neo4jDriver } from "../../../utils/neo4j"
 import Color from 'color'
 import { toNumber } from "../../../utils/helper"
 import fetch from "node-fetch"
+import {default_color, mui_colors} from '../../../utils/colors'
 let color_map = {}
 let score_fields
 const get_color = ({color, darken}) => {
@@ -12,9 +13,7 @@ const get_color = ({color, darken}) => {
 	else return color_map[color].hex()
 }
 
-const default_color = '#48ACF0'
 const highlight_color = '#F8333C'
-const default_edge_color = '#e0e0e0'
 
 export const default_get_node_color_and_type = ({node, terms, color=default_color, aggr_scores, field, aggr_field, aggr_type, fields}) => {
 	// if(terms.indexOf(node.properties.label) > -1){
@@ -76,92 +75,115 @@ const process_properties = (properties) => {
 
 export const resolve_results = ({results,
 	terms,
-	colors,
 	field,
+	colors,
 	start_field,
 	end_field,
 	aggr_scores,
 	get_node_color_and_type=default_get_node_color_and_type,
 	get_edge_color=default_get_edge_color,
-	properties = {}}) => (
-	results.records.flatMap(record => {
-		const relations = record.get('r')
-		const nodes = record.get('n').reduce((acc, i)=>({
-			...acc,
-			[i.identity]: i
-		}), {})
-		const path = []
-		for (const relation of relations) {
-			const start_node = nodes[relation.start]
-			const end_node = nodes[relation.end]
-			const relation_type = relation.type
-			const start_type = start_node.labels.filter(i=>i!=="id")[0]
-			const end_type = end_node.labels.filter(i=>i!=="id")[0]
-			path.push({ 
-				data: {
-					id: start_node.properties.id,
-					kind: start_type,
-					label: start_node.properties.label || start_node.properties.id,
-					properties: {
-						...process_properties(start_node.properties),
-						...properties[start_node.properties.label || start_node.properties.id] || {}
-					},
-					...(get_node_color_and_type({node: {
-						...start_node,
-						properties: {
-							...start_node.properties,
-							...properties[start_node.properties.label || start_node.properties.id] || {}
-						}
-					}, terms, record, fields: [field, start_field, end_field], aggr_scores,
-						 ...colors[start_type]}))
-				} 
-			})
-			path.push({ 
-				data: {
-					source: start_node.properties.id,
-					target: end_node.properties.id,
-					kind: "Relation",
-					relation: relation_type,
-					label: relation_type,
-					properties: {
-						id: `${start_node.properties.label}_${relation_type}_${end_node.properties.label}`,
-						label: relation_type,
-						source_label: start_node.properties.label,
-						target_label: end_node.properties.label,
-						...properties[`${start_node.properties.label}_${end_node.properties.label}`] || {},
-						...process_properties(relation.properties),
-					},
-					...(get_edge_color({relation, record, aggr_scores, ...colors[relation_type]})),
-					directed: relation.properties.directed ? 'triangle': 'none'
-				} 
-			})
-			path.push({ 
-				data: {
-					id: end_node.properties.id,
-					kind: end_type,
-					label: end_node.properties.label || end_node.properties.id,
-					properties: {
-						...process_properties(end_node.properties),
-						...properties[end_node.properties.label || end_node.properties.id] || {}
-					},
-					...(get_node_color_and_type({node: {
-						...end_node,
-						properties: {
-							...end_node.properties,
-							...properties[end_node.properties.label || end_node.properties.id] || {}
-						}
-					}, terms, record, aggr_scores, fields: [field, start_field, end_field],
-						...colors[end_type]}))
-				} 
-			})
+	properties = {}}) => {
+		const color_values = {}
+		let color_index = 0
+		let shade_index = 0
+		const shade = [500, "A100", 200, "A700", "A400"]
+		const colors_func = (type) => {
+			if (colors[type] && colors[type].color) {
+				color_values[type] = colors[type].color
+			}else if (color_values[type] === undefined) {
+				const c = Object.values(mui_colors)[color_index][shade[shade_index]]
+				if (color_index < Object.keys(mui_colors).length) color_index = color_index + 1
+				else {
+					color_index = 0
+					if (shade_index === shade.length) {
+						shade_index = 0
+					} else {
+						shade_index = shade_index + 1
+					}
+				}
+				color_values[type] = c
+			}
+			return {color: color_values[type]}
 		}
-		return path
-	  })
-)
+		const res = results.records.flatMap(record => {
+			const relations = record.get('r')
+			const nodes = record.get('n').reduce((acc, i)=>({
+				...acc,
+				[i.identity]: i
+			}), {})
+			const path = []
+			for (const relation of relations) {
+				const start_node = nodes[relation.start]
+				const end_node = nodes[relation.end]
+				const relation_type = relation.type
+				const start_type = start_node.labels.filter(i=>i!=="id")[0]
+				const end_type = end_node.labels.filter(i=>i!=="id")[0]
+				path.push({ 
+					data: {
+						id: start_node.properties.id,
+						kind: start_type,
+						label: start_node.properties.label || start_node.properties.id,
+						properties: {
+							...process_properties(start_node.properties),
+							...properties[start_node.properties.label || start_node.properties.id] || {}
+						},
+						...(get_node_color_and_type({node: {
+							...start_node,
+							properties: {
+								...start_node.properties,
+								...properties[start_node.properties.label || start_node.properties.id] || {}
+							}
+						}, terms, record, fields: [field, start_field, end_field], aggr_scores,
+							 ...colors_func(start_type)}))
+					} 
+				})
+				path.push({ 
+					data: {
+						source: start_node.properties.id,
+						target: end_node.properties.id,
+						kind: "Relation",
+						relation: relation_type,
+						label: relation_type,
+						properties: {
+							id: `${start_node.properties.label}_${relation_type}_${end_node.properties.label}`,
+							label: relation_type,
+							source_label: start_node.properties.label,
+							target_label: end_node.properties.label,
+							...properties[`${start_node.properties.label}_${end_node.properties.label}`] || {},
+							...process_properties(relation.properties),
+						},
+						...(get_edge_color({relation, record, aggr_scores, ...colors[relation_type]})),
+						directed: relation.properties.directed ? 'triangle': 'none'
+					} 
+				})
+				path.push({ 
+					data: {
+						id: end_node.properties.id,
+						kind: end_type,
+						label: end_node.properties.label || end_node.properties.id,
+						properties: {
+							...process_properties(end_node.properties),
+							...properties[end_node.properties.label || end_node.properties.id] || {}
+						},
+						...(get_node_color_and_type({node: {
+							...end_node,
+							properties: {
+								...end_node.properties,
+								...properties[end_node.properties.label || end_node.properties.id] || {}
+							}
+						}, terms, record, aggr_scores, fields: [field, start_field, end_field],
+							...colors_func(end_type)}))
+					} 
+				})
+			}
+			return path
+		  })
+		return res
+	}
 
 const resolve_two_terms = async ({session, start_term, start_field, start, end_term, end_field, end, limit, order, path_length=4, schema, relation, aggr_scores, colors, remove, expand: e}) => {
 	if (!parseInt(path_length)) throw {message: "Path length is not a number"}
-	let query = `MATCH p=(a: \`${start}\` {${start_field}: $start_term})-[*${path_length}]-(b: \`${end}\` {${end_field}: $end_term})
+	let query = `MATCH p=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\` {${end_field}: $end_term}))
 		USING INDEX a:\`${start}\`(${start_field})
 		USING INDEX b:\`${end}\`(${end_field})
 	`		
@@ -174,12 +196,7 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 			if (edges.indexOf(i) === -1) throw {message: "Invalid relationship"}
 		}
 		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
-		query = query.replace(`[*${path_length}]`,`[:${rels}*${path_length}]`)
-		// query = `MATCH p=(a: \`${start}\` {${start_field}: $start_term})-[:${rels}]-()-[]-()-[:${rels}]-(b: \`${end}\` {${end_field}: $end_term})
-		// USING INDEX a:\`${start}\`(${start_field})
-		// USING INDEX b:\`${end}\`(${end_field})
-		// WITH nodes(p) as n, relationships(p) as r
-		// RETURN * LIMIT ${limit}`
+		query = query.replace(`[*..${path_length}]`,`[:${rels}*..${path_length}]`)
 	} 
 	const vars = {}
 	if ((remove || []).length) {
@@ -209,6 +226,7 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 	
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 	// query = `${query} RETURN * ORDER BY rand() LIMIT ${limit}`
+	console.log(query)
 	const results = await session.readTransaction(txc => txc.run(query, { start_term, end_term, limit, ...vars }))
 	return resolve_results({results, terms: [start_term, end_term], schema, order, score_fields,  aggr_scores, colors, start_field, end_field})
 }
