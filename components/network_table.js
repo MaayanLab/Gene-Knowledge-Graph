@@ -183,7 +183,7 @@ const NetworkTable = ({data, schema}) => {
 	else {
 		const {data={}, header=[], columnVisibilityModel} = processedData[tab] || {}
 		return (
-			<Card>
+			<Card style={{marginBottom: 10}}>
 				<CardContent>
 					<Grid container justifyContent={"center"} style={{paddingBottom: 10}}>
 						<Grid item xs={12}>
