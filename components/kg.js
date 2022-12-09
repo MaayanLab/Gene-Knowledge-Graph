@@ -763,6 +763,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 sel.incomers().removeClass('focusedSemitransp')
                 sel.outgoers().removeClass('focusedSemitransp')
                 // setNode({node, type: "focused"})
+
                 setFocused(node)
                 setTimeout(()=>{
                   const sel = evt.target;
@@ -809,6 +810,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 // setAnchorEl(evt.target.popperRef())
                 // setNode({node: n})
                 setNode(n)
+                
               }
             });
             cy.edges().on('mouseout', (evt) => {
@@ -823,17 +825,18 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
           />
         }
         {(elements && legendVisibility) && <Legend elements={elements} legendSize={legendSize}/>}
-        {(focused || node) && <TooltipCard 
+      </Grid>
+      <Grid item xs={12} sx={{minHeight: 700}}>
+        <div ref={tableref}>
+          {(focused || node) ? <TooltipCard 
           node={focused || node}
           schema={schema}
           tooltip_templates={tooltip_templates}
           setFocused={setFocused}
           router={router} 
-          endpoint={`/${page || ''}`}/>}
-      </Grid>
-      <Grid item xs={12}>
-        <div ref={tableref}>
+          endpoint={`/${page || ''}`}/>:
           <NetworkTable data={data} schema={schema}/>
+          }
         </div>
       </Grid>
     </Grid>

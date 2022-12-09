@@ -469,7 +469,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                 </Grid>
             }
             
-            <Grid item xs={12} style={{height: userListId ? 800: "100%"}}>
+            <Grid item xs={12} style={{height: userListId ? 700: "100%"}}>
                 <Snackbar open={error!==null}
 					anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
 					autoHideDuration={4500}
@@ -703,7 +703,9 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     />
                 }
                 {(elements && userListId && legendVisibility) && <Legend elements={elements.filter(a=>a.data.properties.pval).sort((a,b)=>(a.data.properties.pval-b.data.properties.pval))} search={false} top={400} legendSize={legendSize}/>}
-                {(focused || node) && <TooltipCard 
+            </Grid>
+            <Grid item xs={12}>
+                {(focused || node) ? <TooltipCard 
                     node={focused || node}
                     schema={schema}
                     tooltip_templates={tooltip_templates} 
@@ -712,12 +714,12 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     top={sm ? 1500: 550}
                     endpoint={`/${page || ''}`}
                     expand={false}
-                    />}
-            </Grid>
-            <Grid item xs={12}>
-                <div ref={tableref}>
-                    <TermViz data={elements} schema={schema}/>
-                </div>
+                    />:
+                    <div ref={tableref}>
+                        <TermViz data={elements} schema={schema}/>
+                    </div>
+                }
+                
             </Grid>
         </Grid>
     )
