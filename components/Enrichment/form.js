@@ -37,7 +37,7 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
         term_degree=default_options.term_degree,
     } = query
     
-    const libraries = query.libraries ? JSON.parse(query.libraries) : default_options.selected
+    const libraries = query.libraries ? JSON.parse(query.libraries) : []
     
     const prevInput = usePrevious(input)
 
@@ -177,10 +177,19 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                         <Grid item xs={12} align="left">
                             <Button 
                                 onClick={()=>{
+                                    const {gene_set, libraries, ...query} = props.example
                                     setInput({
-                                        genes: props.example.split(/[\t\r\n;]+/),
+                                        genes: gene_set.split(/[\t\r\n;]+/),
                                         description: "Sample Input"
                                     })
+                                    query.libraries = JSON.stringify(libraries)
+                                    if (Object.keys(query).length > 0) {
+                                        router.push({
+                                            pathname: `/${page || ''}`,
+                                            query,
+                                            }, undefined, { shallow: true }
+                                        )
+                                    }
                                 }}
                                 
                             ><Typography variant='subtitle2'>Try an example</Typography></Button>
@@ -263,7 +272,7 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                         }}
                                         style={{width: "100%"}}
                                         min={1}
-                                        max={libraries.reduce((acc, i)=>(acc+i.term_limit), 0)}
+                                        max={libraries.reduce((acc, i)=>(acc+i.term_limit), 0) || 5}
                                         marks
                                         valueLabelDisplay='auto'
                                         aria-labelledby="degree-slider" />
@@ -349,7 +358,7 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                                     <Checkbox checked={checked_libraries[library] !== undefined} 
                                                         onChange={()=>{
                                                             if (checked_libraries[library]) {
-                                                                if (libraries.length > 1) {
+                                                                if (libraries.length > 0) {
                                                                     const new_query = {...query}
                                                                     new_query.libraries = JSON.stringify(libraries.filter(i=>i.library !== library))
                                                                     setQuery(new_query)
