@@ -226,7 +226,6 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 	
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 	// query = `${query} RETURN * ORDER BY rand() LIMIT ${limit}`
-	console.log(query)
 	const results = await session.readTransaction(txc => txc.run(query, { start_term, end_term, limit, ...vars }))
 	return resolve_results({results, terms: [start_term, end_term], schema, order, score_fields,  aggr_scores, colors, start_field, end_field})
 }
