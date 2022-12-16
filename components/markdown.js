@@ -16,6 +16,12 @@ const LinkRenderer = (props) => {
     )
 }
 
+const Image = (props) => {
+    return (
+        <img src={props.src} alt={props.alt} width={'100%'}/>
+    )
+}
+
 const Markdown = ({src, markdown}) => {
     const [md, setMD] = useState(null)
     useEffect(()=>{
@@ -31,7 +37,7 @@ const Markdown = ({src, markdown}) => {
 
     if (md === null) return null
     else {
-        return <div className='markdown'><ReactMarkdown remarkPlugins={[gfm]} components={{a: LinkRenderer}}>{md}</ReactMarkdown></div>
+        return <div className='markdown'><ReactMarkdown remarkPlugins={[gfm]} components={{a: LinkRenderer, img:Image}}>{md}</ReactMarkdown></div>
     }
 }
 
