@@ -24,7 +24,6 @@ const get_node_color_and_type = ({node, terms, color, aggr_scores, field, aggr_f
             const max_pval = aggr_scores.max_pval //aggr_scores.max_pval > 0.05 ? aggr_scores.max_pval: 0.05
             const min_pval = aggr_scores.min_pval
             const darken =  Math.abs((node.properties.pval - min_pval)/(max_pval-min_pval))
-            // console.log(node.properties.label, max_pval, min_pval, darken)
             return {
                 color: get_color({color, darken}),
                 node_type: 0
@@ -47,6 +46,7 @@ const enrichr_query = async ({userListId, library, term_limit, term_degree}) => 
         regex[k] = new RegExp(v)
     }
     const results = await res.json()
+        
     const genes = {}
     const terms = {}
     let max_pval = 0
