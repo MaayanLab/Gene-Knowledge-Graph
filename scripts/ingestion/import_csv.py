@@ -72,7 +72,7 @@ for directory in directories:
     for filename in glob(directory + "/*.nodes.csv"):
         match = re.match(node_pattern, filename).groupdict()
         entity = match["entity"]
-        label = match["label"]
+        label = match["label"].replace("_", " ")
         print("Ingesting %s nodes..."%label)
         # add constraint
         graph.run("CREATE CONSTRAINT IF NOT EXISTS FOR (n: `%s`) REQUIRE n.id IS UNIQUE"%label)
@@ -90,10 +90,10 @@ for directory in directories:
     for filename in glob(directory + "/*.edges.csv"):
         match = re.match(edge_pattern, filename).groupdict()
         entity = match["entity"]
-        source_type = match["source_type"]
-        relation = match["relation"]
+        source_type = match["source_type"].replace("_", " ")
+        relation = match["relation"].replace("_", " ")
         print("Ingesting %s edges..."%relation)
-        target_type = match["target_type"]
+        target_type = match["target_type"].replace("_", " ")
         # add constraint
         df = pd.read_csv(filename)
         stream = iter(df_parser_edge(df))
