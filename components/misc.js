@@ -184,7 +184,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
       <Box sx={{
         zIndex: 1,
         position: 'absolute',
-        top: top || (matches ? 500: sm ? 1050: 850),
+        top: top || (matches ? 550: sm ? 1100: 900),
         left: left || '20%',
         pointerEvents: "none"
       }}>
