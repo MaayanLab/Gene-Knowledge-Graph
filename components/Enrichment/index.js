@@ -702,7 +702,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     }}
                     />
                 }
-                {(elements && userListId && legendVisibility) && <Legend elements={elements.filter(a=>a.data.properties.pval).sort((a,b)=>(a.data.properties.pval-b.data.properties.pval))} search={false} top={400} legendSize={legendSize}/>}
+                {(elements && userListId && legendVisibility) && <Legend elements={elements.filter(a=>a.data.properties.pval).sort((a,b)=>(a.data.properties.pval-b.data.properties.pval))} search={false} top={'45%'} left={'20%'} legendSize={legendSize}/>}
             </Grid>
             <Grid item xs={12}>
                 {(focused || node) ? <TooltipCard 
@@ -715,9 +715,9 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     endpoint={`/${page || ''}`}
                     expand={false}
                     />:
-                    <div ref={tableref}>
+                    (userListId) ? <div ref={tableref}>
                         <TermViz data={elements} schema={schema}/>
-                    </div>
+                    </div>: null
                 }
                 
             </Grid>
