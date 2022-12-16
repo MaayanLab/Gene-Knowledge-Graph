@@ -332,7 +332,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
               <Grid item>
                 <Link
                   href={{
-                    pathname: current_node.pathname,
+                    pathname: `/${page || ''}`,
                     query: {
                       start,
                       start_term: e,
