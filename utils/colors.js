@@ -22,12 +22,10 @@ import {
 
 export const mui_colors = {
     blue,
-    green,
     amber,
     orange,
     pink,
     lightBlue,
-    lightGreen,
     yellow,
     purple,
     cyan,
@@ -37,7 +35,10 @@ export const mui_colors = {
     deepOrange,
     indigo,
     brown,
-    blueGrey
+    lightGreen,
+    blueGrey,
+    green,
+
 }
 
 export const default_color = grey[300]
