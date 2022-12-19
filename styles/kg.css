@@ -16,7 +16,20 @@ body {
 
 #main {
   flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
   background: rgba(255, 255, 255, 0.96);
+  justify-content: flex-start;
+  align-items: stretch;
+  align-content: stretch;
+
+  height: 100%;
+}
+
+.container {
+  flex: 1 1 auto;
+  display: flex;
+  padding: 25px;
 }
 
 .markdown a {

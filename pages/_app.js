@@ -94,10 +94,10 @@ function MyApp({ Component, pageProps }) {
             />
           </Container>
           :
-          <div style={{backgroundColor: ((schema || {}).ui || {}).background || "#C5F8F8"}}>
-            <Container id={"main"} maxWidth={"lg"} style={{background: "#fff", padding: 0}}>
+          <div style={{backgroundColor: ((schema || {}).ui || {}).background || "#C5F8F8"}}  id={"main"}>
+            <Container maxWidth={"lg"} style={{background: "#fff", padding: 0, flexGrow: 1, display: "flex", flexDirection: "column"}}>
               <Header {...pageProps}/>  
-              <div style={{padding: 25}}>
+              <div item className='container'>
                 <Component 
                   {...pageProps}
                 />

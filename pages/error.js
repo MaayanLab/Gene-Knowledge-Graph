@@ -1,11 +1,24 @@
 import dynamic from "next/dynamic";
-
-const Grid = dynamic(() => import('@mui/material/Grid'));
+import { fetch_kg_schema } from "../utils/initialize";
 const Typography = dynamic(() => import('@mui/material/Typography'));
+const Grid = dynamic(() => import('@mui/material/Grid'));
 
 
 export default function Error() {
     return (
-        <Typography>Error</Typography>
+        <Grid container justifyContent={"center"} sx={{height: "100%"}}>
+            <Grid item>
+                <Typography variant="h5">Oops... we have an error</Typography>
+            </Grid>
+        </Grid>
     )
 }
+export async function getStaticProps(ctx) {
+    const schema = await fetch_kg_schema()
+  
+    return {
+        props: {
+            schema,
+        }
+      };
+  }
