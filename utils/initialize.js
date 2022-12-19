@@ -79,11 +79,6 @@ export const fetch_kg_schema = async () => {
 	}
 	
 	return schema
-	// const r = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/knowledge_graph/schema`)
-	// if (!r.ok) {
-	// 	throw new Error(`Error communicating with {process.env.NEXT_PUBLIC_HOST}/api/knowledge_graph/schema`)
-	// }
-	// else return await r.json()
   }
 
 
