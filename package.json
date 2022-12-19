@@ -14,6 +14,8 @@
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
+    "@mdi/font": "^7.1.96",
+    "@mdi/js": "^7.1.96",
     "@mui/icons-material": "^5.6.2",
     "@mui/material": "^5.6.4",
     "@mui/x-data-grid": "^5.10.0",
@@ -23,6 +25,7 @@
     "cytoscape-fcose": "^2.1.0",
     "cytoscape-popper": "^2.0.0",
     "cytoscape-svg": "^0.4.0",
+    "html-react-parser": "^3.0.4",
     "isomorphic-unfetch": "^3.1.0",
     "js-file-download": "^0.4.12",
     "memory-cache": "^0.2.0",
@@ -33,7 +36,7 @@
     "react-cytoscapejs": "^1.2.1",
     "react-dom": "17.0.2",
     "react-markdown": "^8.0.3",
-    "recharts": "^2.1.16",
+    "recharts": "^2.1.9",
     "remark-gfm": "^3.0.1",
     "use-async-effect": "^2.2.5"
   },
