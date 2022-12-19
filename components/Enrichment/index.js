@@ -85,6 +85,8 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     const [collapsed, setCollapsed] = useState(null)
     const [shortId, setShortId] = useState(null)
     const [openShare, setOpenShare] = useState(false)
+    const [showTooltip, setShowTooltip] = useState(true)
+    const [tab, setTab] = useState(null)
     const [query, setQuery] = useState(rest||{})
     const [id, setId] = useState(0)
     const [legendVisibility, setLegendVisibility] = useState(false)
@@ -106,14 +108,15 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     const theme = useTheme();
     const sm = useMediaQuery(theme.breakpoints.down('md'));
 
-    const tooltip_templates = {}
+    const tooltip_templates_node = {}
+    const tooltip_templates_edges = {}
     for (const i of schema.nodes) {
-        tooltip_templates[i.node] = i.display
+        tooltip_templates_node[i.node] = i.display
     }
 
     for (const e of schema.edges) {
         for (const i of e.match) {
-        tooltip_templates[i] = e.display
+        tooltip_templates_edges[i] = e.display
         }
     }
 
@@ -300,6 +303,47 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                             </Tooltip>
                         </Grid>
                         <Grid item>
+                            <Tooltip title={tab === "table" ? "Hide table": "Show table"}>
+                                <IconButton variant='contained'
+                                    disabled={elements===null}
+                                    onClick={()=>{
+                                        if (tab !== 'table') setTab('table')
+                                        else setTab(null)
+                                    }}
+                                    style={{marginLeft: 5}}
+                                >
+                                    {tab === "table" ? <span className='mdi mdi-table-off'/>: <span className='mdi mdi-table'/>}
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
+                        <Grid item>
+                            <Tooltip title={tab === "bar" ? "Hide bar chart": "Show bar chart"}>
+                                <IconButton variant='contained'
+                                    disabled={elements===null}
+                                    onClick={()=>{
+                                        if (tab !== 'bar') setTab('bar')
+                                        else setTab(null)
+                                    }}
+                                    style={{marginLeft: 5}}
+                                >
+                                    <span className='mdi mdi-poll mdi-rotate-90'/> {tab === "bar" ? <span className='mdi mdi-eye-off mdi-18px'/>: <span className='mdi mdi-eye mdi-18px'/>}
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>   
+                        <Grid item>
+                            <Tooltip title={showTooltip ? "Hide tooltip": "Show tooltip"}>
+                                <IconButton variant='contained'
+                                    disabled={elements===null}
+                                    onClick={()=>{
+                                        setShowTooltip(!showTooltip)
+                                    }}
+                                    style={{marginLeft: 5}}
+                                >
+                                    {showTooltip ? <span className='mdi mdi-tooltip-remove'/>: <span className='mdi mdi-tooltip'/>}
+                                </IconButton>
+                            </Tooltip>
+                        </Grid> 
+                        <Grid item>
                             <Tooltip title="Refresh graph">
                                 <IconButton variant='contained'
                                     disabled={elements===null}
@@ -469,7 +513,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                 </Grid>
             }
             
-            <Grid item xs={12} style={{height: userListId ? 700: "100%"}}>
+            <Grid item xs={12} style={{height: userListId ? 700: "100%", position: "relative"}}>
                 <Snackbar open={error!==null}
 					anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
 					autoHideDuration={4500}
@@ -643,7 +687,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                             sel.incomers().removeClass('focusedSemitransp')
                             sel.outgoers().removeClass('focusedSemitransp')
                             // setNode({node, type: "focused"})
-                            setFocused(node)
+                            setFocused({...node, type: "node"})
                             setTimeout(()=>{
                             const sel = evt.target;
                             cy.elements().removeClass('focusedSemitransp');
@@ -666,7 +710,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         if (n.id !== (node || {}).id) {
                             // setAnchorEl(evt.target.popperRef())
                             // setNode({node: n})
-                            setNode(n)
+                            setNode({...n, "type": "node"})
                         }
                         });
 
@@ -688,7 +732,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         if (n.id !== (node || {}).id) {
                             // setAnchorEl(evt.target.popperRef())
                             // setNode({node: n})
-                            setNode(n)
+                            setNode({...n, "type": "edge"})
                         }
                         });
                         cy.edges().on('mouseout', (evt) => {
@@ -703,23 +747,21 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     />
                 }
                 {(elements && userListId && legendVisibility) && <Legend elements={elements.filter(a=>a.data.properties.pval).sort((a,b)=>(a.data.properties.pval-b.data.properties.pval))} search={false} top={'45%'} left={'20%'} legendSize={legendSize}/>}
-            </Grid>
-            <Grid item xs={12}>
-                {(focused || node) ? <TooltipCard 
+                {(showTooltip && (focused || node)) && <TooltipCard 
                     node={focused || node}
                     schema={schema}
-                    tooltip_templates={tooltip_templates} 
+                    tooltip_templates={ (focused || node).type === "node" ? tooltip_templates_node: tooltip_templates_edges}
                     setFocused={setFocused}
                     router={router}
-                    top={sm ? 1500: 550}
                     endpoint={`/${page || ''}`}
                     expand={false}
-                    />:
-                    (userListId) ? <div ref={tableref}>
-                        <TermViz data={elements} schema={schema}/>
-                    </div>: null
+                    />
                 }
-                
+            </Grid>
+            <Grid item xs={12}>
+            {(userListId) && <div ref={tableref}>
+                <TermViz data={elements} schema={schema} tab={tab} setTab={setTab}/>
+            </div>}   
             </Grid>
         </Grid>
     )

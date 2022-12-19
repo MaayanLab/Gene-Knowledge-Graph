@@ -86,6 +86,8 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   const [layout, setLayout] = React.useState(0)
   const [edgeStyle, setEdgeStyle] = React.useState({label: 'data(label)'})
   const [id, setId] = React.useState(0)
+  const [showTable, setShowTable] = React.useState(false)
+  const [showTooltip, setShowTooltip] = React.useState(true)
   const [elements, setElements] = React.useState(undefined)
   const [controller, setController] = React.useState(null)
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -95,16 +97,16 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   const [legendSize, setLegendSize] = React.useState(0)
 
   const firstUpdate = useRef(true);
-  
   const prevQuery = usePrevious(router.query)
-  const tooltip_templates = {}
+  const tooltip_templates_node = {}
+  const tooltip_templates_edges = {}
   for (const i of schema.nodes) {
-    tooltip_templates[i.node] = i.display
+    tooltip_templates_node[i.node] = i.display
   }
 
   for (const e of schema.edges) {
     for (const i of e.match) {
-      tooltip_templates[i] = e.display
+      tooltip_templates_edges[i] = e.display
     }
   }
   const tableref = useRef(null);
@@ -510,6 +512,32 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
             </Tooltip>
           </Grid>
           <Grid item>
+            <Tooltip title={showTable ? "Hide table": "Show table"}>
+                <IconButton variant='contained'
+                    disabled={elements===null}
+                    onClick={()=>{
+                        setShowTable(!showTable)
+                    }}
+                    style={{marginLeft: 5}}
+                >
+                    {showTable ? <span className='mdi mdi-table-eye-off'/>: <span className='mdi mdi-table-eye'/>}
+                </IconButton>
+            </Tooltip>
+          </Grid>  
+          <Grid item>
+            <Tooltip title={showTooltip ? "Hide tooltip": "Show tooltip"}>
+                <IconButton variant='contained'
+                    disabled={elements===null}
+                    onClick={()=>{
+                        setShowTooltip(!showTooltip)
+                    }}
+                    style={{marginLeft: 5}}
+                >
+                    {showTooltip ? <span className='mdi mdi-tooltip-remove'/>: <span className='mdi mdi-tooltip'/>}
+                </IconButton>
+            </Tooltip>
+          </Grid>  
+          <Grid item>
             <Tooltip title="Switch Graph Layout">
                 <IconButton variant='contained'
                     disabled={elements===null}
@@ -639,7 +667,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
           </Grid>
         </Grid>
       }
-      <Grid item xs={12} style={{minHeight: 500}}>
+      <Grid item xs={12} style={{minHeight: 500, position: "relative"}}>
         {(elements === undefined) ? (
           <CircularProgress/>
         ) : elements.length === 0 ? (
@@ -764,7 +792,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 sel.outgoers().removeClass('focusedSemitransp')
                 // setNode({node, type: "focused"})
 
-                setFocused(node)
+                setFocused({...node, type: "node"})
                 setTimeout(()=>{
                   const sel = evt.target;
                   cy.elements().removeClass('focusedSemitransp');
@@ -787,7 +815,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
               if (n.id !== (node || {}).id) {
                 // setAnchorEl(evt.target.popperRef())
                 // setNode({node: n})
-                setNode(n)
+                setNode({...n, type: "node"})
               }
             });
 
@@ -809,7 +837,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
               if (n.id !== (node || {}).id) {
                 // setAnchorEl(evt.target.popperRef())
                 // setNode({node: n})
-                setNode(n)
+                setNode({...n, type: "edge"})
                 
               }
             });
@@ -825,20 +853,22 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
           />
         }
         {(elements && legendVisibility) && <Legend elements={elements} legendSize={legendSize}/>}
+        {(showTooltip && (focused || node)) && <TooltipCard 
+            node={focused || node}
+            schema={schema}
+            tooltip_templates={ (focused || node).type === "node" ? tooltip_templates_node: tooltip_templates_edges}
+            setFocused={setFocused}
+            router={router} 
+            endpoint={`/${page || ''}`}/>
+        }
       </Grid>
+      {showTable && 
       <Grid item xs={12} sx={{minHeight: 700}}>
         <div ref={tableref}>
-          {(focused || node) ? <TooltipCard 
-          node={focused || node}
-          schema={schema}
-          tooltip_templates={tooltip_templates}
-          setFocused={setFocused}
-          router={router} 
-          endpoint={`/${page || ''}`}/>:
           <NetworkTable data={data} schema={schema}/>
-          }
         </div>
       </Grid>
+      }
     </Grid>
   )
 }

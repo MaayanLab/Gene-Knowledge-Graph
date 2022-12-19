@@ -26,9 +26,6 @@ const Avatar = dynamic(() => import('@mui/material/Avatar'));
 
 export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema, top, right, endpoint="/", expand=true}) => {
     const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.up('lg'));
-    const sm = useMediaQuery(theme.breakpoints.down('sm'));
-  
     const elements = []
     const field = node.kind === "Relation" ? node.label : node.kind
     for (const i of tooltip_templates[field] || []) {
@@ -59,7 +56,13 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
       }
     }
     return(
-      <Box>
+      <Box sx={{
+        zIndex: 2,
+        position: 'absolute',
+        top: 25,
+        left: 25,
+        pointerEvents: "none"
+      }}>
         <Card>
           <CardContent>
             <Typography variant="h6">
@@ -184,8 +187,8 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
       <Box sx={{
         zIndex: 1,
         position: 'absolute',
-        top: top || (matches ? 550: sm ? 1100: 900),
-        left: left || '20%',
+        top: 25,
+        left: 25,
         pointerEvents: "none"
       }}>
           <Grid container alignItems={"center"} spacing={1}>

@@ -66,9 +66,8 @@ const tabs = {
 	},
 }
 
-const TermViz = ({data}) => {
+const TermViz = ({data, tab, setTab}) => {
 	const [entries, setEntries] = useState(null)
-	const [tab, setTab] = useState(Object.keys(tabs)[0])
 	useEffect(()=>{
 		if (data) {
 			const entries = {}
@@ -93,6 +92,7 @@ const TermViz = ({data}) => {
 			setEntries(Object.values(entries).sort((a,b)=>a.pval-b.pval))
 		}
 	}, [data])
+	if (tab === null) return null
 	if (entries === null) return null
 	else if (entries.length === 0) return null
 	else {
