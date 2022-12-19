@@ -77,6 +77,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     const [error, setError] = useState(null)
     const [elements, setElements] = useState(null)
     const [node, setNode] = useState(null)
+    const [edge, setEdge] = useState(null)
     const [focused, setFocused] = useState(null)
     const [loading, setLoading] = useState(false)
     const [edgeStyle, setEdgeStyle] = useState({label: 'data(label)'})
@@ -104,9 +105,6 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
 
 
     const [controller, setController] = React.useState(null)
-
-    const theme = useTheme();
-    const sm = useMediaQuery(theme.breakpoints.down('md'));
 
     const tooltip_templates_node = {}
     const tooltip_templates_edges = {}
@@ -664,93 +662,101 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         elements={elements}
                         layout={Object.values(layouts)[layout]}
                         cy={(cy) => {
-                        cyref.current = cy
-                        cy.on('click', 'node', function (evt) {
-                        // setAnchorEl(null)
-                        const node = evt.target.data()
+                            cyref.current = cy
+                            cy.on('click', 'node', function (evt) {
+                            // setAnchorEl(null)
+                            const node = evt.target.data()
 
-                        if (focused && node.id === focused.id) {
-                            const sel = evt.target;
-                            cy.elements().removeClass('focusedSemitransp');
-                            sel.removeClass('focused').outgoers().removeClass('focusedColored')
-                            sel.incomers().removeClass('focusedColored')
-                            // setNode({node: null, type: "focused"})
-                            setFocused(null)
-                        } else{
-                            const sel = evt.target;
-                            cy.elements().removeClass('focused');
-                            cy.elements().removeClass('focusedSemitransp');
-                            cy.elements().removeClass('focusedColored');
-                            cy.elements().not(sel).addClass('focusedSemitransp');
-                            sel.addClass('focused').outgoers().addClass('focusedColored')
-                            sel.incomers().addClass('focusedColored')
-                            sel.incomers().removeClass('focusedSemitransp')
-                            sel.outgoers().removeClass('focusedSemitransp')
-                            // setNode({node, type: "focused"})
-                            setFocused({...node, type: "node"})
-                            setTimeout(()=>{
-                            const sel = evt.target;
-                            cy.elements().removeClass('focusedSemitransp');
-                            sel.removeClass('focused').outgoers().removeClass('focusedColored')
-                            sel.incomers().removeClass('focusedColored')
-                            // setNode({node: null, type: "focused"})
-                            setFocused(null)
-                            }, 3000)
-                        }
+                            if (focused && node.id === focused.id) {
+                                const sel = evt.target;
+                                cy.elements().removeClass('focusedSemitransp');
+                                sel.removeClass('focused').outgoers().removeClass('focusedColored')
+                                sel.incomers().removeClass('focusedColored')
+                                setFocused(null)
+                            } else{
+                                const sel = evt.target;
+                                cy.elements().removeClass('focused');
+                                cy.elements().removeClass('focusedSemitransp');
+                                cy.elements().removeClass('focusedColored');
+                                cy.elements().not(sel).addClass('focusedSemitransp');
+                                sel.addClass('focused').outgoers().addClass('focusedColored')
+                                sel.incomers().addClass('focusedColored')
+                                sel.incomers().removeClass('focusedSemitransp')
+                                sel.outgoers().removeClass('focusedSemitransp')
+                                setEdge(null)
+                                setFocused(node)
+                                setTimeout(()=>{
+                                    const sel = evt.target;
+                                    cy.elements().removeClass('focusedSemitransp');
+                                    sel.removeClass('focused').outgoers().removeClass('focusedColored')
+                                    sel.incomers().removeClass('focusedColored')
+                                    setFocused(null)
+                                }, 3000)
+                            }
                         })
 
                         cy.nodes().on('mouseover', (evt) => {
-                        const n = evt.target.data()
-                        const sel = evt.target;
-                        cy.elements().not(sel).addClass('semitransp');
-                        sel.addClass('highlight').outgoers().addClass('colored')
-                        sel.incomers().addClass('colored')
-                        sel.incomers().removeClass('semitransp')
-                        sel.outgoers().removeClass('semitransp')
-                        if (n.id !== (node || {}).id) {
-                            // setAnchorEl(evt.target.popperRef())
-                            // setNode({node: n})
-                            setNode({...n, "type": "node"})
-                        }
+                            const n = evt.target.data()
+                            const sel = evt.target;
+                            cy.elements().not(sel).addClass('semitransp');
+                            sel.addClass('highlight').outgoers().addClass('colored')
+                            sel.incomers().addClass('colored')
+                            sel.incomers().removeClass('semitransp')
+                            sel.outgoers().removeClass('semitransp')
+                            if (n.id !== (node || {}).id) {
+                                setEdge(null)
+                                setNode(n)
+                            }
                         });
 
                         cy.nodes().on('mouseout', (evt) => {
-                        const sel = evt.target;
-                        cy.elements().removeClass('semitransp');
-                        sel.removeClass('highlight').outgoers().removeClass('colored')
-                        sel.incomers().removeClass('colored')
-                        // setAnchorEl(null)
-                        // setNode({node: null})
-                        setNode(null)
+                            const sel = evt.target;
+                            cy.elements().removeClass('semitransp');
+                            sel.removeClass('highlight').outgoers().removeClass('colored')
+                            sel.incomers().removeClass('colored')
+                            // setAnchorEl(null)
+                            // setNode({node: null})
+                            setNode(null)
                         });
                         cy.edges().on('mouseover', (evt) => {
-                        const n = evt.target.data()
-                        const sel = evt.target;
-                        cy.elements().not(sel).addClass('semitransp');
-                        sel.addClass('colored').connectedNodes().addClass('highlight')
-                        sel.connectedNodes().removeClass('semitransp')
-                        if (n.id !== (node || {}).id) {
-                            // setAnchorEl(evt.target.popperRef())
-                            // setNode({node: n})
-                            setNode({...n, "type": "edge"})
-                        }
+                            const e = evt.target.data()
+                            const sel = evt.target;
+                            cy.elements().not(sel).addClass('semitransp');
+                            sel.addClass('colored').connectedNodes().addClass('highlight')
+                            sel.connectedNodes().removeClass('semitransp')
+                            if (e.id !== (edge || {}).id) {
+                                // setAnchorEl(evt.target.popperRef())
+                                // setNode({node: n})
+                                setNode(null)
+                                setEdge(e)
+                            }
                         });
                         cy.edges().on('mouseout', (evt) => {
-                        const sel = evt.target;
-                        cy.elements().removeClass('semitransp');
-                        sel.removeClass('colored').connectedNodes().removeClass('highlight')
-                        // setAnchorEl(null)
-                        // setNode({node: null})
-                        setNode(null)
+                            const sel = evt.target;
+                            cy.elements().removeClass('semitransp');
+                            sel.removeClass('colored').connectedNodes().removeClass('highlight')
+                            // setAnchorEl(null)
+                            // setNode({node: null})
+                            setEdge(null)
                         });
                     }}
                     />
                 }
                 {(elements && userListId && legendVisibility) && <Legend elements={elements.filter(a=>a.data.properties.pval).sort((a,b)=>(a.data.properties.pval-b.data.properties.pval))} search={false} top={'45%'} left={'20%'} legendSize={legendSize}/>}
                 {(showTooltip && (focused || node)) && <TooltipCard 
-                    node={focused || node}
+                    node={(focused || node)}
                     schema={schema}
-                    tooltip_templates={ (focused || node).type === "node" ? tooltip_templates_node: tooltip_templates_edges}
+                    tooltip_templates={ tooltip_templates_node}
+                    setFocused={setFocused}
+                    router={router}
+                    endpoint={`/${page || ''}`}
+                    expand={false}
+                    />
+                }
+                {(showTooltip && edge) && <TooltipCard 
+                    node={edge}
+                    schema={schema}
+                    tooltip_templates={tooltip_templates_edges}
                     setFocused={setFocused}
                     router={router}
                     endpoint={`/${page || ''}`}

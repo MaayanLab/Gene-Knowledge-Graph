@@ -25,7 +25,6 @@ const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
 const Avatar = dynamic(() => import('@mui/material/Avatar'));
 
 export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema, top, right, endpoint="/", expand=true}) => {
-    const theme = useTheme();
     const elements = []
     const field = node.kind === "Relation" ? node.label : node.kind
     for (const i of tooltip_templates[field] || []) {
