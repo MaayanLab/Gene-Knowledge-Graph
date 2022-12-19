@@ -9,6 +9,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip  from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
+import parse from 'html-react-parser';
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Stack = dynamic(() => import('@mui/material/Stack'));
@@ -220,11 +221,11 @@ const Header = ({schema, ...rest}) => {
 	if (schema === undefined || schema.header === undefined) return null
 	
 	return(
-	<Grid container style={{paddingBottom: 20, paddingTop: 20}} justifyContent="center">
+	<Grid container justifyContent="center">
 		<Grid item xs={12} align="center">
-			{ schema.header.icon ?
-				<Grid container justifyContent={"center"} alignItems={"center"} spacing={2} style={{marginBottom: 5}}>
-					<Grid item>
+			<Grid container justifyContent={"space-between"} alignItems={"center"} style={{padding: 15, marginBottom: 10, background: schema.header.background.backgroundColor}}>
+				<Grid item>
+					<Stack direction={"row"} alignItems="center">
 						<div style={{height: schema.header.icon.height || 30, 
 							minWidth: schema.header.icon.width || 30}}>
 							<Image 
@@ -236,43 +237,40 @@ const Header = ({schema, ...rest}) => {
 								alt={makeTemplate(schema.header.icon.alt, {})}
 							/>
 						</div>
-					</Grid>
-					<Grid item>
-						<Typography variant="h5"><b>{schema.header.title}</b></Typography>
-					</Grid>
+						<Typography variant="h4">{parse(schema.header.title)}</Typography>
+					</Stack>
+				</Grid>
+				<Grid item align="left">
+					<Stack direction={"row"} alignItems="center">
+					<Counter fontColor={schema.header.background.contrastText}/>
 					{schema.header.tabs && 
-						<Grid item align="left">
-							<Button onClick={handleClickMenu}
-								aria-controls={open ? 'basic-menu' : undefined}
-								aria-haspopup="true"
-								aria-expanded={open ? 'true' : undefined}
-							><MenuIcon/></Button>
-							<Menu
-								id="basic-menu"
-								anchorEl={anchorEl}
-								open={open}
-								onClose={handleCloseMenu}
-								MenuListProps={{
-									'aria-labelledby': 'basic-button',
-								}}
-							>
-								{schema.header.tabs.map(t=>(
-									<MenuItem key={t.label} onClick={()=> {
-										handleCloseMenu()
-										router.push(t.endpoint)
-									}}>{t.label}</MenuItem>
-								))}
-							</Menu>
-						</Grid>
+					<Button onClick={handleClickMenu}
+						aria-controls={open ? 'basic-menu' : undefined}
+						aria-haspopup="true"
+						aria-expanded={open ? 'true' : undefined}
+						sx={{color: schema.header.background.contrastText}}
+					><MenuIcon/></Button>}
+					{ schema.header.tabs && 
+						<Menu
+							id="basic-menu"
+							anchorEl={anchorEl}
+							open={open}
+							onClose={handleCloseMenu}
+							MenuListProps={{
+								'aria-labelledby': 'basic-button',
+							}}
+						>
+							{schema.header.tabs.map(t=>(
+								<MenuItem key={t.label} onClick={()=> {
+									handleCloseMenu()
+									router.push(t.endpoint)
+								}}>{t.label}</MenuItem>
+							))}
+						</Menu>
 					}
-					<Grid item>
-						<Grid container justifyContent={"flex-start"}>
-							<Grid item><Counter/></Grid>
-						</Grid>
-					</Grid>
-				</Grid>:<Typography variant="h4"><b>{schema.header.title}</b></Typography>
-			}
-			
+					</Stack>
+				</Grid>
+			</Grid>	
 		</Grid>
 		{icon_buttons}
 	</Grid>

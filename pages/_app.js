@@ -72,17 +72,18 @@ function MyApp({ Component, pageProps }) {
   const palettes = pageProps.palettes
   const schema = pageProps.schema
   theme_object.palette = {...theme_object.palette, ...palettes}
-  const theme = createTheme(theme_object)
+  const theme = createTheme({...theme_object, ...(schema.theme || {})})
   const router = useRouter()
   const {fullscreen="false"} = router.query
   return (
       <ThemeProvider theme={theme}>
         <Head>
           <meta charSet="utf-8" />
-          <title>{((pageProps.schema || default_schema).header || {}).title}</title>
-          <link rel="shortcut icon" type="image/x-icon" alt={((pageProps.schema || default_schema).header || {}).title} href={makeTemplate((((pageProps.schema || default_schema).header || {}).icon).favicon || '', {})} />
+          <title>{((pageProps.schema || default_schema).header || {}).icon.faviconTitle}</title>
+          <link rel="shortcut icon" type="image/x-icon" alt={((pageProps.schema || default_schema).header || {}).icon.faviconTitle} href={makeTemplate((((pageProps.schema || default_schema).header || {}).icon).favicon || '', {})} />
           <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
           <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css" rel="stylesheet" />
+          <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700"/>
           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
           <script async defer src="https://buttons.github.io/buttons.js"></script>
         </Head>
@@ -95,8 +96,8 @@ function MyApp({ Component, pageProps }) {
           :
           <div style={{backgroundColor: ((schema || {}).ui || {}).background || "#C5F8F8"}}>
             <Container id={"main"} maxWidth={"lg"} style={{background: "#fff", padding: 0}}>
+              <Header {...pageProps}/>  
               <div style={{padding: 25}}>
-                <Header {...pageProps}/>
                 <Component 
                   {...pageProps}
                 />
