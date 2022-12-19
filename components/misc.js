@@ -8,6 +8,7 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import AllOutIcon from '@mui/icons-material/AllOut';
 import ReplyIcon from '@mui/icons-material/Reply';
+import CloseIcon from '@mui/icons-material/Close';
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Box = dynamic(() => import('@mui/material/Box'));
@@ -18,13 +19,14 @@ const MenuItem = dynamic(() => import('@mui/material/MenuItem'));
 const Button = dynamic(() => import('@mui/material/Button'));
 
 const Card = dynamic(() => import('@mui/material/Card'));
+const CardHeader = dynamic(() => import('@mui/material/CardHeader'));
 const CardContent = dynamic(() => import('@mui/material/CardContent'));
 const CardActions = dynamic(() => import('@mui/material/CardActions'));
 
 const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
 const Avatar = dynamic(() => import('@mui/material/Avatar'));
 
-export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema, top, right, endpoint="/", expand=true}) => {
+export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema, top, right, endpoint="/", expand=true, reset=null}) => {
     const elements = []
     const field = node.kind === "Relation" ? node.label : node.kind
     for (const i of tooltip_templates[field] || []) {
@@ -59,14 +61,23 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
         zIndex: 2,
         position: 'absolute',
         top: 25,
-        left: 25,
-        pointerEvents: "none"
-      }}>
+        left: 25
+      }}
+      border={1}
+      >
         <Card>
+          <CardHeader
+            action={
+              <IconButton aria-label="settings" onClick={ ()=>{
+                  if (reset) reset()
+              }}>
+                <CloseIcon />
+              </IconButton>
+            }
+            title={node.label}
+          />
+
           <CardContent>
-            <Typography variant="h6">
-              <b>{node.label}</b>
-            </Typography>
             {elements}
           </CardContent>
           {node.kind !== "Relation" &&

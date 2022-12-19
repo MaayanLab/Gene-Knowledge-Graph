@@ -751,6 +751,11 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     router={router}
                     endpoint={`/${page || ''}`}
                     expand={false}
+                    reset={()=>{
+                        setEdge(null)
+                        setNode(null)
+                        setFocused(null)
+                    }}
                     />
                 }
                 {(showTooltip && edge) && <TooltipCard 
@@ -761,6 +766,11 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     router={router}
                     endpoint={`/${page || ''}`}
                     expand={false}
+                    reset={()=>{
+                        setEdge(null)
+                        setNode(null)
+                        setFocused(null)
+                    }}
                     />
                 }
             </Grid>

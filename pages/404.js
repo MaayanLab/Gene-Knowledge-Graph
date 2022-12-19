@@ -8,7 +8,7 @@ export default function Error() {
     return (
         <Grid container justifyContent={"center"} sx={{height: "100%"}}>
             <Grid item>
-                <Typography variant="h5">Oops... we can't find that page</Typography>
+                <Typography variant="h5">Oops... we cannot find that page</Typography>
             </Grid>
         </Grid>
     )

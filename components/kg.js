@@ -863,6 +863,12 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
             router={router}
             endpoint={`/${page || ''}`}
             expand={false}
+            reset={()=>{
+              console.log("resetting...")
+              setEdge(null)
+              setNode(null)
+              setFocused(null)
+            }}
             />
         }
         {(showTooltip && edge) && <TooltipCard 
@@ -873,6 +879,11 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
             router={router}
             endpoint={`/${page || ''}`}
             expand={false}
+            reset={()=>{
+              setEdge(null)
+              setNode(null)
+              setFocused(null)
+            }}
             />
         }
       </Grid>
