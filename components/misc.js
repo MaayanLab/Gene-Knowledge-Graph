@@ -61,7 +61,8 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
         zIndex: 2,
         position: 'absolute',
         top: 25,
-        left: 25
+        left: 25,
+        maxWidth: 400
       }}
       border={1}
       >
@@ -114,7 +115,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
                   }}
                 ><AllOutIcon/></IconButton>
               </Tooltip>}
-              <Tooltip title="Go to node">
+              <Tooltip title="Open in Term & Gene Search">
                 <IconButton
                   onClick={()=>{
                     setFocused(null)
