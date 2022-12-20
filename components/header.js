@@ -204,7 +204,7 @@ const Header = ({schema, ...rest}) => {
 	const selection_rules = {}
 	for (const i of ((schema.header || {}).subheader||[])) {
 		icon_buttons.push(
-			<Grid item>
+			<Grid item key={i.label}>
 				<IconRenderer
 					router={router}
 					key={i.label}
