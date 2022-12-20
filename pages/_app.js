@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import dynamic from 'next/dynamic';
 import Head from 'next/head'
+import { GoogleAnalytics } from "nextjs-google-analytics";
 import { useRouter } from 'next/router';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as default_schema from '../public/schema.json'
@@ -103,6 +104,7 @@ function MyApp({ Component, pageProps }) {
             </Container>
           </div>
         }
+        <GoogleAnalytics trackPageViews />
       </ThemeProvider>
   )
 }

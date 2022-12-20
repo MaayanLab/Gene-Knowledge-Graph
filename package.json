@@ -30,6 +30,7 @@
     "memory-cache": "^0.2.0",
     "neo4j-driver": "^4.4.5",
     "next": "^12.1.0",
+    "nextjs-google-analytics": "^2.2.2",
     "node-fetch": "^3.2.10",
     "react": "17.0.2",
     "react-cytoscapejs": "^1.2.1",
