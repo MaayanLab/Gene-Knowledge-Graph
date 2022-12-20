@@ -1,6 +1,6 @@
 {
   "name": "cfde-knowledge-exchange",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development next dev",
@@ -15,7 +15,6 @@
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@mdi/font": "^7.1.96",
-    "@mdi/js": "^7.1.96",
     "@mui/icons-material": "^5.6.2",
     "@mui/material": "^5.6.4",
     "@mui/x-data-grid": "^5.10.0",
