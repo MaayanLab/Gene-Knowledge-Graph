@@ -88,7 +88,13 @@ const styles = {
 		"&:hover": {
 			background: "#9e9e9e",
 		},
-		verticalAlign: "center"
+		"&:focus": {
+			background: "#9e9e9e",
+		},
+		"&:enabled": {
+			background: "#9e9e9e",
+		},
+		verticalAlign: "center",
 	}
   }
 
@@ -204,7 +210,7 @@ const Header = ({schema, ...rest}) => {
 	const selection_rules = {}
 	for (const i of ((schema.header || {}).subheader||[])) {
 		icon_buttons.push(
-			<Grid item key={i.label}>
+			<Grid item key={i.label} sx={{margin: 0.1}}>
 				<IconRenderer
 					router={router}
 					key={i.label}
@@ -225,20 +231,22 @@ const Header = ({schema, ...rest}) => {
 		<Grid item xs={12} align="center">
 			<Grid container justifyContent={"space-between"} alignItems={"center"} style={{padding: 15, marginBottom: 10, background: schema.header.background.backgroundColor}}>
 				<Grid item>
-					<Stack direction={"row"} alignItems="center">
-						<div style={{height: schema.header.icon.height || 30, 
-							minWidth: schema.header.icon.width || 30}}>
-							<Image 
-								layout="responsive"
-								objectFit="contain"
-								width={schema.header.icon.width || 30}
-								height={schema.header.icon.height || 30}
-								src={makeTemplate(schema.header.icon.src, {})}
-								alt={makeTemplate(schema.header.icon.alt, {})}
-							/>
-						</div>
-						<Typography variant="h4">{parse(schema.header.title)}</Typography>
-					</Stack>
+					<Button href={`/${process.env.NEXT_PUBLIC_PREFIX}`}>
+						<Stack direction={"row"} alignItems="center">
+							<div style={{height: schema.header.icon.height || 30, 
+								minWidth: schema.header.icon.width || 30}}>
+								<Image 
+									layout="responsive"
+									objectFit="contain"
+									width={schema.header.icon.width || 30}
+									height={schema.header.icon.height || 30}
+									src={makeTemplate(schema.header.icon.src, {})}
+									alt={makeTemplate(schema.header.icon.alt, {})}
+								/>
+							</div>
+							<Typography variant="h4">{parse(schema.header.title)}</Typography>
+						</Stack>
+					</Button>
 				</Grid>
 				<Grid item align="left">
 					<Stack direction={"row"} alignItems="center">
