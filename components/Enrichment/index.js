@@ -525,31 +525,29 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         }
                     }}
 				>
-                    { error!==null && 
-                        <Alert 
-                            onClose={()=>{
-                                if ((error || {} ).type === "fail") {
-                                    router.push({
-                                        pathname: `/${page || ''}`,
-                                    }, undefined, { shallow: true })
-                                    setError(null)
-                                } else {
-                                    setError(null)
-                                }
-                            }}
-                            severity={(error || {} ).type === "fail" ? "error": "warning"}
-                            sx={{ width: '100%' }} 
-                            variant="filled"
-                            elevation={6}
-                            // action={
-                            //     <IconButton size="small" onClick={()=>setError(null)} style={{color: "#FFF"}}>
-                            //         <HighlightOffIcon/>
-                            //     </IconButton>
-                            // }
-                        >
-                            <Typography>{( error || {}).message || ""}</Typography>
-                        </Alert>
-                    }
+                    <Alert 
+                        onClose={()=>{
+                            if ((error || {} ).type === "fail") {
+                                router.push({
+                                    pathname: `/${page || ''}`,
+                                }, undefined, { shallow: true })
+                                setError(null)
+                            } else {
+                                setError(null)
+                            }
+                        }}
+                        severity={(error || {} ).type === "fail" ? "error": "warning"}
+                        sx={{ width: '100%' }} 
+                        variant="filled"
+                        elevation={6}
+                        // action={
+                        //     <IconButton size="small" onClick={()=>setError(null)} style={{color: "#FFF"}}>
+                        //         <HighlightOffIcon/>
+                        //     </IconButton>
+                        // }
+                    >
+                        <Typography>{( error || {}).message || ""}</Typography>
+                    </Alert>
                 </Snackbar>
                 { (userListId === undefined) ? <div align="center">
                     <Typography sx={{marginBottom: 3}}>Enter a set of Entrez gene symbols to perform enrichment analysis with &nbsp;
