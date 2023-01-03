@@ -71,6 +71,7 @@ export const shouldUpdateId = (query, prev_query={}) => {
     else return false
 }
 
+
 const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     const router = useRouter()
     const {page, ...rest} = router.query
@@ -150,42 +151,48 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                 gene_degree=default_options.gene_degree,
                 term_degree=default_options.term_degree,
                 expand,
-                remove
+                remove,
             } = router.query
-            const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : default_options.selected
-            let counter = 0
-            while (counter < 5) {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment`,
-                    {
-                        method: "POST",
-                        body: JSON.stringify({
-                            userListId,
-                            libraries,
-                            min_lib,
-                            gene_limit,
-                            gene_degree,
-                            term_degree,
-                            expand: expand,
-                            remove: remove,
-                        }),
-                        signal: controller.signal
-                    })
-                if (! res.ok && counter === 4) {
-                    setError({message: "Error fetching enrichment. Try again in a while.", type: "fail"})
+            const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : (default_options.selected || [])
+            console.log(libraries)
+            if (libraries.length === 0) {
+                setElements(null)
+            } else {
+                setLoading(true)
+                let counter = 0
+                while (counter < 5) {
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment`,
+                        {
+                            method: "POST",
+                            body: JSON.stringify({
+                                userListId,
+                                libraries,
+                                min_lib,
+                                gene_limit,
+                                gene_degree,
+                                term_degree,
+                                expand: expand,
+                                remove: remove,
+                            }),
+                            signal: controller.signal
+                        })
+                    if (! res.ok && counter === 4) {
+                        setError({message: "Error fetching enrichment. Try again in a while.", type: "fail"})
+                    }
+                    else if (! res.ok && counter < 4) {
+                        setError({message: `Error fetching enrichment. Trying again in ${counter + 5} seconds...`, type: "retry"})
+                        await delay((counter + 5)*1000)
+                    } 
+                    else {
+                        const results = (await res.json())
+                        setError(null)
+                        setLoading(false)
+                        setElements(results)
+                        if (shouldUpdateId(router.query, prevQuery)) setId(id+1)
+                        break
+                    }
+                    counter = counter + 1
                 }
-                else if (! res.ok && counter < 4) {
-                    setError({message: `Error fetching enrichment. Trying again in ${counter + 5} seconds...`, type: "retry"})
-                    await delay((counter + 5)*1000)
-                } 
-                else {
-                    const results = (await res.json())
-                    setError(null)
-                    setLoading(false)
-                    setElements(results)
-                    if (shouldUpdateId(router.query, prevQuery)) setId(id+1)
-                    break
-                }
-                counter = counter + 1
             }
         } catch (error) {
             console.error(error)
@@ -227,8 +234,9 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     useEffect(()=>{    
         const {page, ...rest} = router.query
         const userListId = rest.userListId
+        const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : (default_options.selected || [])     
         if (userListId) {
-            setLoading(true)
+            // setLoading(true)
             fetch_kg()
          }
     }, [router.query])
@@ -237,8 +245,9 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
         const {page, ...rest} = router.query
         setQuery(rest)
         const userListId = rest.userListId
+        const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : (default_options.selected || [])
         if (userListId && (error !== null && error.type === "error")) {
-            setLoading(true)
+            // setLoading(true)
             fetch_kg()
          }
     }, [error])
@@ -264,7 +273,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         'aria-labelledby': 'basic-button',
                     }}
                 >
-                    <CardContent style={{width: 1000}}><GeneSetForm setError={setError} router={router} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} {...props}/></CardContent>
+                    <CardContent style={{width: 1000}}><GeneSetForm setError={setError} router={router} current_router_query={query} page={page} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} disableExample={(elements || []).length > 0} {...props}/></CardContent>
                 </Menu>
             </Grid>
             }
@@ -559,7 +568,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         <Typography>{( error || {}).message || ""}</Typography>
                     </Alert>
                 </Snackbar>
-                { (userListId === undefined) ? <div align="center">
+                { (userListId === undefined || elements === null) ? <div align="center">
                     <Typography variant="h6" sx={{marginBottom: 3}}>Submit your gene set for enrichment analysis with &nbsp;
                         <Link href="https://maayanlab.cloud/Enrichr/" 
                             target="_blank"
@@ -568,11 +577,9 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         >
                             <span style={{fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>En</span><span style={{color: 'red', fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>rich</span><span style={{fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>r</span>
                         </Link>.</Typography>
-                    <GeneSetForm setError={setError} router={router} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} {...props}/>
+                    <GeneSetForm setError={setError} router={router} current_router_query={query} page={page} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} disableExample={(elements || []).length > 0} {...props}/>
                 </div>
-                : (elements === null) ? (
-                <CircularProgress/>
-                ) : elements.length === 0 ? (
+                : elements.length === 0 ? (
                 <div>No results</div>
                 ) : loading ? 
                 <CircularProgress/>:

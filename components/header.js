@@ -68,8 +68,10 @@ const function_mapper = {
 				query
 			}, undefined, {shallow: true})
 		} else {
+			const {libraries, ...rest} = query
 			router.push({
 				pathname: `/${page || ''}`,
+				query: rest
 			}, undefined, {shallow: true})
 		}
 	}

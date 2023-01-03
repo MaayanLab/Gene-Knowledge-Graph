@@ -213,7 +213,7 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                             <Button 
                                 onClick={async ()=>{
                                     if (!(await same_prev_input())) {
-                                        if (input.genes.length > 0) {
+                                        if (input.genes.length > 0 && libraries.length > 0) {
                                             addList()
                                         }
                                     } else {
