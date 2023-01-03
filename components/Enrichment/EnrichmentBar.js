@@ -1,7 +1,7 @@
 import React from 'react'
 import dynamic from 'next/dynamic';
 import {
-	BarChart, Bar, Cell, XAxis, YAxis, LabelList, Tooltip,
+	BarChart, Bar, Cell, XAxis, YAxis, LabelList, Tooltip, ResponsiveContainer
 } from 'recharts';
 import Color from 'color'
 import { precise } from '../../utils/helper';
@@ -63,6 +63,17 @@ export const EnrichmentBar = (props) => {
 	// 	FileSaver.saveAs(png, `${filename}.png`);
 	//   }, [png]);
 	  const height = data.length === 10 ? maxHeight: maxHeight/10 * data.length
+	//   const yWidth = data.reduce((acc, i)=>{
+	// 		if (acc < i.library.length) acc = i.library.length
+	// 		return acc
+	// 	}, 0)
+	let yWidth = 0
+	const data_cells = []
+	for (const index in data) {
+		const i = data[index]
+		if (yWidth < i.library.length) yWidth = i.library.length
+		data_cells.push(<Cell key={`${field}-${index}`} fill={i.color} />)
+	}
 	return(
 		<Grid container>
 			{/* { download ?
@@ -79,39 +90,41 @@ export const EnrichmentBar = (props) => {
 				</Grid>: null
 			} */}
 			<Grid item xs={12}>
-				<BarChart
-					layout="vertical"
-					height={height}
-					width={width}
-					data={data}
-					// ref={ref} // Save the ref of the chart
+				<ResponsiveContainer 
+						height={height}
+						width={'100%'}
 				>
-					<Tooltip content={<BarTooltip/>} />
-					<Bar dataKey="value" fill={color} barSize={barSize}>
-						<LabelList dataKey="label" position="left" content={renderCustomizedLabel} fill={fontColor}/>
-						{data.map((entry, index) => {
-							return <Cell key={`${field}-${index}`} fill={entry.color} />
-						}
-						)}
-					</Bar>
-					<XAxis type="number" domain={[
-						() => {
-							if (min < 0) {
-								return min
-							} else {
-								return min-(min/100)
-							}
-						},
-						() => {
-							if (max > 0) {
-								return max
-							} else {
-								return max-(max/100)
-							}
-						},
-					]} hide/>
-					<YAxis type="category" hide/>
-				</BarChart>
+					<BarChart
+						layout="vertical"
+						height={height}
+						width={width}
+						data={data}
+						// ref={ref} // Save the ref of the chart
+					>
+						<Tooltip content={<BarTooltip/>} />
+						<Bar dataKey="value" fill={color} barSize={barSize}>
+							<LabelList dataKey="label" position="left" content={renderCustomizedLabel} fill={fontColor}/>
+							{data_cells}
+						</Bar>
+						<XAxis type="number" domain={[
+							() => {
+								if (min < 0) {
+									return min
+								} else {
+									return min-(min/100)
+								}
+							},
+							() => {
+								if (max > 0) {
+									return max
+								} else {
+									return max-(max/100)
+								}
+							},
+						]} hide/>
+						<YAxis type="category" dataKey={"library"} width={yWidth*7} axisLine={false} fontSize={12}/>
+					</BarChart>
+				</ResponsiveContainer>
 			</Grid>
 		</Grid>
 	)

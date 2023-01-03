@@ -19,6 +19,13 @@ const header = [
         style: {flexDirection: "row"},
         align: "left"
     },
+	{
+        field: 'library',
+        headerName: "Library",
+        flex: 1,
+        style: {flexDirection: "row"},
+        align: "left"
+    },
     {
         field: 'pval',
         headerName: "p-value",
