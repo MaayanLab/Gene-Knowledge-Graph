@@ -63,6 +63,7 @@ const enrichr_query = async ({userListId, library, term_limit, term_degree}) => 
                 if (pval > max_pval) max_pval = pval
                 if (pval < min_pval) min_pval = pval
                 terms[label] ={
+                    library,
                     pval,
                     zscore,
                     combined_score,
