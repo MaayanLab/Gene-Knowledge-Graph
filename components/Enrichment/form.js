@@ -157,10 +157,9 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                         <Grid item xs={12}>
                             <TextField multiline
                                 rows={10}
-                                placeholder={props.placeholder}
+                                placeholder={"Paste a set of valid Entrez gene symbols (e.g. STAT3) on each row in the text-box"}
                                 fullWidth
                                 value={input.genes.join("\n")}
-                                label={"Gene Set"}
                                 onChange={(e)=>{
                                     setInput({
                                         ...input,
