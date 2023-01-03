@@ -560,12 +560,13 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     </Alert>
                 </Snackbar>
                 { (userListId === undefined) ? <div align="center">
-                    <Typography sx={{marginBottom: 3}}>Enter a set of Entrez gene symbols to perform enrichment analysis with &nbsp;
+                    <Typography variant="h6" sx={{marginBottom: 3}}>Submit your gene set for enrichment analysis with &nbsp;
                         <Link href="https://maayanlab.cloud/Enrichr/" 
                             target="_blank"
                             rel="noopener noreferrer"
+                            style={{color: "black", textDecoration: "none"}}
                         >
-                            Enrichr
+                            <span style={{fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>En</span><span style={{color: 'red', fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>rich</span><span style={{fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>r</span>
                         </Link>.</Typography>
                     <GeneSetForm setError={setError} router={router} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} {...props}/>
                 </div>
