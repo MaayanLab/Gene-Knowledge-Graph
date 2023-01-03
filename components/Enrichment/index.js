@@ -244,7 +244,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     }, [error])
     return (
         <Grid container spacing={2} style={{paddingBottom: 10}} alignItems="center" justifyContent={"space-between"}>
-            { elements !== null && <Grid item>
+            { (elements !== null && userListId !== undefined) && <Grid item>
                 <Tooltip title={collapsed ? "Show filters": "Hide filters"}>
                     <Button onClick={handleClickFilter}
                         startIcon={<InputIcon/>}
@@ -268,7 +268,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                 </Menu>
             </Grid>
             }
-            { elements !== null && 
+            { (elements !== null && userListId !== undefined) && 
                 <Grid item>
                     <Grid container direction={"row"} justifyContent="flex-end">
                         {legendVisibility &&
