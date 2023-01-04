@@ -10,12 +10,15 @@ import MenuItem from '@mui/material/MenuItem';
 import Tooltip  from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 import parse from 'html-react-parser';
+import Alert from '@mui/material/Alert';
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Stack = dynamic(() => import('@mui/material/Stack'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
 const MenuIcon = dynamic(import('@mui/icons-material/Menu'));
 const Counter = dynamic(import('./counter'));
+const Snackbar = dynamic(() => import('@mui/material/Snackbar'));
+
 
 const function_mapper = {
 	filter_relation: ({router, relation})=>{
@@ -40,7 +43,7 @@ const function_mapper = {
 			query
 		}, undefined, {shallow: true})
 	},
-	add_library: ({router, libraries}) => {
+	add_library: ({router, libraries, setError}) => {
 		const {page, libraries: old_lib, ...query} = router.query
 		const old_libraries = JSON.parse(old_lib || "[]").reduce((acc, i)=>({
 			...acc,
@@ -62,11 +65,15 @@ const function_mapper = {
 			}
 		}
 		if (updated_libraries.length) {
-			query.libraries = JSON.stringify(updated_libraries)
-			router.push({
-				pathname: `/${page || ''}`,
-				query
-			}, undefined, {shallow: true})
+			if (updated_libraries.length > 5) {
+				setError("Please limit the number of libraries to 5")
+			} else {
+				query.libraries = JSON.stringify(updated_libraries)
+				router.push({
+					pathname: `/${page || ''}`,
+					query
+				}, undefined, {shallow: true})
+			}
 		} else {
 			const {libraries, ...rest} = query
 			router.push({
@@ -100,7 +107,7 @@ const styles = {
 	}
   }
 
-const IconRenderer = ({label, icon, height=100, width=100, href, router, subheader={}, props}) => {
+const IconRenderer = ({label, icon, height=100, width=100, href, router, subheader={}, setError, props}) => {
 	let selected
 	let for_selection
 	if (subheader.field) {
@@ -129,7 +136,7 @@ const IconRenderer = ({label, icon, height=100, width=100, href, router, subhead
 			<Tooltip title={label} key={label}>
 				<Button 
 					onClick={()=>{
-						function_mapper[subheader.onClick](({router, ...props}))
+						function_mapper[subheader.onClick](({router, setError, ...props}))
 						
 					}}
 					sx={buttonStyle}
@@ -197,6 +204,7 @@ const IconRenderer = ({label, icon, height=100, width=100, href, router, subhead
 
 const Header = ({schema, ...rest}) => {
 	const [anchorEl, setAnchorEl] = useState(null);
+	const [error, setError] = useState(null);
   	const open = Boolean(anchorEl);
 	const router = useRouter()
 
@@ -216,6 +224,7 @@ const Header = ({schema, ...rest}) => {
 				<IconRenderer
 					router={router}
 					key={i.label}
+					setError={setError}
 					{...i}
 					{...rest}
 				/>
@@ -283,6 +292,27 @@ const Header = ({schema, ...rest}) => {
 			</Grid>	
 		</Grid>
 		{icon_buttons}
+		<Grid item xs={12}>
+			<Snackbar open={error!==null}
+				anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
+				autoHideDuration={4500}
+				onClose={()=>{
+					setError(null)
+				}}
+			>
+				<Alert 
+					onClose={()=>{
+						setError(null)
+					}}
+					severity={'error'}
+					sx={{ width: '100%' }} 
+					variant="filled"
+					elevation={6}
+				>
+					<Typography>{error}</Typography>
+				</Alert>
+			</Snackbar>
+		</Grid>
 	</Grid>
 )}
 export default Header

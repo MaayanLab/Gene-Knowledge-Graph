@@ -1,13 +1,12 @@
 import dynamic from 'next/dynamic'
 import React, { useEffect, useState, useRef } from 'react';
+import { useRouter } from 'next/router';
+
 import Tooltip from '@mui/material/Tooltip';
 import { usePrevious, delay } from '.';
-import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import Slider from '@mui/material/Slider'
 
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import Grid from '@mui/material/Grid';
 
 // const Grid = dynamic(() => import('@mui/material/Grid'));
@@ -21,10 +20,10 @@ const Stack = dynamic(()=>import('@mui/material/Stack'))
 const TextField = dynamic(() => import('@mui/material/TextField'));
 
 
-const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_controller, loading, setError, ...props}) => {
+const GeneSetForm = ({default_options, setLoading, libraries_list, get_controller, loading, setError, ...props}) => {
+    const router = useRouter()
     const default_term_limit = default_options.term_limit
-    const {page, ...rest} = router.query
-    const [query, setQuery] = useState(rest||{})
+    const {page, ...query} = router.query
     const [input, setInput] = useState({genes: [], description: ''})
     const [inputError, setInputError] = useState(false)
     const [libStart, setLibStart] = useState(0)
@@ -134,11 +133,6 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
     }, [userListId])
 
 
-    useEffect(()=>{    
-        const {page, ...rest} = router.query
-        setQuery(rest)
-    }, [router.query])
-
     useEffect(()=>{
         const delayed_reset = async () => {
             await delay(1000)
@@ -237,9 +231,13 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                         <Slider 
                                             value={min_lib || 1}
                                                 onChange={(e, nv)=>{
-                                                const new_query = {...query}
-                                                new_query.min_lib = nv
-                                                setQuery(new_query)
+                                                router.push({
+                                                    pathname: `/${page || ''}`,
+                                                    query: {
+                                                        ...query,
+                                                        min_lib: nv
+                                                    },
+                                                }, undefined, { shallow: true })
                                             }}
                                             style={{width: "100%"}}
                                             min={1}
@@ -265,9 +263,13 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                     <Slider 
                                         value={gene_degree || 1}
                                         onChange={(e, nv)=>{
-                                            const new_query = {...query}
-                                            new_query.gene_degree = nv
-                                            setQuery(new_query)
+                                            router.push({
+                                                pathname: `/${page || ''}`,
+                                                query: {
+                                                    ...query,
+                                                    gene_degree: nv
+                                                },
+                                            }, undefined, { shallow: true })
                                         }}
                                         style={{width: "100%"}}
                                         min={1}
@@ -292,9 +294,13 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                     <Slider 
                                         value={term_degree || 1}
                                         onChange={(e, nv)=>{
-                                            const new_query = {...query}
-                                            new_query.term_degree = nv
-                                            setQuery(new_query)
+                                            router.push({
+                                                pathname: `/${page || ''}`,
+                                                query: {
+                                                    ...query,
+                                                    term_degree: nv
+                                                },
+                                            }, undefined, { shallow: true })
                                         }}
                                         style={{width: "100%"}}
                                         min={1}
@@ -319,9 +325,13 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                     <Slider 
                                         value={query.gene_limit || input.genes.length || 100}
                                         onChange={(e, nv)=>{
-                                            const new_query = {...query}
-                                            new_query.gene_limit = nv
-                                            setQuery(new_query)
+                                            router.push({
+                                                pathname: `/${page || ''}`,
+                                                query: {
+                                                    ...query,
+                                                    gene_limit: nv
+                                                },
+                                            }, undefined, { shallow: true })
                                         }}
                                         style={{width: "100%"}}
                                         min={1}
@@ -357,18 +367,26 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                                     <Checkbox checked={checked_libraries[library] !== undefined} 
                                                         onChange={()=>{
                                                             if (checked_libraries[library]) {
-                                                                if (libraries.length > 0) {
-                                                                    const new_query = {...query}
-                                                                    new_query.libraries = JSON.stringify(libraries.filter(i=>i.library !== library))
-                                                                    setQuery(new_query)
+                                                                if (libraries.length > 0) {     
+                                                                    router.push({
+                                                                        pathname: `/${page || ''}`,
+                                                                        query: {
+                                                                            ...query,
+                                                                            libraries: JSON.stringify(libraries.filter(i=>i.library !== library))
+                                                                        },
+                                                                    }, undefined, { shallow: true })
                                                                 }
                                                             } else if (libraries.length < 5 ){
-                                                                const new_query = {...query}
-                                                                new_query.libraries = JSON.stringify([...libraries, {
-                                                                    library,
-                                                                    term_limit: default_term_limit
-                                                                }])
-                                                                setQuery(new_query)
+                                                                router.push({
+                                                                    pathname: `/${page || ''}`,
+                                                                    query: {
+                                                                        ...query,
+                                                                        libraries: JSON.stringify([...libraries, {
+                                                                            library,
+                                                                            term_limit: default_term_limit
+                                                                        }])
+                                                                    },
+                                                                }, undefined, { shallow: true })
                                                             } else {
                                                                 setInputError(true)
                                                             }
@@ -396,9 +414,13 @@ const GeneSetForm = ({router, default_options, setLoading, libraries_list, get_c
                                                                     })
                                                                     else new_libraries.push(i)
                                                                 }
-                                                                const new_query = {...query}
-                                                                new_query.libraries = JSON.stringify(new_libraries)
-                                                                setQuery(new_query)
+                                                                router.push({
+                                                                    pathname: `/${page || ''}`,
+                                                                    query: {
+                                                                        ...query,
+                                                                        libraries: JSON.stringify(new_libraries)
+                                                                    },
+                                                                }, undefined, { shallow: true })
                                                             }}
                                                             style={{width: "100%"}}
                                                             valueLabelDisplay='auto'

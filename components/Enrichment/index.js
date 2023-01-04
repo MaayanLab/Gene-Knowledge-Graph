@@ -2,8 +2,6 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router';
 import React, { useEffect, useState, useRef } from 'react';
 import { layouts } from '../kg';
-import { useTheme } from '@mui/material/styles'
-import useMediaQuery from '@mui/material/useMediaQuery';
 import fileDownload from 'js-file-download'
 import Tooltip from '@mui/material/Tooltip';
 import ShareIcon from '@mui/icons-material/Share';
@@ -273,7 +271,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         'aria-labelledby': 'basic-button',
                     }}
                 >
-                    <CardContent style={{width: 1000}}><GeneSetForm setError={setError} router={router} current_router_query={query} page={page} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} disableExample={(elements || []).length > 0} {...props}/></CardContent>
+                    <CardContent style={{width: 1000}}><GeneSetForm setError={setError} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} disableExample={(elements || []).length > 0} {...props}/></CardContent>
                 </Menu>
             </Grid>
             }
@@ -577,7 +575,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         >
                             <span style={{fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>En</span><span style={{color: 'red', fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>rich</span><span style={{fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>r</span>
                         </Link>.</Typography>
-                    <GeneSetForm setError={setError} router={router} current_router_query={query} page={page} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} disableExample={(elements || []).length > 0} {...props}/>
+                    <GeneSetForm setError={setError} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} disableExample={(elements || []).length > 0} {...props}/>
                 </div>
                 : elements.length === 0 ? (
                 <div>No results</div>
