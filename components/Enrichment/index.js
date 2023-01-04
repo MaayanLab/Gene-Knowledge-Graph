@@ -595,6 +595,8 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                             selector: 'node',
                             style: {
                             'background-color': 'data(color)',
+                            'border-color': 'data(borderColor)',
+                            'border-width': 'data(borderWidth)',
                             'label': 'data(label)',
                             "text-valign": "center",
                             "text-halign": "center",

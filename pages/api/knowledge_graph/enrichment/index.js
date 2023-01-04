@@ -19,16 +19,17 @@ const get_color = ({color, darken}) => {
 const get_node_color_and_type = ({node, terms, color, aggr_scores, field, aggr_field, fields}) => {
     if (node.properties.pval === undefined) return default_get_node_color_and_type(({node, terms, color, aggr_scores, field, aggr_field, fields}))
     else {
-        if (node.properties.pval > 0.05) return {node_type: 0, color: "#bdbdbd"}
-        else {
-            const max_pval = aggr_scores.max_pval //aggr_scores.max_pval > 0.05 ? aggr_scores.max_pval: 0.05
-            const min_pval = aggr_scores.min_pval
-            const darken =  Math.abs((node.properties.pval - min_pval)/(max_pval-min_pval))
-            return {
-                color: get_color({color, darken}),
-                node_type: 0
-            }
+        const props = {node_type: 0, borderWidth: 0}
+        if (node.properties.pval > 0.05) {
+            props.borderColor = "#757575",
+            props.borderWidth = 7
         }
+        const max_pval = aggr_scores.max_pval //aggr_scores.max_pval > 0.05 ? aggr_scores.max_pval: 0.05
+        const min_pval = aggr_scores.min_pval
+        const darken =  Math.abs((node.properties.pval - min_pval)/(max_pval-min_pval))
+        props.color = get_color({color, darken})
+
+        return props
     }	
 }
 

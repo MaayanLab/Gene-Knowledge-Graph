@@ -167,6 +167,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
     const colors = {  
     }
     const sizes = [15, 20, 30, 40, 50]
+    const borders = [2, 2, 4, 6, 8]
     if (search) {
       colors["Search Term"] = <Grid item xs={12} key={"search"}>
       <Grid container alignItems={"center"} spacing={2} key="term">
@@ -193,6 +194,15 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
             <Grid item><Typography variant="subtitle1">{kind}</Typography></Grid>   
           </Grid></Grid> 
       }
+    }
+    if (!search) {
+      colors["Not significant"] = <Grid item xs={12} key={"significant"}>
+      <Grid container alignItems={"center"} spacing={1} key="significant">
+        <Grid item>
+          <Avatar style={{background: "#FFF", borderColor: "#757575", borderStyle: "solid", borderWidth: borders[legendSize], width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar>
+        </Grid>
+        <Grid item><Typography variant="subtitle1">{`Not significant (pval < 0.05)`}</Typography></Grid>   
+      </Grid></Grid>   
     }
     return (
       <Box sx={{
