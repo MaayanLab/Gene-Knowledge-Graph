@@ -148,7 +148,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
         <FormGroup>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
-                    <Grid container alignItems={"stretch"} spacing={1}>
+                    <Grid container alignItems={"center"} spacing={1}>
                         <Grid item xs={12}>
                             <TextField multiline
                                 rows={10}
@@ -168,7 +168,35 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                   }}
                             />
                         </Grid>
-                        <Grid item xs={12} align="left">
+                        <Grid item xs={6} align="left">
+                            <Button 
+                                onClick={async ()=>{
+                                    if (!(await same_prev_input())) {
+                                        if (input.genes.length > 0 && libraries.length > 0) {
+                                            addList()
+                                        }
+                                    } else {
+                                        const {search, ...rest} = query
+                                        router.push({
+                                            pathname: `/${page || ''}`,
+                                            query: {
+                                                ...rest,
+                                                search: true
+                                            },
+                                            }, undefined, { shallow: true }
+                                        )
+                                    }
+                                }}
+                                disabled={(loading && router.query.search) || libraries.length === 0 || input.genes.length === 0}
+                                size="large"
+                                variant="contained"
+                                sx={{
+                                    padding: "15px 30px"
+                                }}
+                                // disabled={input.genes.length === 0}
+                            >{(loading && router.query.search) ? "Searching...": "Submit"}</Button>
+                        </Grid>
+                        <Grid item xs={6} align="right">
                             <Button 
                                 onClick={()=>{
                                     const {gene_set, libraries, ...query} = props.example
@@ -188,7 +216,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                 
                             ><Typography variant='subtitle2'>Try an example</Typography></Button>
                         </Grid>
-                        <Grid item style={{ flexGrow: 1 }}>
+                        <Grid item style={{ flexGrow: 1, marginTop: 10 }}>
                             <TextField
                                 variant='outlined'
                                 value={input.description}
@@ -203,30 +231,6 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                     },
                                   }}
                             />
-                        </Grid>
-                        <Grid item>
-                            <Button 
-                                onClick={async ()=>{
-                                    if (!(await same_prev_input())) {
-                                        if (input.genes.length > 0 && libraries.length > 0) {
-                                            addList()
-                                        }
-                                    } else {
-                                        const {search, ...rest} = query
-                                        router.push({
-                                            pathname: `/${page || ''}`,
-                                            query: {
-                                                ...rest,
-                                                search: true
-                                            },
-                                            }, undefined, { shallow: true }
-                                        )
-                                    }
-                                }}
-                                disabled={loading && router.query.search}
-                                variant="contained"
-                                // disabled={input.genes.length === 0}
-                            >{(loading && router.query.search) ? "Searching...": "Submit"}</Button>
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
@@ -359,13 +363,15 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Grid container spacing={1} justifyContent="flex-end">
-                        <Grid item xs={12} md={6} align="left">
-                            <FormLabel error={inputError}><Typography variant="subtitle2">Select maximum of five libraries</Typography></FormLabel>
-                            {libraries_list.length > 10 && <FormLabel error={inputError}><Typography variant="subtitle2">(Scroll for more)</Typography></FormLabel>}
+                        <Grid item xs={12} md={libraries.length > 0? 6: 12} align="left">
+                            <FormLabel error={inputError}><Typography variant="subtitle2">Select maximum of five libraries {libraries.length === 0 && '(Scroll for more)'}</Typography></FormLabel>
+                            {(libraries.length >0 && libraries_list.length > 10) && <FormLabel error={inputError}><Typography variant="subtitle2">(Scroll for more)</Typography></FormLabel>}
                         </Grid>
-                        <Grid item xs={12} md={6} align="left">
-                            <FormLabel><Typography variant="subtitle2">Top terms to include</Typography></FormLabel>
-                        </Grid>
+                        { libraries.length > 0 &&
+                            <Grid item xs={12} md={6} align="left">
+                                <FormLabel><Typography variant="subtitle2">Top terms to include</Typography></FormLabel>
+                            </Grid>
+                        }
                         <Grid item xs={12} sx={{height: 420,}}>
                             <Grid container  sx={{maxHeight: 420, overflowY: "scroll", paddingRight: 5}} alignItems="flex-start">
                                 {libraries_list.map(library=>(

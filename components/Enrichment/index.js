@@ -530,8 +530,22 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     </Grid>
                 </Grid>
             }
-            
-            { (tab === 'network') && <Grid item xs={12} style={{height: userListId ? 700: "100%", position: "relative"}}>
+            { (userListId === undefined || elements === null) &&
+                <Grid item xs={12} style={{height: "100%"}}>
+                    <div align="center">
+                        <Typography variant="h6" sx={{marginBottom: 3}}>Submit your gene set for enrichment analysis with &nbsp;
+                            <Link href={shortId ? `https://maayanlab.cloud/Enrichr/enrich?dataset=${shortId}` : "https://maayanlab.cloud/Enrichr/"} 
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{color: "black", textDecoration: "none"}}
+                            >
+                                <span style={{fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>En</span><span style={{color: 'red', fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>rich</span><span style={{fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>r</span>
+                            </Link></Typography>
+                        <GeneSetForm setError={setError} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} disableExample={(elements || []).length > 0} {...props}/>
+                    </div>
+                </Grid>
+            }
+            {(tab === 'network' && elements!==null) && <Grid item xs={12} style={{height: !userListId? "100%": !router.query.search ? "100%": 700, position: "relative"}}>
                 <Snackbar open={error!==null}
 					anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
 					autoHideDuration={4500}
@@ -569,18 +583,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         <Typography>{( error || {}).message || ""}</Typography>
                     </Alert>
                 </Snackbar>
-                { (userListId === undefined || elements === null) ? <div align="center">
-                    <Typography variant="h6" sx={{marginBottom: 3}}>Submit your gene set for enrichment analysis with &nbsp;
-                        <Link href="https://maayanlab.cloud/Enrichr/" 
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{color: "black", textDecoration: "none"}}
-                        >
-                            <span style={{fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>En</span><span style={{color: 'red', fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>rich</span><span style={{fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>r</span>
-                        </Link>.</Typography>
-                    <GeneSetForm setError={setError} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} disableExample={(elements || []).length > 0} {...props}/>
-                </div>
-                : elements.length === 0 ? (
+                { elements.length === 0 ? (
                 <div>No results</div>
                 ) : loading ? 
                 <CircularProgress/>:
