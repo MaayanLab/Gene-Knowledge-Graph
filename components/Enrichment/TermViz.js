@@ -125,14 +125,6 @@ const TermViz = ({data, tab, setTab}) => {
 						<Grid item xs={12} align="center">
 							{tabs[tab].component({entries})}
 						</Grid>
-						{/* {Object.entries(tabs).map(([k,v])=>{
-							console.log(k,v)
-							return(
-								<Grid key={k} item xs={12} align="center">
-									{v.component({entries})}
-								</Grid>
-							)
-						})} */}
 					</Grid>
 				</CardContent>
 			</Card>
