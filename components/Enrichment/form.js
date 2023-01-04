@@ -26,7 +26,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
     const {page, ...query} = router.query
     const [input, setInput] = useState({genes: [], description: ''})
     const [inputError, setInputError] = useState(false)
-    const [libStart, setLibStart] = useState(0)
+    const [submitted, setSubmitted] = useState(false)
 
     const {
         userListId,
@@ -88,6 +88,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                 })
             ).json()
             if (query.libraries === undefined) query.libraries = JSON.stringify(default_options.selected)
+            setSubmitted(false)
             router.push({
                 pathname: `/${page || ''}`,
                 query: {
@@ -171,12 +172,14 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                         <Grid item xs={6} align="left">
                             <Button 
                                 onClick={async ()=>{
+                                    setSubmitted(true)
                                     if (!(await same_prev_input())) {
                                         if (input.genes.length > 0 && libraries.length > 0) {
                                             addList()
                                         }
                                     } else {
                                         const {search, ...rest} = query
+                                        setSubmitted(false)
                                         router.push({
                                             pathname: `/${page || ''}`,
                                             query: {
@@ -187,14 +190,14 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                         )
                                     }
                                 }}
-                                disabled={(loading && router.query.search) || libraries.length === 0 || input.genes.length === 0}
+                                disabled={submitted || (loading && router.query.search) || libraries.length === 0 || input.genes.length === 0}
                                 size="large"
                                 variant="contained"
                                 sx={{
                                     padding: "15px 30px"
                                 }}
                                 // disabled={input.genes.length === 0}
-                            >{(loading && router.query.search) ? "Searching...": "Submit"}</Button>
+                            >{((loading && router.query.search) || submitted) ? "Searching...": "Submit"}</Button>
                         </Grid>
                         <Grid item xs={6} align="right">
                             <Button 
@@ -208,7 +211,10 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                     if (Object.keys(query).length > 0) {
                                         router.push({
                                             pathname: `/${page || ''}`,
-                                            query,
+                                            query: {
+                                                userListId: 56159007,
+                                                ...query
+                                            },
                                             }, undefined, { shallow: true }
                                         )
                                     }
