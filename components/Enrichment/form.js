@@ -92,7 +92,8 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                 pathname: `/${page || ''}`,
                 query: {
                     ...query,
-                    userListId
+                    userListId,
+                    search: true
                 },
                 }, undefined, { shallow: true })
         } catch (error) {
@@ -211,17 +212,21 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                             addList()
                                         }
                                     } else {
+                                        const {search, ...rest} = query
                                         router.push({
                                             pathname: `/${page || ''}`,
-                                            query,
+                                            query: {
+                                                ...rest,
+                                                search: true
+                                            },
                                             }, undefined, { shallow: true }
                                         )
                                     }
                                 }}
-                                disabled={loading}
+                                disabled={loading && router.query.search}
                                 variant="contained"
                                 // disabled={input.genes.length === 0}
-                            >{loading ? "Searching...": "Submit"}</Button>
+                            >{(loading && router.query.search) ? "Searching...": "Submit"}</Button>
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
@@ -231,10 +236,11 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                         <Slider 
                                             value={min_lib || 1}
                                                 onChange={(e, nv)=>{
+                                                const {search, ...rest} = query
                                                 router.push({
                                                     pathname: `/${page || ''}`,
                                                     query: {
-                                                        ...query,
+                                                        ...rest,
                                                         min_lib: nv
                                                     },
                                                 }, undefined, { shallow: true })
@@ -263,10 +269,11 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                     <Slider 
                                         value={gene_degree || 1}
                                         onChange={(e, nv)=>{
+                                            const {search, ...rest} = query
                                             router.push({
                                                 pathname: `/${page || ''}`,
                                                 query: {
-                                                    ...query,
+                                                    ...rest,
                                                     gene_degree: nv
                                                 },
                                             }, undefined, { shallow: true })
@@ -294,10 +301,11 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                     <Slider 
                                         value={term_degree || 1}
                                         onChange={(e, nv)=>{
+                                            const {search, ...rest} = query
                                             router.push({
                                                 pathname: `/${page || ''}`,
                                                 query: {
-                                                    ...query,
+                                                    ...rest,
                                                     term_degree: nv
                                                 },
                                             }, undefined, { shallow: true })
@@ -325,10 +333,11 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                     <Slider 
                                         value={query.gene_limit || input.genes.length || 100}
                                         onChange={(e, nv)=>{
+                                            const {search, ...rest} = query
                                             router.push({
                                                 pathname: `/${page || ''}`,
                                                 query: {
-                                                    ...query,
+                                                    ...rest,
                                                     gene_limit: nv
                                                 },
                                             }, undefined, { shallow: true })
@@ -368,19 +377,21 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                                         onChange={()=>{
                                                             if (checked_libraries[library]) {
                                                                 if (libraries.length > 0) {     
+                                                                    const {search, ...rest} = query
                                                                     router.push({
                                                                         pathname: `/${page || ''}`,
                                                                         query: {
-                                                                            ...query,
+                                                                            ...rest,
                                                                             libraries: JSON.stringify(libraries.filter(i=>i.library !== library))
                                                                         },
                                                                     }, undefined, { shallow: true })
                                                                 }
                                                             } else if (libraries.length < 5 ){
+                                                                const {search, ...rest} = query
                                                                 router.push({
                                                                     pathname: `/${page || ''}`,
                                                                     query: {
-                                                                        ...query,
+                                                                        ...rest,
                                                                         libraries: JSON.stringify([...libraries, {
                                                                             library,
                                                                             term_limit: default_term_limit
@@ -414,10 +425,11 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                                                     })
                                                                     else new_libraries.push(i)
                                                                 }
+                                                                const {search, ...rest} = query
                                                                 router.push({
                                                                     pathname: `/${page || ''}`,
                                                                     query: {
-                                                                        ...query,
+                                                                        ...rest,
                                                                         libraries: JSON.stringify(new_libraries)
                                                                     },
                                                                 }, undefined, { shallow: true })

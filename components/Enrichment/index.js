@@ -140,7 +140,6 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
 	};
     const fetch_kg = async () => {
         try {
-            setCollapsed(null)
             const controller = get_controller()
             const {
                 userListId,
@@ -150,12 +149,16 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                 term_degree=default_options.term_degree,
                 expand,
                 remove,
+                search
             } = router.query
             const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : (default_options.selected || [])
-            console.log(libraries)
-            if (libraries.length === 0) {
+            if (!search) {
+                return
+            } else if (libraries.length === 0) {
+                setCollapsed(null)
                 setElements(null)
             } else {
+                setCollapsed(null)
                 setLoading(true)
                 let counter = 0
                 while (counter < 5) {
