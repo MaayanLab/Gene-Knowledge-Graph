@@ -282,6 +282,7 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 			`   
 		}
 	}
+	console.log(query)
 	const results = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
 	return resolve_results({results, terms: [term], schema, order, score_fields,  aggr_scores, colors, field})
 }

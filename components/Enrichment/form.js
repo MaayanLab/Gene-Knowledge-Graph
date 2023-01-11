@@ -370,7 +370,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                 <Grid item xs={12} md={6}>
                     <Grid container spacing={1} justifyContent="flex-end">
                         <Grid item xs={12} md={libraries.length > 0? 6: 12} align="left">
-                            <FormLabel error={inputError}><Typography variant="subtitle2">Select maximum of five libraries {libraries.length === 0 && '(Scroll for more)'}</Typography></FormLabel>
+                            <FormLabel error={inputError}><Typography variant="subtitle2">Select maximum of five libraries {libraries.length > 10 && '(Scroll for more)'}</Typography></FormLabel>
                             {(libraries.length >0 && libraries_list.length > 10) && <FormLabel error={inputError}><Typography variant="subtitle2">(Scroll for more)</Typography></FormLabel>}
                         </Grid>
                         { libraries.length > 0 &&

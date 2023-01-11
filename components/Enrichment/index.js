@@ -92,9 +92,9 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     const [legendVisibility, setLegendVisibility] = useState(false)
     const [legendSize, setLegendSize] = useState(0)
     const prevQuery = usePrevious(router.query)
-    const libraries_list = l.sort(function(a, b) {
+    const libraries_list = props.sortLibraries ? l.sort(function(a, b) {
         return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-     })
+     }): l
 
 
     const {userListId} = router.query
@@ -533,14 +533,17 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
             { (userListId === undefined || elements === null) &&
                 <Grid item xs={12} style={{height: "100%"}}>
                     <div align="center">
-                        <Typography variant="h6" sx={{marginBottom: 3}}>Submit your gene set for enrichment analysis with &nbsp;
-                            <Link href={shortId ? `https://maayanlab.cloud/Enrichr/enrich?dataset=${shortId}` : "https://maayanlab.cloud/Enrichr/"} 
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{color: "black", textDecoration: "none"}}
-                            >
-                                <span style={{fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>En</span><span style={{color: 'red', fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>rich</span><span style={{fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>r</span>
-                            </Link></Typography>
+                        { !props.disableHeader && 
+                            <Typography variant="h6" sx={{marginBottom: 3}}>Submit your gene set for enrichment analysis with &nbsp;
+                                <Link href={shortId ? `https://maayanlab.cloud/Enrichr/enrich?dataset=${shortId}` : "https://maayanlab.cloud/Enrichr/"} 
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{color: "black", textDecoration: "none"}}
+                                >
+                                    <span style={{fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>En</span><span style={{color: 'red', fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>rich</span><span style={{fontSize: 30, fontWeight: 500, letterSpacing: '0.1em'}}>r</span>
+                                </Link>
+                            </Typography>
+                        }
                         <GeneSetForm setError={setError} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} disableExample={(elements || []).length > 0} {...props}/>
                     </div>
                 </Grid>

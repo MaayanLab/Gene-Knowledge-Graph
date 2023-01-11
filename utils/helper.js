@@ -13,7 +13,7 @@ export const precise = (value) => {
     templateString,
     templateVariables
 ) {
-  const keys = [...Object.keys(templateVariables).map((key) => key.replace(/ /g, '_')), 'PREFIX']
+  const keys = [...Object.keys(templateVariables).map((key) => key.replace(/ /g, '_')), 'PREFIX'].filter(i=>i.indexOf(":")===-1)
   const values = [...Object.values(templateVariables), process.env.NEXT_PUBLIC_PREFIX]
   try {
     const templateFunction = new Function(...keys, `return \`${templateString}\`;`)
