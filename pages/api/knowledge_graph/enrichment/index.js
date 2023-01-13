@@ -39,7 +39,7 @@ const enrichr_query = async ({userListId, library, term_limit, term_degree}) => 
         throw new Error(`Error communicating with Enrichr`)
     }
     const regex = {}
-    const reg = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment/getRegex`)
+    const reg = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment/get_regex`)
     if (reg.ok !== true) {
         throw new Error(`Error fetching Regex`)
     }
