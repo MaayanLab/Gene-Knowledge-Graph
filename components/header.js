@@ -240,7 +240,7 @@ const Header = ({schema, ...rest}) => {
 	return(
 	<Grid container justifyContent="center">
 		<Grid item xs={12} align="center">
-			<Grid container justifyContent={"space-between"} alignItems={"center"} style={{padding: 15, marginBottom: 10, background: schema.header.background.backgroundColor}}>
+			<Grid container justifyContent={"space-between"} alignItems={"center"} style={{padding: 15, marginBottom: 10, background:( schema.header.background || {}).backgroundColor}}>
 				<Grid item>
 					<Button href={`${process.env.NEXT_PUBLIC_PREFIX || "/"}`}>
 						<Stack direction={"row"} alignItems="center">
@@ -261,13 +261,13 @@ const Header = ({schema, ...rest}) => {
 				</Grid>
 				<Grid item align="left">
 					<Stack direction={"row"} alignItems="center">
-					<Counter fontColor={schema.header.background.contrastText}/>
+					<Counter fontColor={(schema.header.background || {}).contrastText || "#000"}/>
 					{schema.header.tabs && 
 					<Button onClick={handleClickMenu}
 						aria-controls={open ? 'basic-menu' : undefined}
 						aria-haspopup="true"
 						aria-expanded={open ? 'true' : undefined}
-						sx={{color: schema.header.background.contrastText}}
+						sx={{color: (schema.header.background || {}).contrastText || "#000"}}
 					><MenuIcon/></Button>}
 					{ schema.header.tabs && 
 						<Menu
