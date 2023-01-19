@@ -67,7 +67,7 @@ export const layouts = {
 
 
 
-export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema, initial_query}) {
+export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema, initial_query, tooltip_viz}) {
   if (!schema) schema=default_schema  
   const router = useRouter()
   const {page, start_term, end_term, start_field="label", end_field="label", limit=25, path_length, relation, order=(Object.keys(schema.order || {}))[0], remove, expand, fullscreen=false} = router.query
@@ -88,7 +88,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   const [edgeStyle, setEdgeStyle] = React.useState({label: 'data(label)'})
   const [id, setId] = React.useState(0)
   const [tab, setTab] = React.useState('network')
-  const [showTooltip, setShowTooltip] = React.useState(true)
+  const [showTooltip, setShowTooltip] = React.useState(tooltip_viz!== undefined ? tooltip_viz: true)
   const [elements, setElements] = React.useState(undefined)
   const [controller, setController] = React.useState(null)
   const [anchorEl, setAnchorEl] = React.useState(null)
