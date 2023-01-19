@@ -89,7 +89,7 @@ export const resolve_results = ({results,
 		const shade = [500, "A100", 200, "A700", "A400"]
 		const colors_func = (type) => {
 			if (colors[type] && colors[type].color) {
-				color_values[type] = colors[type].color
+				color_values[type] = colors[type]
 			}else if (color_values[type] === undefined) {
 				const c = Object.values(mui_colors)[color_index][shade[shade_index]]
 				if (color_index < Object.keys(mui_colors).length) color_index = color_index + 1
@@ -101,9 +101,9 @@ export const resolve_results = ({results,
 						shade_index = shade_index + 1
 					}
 				}
-				color_values[type] = c
+				color_values[type] = {color: c}
 			}
-			return {color: color_values[type]}
+			return {...color_values[type]}
 		}
 		const res = results.records.flatMap(record => {
 			const relations = record.get('r')
@@ -282,7 +282,6 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 			`   
 		}
 	}
-	console.log(query)
 	const results = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
 	return resolve_results({results, terms: [term], schema, order, score_fields,  aggr_scores, colors, field})
 }

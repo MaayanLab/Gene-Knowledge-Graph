@@ -67,7 +67,7 @@ export const layouts = {
 
 
 
-export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema}) {
+export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema, initial_query}) {
   if (!schema) schema=default_schema  
   const router = useRouter()
   const {page, start_term, end_term, start_field="label", end_field="label", limit=25, path_length, relation, order=(Object.keys(schema.order || {}))[0], remove, expand, fullscreen=false} = router.query
@@ -133,7 +133,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
 
   React.useEffect(()=>{
     if (current_node && !start_term) {
-      const query = {
+      const query = initial_query || {
         start,
         start_term: current_node.example[0],
         // relation  
@@ -224,13 +224,14 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
 
   useAsyncEffect(async (isActive) => {
     if (current_node && !start_term) {
+      const query = initial_query || {
+        start,
+        start_term: current_node.example[0],
+        // relation
+      }
       router.push({
         pathname: `/${page || ''}`,
-        query: {
-          start,
-          start_term: current_node.example[0],
-          // relation
-        }
+        query
       }, undefined, {shallow: true})
     } else {
       setLoading(true)
