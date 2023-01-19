@@ -67,14 +67,24 @@ export const layouts = {
 
 
 
-export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema, initial_query, tooltip_viz}) {
+export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema, initial_query={}, tooltip_viz}) {
   if (!schema) schema=default_schema  
   const router = useRouter()
-  const {page, start_term, end_term, start_field="label", end_field="label", limit=25, path_length, relation, order=(Object.keys(schema.order || {}))[0], remove, expand, fullscreen=false} = router.query
-  let start = router.query.start
-  let end = router.query.end
-  if (!start) start = schema.nodes[0].node
-  if (!end) end = schema.nodes[0].node
+  const {page,
+        start_term,
+        end_term,
+        start_field="label",
+        end_field="label",
+        limit=25,
+        path_length,
+        relation,
+        order=(Object.keys(schema.order || {}))[0],
+        remove,
+        expand,
+        fullscreen=false,
+        start=initial_query.start || schema.nodes[0].node,
+        end=initial_query.end || schema.nodes[0].node
+      } = router.query
   const current_node = nodes[start] || Object.values(nodes)[0]
   const [allStartTerms, setAllStartTerms] = React.useState([])
   const [startTermInput, setStartTermInput] = React.useState(start_term || '')
@@ -121,6 +131,8 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       query
     }, undefined, {shallow: true})
   }
+
+
   React.useEffect(() => {
     setStartTermInput(start_term || '')
     reset_tooltip()
@@ -132,14 +144,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   }, [end_term])
 
   React.useEffect(()=>{
-    if (current_node && !start_term) {
-      const query = initial_query || {
-        start,
-        start_term: current_node.example[0],
-        // relation  
-      }
-      redirect(query)
-    } else if (start && entries[start]) {
+    if (start && entries[start]) {
       setAllStartTerms(entries[start])
     }
   }, [start])
@@ -222,46 +227,61 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
     }
   }
 
-  useAsyncEffect(async (isActive) => {
-    if (current_node && !start_term) {
-      const query = initial_query || {
-        start,
-        start_term: current_node.example[0],
-        // relation
+  React.useEffect(() => {
+    const {page, ...query} = router.query
+    console.log(query)
+    if (Object.keys(query || {}).length === 0) {
+      if (initial_query) {
+        router.push({
+          pathname: `/${page || ''}`,
+          query: initial_query
+        }, undefined, {shallow: true})
+      } else {
+        router.push({
+          pathname: `/${page || ''}`,
+          query: {
+            start,
+            start_term: current_node.example[0],
+          }
+        }, undefined, {shallow: true})
       }
-      router.push({
-        pathname: `/${page || ''}`,
-        query
-      }, undefined, {shallow: true})
     } else {
-      setLoading(true)
-      await  resolve_elements(isActive)
+      resolve_elements(true)
     }
-  }, [start_term, limit])
+  }, [router.query])
 
-  useAsyncEffect(async (isActive) => {
-    // if (end_term) {
-    //   await  resolve_elements(isActive)
-    // }
-    setLoading(true)
-    await  resolve_elements(isActive)
-  }, [end_term])
+  // useAsyncEffect(async (isActive) => {
+  //   if (current_node && !start_term) {
+  //     //
+  //   } else {
+  //     setLoading(true)
+  //     await  resolve_elements(isActive)
+  //   }
+  // }, [start_term, limit])
 
-  useAsyncEffect(async (isActive) => {
-    // if (end_term) {
-    //   await  resolve_elements(isActive)
-    // }
-    if (remove || expand) await  resolve_elements(isActive)
-  }, [remove, expand])
+  // useAsyncEffect(async (isActive) => {
+  //   // if (end_term) {
+  //   //   await  resolve_elements(isActive)
+  //   // }
+  //   setLoading(true)
+  //   await  resolve_elements(isActive)
+  // }, [end_term])
 
-  useAsyncEffect(async (isActive) => {
-    if (firstUpdate.current && relation===undefined) {
-      firstUpdate.current = false
-    } else {
-      setLoading(true)
-      await  resolve_elements(isActive)
-    }
-  }, [relation, path_length])
+  // useAsyncEffect(async (isActive) => {
+  //   // if (end_term) {
+  //   //   await  resolve_elements(isActive)
+  //   // }
+  //   if (remove || expand) await  resolve_elements(isActive)
+  // }, [remove, expand])
+
+  // useAsyncEffect(async (isActive) => {
+  //   if (firstUpdate.current && relation===undefined) {
+  //     firstUpdate.current = false
+  //   } else {
+  //     setLoading(true)
+  //     await  resolve_elements(isActive)
+  //   }
+  // }, [relation, path_length])
 
                       
   return (
