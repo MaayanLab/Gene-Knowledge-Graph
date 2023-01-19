@@ -2,7 +2,7 @@ version: '2'
 services:
   kg:
     build: .
-    image: maayanlab/knowledge_graph:1.1.18
+    image: maayanlab/knowledge_graph:1.1.19
     platform: linux/x86_64
     env_file: .env.deploy
     ports:
@@ -24,7 +24,7 @@ services:
       - 7474:7474
       - 7687:7687
     volumes:
-      - ./data-enrichr-v4/neo4j:/data
+      - ./data-reprotox-v2/neo4j:/data
     networks:
       internal:
         aliases:
