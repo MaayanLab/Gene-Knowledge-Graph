@@ -238,7 +238,7 @@ const Header = ({schema, ...rest}) => {
 	if (schema === undefined || schema.header === undefined) return null
 	
 	return(
-	<Grid container justifyContent="center">
+	<Grid container justifyContent="center" style={schema.header.style}>
 		<Grid item xs={12} align="center">
 			<Grid container justifyContent={"space-between"} alignItems={"center"} style={{padding: 15, marginBottom: 10, background:( schema.header.background || {}).backgroundColor}}>
 				<Grid item>
@@ -288,31 +288,29 @@ const Header = ({schema, ...rest}) => {
 						</Menu>
 					}
 					</Stack>
+					<Snackbar open={error!==null}
+						anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
+						autoHideDuration={4500}
+						onClose={()=>{
+							setError(null)
+						}}
+					>
+						<Alert 
+							onClose={()=>{
+								setError(null)
+							}}
+							severity={'error'}
+							sx={{ width: '100%' }} 
+							variant="filled"
+							elevation={6}
+						>
+							<Typography>{error}</Typography>
+						</Alert>
+					</Snackbar>
 				</Grid>
 			</Grid>	
 		</Grid>
 		{icon_buttons}
-		<Grid item xs={12}>
-			<Snackbar open={error!==null}
-				anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
-				autoHideDuration={4500}
-				onClose={()=>{
-					setError(null)
-				}}
-			>
-				<Alert 
-					onClose={()=>{
-						setError(null)
-					}}
-					severity={'error'}
-					sx={{ width: '100%' }} 
-					variant="filled"
-					elevation={6}
-				>
-					<Typography>{error}</Typography>
-				</Alert>
-			</Snackbar>
-		</Grid>
 	</Grid>
 )}
 export default Header
