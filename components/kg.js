@@ -7,6 +7,7 @@ import fileDownload from 'js-file-download'
 import * as default_schema from '../public/schema.json'
 import { isIFrame } from '../utils/helper';
 import { usePrevious, shouldUpdateId } from './Enrichment';
+import { process_tables } from '../utils/helper';
 
 import Tooltip from '@mui/material/Tooltip';
 
@@ -26,6 +27,7 @@ import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import SaveIcon from '@mui/icons-material/Save';
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Box = dynamic(() => import('@mui/material/Box'));
@@ -146,6 +148,16 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   React.useEffect(()=>{
     if (start && entries[start]) {
       setAllStartTerms(entries[start])
+      const {page, start: s, ...query} = router.query
+      if (Object.keys(query).length === 0) {
+        router.push({
+          pathname: `/${page || ''}`,
+          query: {
+            start,
+            start_term: current_node.example[0],
+          }
+        }, undefined, {shallow: true})
+      }  
     }
   }, [start])
 
@@ -229,9 +241,8 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
 
   React.useEffect(() => {
     const {page, ...query} = router.query
-    console.log(query)
     if (Object.keys(query || {}).length === 0) {
-      if (initial_query) {
+      if (Object.keys(initial_query || {}).length > 0) {
         router.push({
           pathname: `/${page || ''}`,
           query: initial_query
@@ -282,8 +293,6 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   //     await  resolve_elements(isActive)
   //   }
   // }, [relation, path_length])
-
-                      
   return (
     <Grid container justifyContent="space-around" spacing={2}>
       <Grid item xs={12}>
@@ -501,7 +510,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
             </Grid>
             <Grid item xs={1}>
               <Slider 
-                value={limit}
+                value={parseInt(limit)}
                 color="blues"
                 onChange={(e, nv)=>{
                   router.push({
@@ -563,6 +572,19 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                       <span className='mdi mdi-table'/>
                   </IconButton>
               </Tooltip>
+          </Grid>
+          <Grid item>
+            <Tooltip title={"Save subnetwork"}>
+                <IconButton
+                    disabled={elements===null}
+                    onClick={()=>{
+                        if (elements) process_tables(elements)
+                    }}
+                    style={{marginLeft: 5, borderRadius: 5, background: tab === "bar" ? "#e0e0e0": "none"}}
+                >
+                    <SaveIcon/>
+                </IconButton>
+            </Tooltip>
           </Grid>
           <Grid item>
             <Tooltip title={showTooltip ? "Hide tooltip": "Show tooltip"}>
@@ -675,7 +697,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
             </Grid>
             <Grid item xs={2}>
               <Slider 
-                value={limit}
+                value={parseInt(limit)}
                 color="blues"
                 onChange={(e, nv)=>{
                   router.push({

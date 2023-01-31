@@ -29,7 +29,6 @@ const Avatar = dynamic(() => import('@mui/material/Avatar'));
 export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema, top, right, endpoint="/", expand=true, reset=null}) => {
     const elements = []
     const field = node.kind === "Relation" ? node.label : node.kind
-    console.log(tooltip_templates)
     for (const i of tooltip_templates[field] || []) {
       if (i.type === "link") {
         const text = makeTemplate(i.text, node.properties)

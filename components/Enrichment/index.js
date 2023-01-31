@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router';
 import React, { useEffect, useState, useRef } from 'react';
 import { layouts } from '../kg';
+import { process_tables } from '../../utils/helper';
 import fileDownload from 'js-file-download'
 import Tooltip from '@mui/material/Tooltip';
 import ShareIcon from '@mui/icons-material/Share';
@@ -23,6 +24,7 @@ import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import SaveIcon from '@mui/icons-material/Save';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -345,6 +347,19 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                     style={{marginLeft: 5, borderRadius: 5, background: tab === "bar" ? "#e0e0e0": "none"}}
                                 >
                                     <span className='mdi mdi-poll mdi-rotate-90'/>
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
+                        <Grid item>
+                            <Tooltip title={"Save subnetwork"}>
+                                <IconButton
+                                    disabled={elements===null}
+                                    onClick={()=>{
+                                        if (elements) process_tables(elements)
+                                    }}
+                                    style={{marginLeft: 5, borderRadius: 5, background: tab === "bar" ? "#e0e0e0": "none"}}
+                                >
+                                    <SaveIcon/>
                                 </IconButton>
                             </Tooltip>
                         </Grid>

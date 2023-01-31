@@ -27,6 +27,7 @@
     "html-react-parser": "^3.0.4",
     "isomorphic-unfetch": "^3.1.0",
     "js-file-download": "^0.4.12",
+    "jszip": "^3.10.1",
     "memory-cache": "^0.2.0",
     "neo4j-driver": "^4.4.5",
     "next": "^12.1.0",
