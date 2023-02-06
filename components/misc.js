@@ -175,9 +175,11 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
         <Grid item><Typography variant="subtitle1">Search Term</Typography></Grid>   
       </Grid></Grid>   
     }
+    let not_significant = false
     const color_sum = {}
     for (const i of elements) {
       const {kind, color} = i.data
+      if (i.data.properties.pval && i.data.properties.pval > 0.05) not_significant = true
       if (colors[kind]===undefined && color !== "#F8333C" && kind !== "Relation") {
         color_sum[kind] = color
         colors[kind] = <Grid item xs={12} key={kind}>
@@ -195,7 +197,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
           </Grid></Grid> 
       }
     }
-    if (!search) {
+    if (!search && not_significant) {
       colors["Not significant"] = <Grid item xs={12} key={"significant"}>
       <Grid container alignItems={"center"} spacing={1} key="significant">
         <Grid item>
