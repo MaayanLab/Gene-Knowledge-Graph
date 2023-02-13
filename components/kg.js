@@ -189,13 +189,13 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       reset_tooltip()
       const body = {
         start,
-        start_term,
+        start_term: start_term.replace(/\+/g, "%2B"),
         start_field,
         limit
       }
       if (end && end_term) {
         body.end = end
-        body.end_term = end_term
+        body.end_term = end_term.replace(/\+/g, "%2B")
         body.end_field = end_field
       }
       if (path_length) {
