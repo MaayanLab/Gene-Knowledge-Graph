@@ -8,7 +8,7 @@ import Button from '@mui/material/Button'
 import Slider from '@mui/material/Slider'
 
 import Grid from '@mui/material/Grid';
-import { verify } from 'crypto';
+import ErrorIcon from '@mui/icons-material/Error';
 
 const Card = dynamic(() => import('@mui/material/Card'));
 const CardContent = dynamic(() => import('@mui/material/CardContent'));
@@ -185,7 +185,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                         <CardContent>
                                             {input.genes.map(i=>{
                                                 if (verified.indexOf(i) > -1) return <Typography color="green" align='left' style={{fontSize: 14}}>{i}</Typography>
-                                                else return <Typography align='left' style={{fontSize: 14}}>{i}</Typography>
+                                                else return <Stack direction='row' spacing={1} alignItems={"center"} justifyContent="flex-start"><Typography align='left' color={verified.length > 0 ? 'error': 'default'} style={{fontSize: 14}}>{i}</Typography><ErrorIcon color="error" style={{width: 15}}/></Stack>
                                             })}
                                         </CardContent>
                                     </Card>:
@@ -239,7 +239,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                     }}
                                     // disabled={input.genes.length === 0}
                                 >{((loading && router.query.search) || submitted) ? "Searching...": "Submit"}</Button>
-                                {verified.length > 0 && <Typography variant='subtitle2'> {`${verified.length} valid genes`}</Typography>}
+                                {verified.length > 0 && <Typography variant='subtitle2'> {`${verified.length} matched genes`}</Typography>}
                             </Stack>
                         </Grid>
                         <Grid item xs={6} align="right">
