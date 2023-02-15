@@ -8,8 +8,11 @@ import Button from '@mui/material/Button'
 import Slider from '@mui/material/Slider'
 
 import Grid from '@mui/material/Grid';
+import { verify } from 'crypto';
 
-// const Grid = dynamic(() => import('@mui/material/Grid'));
+const Card = dynamic(() => import('@mui/material/Card'));
+const CardContent = dynamic(() => import('@mui/material/CardContent'));
+
 const Typography = dynamic(() => import('@mui/material/Typography'));
 const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
 const FormLabel = dynamic(()=>import('@mui/material/FormLabel'))
@@ -25,8 +28,10 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
     const default_term_limit = default_options.term_limit
     const {page, ...query} = router.query
     const [input, setInput] = useState({genes: [], description: ''})
+    const [verified, setVerified] = useState([])
     const [inputError, setInputError] = useState(false)
     const [submitted, setSubmitted] = useState(false)
+    const [isFocused, setIsFocused] = useState(false)
 
     const {
         userListId,
@@ -102,6 +107,24 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
         }
     }
 
+    const verifyList = async (input) => {
+        try {
+            const controller = get_controller()
+            const verified = await (
+                await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment/terms_and_genes`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        input
+                    }),
+                    signal: controller.signal
+                })
+            ).json()
+            setVerified(verified)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     useEffect(()=> {
         const resolve_genes = async () => {
             let counter = 0
@@ -145,59 +168,79 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
         }
     }, [inputError])
 
+    useEffect(()=>{
+        if (input.genes.length === 0) setVerified([])
+        else verifyList(input.genes.map(i=>i.toUpperCase()))
+    }, [input.genes])
+
     return (
         <FormGroup>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
                     <Grid container alignItems={"center"} spacing={1}>
                         <Grid item xs={12}>
-                            <TextField multiline
-                                rows={10}
-                                placeholder={"Paste a set of valid Entrez gene symbols (e.g. STAT3) on each row in the text-box"}
-                                fullWidth
-                                value={input.genes.join("\n")}
-                                onChange={(e)=>{
-                                    setInput({
-                                        ...input,
-                                        genes: e.target.value.split(/[\t\r\n;]+/)
-                                    })
-                                }}
-                                InputProps={{
-                                    style: {
-                                      fontSize: 14,
-                                    },
-                                  }}
-                            />
+                            <div tabIndex={0} onBlur={() => setIsFocused(false)} onClick={() => setIsFocused(true)}>
+                                {!isFocused ? 
+                                    <Card style={{height: 235, overflow: "scroll", boxShadow: "none", border: "1px solid black"}}>
+                                        <CardContent>
+                                            {input.genes.map(i=>{
+                                                if (verified.indexOf(i) > -1) return <Typography color="green" align='left' style={{fontSize: 14}}>{i}</Typography>
+                                                else return <Typography align='left' style={{fontSize: 14}}>{i}</Typography>
+                                            })}
+                                        </CardContent>
+                                    </Card>:
+                                    <TextField multiline
+                                        rows={10}
+                                        placeholder={"Paste a set of valid Entrez gene symbols (e.g. STAT3) on each row in the text-box"}
+                                        fullWidth
+                                        value={input.genes.join("\n")}
+                                        onChange={(e)=>{
+                                            setInput({
+                                                ...input,
+                                                genes: e.target.value.split(/[\t\r\n;]+/)
+                                            })
+                                        }}
+                                        InputProps={{
+                                            style: {
+                                            fontSize: 14,
+                                            },
+                                        }}
+                                    />
+                                }
+                            </div>
                         </Grid>
                         <Grid item xs={6} align="left">
-                            <Button 
-                                onClick={async ()=>{
-                                    setSubmitted(true)
-                                    if (!(await same_prev_input())) {
-                                        if (input.genes.length > 0 && libraries.length > 0) {
-                                            addList()
+                            <Stack direction={"row"} spacing={1} alignItems="center">
+                                <Button 
+                                    onClick={async ()=>{
+                                        setSubmitted(true)
+                                        if (!(await same_prev_input())) {
+                                            if (input.genes.length > 0 && libraries.length > 0) {
+                                                addList()
+                                            }
+                                        } else {
+                                            const {search, ...rest} = query
+                                            setSubmitted(false)
+                                            router.push({
+                                                pathname: `/${page || ''}`,
+                                                query: {
+                                                    ...rest,
+                                                    search: true
+                                                },
+                                                }, undefined, { shallow: true }
+                                            )
                                         }
-                                    } else {
-                                        const {search, ...rest} = query
-                                        setSubmitted(false)
-                                        router.push({
-                                            pathname: `/${page || ''}`,
-                                            query: {
-                                                ...rest,
-                                                search: true
-                                            },
-                                            }, undefined, { shallow: true }
-                                        )
-                                    }
-                                }}
-                                disabled={submitted || (loading && router.query.search) || libraries.length === 0 || input.genes.length === 0}
-                                size="large"
-                                variant="contained"
-                                sx={{
-                                    padding: "15px 30px"
-                                }}
-                                // disabled={input.genes.length === 0}
-                            >{((loading && router.query.search) || submitted) ? "Searching...": "Submit"}</Button>
+                                    }}
+                                    disabled={submitted || (loading && router.query.search) || libraries.length === 0 || input.genes.length === 0}
+                                    size="large"
+                                    variant="contained"
+                                    sx={{
+                                        padding: "15px 30px"
+                                    }}
+                                    // disabled={input.genes.length === 0}
+                                >{((loading && router.query.search) || submitted) ? "Searching...": "Submit"}</Button>
+                                {verified.length > 0 && <Typography variant='subtitle2'> {`${verified.length} valid genes`}</Typography>}
+                            </Stack>
                         </Grid>
                         <Grid item xs={6} align="right">
                             <Button 
