@@ -1,17 +1,24 @@
 import dynamic from "next/dynamic";
+import { useState } from "react";
 import Image from 'next/image'
 import { makeTemplate } from "../utils/helper";
 import * as default_schema from '../public/schema.json'
 import React from "react";
+import { Typography } from "@mui/material";
+
+import Icon from '@mdi/react';
+import { mdiCookieOff, mdiCookie } from '@mdi/js';
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Paper = dynamic(() => import('@mui/material/Paper'));
 const Button = dynamic(async () => (await import('@mui/material')).Button);
 
+
+
 const GitHubIcon = dynamic(()=>import('@mui/icons-material/GitHub'));
 const BugReportIcon = dynamic(()=>import('@mui/icons-material/BugReport'));
 
-const FooterContents = ({footer, key, schema}) => {
+const FooterContents = ({footer, key, schema, consentCookie, setConsentCookie, resetCookie}) => {
     if (footer.type == "github") {
         return (
             <Grid item  key={key}>
@@ -23,7 +30,7 @@ const FooterContents = ({footer, key, schema}) => {
 							href={footer.code}
 							style={{textTransform: "none", color: (schema.ui || {}).footer_buttons === "light" ? "#000": "#FFF"}}
 						>
-							Github Repository
+							<Typography variant="subtitle2" color="#FFF">Github Repository</Typography>
 						</Button>
 					</Grid>
 					<Grid item>
@@ -33,9 +40,32 @@ const FooterContents = ({footer, key, schema}) => {
 							href={footer.issues}
 							style={{textTransform: "none", color: (schema.ui || {}).footer_buttons === "light" ? "#000": "#FFF"}}
 						>
-							Report a bug
+							<Typography variant="subtitle2" color="#FFF">Report a bug</Typography>
 						</Button>
 					</Grid>
+					<Grid item>
+						<Button 
+							// variant="contained"
+							startIcon={<Icon path={consentCookie==='allow' ? mdiCookieOff: mdiCookie} size={0.8} />}
+							onClick={()=>{
+								if (consentCookie==='allow'){
+									setConsentCookie('deny')
+								}
+								else {
+									setConsentCookie('allow')
+								}
+							}}
+							style={{textTransform: "none", color: (schema.ui || {}).footer_buttons === "light" ? "#000": "#FFF"}}
+						>
+							<Typography variant="subtitle2" color="#FFF">{consentCookie === 'allow' ? 'Disable Cookies': 'Enable Cookies'}</Typography>
+						</Button>
+					</Grid>
+					{/* <Grid item>
+						<Button onClick={()=>resetCookie()}>
+							Reset
+						</Button>
+							
+					</Grid> */}
                 </Grid>
             </Grid>
         )
@@ -73,7 +103,7 @@ const FooterContents = ({footer, key, schema}) => {
     } else return null
 }
 
-const Footer = ({schema}) => {
+const Footer = ({schema, consentCookie, setConsentCookie, resetCookie}) => {
     if (!schema) schema = default_schema
 	if (schema === undefined || schema.footer === undefined) return null
 
@@ -88,7 +118,7 @@ const Footer = ({schema}) => {
 				marginTop: "auto",
 				marginBottom: "auto",
 			}}>
-                {schema.footer.map((footer, i)=><React.Fragment  key={`footer-${i}`}><FooterContents footer={footer} schema={schema}/></React.Fragment>)}
+                {schema.footer.map((footer, i)=><React.Fragment  key={`footer-${i}`}><FooterContents footer={footer} schema={schema} consentCookie={consentCookie} setConsentCookie={setConsentCookie} resetCookie={resetCookie}/></React.Fragment>)}
             </Grid>
         </Paper>
     )

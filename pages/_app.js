@@ -7,12 +7,13 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as default_schema from '../public/schema.json'
 import { makeTemplate } from '../utils/helper';
 import { isIFrame } from '../utils/helper';
+import { withCookie } from '../components/CookieWrapper';
 import '../styles/kg.css'
 const Container = dynamic(() => import('@mui/material/Container'));
-const Grid = dynamic(() => import('@mui/material/Grid'));
-
 const Header = dynamic(() => import('../components/header'));
 const Footer = dynamic(() => import('../components/footer'));
+const ConsentCookie = dynamic(() => import('../components/ConsentCookie'));
+
 
 const theme_object = {
   palette: {
@@ -69,7 +70,7 @@ const theme_object = {
 
 
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, consentCookie, setConsentCookie, resetCookie }) {
   const palettes = pageProps.palettes
   const schema = pageProps.schema
   theme_object.palette = {...theme_object.palette, ...palettes}
@@ -85,6 +86,9 @@ function MyApp({ Component, pageProps }) {
           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
           <script async defer src="https://buttons.github.io/buttons.js"></script>
         </Head>
+        <div>
+          <ConsentCookie consentCookie={consentCookie} setConsentCookie={setConsentCookie} resetCookie={resetCookie}/>
+        </div>
         {(fullscreen.toLowerCase() !== "false" || isIFrame())  ? 
           <Container id={"main"} maxWidth={"xl"} style={{background: "#fff", marginTop: 10}}>
             <Component 
@@ -100,13 +104,13 @@ function MyApp({ Component, pageProps }) {
                   {...pageProps}
                 />
               </div>
-              <Footer {...pageProps}/>
+              <Footer {...pageProps} consentCookie={consentCookie} setConsentCookie={setConsentCookie} resetCookie={resetCookie}/>
             </Container>
           </div>
         }
-        <GoogleAnalytics trackPageViews />
+        {consentCookie === "allow" && <GoogleAnalytics trackPageViews />}
       </ThemeProvider>
   )
 }
 
-export default MyApp
+export default withCookie(MyApp)

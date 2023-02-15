@@ -61,4 +61,18 @@ body {
     width: 50%;
   }
 
+#cookieConsent {
+    bottom: 0px;  /* you can delete these two lines if you want the position as it is */
+    position:fixed;
+    margin-top: 10px;
+    width: 100%;
+    z-index: 100;
+}
 
+@media screen and (min-width:500px){
+    #cookieConsent { bottom: 0px; }
+}
+
+.MuiSwitch-track {
+  background-color: #FFF;
+}
