@@ -57,7 +57,7 @@ const FooterContents = ({footer, key, schema, consentCookie, setConsentCookie, r
 							}}
 							style={{textTransform: "none", color: (schema.ui || {}).footer_buttons === "light" ? "#000": "#FFF"}}
 						>
-							<Typography variant="subtitle2" color="#FFF">{consentCookie === 'allow' ? 'Disable Cookies': 'Enable Cookies'}</Typography>
+							<Typography variant="subtitle2" color="#FFF">{consentCookie === 'allow' ? 'Disable Google Analytics': 'Enable Google Analytics'}</Typography>
 						</Button>
 					</Grid>
 					{/* <Grid item>
