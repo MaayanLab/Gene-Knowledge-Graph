@@ -7,7 +7,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as default_schema from '../public/schema.json'
 import { makeTemplate } from '../utils/helper';
 import { isIFrame } from '../utils/helper';
-import { withCookie } from '../components/CookieWrapper';
+import withCookie from '../components/CookieWrapper';
 import '../styles/kg.css'
 const Container = dynamic(() => import('@mui/material/Container'));
 const Header = dynamic(() => import('../components/header'));
