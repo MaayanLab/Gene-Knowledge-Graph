@@ -13,7 +13,7 @@ export const ConsentCookie = ({consentCookie, setConsentCookie}) => {
                 <AlertTitle>Cookie Policy</AlertTitle>
                 <Grid container alignItems={"center"} spacing={2}>
                     <Grid item>
-                        <Typography>Are you ok with us using Google Analytics while you use our website?</Typography>
+                        <Typography>Is it ok to have Google Analytics turned on while you are visiting this website?</Typography>
                     </Grid>
                     <Grid item>
                         <Button onClick={() => {
