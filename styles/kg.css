@@ -76,3 +76,7 @@ body {
 .MuiSwitch-track {
   background-color: #FFF;
 }
+
+.EnrichmentForm .MuiInputBase-root {
+  padding-right: 0px;
+}

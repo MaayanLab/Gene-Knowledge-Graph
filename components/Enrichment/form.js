@@ -181,7 +181,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                         <Grid item xs={12}>
                             <div tabIndex={0} onBlur={() => setIsFocused(false)} onClick={() => setIsFocused(true)}>
                                 {!isFocused ? 
-                                    <Card style={{height: 235, overflow: "scroll", boxShadow: "none", border: "1px solid black"}}>
+                                    <Card style={{height: 235, overflowY: "auto", boxShadow: "none", border: "1px solid black"}}>
                                         <CardContent>
                                             {input.genes.map(i=>{
                                                 if (verified.indexOf(i) > -1) return <Typography color="green" align='left' style={{fontSize: 14}}>{i}</Typography>
@@ -189,7 +189,9 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                             })}
                                         </CardContent>
                                     </Card>:
-                                    <TextField multiline
+                                    <TextField
+                                        multiline
+                                        className='EnrichmentForm'
                                         rows={10}
                                         placeholder={"Paste a set of valid Entrez gene symbols (e.g. STAT3) on each row in the text-box"}
                                         fullWidth
@@ -204,6 +206,11 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                             style: {
                                             fontSize: 14,
                                             },
+                                        }}
+                                        inputProps={{
+                                            style: {
+                                                paddingRight: 0
+                                            }
                                         }}
                                     />
                                 }
