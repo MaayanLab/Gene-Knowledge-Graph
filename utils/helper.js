@@ -51,6 +51,7 @@ export const process_tables = async (results) => {
 	const nodes = []
 	const relation_columns = ["source", "target", "relation"]
 	const relations = []
+	const ids = []
 	for (const {data} of results) {
 		if (data.kind === "Relation") {
 			const {source, target, relation, properties={}} = data
@@ -75,16 +76,20 @@ export const process_tables = async (results) => {
 		} else {
 			const props = data.properties
 			const row = []
-			for (const i of node_columns) {
-				row.push(props[i] || '')
-			}
-			for (const [k,v] of Object.entries(props)) {
-				if (node_columns.indexOf(k) === -1) {
-					node_columns.push(k)
-					row.push(v || '')
+			if (ids.indexOf(props["id"]) === -1) {
+				ids.push(props["id"])
+			
+				for (const i of node_columns) {
+					row.push(props[i] || '')
 				}
+				for (const [k,v] of Object.entries(props)) {
+					if (node_columns.indexOf(k) === -1) {
+						node_columns.push(k)
+						row.push(v || '')
+					}
+				}
+				nodes.push(row)
 			}
-			nodes.push(row)
 		}
 	}
 	let node_text = node_columns.join("\t") + "\n"
