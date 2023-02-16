@@ -32,6 +32,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
     const [inputError, setInputError] = useState(false)
     const [submitted, setSubmitted] = useState(false)
     const [isFocused, setIsFocused] = useState(false)
+    const [verifyController, setVerifyController] = useState(false)
 
     const {
         userListId,
@@ -40,6 +41,13 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
         gene_degree=default_options.gene_degree,
         term_degree=default_options.term_degree,
     } = query
+    
+    const get_verify_controller = () => {
+        if (verifyController) verifyController.abort()
+        const c = new AbortController()
+        setVerifyController(c)
+        return c
+      }
     
     const libraries = query.libraries ? JSON.parse(query.libraries) : []
     
@@ -109,7 +117,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
 
     const verifyList = async (input) => {
         try {
-            const controller = get_controller()
+            const controller = get_verify_controller()
             const verified = await (
                 await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment/terms_and_genes`, {
                     method: 'POST',
