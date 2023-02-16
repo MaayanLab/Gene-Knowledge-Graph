@@ -81,9 +81,9 @@ const TermViz = ({data, tab, setTab}) => {
             
 			for (const d of data) {
                 if (d.data.properties.pval !== undefined) {
-                    const {properties, label, color} = d.data
-					if (entries[label] === undefined) {
-						entries[label] = {
+                    const {properties, label, id, color, kind} = d.data
+					if (entries[id] === undefined && kind !== "Gene") {
+						entries[id] = {
 							label,
 							...properties,
 							pval: precise(properties.pval),
