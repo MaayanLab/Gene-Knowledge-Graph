@@ -6,6 +6,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { usePrevious, delay } from '.';
 import Button from '@mui/material/Button'
 import Slider from '@mui/material/Slider'
+import Typography from '@mui/material/Typography'
 
 import Grid from '@mui/material/Grid';
 import ErrorIcon from '@mui/icons-material/Error';
@@ -13,7 +14,6 @@ import ErrorIcon from '@mui/icons-material/Error';
 const Card = dynamic(() => import('@mui/material/Card'));
 const CardContent = dynamic(() => import('@mui/material/CardContent'));
 
-const Typography = dynamic(() => import('@mui/material/Typography'));
 const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
 const FormLabel = dynamic(()=>import('@mui/material/FormLabel'))
 const FormGroup = dynamic(()=>import('@mui/material/FormGroup'))
@@ -179,17 +179,22 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                 <Grid item xs={12} md={6}>
                     <Grid container alignItems={"center"} spacing={1}>
                         <Grid item xs={12}>
-                            <div tabIndex={0} onBlur={() => setIsFocused(false)} onClick={() => setIsFocused(true)}>
+                            <div tabIndex={0}>
                                 {!isFocused ? 
-                                    <Card style={{height: 235, overflowY: "auto", boxShadow: "none", border: "1px solid black"}}>
+                                    <Card style={{height: 235, overflowY: "auto", boxShadow: "none", border: "1px solid black"}} onClick={() => setIsFocused(true)}>
+                                        {input.genes.length === 0 && <Typography variant="subtitle2" align='left' style={{paddingLeft: 12, paddingTop: 15, fontSize: 13.75, color: "#bdbdbd"}}>Paste a set of valid Entrez gene symbols (e.g. STAT3) on each row in the text-box</Typography> }
                                         <CardContent>
                                             {input.genes.map(i=>{
                                                 if (verified.indexOf(i) > -1) return <Typography color="green" align='left' style={{fontSize: 14}}>{i}</Typography>
-                                                else return <Stack direction='row' spacing={1} alignItems={"center"} justifyContent="flex-start"><Typography align='left' color={verified.length > 0 ? 'error': 'default'} style={{fontSize: 14}}>{i}</Typography><ErrorIcon color="error" style={{width: 15}}/></Stack>
+                                                else {
+                                                    if (i === '') return null
+                                                    else return <Stack direction='row' spacing={1} alignItems={"center"} justifyContent="flex-start"><Typography align='left' color={verified.length > 0 ? 'error': 'default'} style={{fontSize: 14}}>{i}</Typography><ErrorIcon color="error" style={{width: 15}}/></Stack>
+                                                }
                                             })}
                                         </CardContent>
                                     </Card>:
                                     <TextField
+                                        onBlur={() => setIsFocused(!isFocused)}
                                         multiline
                                         className='EnrichmentForm'
                                         rows={10}
@@ -246,7 +251,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                     }}
                                     // disabled={input.genes.length === 0}
                                 >{((loading && router.query.search) || submitted) ? "Searching...": "Submit"}</Button>
-                                {verified.length > 0 && <Typography variant='subtitle2'> {`${verified.length} matched genes`}</Typography>}
+                                {(verified.length > 0 && input.genes.length > 0) && <Tooltip title="Click to view matched genes"><Button onClick={()=>setIsFocused(false)}><Typography variant='subtitle2'> {`${verified.length} matched genes`}</Typography></Button></Tooltip>}
                             </Stack>
                         </Grid>
                         <Grid item xs={6} align="right">
