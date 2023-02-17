@@ -111,14 +111,14 @@ export const EnrichmentBar = (props) => {
 								if (min < 0) {
 									return min
 								} else {
-									return min-(min/100)
+									return 0
 								}
 							},
 							() => {
 								if (max > 0) {
 									return max
 								} else {
-									return max-(max/100)
+									return 0
 								}
 							},
 						]} hide/>
