@@ -93,6 +93,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     const [id, setId] = useState(0)
     const [legendVisibility, setLegendVisibility] = useState(false)
     const [legendSize, setLegendSize] = useState(0)
+    const [description, setDescription] = useState('')
     const prevQuery = usePrevious(router.query)
     const libraries_list = props.sortLibraries ? l.sort(function(a, b) {
         return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
@@ -276,7 +277,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         'aria-labelledby': 'basic-button',
                     }}
                 >
-                    <CardContent style={{width: 1000}}><GeneSetForm setError={setError} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} disableExample={(elements || []).length > 0} {...props}/></CardContent>
+                    <CardContent style={{width: 1000}}><GeneSetForm setError={setError} setDescription={setDescription} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} disableExample={(elements || []).length > 0} {...props}/></CardContent>
                 </Menu>
             </Grid>
             }
@@ -357,7 +358,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                     onClick={()=>{
                                         if (elements) process_tables(elements)
                                     }}
-                                    style={{marginLeft: 5, borderRadius: 5, background: tab === "bar" ? "#e0e0e0": "none"}}
+                                    style={{marginLeft: 5, borderRadius: 5}}
                                 >
                                     <SaveIcon/>
                                 </IconButton>
@@ -559,10 +560,11 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                 </Link>
                             </Typography>
                         }
-                        <GeneSetForm setError={setError} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} disableExample={(elements || []).length > 0} {...props}/>
+                        <GeneSetForm setDescription={setDescription} setError={setError} default_options={default_options} loading={loading} setLoading={setLoading} libraries_list={libraries_list.map(l=>l.name)} get_controller={get_controller} disableExample={(elements || []).length > 0} {...props}/>
                     </div>
                 </Grid>
             }
+            {description !== '' && <Grid item xs={12}><Typography variant="h5" align='center'><b>{description}</b></Typography></Grid>} 
             {(tab === 'network' && elements!==null) && <Grid item xs={12} style={{height: !userListId? "100%": !router.query.search ? "100%": 700, position: "relative"}}>
                 <Snackbar open={error!==null}
 					anchorOrigin={{ vertical:"bottom", horizontal:"left" }}

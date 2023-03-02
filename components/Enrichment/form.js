@@ -23,7 +23,7 @@ const Stack = dynamic(()=>import('@mui/material/Stack'))
 const TextField = dynamic(() => import('@mui/material/TextField'));
 
 
-const GeneSetForm = ({default_options, setLoading, libraries_list, get_controller, loading, setError, ...props}) => {
+const GeneSetForm = ({default_options, setLoading, libraries_list, get_controller, loading, setError, setDescription, ...props}) => {
     const router = useRouter()
     const default_term_limit = default_options.term_limit
     const {page, ...query} = router.query
@@ -41,7 +41,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
         gene_degree=default_options.gene_degree,
         term_degree=default_options.term_degree,
     } = query
-    
+
     const get_verify_controller = () => {
         if (verifyController) verifyController.abort()
         const c = new AbortController()
@@ -49,7 +49,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
         return c
       }
     
-    const libraries = query.libraries ? JSON.parse(query.libraries) : []
+    const libraries = query.libraries ? JSON.parse(query.libraries) : default_options.libraries
     
     const prevInput = usePrevious(input)
 
@@ -100,7 +100,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                     signal: controller.signal
                 })
             ).json()
-            if (query.libraries === undefined) query.libraries = JSON.stringify(default_options.selected)
+            if (query.libraries === undefined) query.libraries = JSON.stringify(default_options.libraries)
             setSubmitted(false)
             router.push({
                 pathname: `/${page || ''}`,
@@ -181,6 +181,10 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
         else verifyList(input.genes.map(i=>i.toUpperCase()))
     }, [input.genes])
 
+    useEffect(()=>{
+        setDescription(input.description || '')
+    }, [input.description])
+
     return (
         <FormGroup>
             <Grid container spacing={2}>
@@ -244,6 +248,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                             router.push({
                                                 pathname: `/${page || ''}`,
                                                 query: {
+                                                    libraries,
                                                     ...rest,
                                                     search: true
                                                 },
