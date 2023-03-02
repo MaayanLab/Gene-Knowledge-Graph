@@ -12,7 +12,7 @@ const color_map = {}
 const get_color = ({color, darken}) => {
 	if (!color_map[color]) color_map[color] = Color(color)
 
-	if (darken) return color_map[color].darken(darken*0.5).hex()
+	if (darken) return color_map[color].darken(darken*0.2).hex()
 	else return color_map[color].hex()
 }
 
@@ -187,6 +187,9 @@ export default async function query(req, res) {
                 defaultAccessMode: neo4j.session.READ
             })
             const body = typeof req.body === "string" ? JSON.parse(req.body): req.body
+            if (body.userListId === undefined) {
+                res.status(400).send("userListId is undefined")
+            }
             const results = await enrichment({session, ...body, res})
             res.status(200).send(results)
             
