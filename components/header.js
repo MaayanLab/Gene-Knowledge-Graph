@@ -43,27 +43,29 @@ const function_mapper = {
 			query
 		}, undefined, {shallow: true})
 	},
-	add_library: ({router, libraries, setError}) => {
+	add_library: ({router, icon_picker, label, setError}) => {
+		const clicked_icon_libraries = icon_picker[label]
 		const {page, libraries: old_lib, ...query} = router.query
-		const old_libraries = JSON.parse(old_lib || "[]").reduce((acc, i)=>({
+		let libraries = JSON.parse(old_lib || "[]").reduce((acc, i)=>({
 			...acc,
 			[i.library]: i
 		}), {})
-		const new_libraries = libraries.reduce((acc, i)=>({
-			...acc,
-			[i.library]: i
-		}), {})
-		const updated_libraries = []
-		for (const i of Object.keys(old_libraries)) {
-			if (new_libraries[i] === undefined) {
-				updated_libraries.push(old_libraries[i])
+		let remove = false
+		for (const lib of clicked_icon_libraries) {
+			if (libraries[lib] !== undefined) {
+				delete libraries[lib]
+				remove = true
 			}
 		}
-		for (const i of Object.keys(new_libraries)) {
-			if (old_libraries[i] === undefined) {
-				updated_libraries.push(new_libraries[i])
-			}
+		if (!remove) {
+			for (const library of clicked_icon_libraries) {
+				libraries[library] = {
+					library,
+					term_limit: 5
+				}
+			}	
 		}
+		const updated_libraries = Object.values(libraries)
 		if (updated_libraries.length) {
 			if (updated_libraries.length > 5) {
 				setError("Please limit the number of libraries to 5")
@@ -86,7 +88,7 @@ const function_mapper = {
 
 const styles = {
 	disabled: {
-		opacity: .4
+		opacity: .7
 	},
 	enabled: {
 		opacity: 1,
@@ -107,7 +109,7 @@ const styles = {
 	}
   }
 
-const IconRenderer = ({label, icon, height=100, width=100, href, router, subheader={}, setError, props}) => {
+const IconRenderer = ({label, icon, height=100, width=100, href, router, subheader={}, icon_picker={}, setError, props}) => {
 	let selected
 	let for_selection
 	if (subheader.field) {
@@ -136,7 +138,7 @@ const IconRenderer = ({label, icon, height=100, width=100, href, router, subhead
 			<Tooltip title={label} key={label}>
 				<Button 
 					onClick={()=>{
-						function_mapper[subheader.onClick](({router, setError, ...props}))
+						function_mapper[subheader.onClick](({router, setError, icon_picker, label, ...props}))
 						
 					}}
 					sx={buttonStyle}
@@ -214,7 +216,6 @@ const Header = ({schema, ...rest}) => {
 	const handleCloseMenu = () => {
 		setAnchorEl(null);
 	};
-
 	if (!schema) schema = default_schema
 	const icon_buttons = []
 	const selection_rules = {}

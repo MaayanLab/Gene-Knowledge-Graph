@@ -126,6 +126,17 @@ export const initialize_kg = async () => {
 	}
 }
 
+export const initialize_enrichment = async () => {
+	const schema = await fetch_kg_schema()
+	const icon_picker = {}
+	for (const i of schema.header.subheader) {
+		icon_picker[i.label] = i.props.libraries.map(j=>j.library)
+	}
+	return {
+		icon_picker
+	}
+}
 export const init_function = {
-	initialize_kg
+	initialize_kg,
+	initialize_enrichment
 }
