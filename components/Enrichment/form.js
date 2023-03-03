@@ -248,7 +248,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                             router.push({
                                                 pathname: `/${page || ''}`,
                                                 query: {
-                                                    libraries,
+                                                    libraries: JSON.stringify(libraries),
                                                     ...rest,
                                                     search: true
                                                 },
