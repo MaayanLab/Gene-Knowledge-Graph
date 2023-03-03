@@ -86,10 +86,10 @@ const TermViz = ({data, tab, setTab}) => {
 						entries[id] = {
 							label,
 							...properties,
-							pval: precise(properties.pval),
-							qval: precise(properties.qval),
-							zscore: precise(properties.zscore),
-							combined_score: precise(properties.combined_score),
+							pval: parseFloat(precise(properties.pval)),
+							qval: parseFloat(precise(properties.qval)),
+							zscore: parseFloat(precise(properties.zscore)),
+							combined_score: parseFloat(precise(properties.combined_score)),
 							value: properties.logpval,
 							color
 						}
