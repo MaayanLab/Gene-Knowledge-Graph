@@ -395,10 +395,13 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                 <IconButton variant='contained'
                                     disabled={elements===null}
                                     onClick={()=>{
-                                        setElements(null)
+                                        const {userListId, ...rest} = router.query
+                                        console.log(rest)
                                         router.push({
                                             pathname: `/${page || ''}`,
+                                            query: rest
                                         }, undefined, { shallow: true })
+                                        setElements(null)
                                     }}
                                     style={{marginLeft: 5}}
                                 >
@@ -564,7 +567,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     </div>
                 </Grid>
             }
-            {description !== '' && <Grid item xs={12}><Typography variant="h5" align='center'><b>{description}</b></Typography></Grid>} 
+            {(description !== '' && elements !== null) && <Grid item xs={12}><Typography variant="h5" align='center'><b>{description}</b></Typography></Grid>} 
             {(tab === 'network' && elements!==null) && <Grid item xs={12} style={{height: !userListId? "100%": !router.query.search ? "100%": 700, position: "relative"}}>
                 <Snackbar open={error!==null}
 					anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
