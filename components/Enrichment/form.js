@@ -271,10 +271,10 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                             <Button 
                                 onClick={()=>{
                                     const {gene_set, libraries, ...query} = props.example
-                                    setInput({
-                                        genes: gene_set.split(/[\t\r\n;]+/),
-                                        description: "Sample Input"
-                                    })
+                                    // setInput({
+                                    //     genes: gene_set.split(/[\t\r\n;]+/),
+                                    //     description: "Sample Input"
+                                    // })
                                     query.libraries = JSON.stringify(libraries)
                                     if (Object.keys(query).length > 0) {
                                         router.push({
