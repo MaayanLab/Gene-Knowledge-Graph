@@ -40,7 +40,7 @@ const FooterContents = ({footer, key, schema, consentCookie, setConsentCookie, r
 							href={footer.issues}
 							style={{textTransform: "none", color: (schema.ui || {}).footer_buttons === "light" ? "#000": "#FFF"}}
 						>
-							<Typography variant="subtitle2" color="#FFF">Report a bug</Typography>
+							<Typography variant="subtitle2" color="#FFF">Report a Bug</Typography>
 						</Button>
 					</Grid>
 					<Grid item>
