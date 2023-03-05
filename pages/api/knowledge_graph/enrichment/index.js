@@ -53,7 +53,8 @@ const enrichr_query = async ({userListId, library, term_limit, term_degree}) => 
     let max_pval = 0
     let min_pval = 1
     for (const i of results[library].slice(0,term_limit)) {
-        const label = regex[library] !== undefined ? regex[library].exec(i[1]).groups.label:i[1]
+        const enrichr_label = i[1]
+        const label = regex[library] !== undefined ? regex[library].exec(enrichr_label).groups.label:enrichr_label
         const pval = i[2]
         const zscore = i[3]
         const combined_score = i[4]
@@ -63,8 +64,10 @@ const enrichr_query = async ({userListId, library, term_limit, term_degree}) => 
             if (terms[label] === undefined){
                 if (pval > max_pval) max_pval = pval
                 if (pval < min_pval) min_pval = pval
-                terms[label] ={
+                terms[label] = {
                     library,
+                    label,
+                    enrichr_label,
                     pval,
                     zscore,
                     combined_score,

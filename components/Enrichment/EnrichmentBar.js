@@ -30,11 +30,11 @@ const renderCustomizedLabel = (props) => {
 
   const BarTooltip = ({ active, payload }) => {
 	if (active) {
-		const {label, pval, qval, zscore, combined_score} = payload[0].payload
+		const {enrichr_label, pval, qval, zscore, combined_score} = payload[0].payload
 		return(
 			<Card style={{opacity:"0.8", textAlign: "left"}}>
 				<CardContent>
-					<Typography variant="subtitle2"><b>{label}</b></Typography>
+					<Typography variant="subtitle2"><b>{enrichr_label}</b></Typography>
 					<Typography variant="subtitle2"><b>p-value:</b> {precise(pval)}</Typography>
 					<Typography variant="subtitle2"><b>q-value:</b> {precise(qval)}</Typography>
 					<Typography variant="subtitle2"><b>z-score:</b> {precise(zscore)}</Typography>
@@ -103,7 +103,7 @@ export const EnrichmentBar = (props) => {
 					>
 						<Tooltip content={<BarTooltip/>} />
 						<Bar dataKey="value" fill={color} barSize={barSize}>
-							<LabelList dataKey="label" position="left" content={renderCustomizedLabel} fill={fontColor}/>
+							<LabelList dataKey="enrichr_label" position="left" content={renderCustomizedLabel} fill={fontColor}/>
 							{data_cells}
 						</Bar>
 						<XAxis type="number" domain={[

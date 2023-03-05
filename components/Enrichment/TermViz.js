@@ -13,7 +13,7 @@ const EnrichmentBar = dynamic(() => import('./EnrichmentBar'));
 
 const header = [
     {
-        field: 'label',
+        field: 'enrichr_label',
         headerName: "Term",
         flex: 1,
         style: {flexDirection: "row"},
@@ -77,14 +77,16 @@ const TermViz = ({data, tab, setTab}) => {
 	const [entries, setEntries] = useState(null)
 	useEffect(()=>{
 		if (data) {
+			console.log(data)
 			const entries = {}
             
 			for (const d of data) {
                 if (d.data.properties.pval !== undefined) {
-                    const {properties, label, id, color, kind} = d.data
+                    const {properties, label, enrichr_label, id, color, kind} = d.data
 					if (entries[id] === undefined && kind !== "Gene") {
 						entries[id] = {
 							label,
+							enrichr_label,
 							...properties,
 							pval: parseFloat(precise(properties.pval)),
 							qval: parseFloat(precise(properties.qval)),
