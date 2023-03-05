@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import dynamic from 'next/dynamic';
 import {
 	BarChart, Bar, Cell, XAxis, YAxis, LabelList, Tooltip, ResponsiveContainer
 } from 'recharts';
 import Color from 'color'
 import { precise } from '../../utils/helper';
+import { useCurrentPng } from 'recharts-to-png';
+import Button from '@mui/material/Button';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import FileSaver from 'file-saver';
+
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Card = dynamic(() => import('@mui/material/Card'));
 const CardContent = dynamic(() => import('@mui/material/CardContent'));
@@ -69,12 +74,23 @@ export const EnrichmentBar = (props) => {
 	// 	}, 0)
 	let yWidth = 0
 	const data_cells = []
-	console.log(data)
+	const [getPng, { ref, isLoading }] = useCurrentPng();
+
 	for (const index in data) {
 		const i = data[index]
 		if (yWidth < i.library.length) yWidth = i.library.length
 		data_cells.push(<Cell key={`${field}-${index}`} fill={i.color} />)
 	}
+
+	const handleDownload = useCallback(async () => {
+		const png = await getPng();
+		// Verify that png is not undefined
+		if (png) {
+		  // Download with FileSaver
+		  FileSaver.saveAs(png, 'enrichment.png');
+		}
+	  }, [getPng]);
+
 	return(
 		<Grid container>
 			{/* { download ?
@@ -89,7 +105,9 @@ export const EnrichmentBar = (props) => {
 						]} 
 					/>
 				</Grid>: null
+			
 			} */}
+			<Grid item xs={12} align="right"><Button onClick={handleDownload}><PhotoCameraIcon/></Button></Grid>
 			<Grid item xs={12}>
 				<ResponsiveContainer 
 						height={height}
@@ -100,7 +118,7 @@ export const EnrichmentBar = (props) => {
 						height={height}
 						width={width}
 						data={data}
-						// ref={ref} // Save the ref of the chart
+						ref={ref} // Save the ref of the chart
 					>
 						<Tooltip content={<BarTooltip/>} />
 						<Bar dataKey="value" fill={color} barSize={barSize}>
