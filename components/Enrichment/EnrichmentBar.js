@@ -69,6 +69,7 @@ export const EnrichmentBar = (props) => {
 	// 	}, 0)
 	let yWidth = 0
 	const data_cells = []
+	console.log(data)
 	for (const index in data) {
 		const i = data[index]
 		if (yWidth < i.library.length) yWidth = i.library.length

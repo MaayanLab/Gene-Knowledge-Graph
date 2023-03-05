@@ -77,23 +77,27 @@ const TermViz = ({data, tab, setTab}) => {
 	const [entries, setEntries] = useState(null)
 	useEffect(()=>{
 		if (data) {
-			console.log(data)
 			const entries = {}
             
-			for (const d of data) {
-                if (d.data.properties.pval !== undefined) {
-                    const {properties, label, enrichr_label, id, color, kind} = d.data
-					if (entries[id] === undefined && kind !== "Gene") {
-						entries[id] = {
-							label,
-							enrichr_label,
-							...properties,
-							pval: parseFloat(precise(properties.pval)),
-							qval: parseFloat(precise(properties.qval)),
-							zscore: parseFloat(precise(properties.zscore)),
-							combined_score: parseFloat(precise(properties.combined_score)),
-							value: properties.logpval,
-							color
+			for (const dt of data) {
+				const {label, id: i, kind} = dt.data
+                if (dt.data.properties.pval !== undefined) {
+					for (const [enrichr_label, properties] of Object.entries(dt.data.properties.enrichment)) {
+						const {color} = properties
+						const id = `${enrichr_label} (${i})`
+						if (entries[id] === undefined && kind !== "Gene") {
+							entries[id] = {
+								id,
+								label,
+								enrichr_label,
+								...properties,
+								pval: parseFloat(precise(properties.pval)),
+								qval: parseFloat(precise(properties.qval)),
+								zscore: parseFloat(precise(properties.zscore)),
+								combined_score: parseFloat(precise(properties.combined_score)),
+								value: properties.logpval || 10000,
+								color
+							}
 						}
 					}
                 }

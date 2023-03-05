@@ -15,20 +15,26 @@ const get_color = ({color, darken}) => {
 	if (darken) return color_map[color].darken(darken*0.2).hex()
 	else return color_map[color].hex()
 }
+const compute_colors = ({properties, aggr_scores, color}) => {
+    const props = {node_type: 0, borderWidth: 0}
+    if (properties.pval > 0.05) {
+        props.borderColor = "#757575",
+        props.borderWidth = 7
+    }
+    const max_pval = aggr_scores.max_pval //aggr_scores.max_pval > 0.05 ? aggr_scores.max_pval: 0.05
+    const min_pval = aggr_scores.min_pval
+    const darken =  Math.abs((properties.pval - min_pval)/(max_pval-min_pval))
+    props.color = get_color({color, darken})
 
+    return props
+}
 const get_node_color_and_type = ({node, terms, color, aggr_scores, field, aggr_field, fields}) => {
     if (node.properties.pval === undefined) return default_get_node_color_and_type(({node, terms, color, aggr_scores, field, aggr_field, fields}))
     else {
-        const props = {node_type: 0, borderWidth: 0}
-        if (node.properties.pval > 0.05) {
-            props.borderColor = "#757575",
-            props.borderWidth = 7
+        const props = compute_colors({properties: node.properties, aggr_scores, color}) 
+        for (const [k,v] of Object.entries(node.properties.enrichment)) {
+            node.properties.enrichment[k] = { ...node.properties.enrichment[k], ...compute_colors({properties: v, aggr_scores, color}) }
         }
-        const max_pval = aggr_scores.max_pval //aggr_scores.max_pval > 0.05 ? aggr_scores.max_pval: 0.05
-        const min_pval = aggr_scores.min_pval
-        const darken =  Math.abs((node.properties.pval - min_pval)/(max_pval-min_pval))
-        props.color = get_color({color, darken})
-
         return props
     }	
 }
@@ -61,12 +67,12 @@ const enrichr_query = async ({userListId, library, term_limit, term_degree}) => 
         const overlapping_genes = i[5]
         const qval = i[6]
         if (term_degree===undefined || overlapping_genes.length >= term_degree) {
-            if (terms[label] === undefined){
+            if (terms[label] === undefined) terms[label] = {enrichment: {}, pval: 1.0}
+            if (terms[label].enrichment[enrichr_label] === undefined){
                 if (pval > max_pval) max_pval = pval
                 if (pval < min_pval) min_pval = pval
-                terms[label] = {
+                terms[label].enrichment[enrichr_label] = {
                     library,
-                    label,
                     enrichr_label,
                     pval,
                     zscore,
@@ -74,6 +80,15 @@ const enrichr_query = async ({userListId, library, term_limit, term_degree}) => 
                     qval,
                     logpval: -Math.log(pval),
                     overlap: overlapping_genes.length,
+                }
+                if (pval < terms[label].pval) {
+                    terms[label].enrichr_label = enrichr_label
+                    terms[label].pval = pval
+                    terms[label].zscore = zscore
+                    terms[label].combined_score = combined_score
+                    terms[label].qval = qval
+                    terms[label].logpval = -Math.log(pval)
+                    terms[label].overlap = overlapping_genes.length
                 }
             }
             for (const gene of overlapping_genes) {

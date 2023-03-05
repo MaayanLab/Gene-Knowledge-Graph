@@ -86,7 +86,7 @@ export const resolve_results = ({results,
 		const color_values = {}
 		let color_index = 0
 		let shade_index = 0
-		const shade = [500, "A100", 200, "A700", "A400"]
+		const shade = [400, "A100", 200, "A700", "A400"]
 		const colors_func = (type) => {
 			if (colors[type] && colors[type].color) {
 				color_values[type] = colors[type]
