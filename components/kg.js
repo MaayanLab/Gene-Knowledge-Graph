@@ -97,7 +97,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   const [data, setData] = React.useState(null)
   const [focused, setFocused] = React.useState(null)
   const [layout, setLayout] = React.useState(0)
-  const [edgeStyle, setEdgeStyle] = React.useState({label: 'data(label)'})
+  const [edgeStyle, setEdgeStyle] = React.useState({})
   const [id, setId] = React.useState(0)
   const [tab, setTab] = React.useState('network')
   const [showTooltip, setShowTooltip] = React.useState(tooltip_viz!== undefined ? tooltip_viz: true)

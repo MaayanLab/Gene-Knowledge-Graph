@@ -81,7 +81,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     const [edge, setEdge] = useState(null)
     const [focused, setFocused] = useState(null)
     const [loading, setLoading] = useState(false)
-    const [edgeStyle, setEdgeStyle] = useState({label: 'data(label)'})
+    const [edgeStyle, setEdgeStyle] = useState({})
     const [layout, setLayout] = useState(0)
     const [anchorEl, setAnchorEl] = useState(null)
     const [collapsed, setCollapsed] = useState(null)
