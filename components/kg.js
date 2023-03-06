@@ -301,7 +301,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
             <Typography variant="body1"><b>Start with</b></Typography>
           </Grid>
           <Grid item>
-            <Selector entries={Object.keys(entries)} value={start} prefix={"Start"} onChange={(e)=>redirect({start: e})}/>
+            <Selector entries={Object.keys(entries).sort()} value={start} prefix={"Start"} onChange={(e)=>redirect({start: e})}/>
           </Grid>
           <Grid item>
             <Selector entries={Object.keys(entries[start])} value={start_field} prefix={"StartField"} onChange={(e)=>{
@@ -408,7 +408,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
               <Typography variant="body1"><b>End with</b></Typography>
             </Grid>
             <Grid item>
-              <Selector entries={Object.keys(entries)} value={end} prefix={"End"} onChange={(e)=>{
+              <Selector entries={Object.keys(entries).sort()} value={end} prefix={"End"} onChange={(e)=>{
                 redirect({start, start_term, end: e, limit})
               }}/>
             </Grid>
