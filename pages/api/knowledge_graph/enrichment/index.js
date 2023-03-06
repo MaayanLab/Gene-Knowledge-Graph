@@ -53,9 +53,9 @@ const enrichr_query = async ({userListId, library, term_limit, term_degree}) => 
         regex[k] = new RegExp(v)
     }
     const results = await res.json()
-        
-    const genes = {}
+
     const terms = {}
+    const genes = {}
     let max_pval = 0
     let min_pval = 1
     for (const i of results[library].slice(0,term_limit)) {
@@ -115,8 +115,20 @@ const enrichment = async ({
     res
 }) => {
     try {
-        const results = await Promise.all(libraries.map(async ({library, term_limit})=>
-            await enrichr_query({userListId, term_limit, library, term_degree})
+        const nod = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment/node_mapping`)
+        if (nod.ok !== true) {
+            throw new Error(`Error fetching node_map`)
+        }
+        const node_mapping = await nod.json()
+        const nodes = []
+        const results = await Promise.all(libraries.map(async ({library, term_limit})=> {
+            if (node_mapping[library]) {
+                const node = `a:\`${node_mapping[library]}\``
+                if (nodes.indexOf(node) === -1) nodes.push(node)
+            }
+            return await enrichr_query({userListId, term_limit, library, term_degree})
+        }
+            
         ))
         const gene_counts = {}
         let terms = {}
@@ -157,6 +169,9 @@ const enrichment = async ({
             WHERE a.label IN ${JSON.stringify(Object.keys(terms))} 
             AND b.label IN ${JSON.stringify(genes)}
         `
+        if (nodes.length > 0) {
+            query = query + "AND (" + nodes.join(" OR ") + ")\n"
+        }
         const vars = {}
         const remove = (JSON.parse(r || "[]"))
         if ((remove || []).length) {
@@ -170,7 +185,6 @@ const enrichment = async ({
             
         }
         query = query + `RETURN p, nodes(p) as n, relationships(p) as r`
-
         // remove has precedence on expand
         // TODO: ensure that expand is checked
         const expand = (JSON.parse(e || "[]")).filter(i=>(remove || []).indexOf(i) === -1)
