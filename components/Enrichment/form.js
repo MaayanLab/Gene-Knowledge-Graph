@@ -295,7 +295,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                 variant='outlined'
                                 value={input.description}
                                 size="small"
-                                onChange={e=>setInput({...input, description: e.target.value.trim().split(/[\t\r\n;]+/)})}
+                                onChange={e=>setInput({...input, description: e.target.value})}
                                 placeholder="Description"
                                 label="Description"
                                 style={{width: "100%"}}
