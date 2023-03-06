@@ -84,7 +84,7 @@ const TermViz = ({data, tab, setTab}) => {
                 if (dt.data.properties.pval !== undefined) {
 					for (const [enrichr_label, properties] of Object.entries(dt.data.properties.enrichment)) {
 						const {color} = properties
-						const id = `${enrichr_label} (${i})`
+						const id = `${properties.library}: ${enrichr_label} (${i})`
 						if (entries[id] === undefined && kind !== "Gene") {
 							entries[id] = {
 								id,
