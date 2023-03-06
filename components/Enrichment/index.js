@@ -835,7 +835,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     />
                 }
             </Grid>}
-            {(userListId && tab!=='network') &&
+            {(userListId && tab!=='network' && elements !== null) &&
                 <Grid item xs={12}>
                     <div ref={tableref}>
                         <TermViz data={elements} schema={schema} tab={tab} setTab={setTab}/>
