@@ -49,7 +49,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
         return c
       }
     
-    const libraries = query.libraries ? JSON.parse(query.libraries) : default_options.libraries
+    const libraries = query.libraries ? JSON.parse(query.libraries) : default_options.libraries || []
     
     const prevInput = usePrevious(input)
 
