@@ -526,7 +526,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                     </Grid>
                                 ))}
                             </Grid>
-                            <Grid item xs={12} align="left">
+                            <Grid item xs={12} align="left" style={libraries_list.length <= 9 ? {marginTop: 15}: {}}>
                                 <EnrichrTermSearch setInput={setInput}/>
                             </Grid>
                         </Grid>

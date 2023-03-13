@@ -58,19 +58,22 @@ export const EnrichrTermSearch = ({setInput}) => {
         searchTerm(term)
     }, [term])
 
-    const fetchGeneSet = async ({library, term}) => {
+    const fetchGeneSet = async (params) => {
         try {
-            const controller = get_controller() 
-            const res = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/geneSetLibrary?term=${term}&libraryName=${library}&mode=json`, {
-                method: 'GET',
-                signal: controller.signal
-            })
-            const results = await res.json()
-            const vals = Object.entries(results)           
-            if (vals) {
-                const [description, genes] = vals[0]
-                setInput({description, genes})
-                setOpen(false)
+            if (params) {
+                const {library, term} = params
+                const controller = get_controller() 
+                const res = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/geneSetLibrary?term=${term}&libraryName=${library}&mode=json`, {
+                    method: 'GET',
+                    signal: controller.signal
+                })
+                const results = await res.json()
+                const vals = Object.entries(results)           
+                if (vals) {
+                    const [description, genes] = vals[0]
+                    setInput({description, genes})
+                    setOpen(false)
+                }
             }
         } catch (error) {
             console.error(error)
@@ -78,7 +81,7 @@ export const EnrichrTermSearch = ({setInput}) => {
     }
 
     return (
-        <Stack direction={'column'} spacing={1} justifyContent={'flex-start'} alignItems={'flex-start'} style={{marginTop: 15}}>
+        <Stack direction={'column'} spacing={1} justifyContent={'flex-start'} alignItems={'flex-start'}>
             <Typography> Search an Enrichr term and expand it to a gene set:</Typography>
             <Autocomplete
                 id="enrichr-term"
@@ -94,6 +97,7 @@ export const EnrichrTermSearch = ({setInput}) => {
                 }}
                 popupIcon={null}
                 open={open}
+                onBlur={()=>setOpen(false)}
             />
         </Stack>
     )
