@@ -19,9 +19,8 @@ const FormLabel = dynamic(()=>import('@mui/material/FormLabel'))
 const FormGroup = dynamic(()=>import('@mui/material/FormGroup'))
 const FormControlLabel = dynamic(()=>import('@mui/material/FormControlLabel'))
 const Stack = dynamic(()=>import('@mui/material/Stack'))
-
 const TextField = dynamic(() => import('@mui/material/TextField'));
-
+const EnrichrTermSearch = dynamic(() => import('./EnrichrTermSearch'));
 
 const GeneSetForm = ({default_options, setLoading, libraries_list, get_controller, loading, setError, setDescription, ...props}) => {
     const router = useRouter()
@@ -439,15 +438,15 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                     <Grid container spacing={1} justifyContent="flex-end">
                         <Grid item xs={12} md={libraries.length > 0? 6: 12} align="left">
                             <FormLabel error={inputError}><Typography variant="subtitle2">Select maximum of five libraries {libraries.length > 10 && '(Scroll for more)'}</Typography></FormLabel>
-                            {(libraries.length >0 && libraries_list.length > 10) && <FormLabel error={inputError}><Typography variant="subtitle2">(Scroll for more)</Typography></FormLabel>}
+                            {(libraries.length >0 && libraries_list.length > 9) && <FormLabel error={inputError}><Typography variant="subtitle2">(Scroll for more)</Typography></FormLabel>}
                         </Grid>
                         { libraries.length > 0 &&
                             <Grid item xs={12} md={6} align="left">
                                 <FormLabel><Typography variant="subtitle2">Top terms to include</Typography></FormLabel>
                             </Grid>
                         }
-                        <Grid item xs={12} sx={{height: 420,}}>
-                            <Grid container  sx={{maxHeight: 420, overflowY: "scroll", paddingRight: 5}} alignItems="flex-start">
+                        <Grid item xs={12} sx={{height: 390,}}>
+                            <Grid container  sx={{maxHeight: 390, overflowY: "auto", paddingRight: 5}} alignItems="flex-start">
                                 {libraries_list.map(library=>(
                                     <Grid item xs={12} key={library}>
                                         <Stack direction="row" alignItems="center" spacing={1}>
@@ -526,6 +525,9 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                         </Stack>
                                     </Grid>
                                 ))}
+                            </Grid>
+                            <Grid item xs={12} align="left">
+                                <EnrichrTermSearch setInput={setInput}/>
                             </Grid>
                         </Grid>
                         {/* {(unchecked.length > 10) && <Grid item align="right"><IconButton onClick={()=>{{
