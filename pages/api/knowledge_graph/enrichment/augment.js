@@ -1,9 +1,7 @@
-import fetch from "node-fetch";
 import neo4j from "neo4j-driver"
 import { neo4jDriver } from "../../../../utils/neo4j"
 import { default_get_node_color_and_type } from "../index";
-import Color from 'color'
-import { mui_colors } from "../../../../utils/colors";
+import fetch, { FormData } from "node-fetch";
 
 import {resolve_results} from '../index'
 import { enrichr_query, compute_colors } from ".";
