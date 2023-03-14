@@ -36,6 +36,8 @@ const TextField = dynamic(() => import('@mui/material/TextField'));
 const Button = dynamic(() => import('@mui/material/Button'));
 const Autocomplete = dynamic(() => import('@mui/material/Autocomplete'));
 const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
+const Backdrop = dynamic(() => import('@mui/material/Backdrop'));
+
 const Slider = dynamic(() => import('@mui/material/Slider'));
 const Cytoscape = dynamic(() => import('./Cytoscape'), { ssr: false })
 const AddBoxIcon  = dynamic(() => import('@mui/icons-material/AddBox'));
@@ -732,10 +734,22 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       {tab === 'network' &&
         <Grid item xs={12} style={{minHeight: 500, position: "relative"}}>
           {(elements === undefined) ? (
-            <CircularProgress/>
+            <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={elements === undefined}
+            >
+              <CircularProgress/>
+            </Backdrop> 
           ) : elements.length === 0 ? (
             <div>No results</div>
-          ) : loading ? <CircularProgress/>:
+          ) : loading ? 
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={loading}
+            >
+                <CircularProgress/>
+            </Backdrop> 
+          :
             <Cytoscape
               key={id}
               wheelSensitivity={0.1}

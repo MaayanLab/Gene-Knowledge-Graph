@@ -28,7 +28,7 @@ const Avatar = dynamic(() => import('@mui/material/Avatar'));
 
 export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema, top, right, endpoint="/", expand=true, reset=null}) => {
     const elements = []
-    const field = node.kind === "Relation" ? node.label : node.kind
+    const field = node.kind === "Relation" ? node.label : node.kind.replace("Co-expressed Gene", "Gene")
     for (const i of tooltip_templates[field] || []) {
       if (i.type === "link") {
         const text = makeTemplate(i.text, node.properties)
@@ -178,21 +178,23 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
     let not_significant = false
     const color_sum = {}
     for (const i of elements) {
-      const {kind, color} = i.data
+      const {kind, color, borderColor} = i.data
       if (i.data.properties.pval && i.data.properties.pval > 0.05) not_significant = true
       if (colors[kind]===undefined && color !== "#F8333C" && kind !== "Relation") {
         color_sum[kind] = color
+        console.log({background: color, width: sizes[legendSize], height: sizes[legendSize], borderColor, borderWidth: borders[legendSize]})
         colors[kind] = <Grid item xs={12} key={kind}>
           <Grid container alignItems={"center"} spacing={1}>
-            <Grid item><Avatar sx={{background: color, width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar></Grid>
+            <Grid item><Avatar style={{background: color, width: sizes[legendSize], height: sizes[legendSize], borderColor, borderStyle: borderColor ? "solid": "none", borderWidth: borders[legendSize]}}> </Avatar></Grid>
             <Grid item><Typography variant="subtitle1">{kind}</Typography></Grid>   
           </Grid></Grid> 
       }
       if (colors[kind]!==undefined && color_sum[kind] === "#bdbdbd" && color !== "#F8333C" && kind !== "Relation") {
+        console.log(kind)
         color_sum[kind] = color
         colors[kind] = <Grid item xs={12} key={kind}>
           <Grid container alignItems={"center"} spacing={1}>
-            <Grid item><Avatar sx={{background: color, width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar></Grid>
+            <Grid item><Avatar sx={{background: color, width: sizes[legendSize], height: sizes[legendSize], borderColor, borderWidth: borders[legendSize]}}> </Avatar></Grid>
             <Grid item><Typography variant="subtitle1">{kind}</Typography></Grid>   
           </Grid></Grid> 
       }
@@ -212,7 +214,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
         position: 'absolute',
         top: 25,
         left: 25,
-        pointerEvents: "none"
+        // pointerEvents: "none"
       }}>
           <Grid container alignItems={"center"} spacing={1}>
             <Grid item xs={12}>

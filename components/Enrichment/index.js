@@ -25,6 +25,7 @@ import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import SaveIcon from '@mui/icons-material/Save';
+import HubIcon from '@mui/icons-material/Hub';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -38,8 +39,8 @@ import Alert from '@mui/material/Alert';
 const Typography = dynamic(() => import('@mui/material/Typography'));
 const Snackbar = dynamic(() => import('@mui/material/Snackbar'));
 
+const Backdrop = dynamic(() => import('@mui/material/Backdrop'));
 const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
-
 const TextField = dynamic(() => import('@mui/material/TextField'));
 const CardContent = dynamic(() => import('@mui/material/CardContent'));
 const Link = dynamic(() => import('@mui/material/Link'));
@@ -165,7 +166,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                 setLoading(true)
                 let counter = 0
                 while (counter < 5) {
-                    const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment`,
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/enrichment${router.query.augment==='true' ? '/augment': ''}`,
                         {
                             method: "POST",
                             body: JSON.stringify({
@@ -546,6 +547,33 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                 </IconButton>
                             </Tooltip>
                         </Grid>
+                        <Grid item>
+                            <Tooltip title={router.query.augment === "true" ? "Reset network to original genes": "Augment network using co-expressed genes"}>
+                                <IconButton
+                                    disabled={elements===null}
+                                    onClick={()=>{
+                                        const {augment, page, ...query} = router.query
+                                        if (augment === "true") {
+                                            router.push({
+                                                pathname: `/${page || ''}`,
+                                                query
+                                            }, undefined, { shallow: true })
+                                        } else {
+                                            router.push({
+                                                pathname: `/${page || ''}`,
+                                                query: {
+                                                    ...query,
+                                                    augment: 'true'
+                                                }
+                                            }, undefined, { shallow: true })
+                                        }
+                                    }}
+                                    style={{marginLeft: 5, borderRadius: 5}}
+                                >
+                                    <HubIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
                     </Grid>
                 </Grid>
             }
@@ -567,7 +595,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     </div>
                 </Grid>
             }
-            {(description !== '' && elements !== null) && <Grid item xs={12}><Typography variant="h5" align='center'><b>{description}</b></Typography></Grid>} 
+            {(description !== '' && elements !== null) && <Grid item xs={12}><Typography variant="h5" align='center'><b>{`${description}${router.query.augment === 'true' ? ' (Augmented)':''}`}</b></Typography></Grid>} 
             {(tab === 'network' && elements!==null) && <Grid item xs={12} style={{height: !userListId? "100%": !router.query.search ? "100%": 700, position: "relative"}}>
                 <Snackbar open={error!==null}
 					anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
@@ -608,8 +636,14 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                 </Snackbar>
                 { elements.length === 0 ? (
                 <div>No results</div>
-                ) : loading ? 
-                <CircularProgress/>:
+                ) : loading ?
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={loading}
+                >
+                    <CircularProgress/>
+                </Backdrop> 
+                :
                     <Cytoscape
                         key={id}
                         wheelSensitivity={0.1}
@@ -788,7 +822,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     }}
                     />
                 }
-                {(elements && userListId && legendVisibility) && <Legend elements={elements.filter(a=>a.data.properties.pval).sort((a,b)=>(a.data.properties.pval-b.data.properties.pval))} search={false} top={'45%'} left={'20%'} legendSize={legendSize}/>}
+                {(elements && userListId && legendVisibility) && <Legend elements={elements.sort((a,b)=>((a.data.properties.pval || 1)-(b.data.properties.pval || 1)))} search={false} top={'45%'} left={'20%'} legendSize={legendSize}/>}
                 {(focused === null && showTooltip && node) && <TooltipCard 
                     node={node}
                     schema={schema}

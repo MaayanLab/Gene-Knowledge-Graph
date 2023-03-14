@@ -15,7 +15,7 @@ const get_color = ({color, darken}) => {
 	if (darken) return color_map[color].darken(darken*0.2).hex()
 	else return color_map[color].hex()
 }
-const compute_colors = ({properties, aggr_scores, color}) => {
+export const compute_colors = ({properties, aggr_scores, color}) => {
     const props = {node_type: 0, borderWidth: 0}
     if (properties.pval > 0.05) {
         props.borderColor = "#757575",
@@ -39,7 +39,7 @@ const get_node_color_and_type = ({node, terms, color, aggr_scores, field, aggr_f
     }	
 }
 
-const enrichr_query = async ({userListId, library, term_limit, term_degree}) => {
+export const enrichr_query = async ({userListId, library, term_limit, term_degree}) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/enrich?userListId=${userListId}&backgroundType=${library}`)
     if (res.ok !== true) {
         throw new Error(`Error communicating with Enrichr`)

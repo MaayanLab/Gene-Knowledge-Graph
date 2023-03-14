@@ -82,7 +82,10 @@ export const resolve_results = ({results,
 	aggr_scores,
 	get_node_color_and_type=default_get_node_color_and_type,
 	get_edge_color=default_get_edge_color,
-	properties = {}}) => {
+	properties = {},
+	misc_props = {},
+	kind_mapper = null, 
+}) => {
 		const color_values = {}
 		let color_index = 0
 		let shade_index = 0
@@ -121,7 +124,7 @@ export const resolve_results = ({results,
 				path.push({ 
 					data: {
 						id: start_node.properties.id,
-						kind: start_type,
+						kind: kind_mapper ? kind_mapper({node: start_node, type: start_type, ...misc_props})  : start_type,
 						label: start_node.properties.label || start_node.properties.id,
 						properties: {
 							...process_properties(start_node.properties),
@@ -131,10 +134,10 @@ export const resolve_results = ({results,
 							...start_node,
 							properties: {
 								...start_node.properties,
-								...properties[start_node.properties.label || start_node.properties.id] || {}
+								...properties[start_node.properties.label || start_node.properties.id] || {},
 							}
 						}, terms, record, fields: [field, start_field, end_field], aggr_scores,
-							 ...colors_func(start_type)}))
+							 ...colors_func(start_type), ...misc_props}))
 					} 
 				})
 				path.push({ 
@@ -159,7 +162,7 @@ export const resolve_results = ({results,
 				path.push({ 
 					data: {
 						id: end_node.properties.id,
-						kind: end_type,
+						kind: kind_mapper ? kind_mapper({node: end_node, type: end_type, ...misc_props})  : end_type,
 						label: end_node.properties.label || end_node.properties.id,
 						properties: {
 							...process_properties(end_node.properties),
@@ -172,7 +175,7 @@ export const resolve_results = ({results,
 								...properties[end_node.properties.label || end_node.properties.id] || {}
 							}
 						}, terms, record, aggr_scores, fields: [field, start_field, end_field],
-							...colors_func(end_type)}))
+							...colors_func(end_type), ...misc_props}))
 					} 
 				})
 			}
