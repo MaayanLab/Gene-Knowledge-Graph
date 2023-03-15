@@ -439,8 +439,8 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                 <Grid item xs={12} md={6}>
                     <Grid container spacing={1} justifyContent="flex-end">
                         <Grid item xs={12} md={libraries.length > 0? 6: 12} align="left">
-                            <FormLabel error={inputError}><Typography variant="subtitle2">Select maximum of five libraries {libraries.length > 10 && '(Scroll for more)'}</Typography></FormLabel>
-                            {(libraries.length >0 && libraries_list.length > 9) && <FormLabel error={inputError}><Typography variant="subtitle2">(Scroll for more)</Typography></FormLabel>}
+                            <FormLabel error={inputError}><Typography variant="subtitle2">{props.disableLibraryLimit ? "Select libraries": `Select maximum of five libraries ${libraries.length > 10 ? '(Scroll for more)': ''}`}</Typography></FormLabel>
+                            {(!props.disableLibraryLimit && libraries.length >0 && libraries_list.length > 9) && <FormLabel error={inputError}><Typography variant="subtitle2">(Scroll for more)</Typography></FormLabel>}
                         </Grid>
                         { libraries.length > 0 &&
                             <Grid item xs={12} md={6} align="left">
@@ -467,7 +467,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                                                         },
                                                                     }, undefined, { shallow: true })
                                                                 }
-                                                            } else if (libraries.length < 5 ){
+                                                            } else if (libraries.length < 5 || props.disableLibraryLimit ){
                                                                 const {search, ...rest} = query
                                                                 router.push({
                                                                     pathname: `/${page || ''}`,

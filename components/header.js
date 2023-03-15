@@ -43,7 +43,7 @@ const function_mapper = {
 			query
 		}, undefined, {shallow: true})
 	},
-	add_library: ({router, icon_picker, label, setError}) => {
+	add_library: ({router, icon_picker, label, setError, disableLibraryLimit=false}) => {
 		const clicked_icon_libraries = icon_picker[label]
 		const {page, libraries: old_lib, ...query} = router.query
 		let libraries = JSON.parse(old_lib || "[]").reduce((acc, i)=>({
@@ -68,7 +68,7 @@ const function_mapper = {
 		}
 		const updated_libraries = Object.values(libraries)
 		if (updated_libraries.length) {
-			if (updated_libraries.length > 5) {
+			if (!disableLibraryLimit && updated_libraries.length > 5) {
 				const added = updated_libraries.length-lib_len
 				setError(`Adding ${added} more librar${added===1?'y':'ies'}. Please limit the number of libraries to five.`)
 			} else {
@@ -111,7 +111,7 @@ const styles = {
 	}
   }
 
-const IconRenderer = ({label, icon, height=100, width=100, href, router, subheader={}, icon_picker={}, setError, props}) => {
+const IconRenderer = ({label, icon, height=100, width=100, href, router, subheader={}, icon_picker={}, setError, props, ...rest}) => {
 	let selected
 	let for_selection
 	if (subheader.field) {
@@ -140,7 +140,7 @@ const IconRenderer = ({label, icon, height=100, width=100, href, router, subhead
 			<Tooltip title={label} key={label}>
 				<Button 
 					onClick={()=>{
-						function_mapper[subheader.onClick](({router, setError, icon_picker, label, ...props}))
+						function_mapper[subheader.onClick](({router, setError, icon_picker, label, ...props, ...rest}))
 						
 					}}
 					sx={buttonStyle}
