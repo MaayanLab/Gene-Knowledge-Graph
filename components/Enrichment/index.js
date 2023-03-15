@@ -25,7 +25,8 @@ import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import SaveIcon from '@mui/icons-material/Save';
-import HubIcon from '@mui/icons-material/Hub';
+import Icon from '@mdi/react';
+import { mdiDna } from '@mdi/js';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -570,7 +571,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                     }}
                                     style={{marginLeft: 5, borderRadius: 5}}
                                 >
-                                    <HubIcon/>
+                                    <Icon path={mdiDna} size={0.8} />
                                 </IconButton>
                             </Tooltip>
                         </Grid>

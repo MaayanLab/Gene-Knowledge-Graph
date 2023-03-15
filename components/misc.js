@@ -7,8 +7,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import AllOutIcon from '@mui/icons-material/AllOut';
-import ReplyIcon from '@mui/icons-material/Reply';
 import CloseIcon from '@mui/icons-material/Close';
+import HubIcon from '@mui/icons-material/Hub';
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Box = dynamic(() => import('@mui/material/Box'));
@@ -129,7 +129,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
                       }
                     }, undefined, { shallow: true })
                   }}
-                ><ReplyIcon sx={{transform: "scaleX(-1)"}}/></IconButton>
+                ><HubIcon sx={{transform: "scaleX(-1)"}}/></IconButton>
               </Tooltip>
             </CardActions>
           }
