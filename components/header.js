@@ -50,6 +50,7 @@ const function_mapper = {
 			...acc,
 			[i.library]: i
 		}), {})
+		const lib_len = Object.keys(libraries).length
 		let remove = false
 		for (const lib of clicked_icon_libraries) {
 			if (libraries[lib] !== undefined) {
@@ -68,7 +69,8 @@ const function_mapper = {
 		const updated_libraries = Object.values(libraries)
 		if (updated_libraries.length) {
 			if (updated_libraries.length > 5) {
-				setError("Please limit the number of libraries to 5")
+				const added = updated_libraries.length-lib_len
+				setError(`Adding ${added} more librar${added===1?'y':'ies'}. Please limit the number of libraries to five.`)
 			} else {
 				query.libraries = JSON.stringify(updated_libraries)
 				router.push({
