@@ -102,10 +102,11 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
             ).json()
             if (query.libraries === undefined) query.libraries = JSON.stringify(default_options.libraries)
             setSubmitted(false)
+            const {augment, ...rest} = query
             router.push({
                 pathname: `/${page || ''}`,
                 query: {
-                    ...query,
+                    ...rest,
                     userListId,
                     search: true
                 },
