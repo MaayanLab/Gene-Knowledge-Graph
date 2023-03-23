@@ -36,6 +36,8 @@ import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 import Slider from '@mui/material/Slider'
+import SendIcon from '@mui/icons-material/Send';
+import UndoIcon from '@mui/icons-material/Undo';
 
 // const Grid = dynamic(() => import('@mui/material/Grid'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
@@ -558,24 +560,25 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                 <IconButton
                                     disabled={(elements || []).filter(i=>i.data.kind === "Gene").length > 100}
                                     onClick={()=>{
-                                        const {augment, augment_limit, page, ...query} = router.query
-                                        if (augment === "true") {
-                                            router.push({
-                                                pathname: `/${page || ''}`,
-                                                query
-                                            }, undefined, { shallow: true })
-                                        } else {
-                                            router.push({
-                                                pathname: `/${page || ''}`,
-                                                query: {
-                                                    ...query,
-                                                    augment: 'true',
-                                                    augment_limit: augment_limit || 50
-                                                }
-                                            }, undefined, { shallow: true })
-                                        }
+                                        setAugmentOpen(!augmentOpen)
+                                        // const {augment, augment_limit, page, ...query} = router.query
+                                        // if (augment === "true") {
+                                        //     router.push({
+                                        //         pathname: `/${page || ''}`,
+                                        //         query
+                                        //     }, undefined, { shallow: true })
+                                        // } else {
+                                        //     router.push({
+                                        //         pathname: `/${page || ''}`,
+                                        //         query: {
+                                        //             ...query,
+                                        //             augment: 'true',
+                                        //             augment_limit: augment_limit || 50
+                                        //         }
+                                        //     }, undefined, { shallow: true })
+                                        // }
                                     }}
-                                    style={{marginLeft: 5, borderRadius: 5, background: router.query.augment ? "#e0e0e0": "none"}}
+                                    style={{marginLeft: 5, borderRadius: 5, background: augmentOpen ? "#e0e0e0": "none"}}
                                 >
                                     <Icon path={mdiDna} size={0.8} />
                                 </IconButton>
@@ -584,21 +587,22 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     </Grid>
                 </Grid>
             }
-            {(elements && router.query.augment) && 
+            {(elements && augmentOpen) && 
                 <Grid item xs={12}>
                     <Stack direction="row" spacing={2} alignItems="center" justifyContent={"flex-end"}>
                         <Typography variant='subtitle2'>Top co-expressed genes:</Typography>
                         <Slider 
-                                value={router.query.augment_limit || 50}
+                                value={augmentLimit || 50}
                                 onChange={(e, nv)=>{
-                                    router.push({
-                                        pathname: `/${page || ''}`,
-                                        query: {
-                                            ...query,
-                                            augment: 'true',
-                                            augment_limit: nv
-                                        }
-                                    }, undefined, { shallow: true })
+                                    setAugmentLimit(nv)
+                                    // router.push({
+                                    //     pathname: `/${page || ''}`,
+                                    //     query: {
+                                    //         ...query,
+                                    //         augment: 'true',
+                                    //         augment_limit: nv
+                                    //     }
+                                    // }, undefined, { shallow: true })
                                 }}
                                 min={10}
                                 max={200}
@@ -606,8 +610,40 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                 aria-labelledby="augment-limit-slider"
                                 style={{width: 100}}
                         />
-                        
-                        <Typography variant='subtitle2'>{router.query.augment_limit}</Typography>
+                        <Typography variant='subtitle2'>{augmentLimit}</Typography>
+                        <Tooltip title="Augment genes">
+                            <IconButton
+                                disabled={router.query.augment}
+                                onClick={()=>{
+                                    const {augment, augment_limit, page, ...query} = router.query
+                                    router.push({
+                                        pathname: `/${page || ''}`,
+                                        query: {
+                                            ...query,
+                                            augment: 'true',
+                                            augment_limit: augmentLimit || 50
+                                        }
+                                    }, undefined, { shallow: true })
+                                    setAugmentOpen(false)
+                                }}
+                            >
+                                <SendIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Reset network">
+                            <IconButton disabled={!router.query.augment}
+                                onClick={()=>{
+                                    const {augment, augment_limit, page, ...query} = router.query
+                                    router.push({
+                                        pathname: `/${page || ''}`,
+                                        query
+                                    }, undefined, { shallow: true })
+                                    setAugmentOpen(false)
+                                }}
+                            >
+                                <UndoIcon/>
+                            </IconButton>
+                        </Tooltip>
                     </Stack>
                 </Grid>
             }
