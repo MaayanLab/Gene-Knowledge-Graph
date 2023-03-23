@@ -35,6 +35,7 @@ import Grid from '@mui/material/Grid';
 
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
+import Slider from '@mui/material/Slider'
 
 // const Grid = dynamic(() => import('@mui/material/Grid'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
@@ -96,6 +97,8 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     const [legendVisibility, setLegendVisibility] = useState(false)
     const [legendSize, setLegendSize] = useState(0)
     const [description, setDescription] = useState('')
+    const [augmentOpen, setAugmentOpen] = useState(null)
+    const [augmentLimit, setAugmentLimit] = useState(50)
     const prevQuery = usePrevious(router.query)
     const libraries_list = props.sortLibraries ? l.sort(function(a, b) {
         return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
@@ -154,6 +157,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                 term_degree=default_options.term_degree,
                 expand,
                 remove,
+                augment_limit,
                 search
             } = router.query
             const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : (default_options.selected || [])
@@ -179,6 +183,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                 term_degree,
                                 expand: expand,
                                 remove: remove,
+                                augment_limit
                             }),
                             signal: controller.signal
                         })
@@ -285,7 +290,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
             }
             { (elements !== null && userListId !== undefined) && 
                 <Grid item>
-                    <Grid container direction={"row"} justifyContent="flex-end">
+                    <Grid container direction={"row"} justifyContent="flex-end" alignItems={"center"}>
                         {legendVisibility &&
                             <Grid item>
                                 <Tooltip title="Adjust legend size">
@@ -549,11 +554,11 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                             </Tooltip>
                         </Grid>
                         <Grid item>
-                            <Tooltip title={router.query.augment === "true" ? "Reset network to original genes": "Augment network using co-expressed genes"}>
+                            <Tooltip title={router.query.augment ? "Reset network": "Augment network using co-expressed genes"}>
                                 <IconButton
-                                    disabled={elements===null}
+                                    disabled={(elements || []).filter(i=>i.data.kind === "Gene").length > 100}
                                     onClick={()=>{
-                                        const {augment, page, ...query} = router.query
+                                        const {augment, augment_limit, page, ...query} = router.query
                                         if (augment === "true") {
                                             router.push({
                                                 pathname: `/${page || ''}`,
@@ -564,18 +569,46 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                                 pathname: `/${page || ''}`,
                                                 query: {
                                                     ...query,
-                                                    augment: 'true'
+                                                    augment: 'true',
+                                                    augment_limit: augment_limit || 50
                                                 }
                                             }, undefined, { shallow: true })
                                         }
                                     }}
-                                    style={{marginLeft: 5, borderRadius: 5}}
+                                    style={{marginLeft: 5, borderRadius: 5, background: router.query.augment ? "#e0e0e0": "none"}}
                                 >
                                     <Icon path={mdiDna} size={0.8} />
                                 </IconButton>
                             </Tooltip>
                         </Grid>
                     </Grid>
+                </Grid>
+            }
+            {(elements && router.query.augment) && 
+                <Grid item xs={12}>
+                    <Stack direction="row" spacing={2} alignItems="center" justifyContent={"flex-end"}>
+                        <Typography variant='subtitle2'>Top co-expressed genes:</Typography>
+                        <Slider 
+                                value={router.query.augment_limit || 50}
+                                onChange={(e, nv)=>{
+                                    router.push({
+                                        pathname: `/${page || ''}`,
+                                        query: {
+                                            ...query,
+                                            augment: 'true',
+                                            augment_limit: nv
+                                        }
+                                    }, undefined, { shallow: true })
+                                }}
+                                min={10}
+                                max={200}
+                                valueLabelDisplay='auto'
+                                aria-labelledby="augment-limit-slider"
+                                style={{width: 100}}
+                        />
+                        
+                        <Typography variant='subtitle2'>{router.query.augment_limit}</Typography>
+                    </Stack>
                 </Grid>
             }
             { (userListId === undefined || elements === null) &&
