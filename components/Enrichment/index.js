@@ -100,7 +100,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     const [legendSize, setLegendSize] = useState(0)
     const [description, setDescription] = useState('')
     const [augmentOpen, setAugmentOpen] = useState(null)
-    const [augmentLimit, setAugmentLimit] = useState(50)
+    const [augmentLimit, setAugmentLimit] = useState(10)
     const prevQuery = usePrevious(router.query)
     const libraries_list = props.sortLibraries ? l.sort(function(a, b) {
         return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
@@ -592,7 +592,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     <Stack direction="row" spacing={2} alignItems="center" justifyContent={"flex-end"}>
                         <Typography variant='subtitle2'>Top co-expressed genes:</Typography>
                         <Slider 
-                                value={augmentLimit || 50}
+                                value={augmentLimit || 10}
                                 onChange={(e, nv)=>{
                                     setAugmentLimit(nv)
                                     // router.push({
@@ -604,8 +604,8 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                     //     }
                                     // }, undefined, { shallow: true })
                                 }}
-                                min={10}
-                                max={200}
+                                min={1}
+                                max={50}
                                 valueLabelDisplay='auto'
                                 aria-labelledby="augment-limit-slider"
                                 style={{width: 100}}
@@ -613,7 +613,6 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         <Typography variant='subtitle2'>{augmentLimit}</Typography>
                         <Tooltip title="Augment genes">
                             <IconButton
-                                disabled={router.query.augment}
                                 onClick={()=>{
                                     const {augment, augment_limit, page, ...query} = router.query
                                     router.push({
@@ -621,7 +620,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                         query: {
                                             ...query,
                                             augment: 'true',
-                                            augment_limit: augmentLimit || 50
+                                            augment_limit: augmentLimit || 10
                                         }
                                     }, undefined, { shallow: true })
                                     setAugmentOpen(false)
