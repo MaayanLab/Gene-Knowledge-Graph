@@ -214,7 +214,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
         position: 'absolute',
         top: 25,
         left: 25,
-        // pointerEvents: "none"
+        pointerEvents: "none"
       }}>
           <Grid container alignItems={"center"} spacing={1}>
             <Grid item xs={12}>
