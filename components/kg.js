@@ -311,7 +311,8 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
           <Grid item>
             <Selector entries={Object.keys(entries[start])} value={start_field} prefix={"StartField"} onChange={(e)=>{
               setStartTermInput('')
-              redirect({...router.query, start_field: e})
+              const {page, ...query} = router.query
+              redirect({...query, start_field: e, start_term: (entries || {})[start][e][0]})
             }}/>
           </Grid>
           <Grid item>
@@ -418,9 +419,10 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
               }}/>
             </Grid>
             <Grid item>
-              <Selector entries={Object.keys(entries[end])} value={end_field} prefix={"StartField"} onChange={(e)=>{
+              <Selector entries={Object.keys(entries[end])} value={end_field} prefix={"EndField"} onChange={(e)=>{
                 setEndTermInput(e)
-                redirect({...router.query, end_field: e})
+                const {page, ...query} = router.query
+                redirect({...query, end_field: e, end_term: (entries || {})[end][e][0]})
               }}/>
             </Grid>
             <Grid item>
