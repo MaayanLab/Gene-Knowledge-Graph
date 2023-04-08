@@ -26,7 +26,7 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import SaveIcon from '@mui/icons-material/Save';
 import Icon from '@mdi/react';
-import { mdiDna } from '@mdi/js';
+import { mdiDna, mdiLinkVariant, mdiLinkVariantOff } from '@mdi/js';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -38,6 +38,7 @@ import Alert from '@mui/material/Alert';
 import Slider from '@mui/material/Slider'
 import SendIcon from '@mui/icons-material/Send';
 import UndoIcon from '@mui/icons-material/Undo';
+import CableIcon from '@mui/icons-material/Cable';
 
 // const Grid = dynamic(() => import('@mui/material/Grid'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
@@ -160,7 +161,8 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                 expand,
                 remove,
                 augment_limit,
-                search
+                search,
+                gene_links=false
             } = router.query
             const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : (default_options.selected || [])
             if (!search) {
@@ -185,7 +187,8 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                 term_degree,
                                 expand: expand,
                                 remove: remove,
-                                augment_limit
+                                augment_limit,
+                                gene_links
                             }),
                             signal: controller.signal
                         })
@@ -552,6 +555,23 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                     style={{marginLeft: 5}}
                                 >
                                     {router.query.fullscreen ? <FullscreenExitIcon/>: <FullscreenIcon/>}
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
+                        <Grid item>
+                            <Tooltip title={router.query.gene_links ? "Remove gene-gene connections": "View gene-gene connections"}>
+                                <IconButton variant='contained'
+                                    onClick={()=>{
+                                    const {gene_links=false, ...query} = router.query
+                                    if (!gene_links) query.gene_links = 'true'
+                                    router.push({
+                                        pathname: `/${page || ''}`,
+                                        query
+                                        }, undefined, { shallow: true })
+                                    }}
+                                    style={{marginLeft: 5}}
+                                >
+                                    {router.query.gene_links ? <Icon path={mdiLinkVariantOff} size={0.8} />: <Icon path={mdiLinkVariant} size={0.8} />}
                                 </IconButton>
                             </Tooltip>
                         </Grid>

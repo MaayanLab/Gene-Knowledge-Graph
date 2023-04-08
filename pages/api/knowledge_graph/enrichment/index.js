@@ -111,6 +111,7 @@ const enrichment = async ({
     session,
     remove: r,
     expand:e,
+    gene_links,
     expand_limit=10,
     res
 }) => {
@@ -192,6 +193,25 @@ const enrichment = async ({
             }
             query_part = query_part + `RETURN p, nodes(p) as n, relationships(p) as r`
             query_list.push(query_part)   
+        }
+        if (gene_links) {
+            let query_part = `
+                MATCH p = (a)--(b) 
+                WHERE a.label IN ${JSON.stringify(genes)} 
+                AND b.label IN ${JSON.stringify(genes)}
+            `
+            if ((remove || []).length) {
+                for (const ind in remove) {
+                    vars[`remove_${ind}`] = remove[ind]
+                    query_part = query_part + `
+                        AND NOT a.id = $remove_${ind}
+                        AND NOT b.id = $remove_${ind}
+                    `
+                }
+                 
+            }
+            query_part = query_part + `RETURN p, nodes(p) as n, relationships(p) as r`
+            query_list.push(query_part)  
         }
         // remove has precedence on expand
         // TODO: ensure that expand is checked
