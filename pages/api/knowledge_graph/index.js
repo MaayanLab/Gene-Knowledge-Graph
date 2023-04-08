@@ -196,7 +196,7 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 			...i.match
 		  ]), [])
 		for (const i of relation.split(",")) {
-			if (edges.indexOf(i) === -1) throw {message: "Invalid relationship"}
+			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
 		}
 		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
 		query = query.replace(`[*..${path_length}]`,`[:${rels}*..${path_length}]`)
@@ -233,6 +233,55 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 	return resolve_results({results, terms: [start_term, end_term], schema, order, score_fields,  aggr_scores, colors, start_field, end_field})
 }
 
+const resolve_term_and_end_type = async ({session, start_term, start_field, start, end, limit, order, path_length=4, schema, relation, aggr_scores, colors, remove, expand: e}) => {
+	if (!parseInt(path_length)) throw {message: "Path length is not a number"}
+	let query = `MATCH p=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\`))
+		USING INDEX a:\`${start}\`(${start_field})
+	`		
+	if (relation) {
+		const edges = schema.edges.reduce((acc, i)=>([
+			...acc,
+			...i.match
+		  ]), [])
+		for (const i of relation.split(",")) {
+			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
+		}
+		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
+		query = query.replace(`[*..${path_length}]`,`[:${rels}*..${path_length}]`)
+	} 
+	const vars = {}
+	if ((remove || []).length) {
+		query = query + `
+			WHERE NOT a.id in ${JSON.stringify(remove)}
+			AND NOT b.id in ${JSON.stringify(remove)}
+		`
+	}
+	query = query + `RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
+
+	// remove has precedence on expand
+	const expand = (e || []).filter(i=>(remove || []).indexOf(i) === -1)
+
+	if ((expand || []).length) {
+		for (const ind in expand) {
+			vars[`expand_${ind}`] = expand[ind]
+			query = query + `
+				UNION
+				MATCH p = (c)--(d)
+				WHERE c.id = $expand_${ind}
+				RETURN p, nodes(p) as n, relationships(p) as r
+				LIMIT 10
+			`   
+		}
+	}
+
+	
+	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
+	// query = `${query} RETURN * ORDER BY rand() LIMIT ${limit}`
+	const results = await session.readTransaction(txc => txc.run(query, { start_term, limit, ...vars }))
+	return resolve_results({results, terms: [start_term], schema, order, score_fields,  aggr_scores, colors, start_field})
+}
+
+
 const resolve_one_term = async ({session, start, field, term, relation, limit, order, path_length=1, schema, aggr_scores, colors, expand: e, remove}) => {
 	if (!parseInt(path_length)) throw {message: "Path length is not a number"}
 	let query = `
@@ -246,7 +295,7 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 			...i.match
 		  ]), [])
 		for (const i of relation.split(",")) {
-			if (edges.indexOf(i) === -1) throw {message: "Invalid relationship"}
+			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
 		}
 		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
 		query = query.replace(`[*${path_length}]`,`[:${rels}*${path_length}]`)
@@ -304,6 +353,10 @@ export default async function query(req, res) {
 		try {
 			if (start && end && start_term && end_term) {
 				const results = await resolve_two_terms({session, start_term, start_field, start, end_term, end_field, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : []})
+				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
+				res.status(200).send(results)
+			} else if (start && end && start_term ) {
+				const results = await resolve_term_and_end_type({session, start_term, start_field, start, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : []})
 				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
 				res.status(200).send(results)
 			} else if (start) {

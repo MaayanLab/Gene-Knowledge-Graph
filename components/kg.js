@@ -87,7 +87,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
         expand,
         fullscreen=false,
         start=initial_query.start || schema.nodes[0].node,
-        end=initial_query.end || schema.nodes[0].node
+        end=initial_query.end || initial_query.start || schema.nodes[0].node
       } = router.query
   const current_node = nodes[start] || Object.values(nodes)[0]
   const [allStartTerms, setAllStartTerms] = React.useState([])
@@ -195,8 +195,10 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
         start_field,
         limit
       }
-      if (end && end_term) {
-        body.end = end
+      if (router.query.end) {
+        body.end = router.query.end
+      }
+      if (end_term) {
         body.end_term = end_term.replace(/\+/g, "%2B")
         body.end_field = end_field
       }
@@ -243,6 +245,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
 
   React.useEffect(() => {
     const {page, ...query} = router.query
+    console.log(query)
     if (Object.keys(query || {}).length === 0) {
       if (Object.keys(initial_query || {}).length > 0) {
         router.push({
