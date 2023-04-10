@@ -410,7 +410,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                             <Grid item style={{ flexGrow: 1 }}>
                                 <Tooltip title={`How many genes should the knowledge graph return? (Prioritized by gene connectivity)`}>
                                     <Slider 
-                                        value={query.gene_limit || input.genes.length || 100}
+                                        value={query.gene_limit || verified.length || input.genes.length || 100}
                                         onChange={(e, nv)=>{
                                             const {search, ...rest} = query
                                             router.push({
@@ -423,14 +423,14 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                         }}
                                         style={{width: "100%"}}
                                         min={1}
-                                        max={input.genes.length*2 || 100}
+                                        max={verified.length || input.genes.length || 100}
                                         valueLabelDisplay='auto'
                                         aria-labelledby="top-gene-slider" />
                                     </Tooltip>
                             </Grid>
                             <Grid item xs={1}>
                                 <Typography variant='subtitle2'>
-                                    {query.gene_limit || input.genes.length || 100}
+                                    {query.gene_limit || verified.length || input.genes.length || 100}
                                 </Typography>
                             </Grid>
                         </Grid>
