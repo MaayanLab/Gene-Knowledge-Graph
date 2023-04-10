@@ -166,7 +166,11 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
     const sm = useMediaQuery(theme.breakpoints.down('sm'));
     const colors = {  
     }
+    const relation_colors = {  
+    }
     const sizes = [15, 20, 30, 40, 50]
+    const lineHeight = [2, 3, 4, 5, 6]
+    const lineWidth = [20, 25, 30, 35, 40]
     const borders = [2, 2, 4, 6, 8]
     if (search) {
       colors["Search Term"] = <Grid item xs={12} key={"search"}>
@@ -177,12 +181,19 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
     }
     let not_significant = false
     const color_sum = {}
+    const relations = []
     for (const i of elements) {
-      const {kind, color, borderColor} = i.data
+      const {kind, color, borderColor, lineColor, relation} = i.data
       if (i.data.properties.pval && i.data.properties.pval > 0.05) not_significant = true
+      if (kind === "Relation" && lineColor !== "#e0e0e0" && relation_colors[relation]===undefined) {
+        relation_colors[relation] = <Grid item xs={12} key={kind}>
+          <Grid container alignItems={"center"} spacing={1}>
+            <Grid item><hr style={{color: lineColor, height: lineHeight[legendSize], backgroundColor: lineColor, width: lineWidth[legendSize]}}/></Grid>
+            <Grid item><Typography variant="subtitle1">{relation}</Typography></Grid>   
+          </Grid></Grid>
+      }
       if (colors[kind]===undefined && color !== "#F8333C" && kind !== "Relation") {
         color_sum[kind] = color
-        console.log({background: color, width: sizes[legendSize], height: sizes[legendSize], borderColor, borderWidth: borders[legendSize]})
         colors[kind] = <Grid item xs={12} key={kind}>
           <Grid container alignItems={"center"} spacing={1}>
             <Grid item><Avatar style={{background: color, width: sizes[legendSize], height: sizes[legendSize], borderColor, borderStyle: borderColor ? "solid": "none", borderWidth: borders[legendSize]}}> </Avatar></Grid>
@@ -190,7 +201,6 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
           </Grid></Grid> 
       }
       if (colors[kind]!==undefined && color_sum[kind] === "#bdbdbd" && color !== "#F8333C" && kind !== "Relation") {
-        console.log(kind)
         color_sum[kind] = color
         colors[kind] = <Grid item xs={12} key={kind}>
           <Grid container alignItems={"center"} spacing={1}>
@@ -223,6 +233,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
               </Typography>
             </Grid>
             {Object.values(colors)}
+            {Object.values(relation_colors)}
           </Grid>
       </Box>
     )
