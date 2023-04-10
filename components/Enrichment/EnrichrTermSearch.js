@@ -71,7 +71,7 @@ export const EnrichrTermSearch = ({setInput}) => {
                 const vals = Object.entries(results)           
                 if (vals) {
                     const [description, genes] = vals[0]
-                    setInput({description, genes})
+                    setInput({description: `${description} (${library})`, genes})
                     setOpen(false)
                 }
             }
