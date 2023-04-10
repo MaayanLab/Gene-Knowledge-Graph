@@ -248,7 +248,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       setElements(results)
       setLoading(false)
       setData(results)
-      if (shouldUpdateId(router.query, prevQuery)) setId(id+1)
+      setId(id+1)
     } catch (error) {
       console.error(error)
     }
@@ -541,7 +541,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 }}
                 style={{marginBottom: -5}}
                 min={10}
-                max={100}
+                max={150}
                 aria-labelledby="continuous-slider" />
             </Grid>
             <Grid item>
@@ -750,7 +750,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 }}
                 style={{marginBottom: -5}}
                 min={10}
-                max={100}
+                max={150}
                 aria-labelledby="continuous-slider" />
             </Grid>
             <Grid item>
