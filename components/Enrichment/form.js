@@ -423,7 +423,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                         }}
                                         style={{width: "100%"}}
                                         min={1}
-                                        max={input.genes.length || 100}
+                                        max={input.genes.length*2 || 100}
                                         valueLabelDisplay='auto'
                                         aria-labelledby="top-gene-slider" />
                                     </Tooltip>
