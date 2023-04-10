@@ -177,7 +177,7 @@ const enrichment = async ({
         
         for (const [node, lib_terms] of Object.entries(library_terms)) {
             let query_part = `
-                MATCH p = (${node})--(b) 
+                MATCH p = (${node})--(b:Gene) 
                 WHERE a.label IN ${JSON.stringify(lib_terms)} 
                 AND b.label IN ${JSON.stringify(genes)}
             `
@@ -196,7 +196,7 @@ const enrichment = async ({
         }
         if (gene_links) {
             let query_part = `
-                MATCH p = (a)--(b) 
+                MATCH p = (a:Gene)--(b:Gene) 
                 WHERE a.label IN ${JSON.stringify(genes)} 
                 AND b.label IN ${JSON.stringify(genes)}
             `
