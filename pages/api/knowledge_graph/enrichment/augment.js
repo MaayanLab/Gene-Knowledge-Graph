@@ -97,7 +97,7 @@ const kind_mapper = ({node, type, augmented_genes}) => {
     
 }
 
-const enrichr_query_wrapper = async ({libraries,  userListId, term_degree, min_lib, gene_degree, node_mapping, gene_limit}) => {
+const enrichr_query_wrapper = async ({libraries,  userListId, term_degree, min_lib, gene_degree, node_mapping, gene_limit, augmented_genes}) => {
     const nodes = []
     const node_library = {}
     const results = await Promise.all(libraries.map(async ({library, term_limit})=> {
@@ -137,7 +137,7 @@ const enrichr_query_wrapper = async ({libraries,  userListId, term_degree, min_l
         genes = Object.keys(gene_counts).filter(gene=>gene_counts[gene].libraries >= min_lib)
     } 
     if (gene_degree) {
-        genes = genes.filter(gene=>gene_counts[gene].count >= gene_degree)
+        genes = genes.filter(gene=>(augmented_genes || []).indexOf(gene) > -1 || gene_counts[gene].count >= gene_degree)
     }
     if (gene_limit) {
         genes = genes.sort((a,b)=>gene_counts[b].count - gene_counts[a].count).slice(0,gene_limit)
@@ -173,7 +173,7 @@ const enrichment = async ({
             genes: [...gene_list, ...augmented_genes],
             description: `${description} (Augmented)`
         })
-        const {genes, terms, max_pval, min_pval, nodes, library_terms} = await enrichr_query_wrapper(({libraries, userListId, term_degree, min_lib, gene_degree, node_mapping, gene_limit}))
+        const {genes, terms, max_pval, min_pval, nodes, library_terms} = await enrichr_query_wrapper(({libraries, userListId, term_degree, min_lib, gene_degree, node_mapping, gene_limit, augmented_genes}))
         
         const schema = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/schema`)).json()
         const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/aggregate`)).json()
