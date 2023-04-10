@@ -51,6 +51,8 @@ const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'))
 const TextField = dynamic(() => import('@mui/material/TextField'));
 const CardContent = dynamic(() => import('@mui/material/CardContent'));
 const Link = dynamic(() => import('@mui/material/Link'));
+const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
+const FormControlLabel = dynamic(() => import('@mui/material/FormControlLabel'));
 
 const CameraAltOutlinedIcon  = dynamic(() => import('@mui/icons-material/CameraAltOutlined'));
 
@@ -103,13 +105,14 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     const [legendVisibility, setLegendVisibility] = useState(false)
     const [legendSize, setLegendSize] = useState(0)
     const [description, setDescription] = useState('')
-    const [augmentOpen, setAugmentOpen] = useState(null)
+    const [augmentOpen, setAugmentOpen] = useState(false)
     const [augmentLimit, setAugmentLimit] = useState(10)
+    const [geneLinksOpen, setGeneLinksOpen] = useState(false)
+    const [geneLinks, setGeneLinks] = useState(JSON.parse(router.query.gene_links || '[]'))
     const prevQuery = usePrevious(router.query)
     const libraries_list = props.sortLibraries ? l.sort(function(a, b) {
         return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
      }): l
-
 
     const {userListId} = router.query
     
@@ -165,7 +168,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                 remove,
                 augment_limit,
                 search,
-                gene_links=false
+                gene_links
             } = router.query
             const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : (default_options.selected || [])
             if (!search) {
@@ -191,7 +194,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                 expand: expand,
                                 remove: remove,
                                 augment_limit,
-                                gene_links
+                                gene_links: JSON.parse(gene_links || '[]')
                             }),
                             signal: controller.signal
                         })
@@ -218,8 +221,10 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
         }
     }
 
-    
-
+    const geneLinksRelations = schema.edges.reduce((acc, i)=>{
+        if (i.gene_link) return [...acc, ...i.match]
+        else return acc
+    }, [])
     useEffect(()=> {
         const get_shortId = async () => {
             let counter = 0
@@ -270,6 +275,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
             fetch_kg()
          }
     }, [error])
+
     return (
         <Grid container spacing={2} style={{paddingBottom: 10}} alignItems="center" justifyContent={"space-between"}>
             { (elements !== null && userListId !== undefined) && <Grid item>
@@ -584,27 +590,30 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                             </Tooltip>
                         </Grid>
                         <Grid item>
-                            <Tooltip title={router.query.gene_links ? "Remove gene-gene connections": "View gene-gene connections"}>
+                            <Tooltip title={"Gene-gene connections"}>
                                 <IconButton variant='contained'
                                     onClick={()=>{
-                                    const {gene_links=false, ...query} = router.query
-                                    if (!gene_links) query.gene_links = 'true'
-                                    router.push({
-                                        pathname: `/${page || ''}`,
-                                        query
-                                        }, undefined, { shallow: true })
+                                    // const {gene_links=false, ...query} = router.query
+                                    // if (!gene_links) query.gene_links = 'true'
+                                    // router.push({
+                                    //     pathname: `/${page || ''}`,
+                                    //     query
+                                    //     }, undefined, { shallow: true })
+                                    setGeneLinksOpen(!geneLinksOpen)
+                                    setAugmentOpen(false)
                                     }}
                                     style={{marginLeft: 5}}
                                 >
-                                    {router.query.gene_links ? <Icon path={mdiLinkVariantOff} size={0.8} />: <Icon path={mdiLinkVariant} size={0.8} />}
+                                    <Icon path={mdiLinkVariant} size={0.8} />
                                 </IconButton>
                             </Tooltip>
                         </Grid>
                         <Grid item>
                             <Tooltip title={router.query.augment ? "Reset network": "Augment network using co-expressed genes"}>
                                 <IconButton
-                                    disabled={(elements || []).filter(i=>i.data.kind === "Gene").length > 100}
+                                    disabled={!router.query.augment && (elements || []).filter(i=>i.data.kind === "Gene").length > 100}
                                     onClick={()=>{
+                                        setGeneLinksOpen(false)
                                         setAugmentOpen(!augmentOpen)
                                         // const {augment, augment_limit, page, ...query} = router.query
                                         // if (augment === "true") {
@@ -632,32 +641,79 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     </Grid>
                 </Grid>
             }
+            {(elements && geneLinksOpen) &&
+                <Grid item xs={12}>
+                    <Stack direction="row" alignItems="center" justifyContent={"flex-end"}>
+                        <Typography variant='subtitle2' style={{marginRight: 5}}>Select relationships:</Typography>
+                        {geneLinksRelations.map(i=>(
+                              <FormControlLabel control={<Checkbox checked={geneLinks.indexOf(i)>-1} onChange={()=>{
+                                console.log(geneLinks)
+                                if (geneLinks.indexOf(i)===-1) setGeneLinks([...geneLinks, i])
+                                else setGeneLinks(geneLinks.filter(l=>l!==i))
+                              }}/>} label={<Typography variant='subtitle2'>{i}</Typography>} />
+                        ))}
+                        <Tooltip title="Show gene links">
+                            <IconButton
+                                disabled={router.query.gene_links || geneLinks.length === 0}
+                                onClick={()=>{
+                                    const {gene_links, page, ...query} = router.query
+                                    router.push({
+                                        pathname: `/${page || ''}`,
+                                        query: {
+                                            ...query,
+                                            gene_links: JSON.stringify(geneLinks)
+                                        }
+                                    }, undefined, { shallow: true })
+                                    setGeneLinksOpen(false)
+                                }}
+                            >
+                                <SendIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Reset network">
+                            <IconButton disabled={!router.query.gene_links}
+                                onClick={()=>{
+                                    const {gene_links, page, ...query} = router.query
+                                    router.push({
+                                        pathname: `/${page || ''}`,
+                                        query
+                                    }, undefined, { shallow: true })
+                                    setGeneLinksOpen(false)
+                                }}
+                            >
+                                <UndoIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    </Stack>
+                </Grid>
+            }
             {(elements && augmentOpen) && 
                 <Grid item xs={12}>
                     <Stack direction="row" spacing={2} alignItems="center" justifyContent={"flex-end"}>
                         <Typography variant='subtitle2'>Top co-expressed genes:</Typography>
                         <Slider 
-                                value={augmentLimit || 10}
-                                onChange={(e, nv)=>{
-                                    setAugmentLimit(nv)
-                                    // router.push({
-                                    //     pathname: `/${page || ''}`,
-                                    //     query: {
-                                    //         ...query,
-                                    //         augment: 'true',
-                                    //         augment_limit: nv
-                                    //     }
-                                    // }, undefined, { shallow: true })
-                                }}
-                                min={1}
-                                max={50}
-                                valueLabelDisplay='auto'
-                                aria-labelledby="augment-limit-slider"
-                                style={{width: 100}}
+                            value={augmentLimit || 10}
+                            onChange={(e, nv)=>{
+                                setAugmentLimit(nv)
+                                // router.push({
+                                //     pathname: `/${page || ''}`,
+                                //     query: {
+                                //         ...query,
+                                //         augment: 'true',
+                                //         augment_limit: nv
+                                //     }
+                                // }, undefined, { shallow: true })
+                            }}
+                            min={1}
+                            max={50}
+                            valueLabelDisplay='auto'
+                            aria-labelledby="augment-limit-slider"
+                            style={{width: 100}}
                         />
                         <Typography variant='subtitle2'>{augmentLimit}</Typography>
                         <Tooltip title="Augment genes">
                             <IconButton
+                                disabled={(elements || []).filter(i=>i.data.kind === "Gene").length > 100}
                                 onClick={()=>{
                                     const {augment, augment_limit, page, ...query} = router.query
                                     router.push({

@@ -194,11 +194,19 @@ const enrichment = async ({
             query_part = query_part + `RETURN p, nodes(p) as n, relationships(p) as r`
             query_list.push(query_part)   
         }
-        if (gene_links) {
+        if (gene_links && gene_links.length > 0) {
+            const geneLinksRelations = schema.edges.reduce((acc, i)=>{
+                if (i.gene_link) return [...acc, ...i.match]
+                else return acc
+            }, [])
+            for (const i of geneLinksRelations) {
+                if (geneLinksRelations.indexOf(i) === -1) throw Error("Invalid gene link")
+            }
             let query_part = `
-                MATCH p = (a:Gene)--(b:Gene) 
+                MATCH p = (a:Gene)-[r]-(b:Gene) 
                 WHERE a.label IN ${JSON.stringify(genes)} 
                 AND b.label IN ${JSON.stringify(genes)}
+                AND r.relation IN ${JSON.stringify(gene_links)}
             `
             if ((remove || []).length) {
                 for (const ind in remove) {

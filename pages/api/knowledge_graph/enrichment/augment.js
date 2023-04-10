@@ -202,11 +202,19 @@ const enrichment = async ({
             query_part = query_part + `RETURN p, nodes(p) as n, relationships(p) as r`
             query_list.push(query_part)   
         }
-        if (gene_links) {
+        if (gene_links && gene_links.length > 0) {
+            const geneLinksRelations = schema.edges.reduce((acc, i)=>{
+                if (i.gene_link) return [...acc, ...i.match]
+                else return acc
+            }, [])
+            for (const i of geneLinksRelations) {
+                if (geneLinksRelations.indexOf(i) === -1) throw Error("Invalid gene link")
+            }
             let query_part = `
-                MATCH p = (a:Gene)--(b:Gene) 
+                MATCH p = (a:Gene)-[r]-(b:Gene) 
                 WHERE a.label IN ${JSON.stringify(genes)} 
                 AND b.label IN ${JSON.stringify(genes)}
+                AND r.relation IN ${JSON.stringify(gene_links)}
             `
             if ((remove || []).length) {
                 for (const ind in remove) {
@@ -235,6 +243,7 @@ const enrichment = async ({
             }
         }
         const query = query_list.join(' UNION ')
+        console.log(query)
         const rs = await session.readTransaction(txc => txc.run(query, {limit: expand_limit, ...vars}))
         fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
         return resolve_results({results: rs, schema,  aggr_scores, colors, properties: terms, get_node_color_and_type, kind_mapper, misc_props: {
