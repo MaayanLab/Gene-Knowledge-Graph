@@ -28,6 +28,7 @@ const FooterContents = ({footer, key, schema, consentCookie, setConsentCookie, r
 							// variant="contained"
 							startIcon={<GitHubIcon/>}
 							href={footer.code}
+							target="_blank" rel="noopener noreferrer"
 							style={{textTransform: "none", color: (schema.ui || {}).footer_buttons === "light" ? "#000": "#FFF"}}
 						>
 							<Typography variant="subtitle2" color="#FFF">Github Repository</Typography>
@@ -38,6 +39,7 @@ const FooterContents = ({footer, key, schema, consentCookie, setConsentCookie, r
 							// variant="contained"
 							startIcon={<BugReportIcon/>}
 							href={footer.issues}
+							target="_blank" rel="noopener noreferrer"
 							style={{textTransform: "none", color: (schema.ui || {}).footer_buttons === "light" ? "#000": "#FFF"}}
 						>
 							<Typography variant="subtitle2" color="#FFF">Report a Bug</Typography>
