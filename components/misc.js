@@ -215,7 +215,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
         <Grid item>
           <Avatar style={{background: "#FFF", borderColor: "#757575", borderStyle: "solid", borderWidth: borders[legendSize], width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar>
         </Grid>
-        <Grid item><Typography variant="subtitle1">{`Not significant (pval < 0.05)`}</Typography></Grid>   
+        <Grid item><Typography variant="subtitle1">{`Not significant (pval > 0.05)`}</Typography></Grid>   
       </Grid></Grid>   
     }
     return (
