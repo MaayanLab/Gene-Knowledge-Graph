@@ -92,7 +92,7 @@ const kind_mapper = ({node, type, augmented_genes}) => {
     if (type !== "Gene") return type
     const label = node.properties.label
     if (augmented_genes.indexOf(label) > -1) {
-        return "Co-expressed Gene"
+        return "Predicted Gene (Co-Expression)"
     } else return "Gene"
     
 }
