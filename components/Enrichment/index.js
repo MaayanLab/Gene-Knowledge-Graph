@@ -43,6 +43,8 @@ import CableIcon from '@mui/icons-material/Cable';
 // const Grid = dynamic(() => import('@mui/material/Grid'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
 const Snackbar = dynamic(() => import('@mui/material/Snackbar'));
+const ListItemText = dynamic(() => import('@mui/material/ListItemText'));
+const ListItemIcon = dynamic(() => import('@mui/material/ListItemIcon'));
 
 const Backdrop = dynamic(() => import('@mui/material/Backdrop'));
 const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
@@ -88,8 +90,9 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     const [focused, setFocused] = useState(null)
     const [loading, setLoading] = useState(false)
     const [edgeStyle, setEdgeStyle] = useState({})
-    const [layout, setLayout] = useState(0)
+    const [layout, setLayout] = useState(Object.keys(layouts)[0])
     const [anchorEl, setAnchorEl] = useState(null)
+    const [anchorElLayout, setAnchorElLayout] = useState(null)
     const [collapsed, setCollapsed] = useState(null)
     const [shortId, setShortId] = useState(null)
     const [openShare, setOpenShare] = useState(false)
@@ -136,11 +139,11 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
       }
     
 
-    const handleClickMenu = (e) => {
-		setAnchorEl(e.currentTarget);
+    const handleClickMenu = (e, setter) => {
+		setter(e.currentTarget);
 	  };
-	const handleCloseMenu = () => {
-		setAnchorEl(null);
+	const handleCloseMenu = (setter) => {
+		setter(null);
 	};
 
     const handleClickFilter = (e) => {
@@ -425,14 +428,36 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                             <Tooltip title="Switch Graph Layout">
                                 <IconButton variant='contained'
                                     disabled={elements===null}
-                                    onClick={()=>{
-                                        setLayout(layout + 1 === Object.keys(layouts).length ? 0: layout+1)
-                                    }}
+                                    onClick={(e)=>handleClickMenu(e, setAnchorElLayout)}
+                                    aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={anchorEl!==null ? 'true' : undefined}
                                     style={{marginLeft: 5}}
                                 >
                                     <FlipCameraAndroidIcon/>
                                 </IconButton>
                             </Tooltip>
+                            <Menu
+                                id="basic-menu"
+                                anchorEl={anchorElLayout}
+                                open={anchorElLayout!==null}
+                                onClose={()=>handleCloseMenu(setAnchorElLayout)}
+                                MenuListProps={{
+                                    'aria-labelledby': 'basic-button',
+                                }}
+                            >
+                                { Object.entries(layouts).map(([label, {icon}])=>(
+                                    <MenuItem key={'png'} onClick={()=> {
+                                        setLayout(label)
+                                        handleCloseMenu(setAnchorElLayout)
+                                    }}>
+                                    <ListItemIcon>
+                                        {icon()}
+                                    </ListItemIcon>
+                                    <ListItemText>{label}</ListItemText>
+                                    </MenuItem>
+                                ))}
+                            </Menu>
                         </Grid>
                         <Grid item>
                             <Tooltip title={edgeStyle.label ? "Hide edge labels": "Show edge labels"}>
@@ -450,7 +475,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         </Grid>
                         <Grid item>
                             <Tooltip title={"Download graph as an image file"}>
-                                <IconButton onClick={handleClickMenu}
+                                <IconButton onClick={(e)=>handleClickMenu(e, setAnchorEl)}
                                     aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
                                     aria-haspopup="true"
                                     aria-expanded={anchorEl!==null ? 'true' : undefined}
@@ -460,13 +485,13 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                 id="basic-menu"
                                 anchorEl={anchorEl}
                                 open={anchorEl!==null}
-                                onClose={handleCloseMenu}
+                                onClose={()=>handleCloseMenu(setAnchorEl)}
                                 MenuListProps={{
                                     'aria-labelledby': 'basic-button',
                                 }}
                             >
                                 <MenuItem key={'png'} onClick={()=> {
-                                    handleCloseMenu()
+                                    handleCloseMenu(setAnchorEl)
                                     fileDownload(cyref.current.png({output: "blob"}), "network.png")
                                 }}>PNG</MenuItem>
                                 <MenuItem key={'jpg'} onClick={()=> {
@@ -828,7 +853,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         }
                         ]}
                         elements={elements}
-                        layout={Object.values(layouts)[layout]}
+                        layout={layouts[layout]}
                         cy={(cy) => {
                             cyref.current = cy
                             cy.on('click', 'node', function (evt) {

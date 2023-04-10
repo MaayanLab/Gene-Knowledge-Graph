@@ -28,6 +28,10 @@ import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import SaveIcon from '@mui/icons-material/Save';
+import HubIcon from '@mui/icons-material/Hub';
+import { mdiFamilyTree, mdiDotsCircle } from '@mdi/js';
+import Icon from '@mdi/react';
+
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Box = dynamic(() => import('@mui/material/Box'));
@@ -37,6 +41,9 @@ const Button = dynamic(() => import('@mui/material/Button'));
 const Autocomplete = dynamic(() => import('@mui/material/Autocomplete'));
 const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
 const Backdrop = dynamic(() => import('@mui/material/Backdrop'));
+
+const ListItemText = dynamic(() => import('@mui/material/ListItemText'));
+const ListItemIcon = dynamic(() => import('@mui/material/ListItemIcon'));
 
 const Slider = dynamic(() => import('@mui/material/Slider'));
 const Cytoscape = dynamic(() => import('./Cytoscape'), { ssr: false })
@@ -54,6 +61,7 @@ export const layouts = {
     randomize: 'false',
     animate: true,
     idealEdgeLength: edge => 150,
+    icon: ()=><HubIcon/>
   },
   "Hierarchical Layout": {
     name: "breadthfirst",
@@ -61,10 +69,12 @@ export const layouts = {
     spacingFactor: 1,
     padding: 15,
     avoidOverlap: true,
+    icon: ()=><Icon path={mdiFamilyTree} size={0.8} />
   },
   Geometric: {
     name: 'avsdf',
-    nodeSeparation: 150
+    nodeSeparation: 150,
+    icon: ()=><Icon path={mdiDotsCircle} size={0.8} />
   },
 }
 
@@ -98,7 +108,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   const [edge, setEdge] = React.useState(null)
   const [data, setData] = React.useState(null)
   const [focused, setFocused] = React.useState(null)
-  const [layout, setLayout] = React.useState(0)
+  const [layout, setLayout] = React.useState(Object.keys(layouts)[0])
   const [edgeStyle, setEdgeStyle] = React.useState({})
   const [id, setId] = React.useState(0)
   const [tab, setTab] = React.useState('network')
@@ -106,6 +116,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   const [elements, setElements] = React.useState(undefined)
   const [controller, setController] = React.useState(null)
   const [anchorEl, setAnchorEl] = React.useState(null)
+  const [anchorElLayout, setAnchorElLayout] = React.useState(null)
   const [loading, setLoading] = React.useState(false)
   const [selected, setSelected] = React.useState([])
   const [legendVisibility, setLegendVisibility] = React.useState(false)
@@ -178,11 +189,11 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
     return c
   }
 
-  const handleClickMenu = (e) => {
-		setAnchorEl(e.currentTarget);
+  const handleClickMenu = (e, setter) => {
+		setter(e.currentTarget);
 	  };
-	const handleCloseMenu = () => {
-		setAnchorEl(null);
+	const handleCloseMenu = (setter) => {
+		setter(null);
 	};
   
   const resolve_elements = async (isActive) => {
@@ -401,7 +412,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 const {path_length, ...rest} = router.query
                 redirect({...rest, end})
               }} startIcon={<AddBoxIcon />}>
-                  Add End Filter
+                  Find Shortest Paths between Two Nodes
               </Button>
             </Grid>
           }
@@ -479,7 +490,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 const {end, end_term, end_field, ...query} = router.query
                 redirect({...query})}
               } startIcon={<IndeterminateCheckBoxIcon />}>
-                  Remove End Filter
+                  Collapse to Focus the Search on a Single Node
               </Button>
             </Grid>
           </Grid>
@@ -610,14 +621,36 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
             <Tooltip title="Switch Graph Layout">
                 <IconButton variant='contained'
                     disabled={elements===null}
-                    onClick={()=>{
-                        setLayout(layout + 1 === Object.keys(layouts).length ? 0: layout+1)
-                    }}
+                    onClick={(e)=>handleClickMenu(e, setAnchorElLayout)}
+                    aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={anchorEl!==null ? 'true' : undefined}
                     style={{marginLeft: 5}}
                 >
                     <FlipCameraAndroidIcon/>
                 </IconButton>
             </Tooltip>
+              <Menu
+                  id="basic-menu"
+                  anchorEl={anchorElLayout}
+                  open={anchorElLayout!==null}
+                  onClose={()=>handleCloseMenu(setAnchorElLayout)}
+                  MenuListProps={{
+                      'aria-labelledby': 'basic-button',
+                  }}
+              >
+                  { Object.entries(layouts).map(([label, {icon}])=>(
+                    <MenuItem key={'png'} onClick={()=> {
+                        setLayout(label)
+                        handleCloseMenu(setAnchorElLayout)
+                    }}>
+                      <ListItemIcon>
+                          {icon()}
+                      </ListItemIcon>
+                      <ListItemText>{label}</ListItemText>
+                    </MenuItem>
+                  ))}
+              </Menu>
           </Grid>
           <Grid item>
             <Tooltip title={edgeStyle.label ? "Hide edge labels": "Show edge labels"}>
@@ -635,7 +668,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
           </Grid>          
           <Grid item>
             <Tooltip title={"Download graph as an image file"}>
-              <IconButton onClick={handleClickMenu}
+              <IconButton onClick={(e)=>handleClickMenu(e, setAnchorEl)}
                   aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
                   aria-haspopup="true"
                   aria-expanded={anchorEl!==null ? 'true' : undefined}
@@ -645,21 +678,21 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 id="basic-menu"
                 anchorEl={anchorEl}
                 open={anchorEl!==null}
-                onClose={handleCloseMenu}
+                onClose={()=>handleCloseMenu(setAnchorEl)}
                 MenuListProps={{
                     'aria-labelledby': 'basic-button',
                 }}
             >
                 <MenuItem key={'png'} onClick={()=> {
-                    handleCloseMenu()
+                    handleCloseMenu(setAnchorEl)
                     fileDownload(cyref.current.png({output: "blob"}), "network.png")
                 }}>PNG</MenuItem>
                 <MenuItem key={'jpg'} onClick={()=> {
-                    handleCloseMenu()
+                    handleCloseMenu(setAnchorEl)
                     fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
                 }}>JPG</MenuItem>
                 <MenuItem key={'svg'} onClick={()=> {
-                    handleCloseMenu()
+                    handleCloseMenu(setAnchorEl)
                     fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
                 }}>SVG</MenuItem>
             </Menu>
@@ -729,7 +762,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                   const {path_length, ...rest} = router.query
                   redirect({...rest, end})
                 }} startIcon={<AddBoxIcon />}>
-                    Add End Filter
+                    Find Shortest Paths between Two Nodes
                 </Button>
               </Grid>
             }
@@ -848,7 +881,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 }
               ]}
               elements={elements}
-              layout={Object.values(layouts)[layout]}
+              layout={layouts[layout]}
               cy={(cy) => {
                 cyref.current = cy
                 cy.on('click', 'node', function (evt) {
