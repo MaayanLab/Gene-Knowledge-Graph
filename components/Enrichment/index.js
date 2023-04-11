@@ -593,12 +593,6 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                             <Tooltip title={"Gene-gene connections"}>
                                 <IconButton variant='contained'
                                     onClick={()=>{
-                                    // const {gene_links=false, ...query} = router.query
-                                    // if (!gene_links) query.gene_links = 'true'
-                                    // router.push({
-                                    //     pathname: `/${page || ''}`,
-                                    //     query
-                                    //     }, undefined, { shallow: true })
                                     setGeneLinksOpen(!geneLinksOpen)
                                     setAugmentOpen(false)
                                     }}
@@ -615,22 +609,6 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                     onClick={()=>{
                                         setGeneLinksOpen(false)
                                         setAugmentOpen(!augmentOpen)
-                                        // const {augment, augment_limit, page, ...query} = router.query
-                                        // if (augment === "true") {
-                                        //     router.push({
-                                        //         pathname: `/${page || ''}`,
-                                        //         query
-                                        //     }, undefined, { shallow: true })
-                                        // } else {
-                                        //     router.push({
-                                        //         pathname: `/${page || ''}`,
-                                        //         query: {
-                                        //             ...query,
-                                        //             augment: 'true',
-                                        //             augment_limit: augment_limit || 50
-                                        //         }
-                                        //     }, undefined, { shallow: true })
-                                        // }
                                     }}
                                     style={{marginLeft: 5, borderRadius: 5, background: augmentOpen ? "#e0e0e0": "none"}}
                                 >
@@ -646,15 +624,13 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     <Stack direction="row" alignItems="center" justifyContent={"flex-end"}>
                         <Typography variant='subtitle2' style={{marginRight: 5}}>Select relationships:</Typography>
                         {geneLinksRelations.map(i=>(
-                              <FormControlLabel control={<Checkbox checked={geneLinks.indexOf(i)>-1} onChange={()=>{
-                                console.log(geneLinks)
+                              <FormControlLabel key={i} control={<Checkbox checked={geneLinks.indexOf(i)>-1} onChange={()=>{
                                 if (geneLinks.indexOf(i)===-1) setGeneLinks([...geneLinks, i])
                                 else setGeneLinks(geneLinks.filter(l=>l!==i))
                               }}/>} label={<Typography variant='subtitle2'>{i}</Typography>} />
                         ))}
                         <Tooltip title="Show gene links">
                             <IconButton
-                                disabled={router.query.gene_links || geneLinks.length === 0}
                                 onClick={()=>{
                                     const {gene_links, page, ...query} = router.query
                                     router.push({

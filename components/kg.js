@@ -28,8 +28,11 @@ import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import SaveIcon from '@mui/icons-material/Save';
+import SendIcon from '@mui/icons-material/Send';
+import UndoIcon from '@mui/icons-material/Undo';
+
 import HubIcon from '@mui/icons-material/Hub';
-import { mdiFamilyTree, mdiDotsCircle } from '@mdi/js';
+import { mdiFamilyTree, mdiDotsCircle, mdiDna, mdiLinkVariant } from '@mdi/js';
 import Icon from '@mdi/react';
 
 
@@ -41,6 +44,7 @@ const Button = dynamic(() => import('@mui/material/Button'));
 const Autocomplete = dynamic(() => import('@mui/material/Autocomplete'));
 const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
 const Backdrop = dynamic(() => import('@mui/material/Backdrop'));
+const Stack = dynamic(() => import('@mui/material/Stack'));
 
 const ListItemText = dynamic(() => import('@mui/material/ListItemText'));
 const ListItemIcon = dynamic(() => import('@mui/material/ListItemIcon'));
@@ -52,6 +56,9 @@ const IndeterminateCheckBoxIcon = dynamic(() => import('@mui/icons-material/Inde
 const TooltipCard = dynamic(async () => (await import('./misc')).TooltipCard);
 const Legend = dynamic(async () => (await import('./misc')).Legend);
 const Selector = dynamic(async () => (await import('./misc')).Selector);
+const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
+const FormControlLabel = dynamic(() => import('@mui/material/FormControlLabel'));
+
 
 const NetworkTable =  dynamic(() => import('./network_table'))
 export const layouts = {
@@ -81,7 +88,7 @@ export const layouts = {
 
 
 
-export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema, initial_query={}, tooltip_viz}) {
+export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema, initial_query={}, tooltip_viz, coexpression_prediction, gene_link_button}) {
   if (!schema) schema=default_schema  
   const router = useRouter()
   const {page,
@@ -121,6 +128,11 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   const [selected, setSelected] = React.useState([])
   const [legendVisibility, setLegendVisibility] = React.useState(false)
   const [legendSize, setLegendSize] = React.useState(0)
+  const [augmentOpen, setAugmentOpen] = React.useState(false)
+  const [augmentLimit, setAugmentLimit] = React.useState(10)
+  const [geneLinksOpen, setGeneLinksOpen] = React.useState(false)
+  const [geneLinks, setGeneLinks] = React.useState(JSON.parse(router.query.gene_links || '[]'))
+  const [neighborCount, setNeighborCount] = React.useState(150)
 
   const firstUpdate = useRef(true);
   const prevQuery = usePrevious(router.query)
@@ -254,9 +266,55 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
     }
   }
 
+  const resolve_single_count = async (isActive) => {
+    try {
+      const controller = get_controller()
+      reset_tooltip()
+      const body = {
+        start,
+        start_term: start_term.replace(/\+/g, "%2B"),
+        start_field,
+        limit
+      }
+      if (!router.query.end) {
+        if (path_length) {
+          body.path_length = path_length
+        }
+        if (relation) {
+          body.relation = relation
+        } else if (!end_term){
+          body.relation = current_node.relation.join(",") || default_relations.join(",")
+        }
+        if (remove) {
+          body.remove = remove
+        }
+        if (expand) {
+          body.expand = expand
+        }
+        
+        const body_str = Object.entries(body).map(([k,v])=>`${k}=${v}`).join("&")
+        
+        const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/count?${body_str}`,
+        {
+          method: 'GET',
+          signal: controller.signal,
+        }) 
+        if (!isActive) return
+        const results = await res.json()
+        if (!isActive) return
+        const count = results.reduce((acc,i)=>(
+          acc + i.count
+        ), 0)
+        if (count < 250) setNeighborCount(count)
+        else setNeighborCount(150)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   React.useEffect(() => {
     const {page, ...query} = router.query
-    console.log(query)
     if (Object.keys(query || {}).length === 0) {
       if (Object.keys(initial_query || {}).length > 0) {
         router.push({
@@ -274,41 +332,15 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       }
     } else {
       resolve_elements(true)
+      resolve_single_count(true)
     }
   }, [router.query])
 
-  // useAsyncEffect(async (isActive) => {
-  //   if (current_node && !start_term) {
-  //     //
-  //   } else {
-  //     setLoading(true)
-  //     await  resolve_elements(isActive)
-  //   }
-  // }, [start_term, limit])
-
-  // useAsyncEffect(async (isActive) => {
-  //   // if (end_term) {
-  //   //   await  resolve_elements(isActive)
-  //   // }
-  //   setLoading(true)
-  //   await  resolve_elements(isActive)
-  // }, [end_term])
-
-  // useAsyncEffect(async (isActive) => {
-  //   // if (end_term) {
-  //   //   await  resolve_elements(isActive)
-  //   // }
-  //   if (remove || expand) await  resolve_elements(isActive)
-  // }, [remove, expand])
-
-  // useAsyncEffect(async (isActive) => {
-  //   if (firstUpdate.current && relation===undefined) {
-  //     firstUpdate.current = false
-  //   } else {
-  //     setLoading(true)
-  //     await  resolve_elements(isActive)
-  //   }
-  // }, [relation, path_length])
+  const geneLinksRelations = schema.edges.reduce((acc, i)=>{
+      if (i.gene_link) return [...acc, ...i.match]
+      else return acc
+  }, [])
+  
   return (
     <Grid container justifyContent="space-around" spacing={2}>
       <Grid item xs={12}>
@@ -541,7 +573,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 }}
                 style={{marginBottom: -5}}
                 min={10}
-                max={150}
+                max={router.query.end ? 100: neighborCount}
                 aria-labelledby="continuous-slider" />
             </Grid>
             <Grid item>
@@ -697,6 +729,37 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 }}>SVG</MenuItem>
             </Menu>
           </Grid>
+          { (!router.query.end && router.query. start !== "Gene" && gene_link_button) &&
+              <Grid item>
+                  <Tooltip title={"Gene-gene connections"}>
+                      <IconButton variant='contained'
+                          onClick={()=>{
+                          setGeneLinksOpen(!geneLinksOpen)
+                          setAugmentOpen(false)
+                          }}
+                          style={{marginLeft: 5}}
+                      >
+                          <Icon path={mdiLinkVariant} size={0.8} />
+                      </IconButton>
+                  </Tooltip>
+              </Grid>
+          }
+          { (!router.query.end && router.query. start !== "Gene" && coexpression_prediction) && 
+            <Grid item>
+                <Tooltip title={router.query.augment ? "Reset network": "Augment network using co-expressed genes"}>
+                    <IconButton
+                        disabled={!router.query.augment && (elements || []).filter(i=>i.data.kind === "Gene").length > 100}
+                        onClick={()=>{
+                            setGeneLinksOpen(false)
+                            setAugmentOpen(!augmentOpen)
+                        }}
+                        style={{marginLeft: 5, borderRadius: 5, background: augmentOpen ? "#e0e0e0": "none"}}
+                    >
+                        <Icon path={mdiDna} size={0.8} />
+                    </IconButton>
+                </Tooltip>
+            </Grid>
+          }
           <Grid item>
               <Tooltip title={!legendVisibility ? "Show legend": "Hide legend"}>
                   <IconButton variant='contained'
@@ -725,9 +788,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                   </Tooltip>
               </Grid>
           }
-        </Grid>
-          
-          
+        </Grid>   
       </Grid>
       {isIFrame() && 
         <Grid item xs={12}>
@@ -750,7 +811,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 }}
                 style={{marginBottom: -5}}
                 min={10}
-                max={150}
+                max={router.query.end ? 150: neighborCount}
                 aria-labelledby="continuous-slider" />
             </Grid>
             <Grid item>
@@ -769,6 +830,110 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
           </Grid>
         </Grid>
       }
+      {(elements && geneLinksOpen) &&
+                <Grid item xs={12}>
+                    <Stack direction="row" alignItems="center" justifyContent={"flex-end"}>
+                        <Typography variant='subtitle2' style={{marginRight: 5}}>Select relationships:</Typography>
+                        {geneLinksRelations.map(i=>(
+                              <FormControlLabel key={i} control={<Checkbox checked={geneLinks.indexOf(i)>-1} onChange={()=>{
+                                if (geneLinks.indexOf(i)===-1) setGeneLinks([...geneLinks, i])
+                                else setGeneLinks(geneLinks.filter(l=>l!==i))
+                              }}/>} label={<Typography variant='subtitle2'>{i}</Typography>} />
+                        ))}
+                        <Tooltip title="Show gene links">
+                            <IconButton
+                                onClick={()=>{
+                                    const {gene_links, page, ...query} = router.query
+                                    router.push({
+                                        pathname: `/${page || ''}`,
+                                        query: {
+                                            ...query,
+                                            gene_links: JSON.stringify(geneLinks)
+                                        }
+                                    }, undefined, { shallow: true })
+                                    setGeneLinksOpen(false)
+                                }}
+                            >
+                                <SendIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Reset network">
+                            <IconButton disabled={!router.query.gene_links}
+                                onClick={()=>{
+                                    const {gene_links, page, ...query} = router.query
+                                    router.push({
+                                        pathname: `/${page || ''}`,
+                                        query
+                                    }, undefined, { shallow: true })
+                                    setGeneLinksOpen(false)
+                                }}
+                            >
+                                <UndoIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    </Stack>
+                </Grid>
+            }
+            {(elements && augmentOpen) && 
+              <Grid item xs={12}>
+                <Stack direction="row" spacing={2} alignItems="center" justifyContent={"flex-end"}>
+                    <Typography variant='subtitle2'>Top co-expressed genes:</Typography>
+                    <Slider 
+                        value={augmentLimit || 10}
+                        onChange={(e, nv)=>{
+                            setAugmentLimit(nv)
+                            // router.push({
+                            //     pathname: `/${page || ''}`,
+                            //     query: {
+                            //         ...query,
+                            //         augment: 'true',
+                            //         augment_limit: nv
+                            //     }
+                            // }, undefined, { shallow: true })
+                        }}
+                        min={1}
+                        max={50}
+                        valueLabelDisplay='auto'
+                        aria-labelledby="augment-limit-slider"
+                        style={{width: 100}}
+                    />
+                    <Typography variant='subtitle2'>{augmentLimit}</Typography>
+                    <Tooltip title="Augment genes">
+                        <IconButton
+                            disabled={(elements || []).filter(i=>i.data.kind === "Gene").length > 100}
+                            onClick={()=>{
+                                const {augment, augment_limit, page, ...query} = router.query
+                                router.push({
+                                    pathname: `/${page || ''}`,
+                                    query: {
+                                        ...query,
+                                        augment: 'true',
+                                        augment_limit: augmentLimit || 10
+                                    }
+                                }, undefined, { shallow: true })
+                                setAugmentOpen(false)
+                            }}
+                        >
+                            <SendIcon/>
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Reset network">
+                        <IconButton disabled={!router.query.augment}
+                            onClick={()=>{
+                                const {augment, augment_limit, page, ...query} = router.query
+                                router.push({
+                                    pathname: `/${page || ''}`,
+                                    query
+                                }, undefined, { shallow: true })
+                                setAugmentOpen(false)
+                            }}
+                        >
+                            <UndoIcon/>
+                        </IconButton>
+                    </Tooltip>
+                </Stack>
+            </Grid>
+        }
       {tab === 'network' &&
         <Grid item xs={12} style={{minHeight: 500, position: "relative"}}>
           {(elements === undefined) ? (
