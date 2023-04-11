@@ -216,7 +216,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
         start,
         start_term: start_term.replace(/\+/g, "%2B"),
         start_field,
-        limit
+        limit,
       }
       if (router.query.end) {
         body.end = router.query.end
@@ -239,7 +239,15 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       if (expand) {
         body.expand = expand
       }
-      
+      if (router.query.augment) {
+        body.augment = router.query.augment
+      }
+      if (router.query.augment_limit) {
+        body.augment_limit = router.query.augment_limit
+      }
+      if (router.query.gene_links) {
+        body.gene_links = router.query.gene_links
+      }
       const body_str = Object.entries(body).map(([k,v])=>`${k}=${v}`).join("&")
       
       const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph?${body_str}`,
@@ -729,7 +737,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 }}>SVG</MenuItem>
             </Menu>
           </Grid>
-          { (!router.query.end && router.query. start !== "Gene" && gene_link_button) &&
+          {/* { (gene_link_button) &&
               <Grid item>
                   <Tooltip title={"Gene-gene connections"}>
                       <IconButton variant='contained'
@@ -744,7 +752,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                   </Tooltip>
               </Grid>
           }
-          { (!router.query.end && router.query. start !== "Gene" && coexpression_prediction) && 
+          { (!router.query.end && router.query.start !== "Gene" && coexpression_prediction) && 
             <Grid item>
                 <Tooltip title={router.query.augment ? "Reset network": "Augment network using co-expressed genes"}>
                     <IconButton
@@ -759,7 +767,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                     </IconButton>
                 </Tooltip>
             </Grid>
-          }
+          } */}
           <Grid item>
               <Tooltip title={!legendVisibility ? "Show legend": "Hide legend"}>
                   <IconButton variant='contained'

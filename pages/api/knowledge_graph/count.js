@@ -40,7 +40,6 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 		}
 	}
 	query = query + `RETURN COUNT(p) as count`
-	console.log(query)
 	const results = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
 	const res = results.records.flatMap(record => {
 		return {count: toNumber(record.get('count'))}
