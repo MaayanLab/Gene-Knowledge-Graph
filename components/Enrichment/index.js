@@ -61,6 +61,7 @@ const Cytoscape = dynamic(() => import('../Cytoscape'), { ssr: false })
 const TooltipCard = dynamic(async () => (await import('../misc')).TooltipCard);
 const Legend = dynamic(async () => (await import('../misc')).Legend);
 const TermViz =  dynamic(() => import('./TermViz'))
+const Summarizer = dynamic(async () => (await import('./Summarizer')).Summarizer);
 
 
 export const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -615,6 +616,9 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                     <Icon path={mdiDna} size={0.8} />
                                 </IconButton>
                             </Tooltip>
+                        </Grid>
+                        <Grid item>
+                            <Summarizer elements={elements} schema={schema} augmented={router.query.augment}/>
                         </Grid>
                     </Grid>
                 </Grid>
