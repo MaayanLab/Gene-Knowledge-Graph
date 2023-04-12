@@ -184,32 +184,53 @@ export const resolve_results = ({results,
 		return res
 	}
 
-const resolve_two_terms = async ({session, start_term, start_field, start, end_term, end_field, end, limit, order, path_length=4, schema, relation, aggr_scores, colors, remove, expand: e}) => {
+const resolve_two_terms = async ({session, start_term, start_field, start, end_term, end_field, end, limit, order, path_length=4, schema, relation, aggr_scores, colors, remove, expand: e, gene_links}) => {
 	if (!parseInt(path_length)) throw {message: "Path length is not a number"}
-	let query = `MATCH p=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\` {${end_field}: $end_term}))
+	let query = `MATCH q=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\` {${end_field}: $end_term}))
 		USING INDEX a:\`${start}\`(${start_field})
 		USING INDEX b:\`${end}\`(${end_field})
 	`		
+	const edges = schema.edges.reduce((acc, i)=>([
+		...acc,
+		...i.match
+	  ]), [])
 	if (relation) {
-		const edges = schema.edges.reduce((acc, i)=>([
-			...acc,
-			...i.match
-		  ]), [])
+		const rels = []
 		for (const i of relation.split(",")) {
 			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
+			rels.push(`\`${i}\``)
 		}
-		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
-		query = query.replace(`[*..${path_length}]`,`[:${rels}*..${path_length}]`)
-	} 
+		if (rels.length > 0) query = query.replace(`[*..${path_length}]`,`[:${rels.join("|")}*..${path_length}]`)
+	}
 	const vars = {}
 	if ((remove || []).length) {
 		query = query + `
 			WHERE NOT a.id in ${JSON.stringify(remove)}
 			AND NOT b.id in ${JSON.stringify(remove)}
 		`
+	} 
+	const gl = []
+	if (gene_links) {
+		const links = JSON.parse(gene_links)
+		for (const i of links) {
+			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
+			gl.push(`\`${i}\``)
+		}
+		query = query + `CALL {
+			WITH q
+			MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)
+			WHERE c in NODES(q) and d in NODES(q)
+			RETURN p, nodes(p) as n, relationships(p) as r
+			UNION
+			WITH q
+			RETURN q as p, nodes(q) as n, relationships(q) as r
+		}
+		RETURN p, n, r
+		LIMIT TOINTEGER($limit) `
 	}
-	query = query + `RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
-
+	else {
+		query = query + `RETURN q as p, nodes(q) as n, relationships(q) as r LIMIT TOINTEGER($limit)`
+	}
 	// remove has precedence on expand
 	const expand = (e || []).filter(i=>(remove || []).indexOf(i) === -1)
 
@@ -225,39 +246,69 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 			`   
 		}
 	}
-
-	
-	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
-	// query = `${query} RETURN * ORDER BY rand() LIMIT ${limit}`
 	const results = await session.readTransaction(txc => txc.run(query, { start_term, end_term, limit, ...vars }))
 	return resolve_results({results, terms: [start_term, end_term], schema, order, score_fields,  aggr_scores, colors, start_field, end_field})
 }
 
-const resolve_term_and_end_type = async ({session, start_term, start_field, start, end, limit, order, path_length=4, schema, relation, aggr_scores, colors, remove, expand: e}) => {
+const resolve_term_and_end_type = async ({session, start_term, start_field, start, end, limit, order, path_length=4, schema, relation, aggr_scores, colors, remove, expand: e, gene_links}) => {
+	
 	if (!parseInt(path_length)) throw {message: "Path length is not a number"}
-	let query = `MATCH p=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\`))
+	let query = `MATCH q=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\`))
 		USING INDEX a:\`${start}\`(${start_field})
-	`		
+	`
+
+	const edges = schema.edges.reduce((acc, i)=>([
+		...acc,
+		...i.match
+	  ]), [])
 	if (relation) {
-		const edges = schema.edges.reduce((acc, i)=>([
-			...acc,
-			...i.match
-		  ]), [])
+		const rels = []
 		for (const i of relation.split(",")) {
 			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
+			rels.push(`\`${i}\``)
 		}
-		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
-		query = query.replace(`[*..${path_length}]`,`[:${rels}*..${path_length}]`)
-	} 
+		if (rels.length > 0) query = query.replace(`[*..${path_length}]`,`[:${rels.join("|")}*..${path_length}]`)
+	}
 	const vars = {}
 	if ((remove || []).length) {
 		query = query + `
 			WHERE NOT a.id in ${JSON.stringify(remove)}
 			AND NOT b.id in ${JSON.stringify(remove)}
 		`
+	} 
+	if (start === end) {
+		if (query.includes('WHERE')) {
+			query = query + `
+				AND NOT b.label = $start_term
+			`
+		} else {
+			query = query + `
+				WHERE NOT b.label = $start_term
+			`
+		}
 	}
-	query = query + `RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
-
+	const gl = []
+	if (gene_links) {
+		const links = JSON.parse(gene_links)
+		for (const i of links) {
+			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
+			gl.push(`\`${i}\``)
+		}
+		query = query + `CALL {
+			WITH q
+			MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)
+			WHERE c in NODES(q) and d in NODES(q)
+			RETURN p, nodes(p) as n, relationships(p) as r
+			UNION
+			WITH q
+			RETURN q as p, nodes(q) as n, relationships(q) as r
+		}
+		RETURN p, n, r
+		LIMIT TOINTEGER($limit) `
+	}
+	else {
+		query = query + `RETURN q as p, nodes(q) as n, relationships(q) as r LIMIT TOINTEGER($limit)`
+	}
 	// remove has precedence on expand
 	const expand = (e || []).filter(i=>(remove || []).indexOf(i) === -1)
 
@@ -282,44 +333,71 @@ const resolve_term_and_end_type = async ({session, start_term, start_field, star
 }
 
 
-const resolve_one_term = async ({session, start, field, term, relation, limit, order, path_length=1, schema, aggr_scores, colors, expand: e, remove}) => {
+const resolve_one_term = async ({session, start, field, term, relation, limit, order, path_length=1, schema, aggr_scores, colors, expand: e, remove, gene_links}) => {
 	if (!parseInt(path_length)) throw {message: "Path length is not a number"}
 	let query = `
-		MATCH p=(st:\`${start}\` { ${field}: $term })-[*${path_length}]-(en)
+		MATCH q=(st:\`${start}\` { ${field}: $term })-[*${path_length}]-(en)
 		USING INDEX st:\`${start}\`(${field})
-		WITH p, st, en
+		WITH q, st
+		LIMIT TOINTEGER($limit) 
 		`
-	if (relation) {
 		const edges = schema.edges.reduce((acc, i)=>([
 			...acc,
 			...i.match
 		  ]), [])
-		for (const i of relation.split(",")) {
-			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
-		}
-		const rels = relation.split(",").map(i=>`\`${i}\``).join("|")
-		query = query.replace(`[*${path_length}]`,`[:${rels}*${path_length}]`)
-	}
-	const vars = {}
-	if ((remove || []).length) {
-		for (const ind in remove) {
-			vars[`remove_${ind}`] = remove[ind]
-			if (ind === "0") {
-				query = query + `
-					WHERE NOT st.id = $remove_${ind}
-					AND NOT en.id = $remove_${ind}
-				`
+		const rels = []
+		if (relation) {
+			for (const i of relation.split(",")) {
+				if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
+				rels.push(`\`${i}\``)
 			}
-			else {
-				query = query + `
-					AND NOT st.id = $remove_${ind}
-					AND NOT en.id = $remove_${ind}
-				`
-			}
+			if (rels.length > 0) query = query.replace(`[*${path_length}]`,`[:${rels.join("|")}*..${path_length}]`)
 		}
-	}
-	query = query + `RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
+		const vars = {}
+		if ((remove || []).length) {
+			query = query + `
+				WHERE NOT a.id in ${JSON.stringify(remove)}
+				AND NOT b.id in ${JSON.stringify(remove)}
+			`
+		} 
+		const gl = []
+		if (gene_links) {
+			const links = JSON.parse(gene_links)
+			for (const i of links) {
+				if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
+				gl.push(`\`${i}\``)
+			}
+			if (start === "Gene") {
 
+			}
+			if (start === "Gene") {
+				query = query + `CALL {
+					WITH q, st
+					MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)
+					WHERE c in NODES(q)
+					RETURN p, nodes(p) as n, relationships(p) as r
+					UNION
+					WITH q
+					RETURN q as p, nodes(q) as n, relationships(q) as r
+				}
+				RETURN p, n, r`
+			} else {
+				query = query + `CALL {
+					WITH q, st
+					MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)-[:${rels.join("|")}]-(st)
+					WHERE c in NODES(q)
+					RETURN p, nodes(p) as n, relationships(p) as r
+					UNION
+					WITH q
+					RETURN q as p, nodes(q) as n, relationships(q) as r
+				}
+				RETURN p, n, r`
+			}
+			
+		}
+		else {
+			query = query + `RETURN q as p, nodes(q) as n, relationships(q) as r LIMIT TOINTEGER($limit)`
+		}
 	// remove has precedence on expand
 	const expand = (e || []).filter(i=>(remove || []).indexOf(i) === -1)
 	if ((expand || []).length) {
@@ -339,7 +417,7 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 }
 
 export default async function query(req, res) {
-  const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=25, path_length, order, remove, expand } = await req.query
+  const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=25, path_length, order, remove, expand, gene_links } = await req.query
   const schema = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/schema`)).json()
   const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/aggregate`)).json()
   const nodes = schema.nodes.map(i=>i.node)
@@ -352,15 +430,15 @@ export default async function query(req, res) {
 		})
 		try {
 			if (start && end && start_term && end_term) {
-				const results = await resolve_two_terms({session, start_term, start_field, start, end_term, end_field, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : []})
+				const results = await resolve_two_terms({session, start_term, start_field, start, end_term, end_field, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : [], gene_links})
 				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
 				res.status(200).send(results)
 			} else if (start && end && start_term ) {
-				const results = await resolve_term_and_end_type({session, start_term, start_field, start, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : []})
+				const results = await resolve_term_and_end_type({session, start_term, start_field, start, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : [], gene_links})
 				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
 				res.status(200).send(results)
 			} else if (start) {
-				const results = await resolve_one_term({session, start, field: start_field, term: start_term, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : []})
+				const results = await resolve_one_term({session, start, field: start_field, term: start_term, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : [], gene_links})
 				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
 				res.status(200).send(results)
 			} else {

@@ -133,6 +133,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   const [geneLinksOpen, setGeneLinksOpen] = React.useState(false)
   const [geneLinks, setGeneLinks] = React.useState(JSON.parse(router.query.gene_links || '[]'))
   const [neighborCount, setNeighborCount] = React.useState(150)
+  const [legendCount, setLegendCount] = React.useState(0)
 
   const firstUpdate = useRef(true);
   const prevQuery = usePrevious(router.query)
@@ -232,6 +233,8 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
         body.relation = relation
       } else if (!end_term){
         body.relation = current_node.relation.join(",") || default_relations.join(",")
+      } else if (end_term) {
+        body.relation = edges.join(",")
       }
       if (remove) {
         body.remove = remove
@@ -349,6 +352,11 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       else return acc
   }, [])
   
+  const genes = (elements || []).reduce((acc, i)=>{
+      if (i.data.kind === "Gene" && acc.indexOf(i.data.label) === -1) return [...acc, i.data.label]
+      else return acc
+  }, [])
+
   return (
     <Grid container justifyContent="space-around" spacing={2}>
       <Grid item xs={12}>
@@ -737,7 +745,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 }}>SVG</MenuItem>
             </Menu>
           </Grid>
-          {/* { (gene_link_button) &&
+          { (gene_link_button) &&
               <Grid item>
                   <Tooltip title={"Gene-gene connections"}>
                       <IconButton variant='contained'
@@ -752,11 +760,11 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                   </Tooltip>
               </Grid>
           }
-          { (!router.query.end && router.query.start !== "Gene" && coexpression_prediction) && 
+          {/* { (!router.query.end && router.query.start !== "Gene" && coexpression_prediction) && 
             <Grid item>
                 <Tooltip title={router.query.augment ? "Reset network": "Augment network using co-expressed genes"}>
                     <IconButton
-                        disabled={!router.query.augment && (elements || []).filter(i=>i.data.kind === "Gene").length > 100}
+                        disabled={genes.length > 100}
                         onClick={()=>{
                             setGeneLinksOpen(false)
                             setAugmentOpen(!augmentOpen)
@@ -908,7 +916,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                     <Typography variant='subtitle2'>{augmentLimit}</Typography>
                     <Tooltip title="Augment genes">
                         <IconButton
-                            disabled={(elements || []).filter(i=>i.data.kind === "Gene").length > 100}
+                            disabled={genes.length > 100}
                             onClick={()=>{
                                 const {augment, augment_limit, page, ...query} = router.query
                                 router.push({

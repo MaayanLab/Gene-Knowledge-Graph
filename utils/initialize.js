@@ -104,13 +104,14 @@ export const initialize_kg = async () => {
 		// }
 	}
   for (const i of schema.edges) {
-	for (const e of i.match) {
-		if (edges.indexOf(e) === -1) edges.push(e)
+	if (!i.gene_link) {
+		for (const e of i.match) {
+			if (edges.indexOf(e) === -1) edges.push(e)
+		}
+		if (i.selected) {
+		  default_relations = [...default_relations,  ...(i.match || [])]
+		}
 	}
-    // edges = [...edges, ...(i.match || [])]
-    if (i.selected) {
-      default_relations = [...default_relations,  ...(i.match || [])]
-    }
   }
 
   
