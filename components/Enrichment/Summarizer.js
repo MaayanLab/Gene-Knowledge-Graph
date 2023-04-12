@@ -106,8 +106,6 @@ export const Summarizer = ({elements, schema, augmented}) => {
                 for (const i in Object.values(relationships)) {
                     const index = parseInt(i)
                     const {relation, ...data} = Object.values(relationships)[index]
-                    let ordinal = index+1 === Object.values(relationships).length ? index+1 === 1 ? "": index+1 === 2 ? "Second": "Lastly": capitalize(converter.toWordsOrdinal(index+1))
-                    console.log(ordinal)
                     const template_object = templates[relation]
                     let text
                     if (data.gene !== undefined) {
@@ -123,7 +121,7 @@ export const Summarizer = ({elements, schema, augmented}) => {
                             text = makeTemplate(template_object.multiple, data)
                         }
                     }
-                    summary = `${summary}${ordinal}, ${text} `
+                    summary = `${summary} ${text} `
                 }
             }
             setSummary(summary)
@@ -143,7 +141,7 @@ export const Summarizer = ({elements, schema, augmented}) => {
                     onClose={()=>setOpen(false)}
                 >
                     <Box sx={style}>
-                        <Typography variant="h5">{augmented ? "Augmented Network Summary": "Network Summary"}</Typography>
+                        <Typography variant="h5">{augmented ? "Free text summary of the augmented subnetwork": "Free text summary of the subnetwork"}</Typography>
                         {summary === "null" ? <CircularProgress/>: 
                             <Box style={{padding: 10, border: "1px solid", marginTop: 10}}>
                                 <Typography variant="subtitle1">{summary}</Typography>
