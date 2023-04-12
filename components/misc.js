@@ -226,7 +226,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
         left: 25,
         pointerEvents: "none"
       }}>
-          <Grid container alignItems={"center"} spacing={1}>
+          <Grid container alignItems={"center"} spacing={legendSize > 1 ? 1: 0} style={{maxHeight: 700, overflow: "hidden"}}>
             <Grid item xs={12}>
               <Typography variant="h6">
                 <b>Legend</b>
