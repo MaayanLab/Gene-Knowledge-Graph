@@ -276,7 +276,10 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
             fetch_kg()
          }
     }, [error])
-
+    const genes = (elements || []).reduce((acc, i)=>{
+        if (i.data.kind === "Gene" && acc.indexOf(i.data.label) === -1) return [...acc, i.data.label]
+        else return acc
+    }, [])
     return (
         <Grid container spacing={2} style={{paddingBottom: 10}} alignItems="center" justifyContent={"space-between"}>
             { (elements !== null && userListId !== undefined) && <Grid item>
@@ -606,7 +609,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         <Grid item>
                             <Tooltip title={router.query.augment ? "Reset network": "Augment network using co-expressed genes"}>
                                 <IconButton
-                                    disabled={!router.query.augment && (elements || []).filter(i=>i.data.kind === "Gene").length > 100}
+                                    disabled={!router.query.augment && genes.length > 100}
                                     onClick={()=>{
                                         setGeneLinksOpen(false)
                                         setAugmentOpen(!augmentOpen)
