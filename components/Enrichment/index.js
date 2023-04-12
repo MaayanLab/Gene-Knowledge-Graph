@@ -696,7 +696,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         <Typography variant='subtitle2'>{augmentLimit}</Typography>
                         <Tooltip title="Augment genes">
                             <IconButton
-                                disabled={(elements || []).filter(i=>i.data.kind === "Gene").length > 100}
+                                disabled={genes.length > 100}
                                 onClick={()=>{
                                     const {augment, augment_limit, page, ...query} = router.query
                                     router.push({
