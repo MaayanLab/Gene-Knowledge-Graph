@@ -505,11 +505,11 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                     fileDownload(cyref.current.png({output: "blob"}), "network.png")
                                 }}>PNG</MenuItem>
                                 <MenuItem key={'jpg'} onClick={()=> {
-                                    handleCloseMenu()
+                                    handleCloseMenu(setAnchorEl)
                                     fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
                                 }}>JPG</MenuItem>
                                 <MenuItem key={'svg'} onClick={()=> {
-                                    handleCloseMenu()
+                                    handleCloseMenu(setAnchorEl)
                                     fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
                                 }}>SVG</MenuItem>
                             </Menu>
