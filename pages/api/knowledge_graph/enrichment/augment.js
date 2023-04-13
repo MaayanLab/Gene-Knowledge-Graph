@@ -48,7 +48,7 @@ const resolve_genes = async ({userListId}) => {
     }
 }
 
-const augment_gene_set = async ({gene_list, augment_limit}) => {
+export const augment_gene_set = async ({gene_list, augment_limit}) => {
     const request = await fetch(`${process.env.NEXT_PUBLIC_GENESHOT_URL}/api/associate`, {
         method: 'POST',
         headers: {
@@ -88,7 +88,7 @@ const add_list = async ({genes, description}) => {
     }
 }
 
-const kind_mapper = ({node, type, augmented_genes}) => {
+export const kind_mapper = ({node, type, augmented_genes}) => {
     if (type !== "Gene") return type
     const label = node.properties.label
     if (augmented_genes.indexOf(label) > -1) {
