@@ -32,7 +32,7 @@ import SendIcon from '@mui/icons-material/Send';
 import UndoIcon from '@mui/icons-material/Undo';
 
 import HubIcon from '@mui/icons-material/Hub';
-import { mdiFamilyTree, mdiDotsCircle, mdiDna, mdiLinkVariant } from '@mdi/js';
+import { mdiFamilyTree, mdiDotsCircle, mdiDna, mdiLinkVariant, mdiLinkVariantOff } from '@mdi/js';
 import Icon from '@mdi/react';
 
 
@@ -316,7 +316,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
         const count = results.reduce((acc,i)=>(
           acc + i.count
         ), 0)
-        if (count < 250) setNeighborCount(count)
+        if (count < 150) setNeighborCount(count)
         else setNeighborCount(150)
       }
     } catch (error) {
@@ -346,6 +346,10 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       resolve_single_count(true)
     }
   }, [router.query])
+
+  React.useEffect(()=>{
+    setId(id+1)
+  },[elements])
 
   const geneLinksRelations = schema.edges.reduce((acc, i)=>{
       if (i.gene_link) return [...acc, ...i.match]
@@ -589,7 +593,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 }}
                 style={{marginBottom: -5}}
                 min={10}
-                max={router.query.end ? 100: neighborCount}
+                max={router.query.end ? 150: neighborCount}
                 aria-labelledby="continuous-slider" />
             </Grid>
             <Grid item>
@@ -755,12 +759,12 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                           }}
                           style={{marginLeft: 5}}
                       >
-                          <Icon path={mdiLinkVariant} size={0.8} />
+                          <Icon path={router.query.gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
                       </IconButton>
                   </Tooltip>
               </Grid>
           }
-          {/* { (!router.query.end && router.query.start !== "Gene" && coexpression_prediction) && 
+          { (!router.query.end && router.query.start !== "Gene" && coexpression_prediction) && 
             <Grid item>
                 <Tooltip title={router.query.augment ? "Reset network": "Augment network using co-expressed genes"}>
                     <IconButton
@@ -775,7 +779,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                     </IconButton>
                 </Tooltip>
             </Grid>
-          } */}
+          }
           <Grid item>
               <Tooltip title={!legendVisibility ? "Show legend": "Hide legend"}>
                   <IconButton variant='contained'
@@ -981,6 +985,8 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                   selector: 'node',
                   style: {
                     'background-color': 'data(color)',
+                    'border-color': 'data(borderColor)',
+                    'border-width': 'data(borderWidth)',
                     'label': 'data(label)',
                     "text-valign": "center",
                     "text-halign": "center",

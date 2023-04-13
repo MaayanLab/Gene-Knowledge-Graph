@@ -602,7 +602,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                     }}
                                     style={{marginLeft: 5}}
                                 >
-                                    <Icon path={mdiLinkVariant} size={0.8} />
+                                    <Icon path={router.query.gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
                                 </IconButton>
                             </Tooltip>
                         </Grid>

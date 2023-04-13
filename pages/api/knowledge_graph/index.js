@@ -4,6 +4,7 @@ import Color from 'color'
 import { toNumber } from "../../../utils/helper"
 import fetch from "node-fetch"
 import {default_color, mui_colors} from '../../../utils/colors'
+import { augment_gene_set, kind_mapper, get_node_color_and_type } from "./enrichment/augment"
 let color_map = {}
 let score_fields
 const get_color = ({color, darken}) => {
@@ -115,69 +116,94 @@ export const resolve_results = ({results,
 				[i.identity]: i
 			}), {})
 			const path = []
-			for (const relation of relations) {
-				const start_node = nodes[relation.start]
-				const end_node = nodes[relation.end]
-				const relation_type = relation.type
-				const start_type = start_node.labels.filter(i=>i!=="id")[0]
-				const end_type = end_node.labels.filter(i=>i!=="id")[0]
-				path.push({ 
-					data: {
-						id: start_node.properties.id,
-						kind: kind_mapper ? kind_mapper({node: start_node, type: start_type, ...misc_props})  : start_type,
-						label: start_node.properties.label || start_node.properties.id,
-						properties: {
-							...process_properties(start_node.properties),
-							...properties[start_node.properties.label || start_node.properties.id] || {}
-						},
-						...(get_node_color_and_type({node: {
-							...start_node,
+			if (relations.length > 0) {
+				for (const relation of relations) {
+					const start_node = nodes[relation.start]
+					const end_node = nodes[relation.end]
+					const relation_type = relation.type
+					const start_type = start_node.labels.filter(i=>i!=="id")[0]
+					const end_type = end_node.labels.filter(i=>i!=="id")[0]
+					path.push({ 
+						data: {
+							id: start_node.properties.id,
+							kind: kind_mapper ? kind_mapper({node: start_node, type: start_type, ...misc_props})  : start_type,
+							label: start_node.properties.label || start_node.properties.id,
 							properties: {
-								...start_node.properties,
-								...properties[start_node.properties.label || start_node.properties.id] || {},
-							}
-						}, terms, record, fields: [field, start_field, end_field], aggr_scores,
-							 ...colors_func(start_type), ...misc_props}))
-					} 
-				})
-				path.push({ 
-					data: {
-						source: start_node.properties.id,
-						target: end_node.properties.id,
-						kind: "Relation",
-						relation: relation_type,
-						label: relation_type,
-						properties: {
-							id: `${start_node.properties.label}_${relation_type}_${end_node.properties.label}`,
+								...process_properties(start_node.properties),
+								...properties[start_node.properties.label || start_node.properties.id] || {}
+							},
+							...(get_node_color_and_type({node: {
+								...start_node,
+								properties: {
+									...start_node.properties,
+									...properties[start_node.properties.label || start_node.properties.id] || {},
+								}
+							}, terms, record, fields: [field, start_field, end_field], aggr_scores,
+								...colors_func(start_type), ...misc_props}))
+						} 
+					})
+					path.push({ 
+						data: {
+							source: start_node.properties.id,
+							target: end_node.properties.id,
+							kind: "Relation",
+							relation: relation_type,
 							label: relation_type,
-							source_label: start_node.properties.label,
-							target_label: end_node.properties.label,
-							...properties[`${start_node.properties.label}_${end_node.properties.label}`] || {},
-							...process_properties(relation.properties),
-						},
-						...(get_edge_color({relation, record, aggr_scores, ...colors[relation_type]})),
-						directed: relation.properties.directed ? 'triangle': 'none'
-					} 
-				})
-				path.push({ 
-					data: {
-						id: end_node.properties.id,
-						kind: kind_mapper ? kind_mapper({node: end_node, type: end_type, ...misc_props})  : end_type,
-						label: end_node.properties.label || end_node.properties.id,
-						properties: {
-							...process_properties(end_node.properties),
-							...properties[end_node.properties.label || end_node.properties.id] || {}
-						},
-						...(get_node_color_and_type({node: {
-							...end_node,
 							properties: {
-								...end_node.properties,
+								id: `${start_node.properties.label}_${relation_type}_${end_node.properties.label}`,
+								label: relation_type,
+								source_label: start_node.properties.label,
+								target_label: end_node.properties.label,
+								...properties[`${start_node.properties.label}_${end_node.properties.label}`] || {},
+								...process_properties(relation.properties),
+							},
+							...(get_edge_color({relation, record, aggr_scores, ...colors[relation_type]})),
+							directed: relation.properties.directed ? 'triangle': 'none'
+						} 
+					})
+					path.push({ 
+						data: {
+							id: end_node.properties.id,
+							kind: kind_mapper ? kind_mapper({node: end_node, type: end_type, ...misc_props})  : end_type,
+							label: end_node.properties.label || end_node.properties.id,
+							properties: {
+								...process_properties(end_node.properties),
 								...properties[end_node.properties.label || end_node.properties.id] || {}
-							}
-						}, terms, record, aggr_scores, fields: [field, start_field, end_field],
-							...colors_func(end_type), ...misc_props}))
-					} 
-				})
+							},
+							...(get_node_color_and_type({node: {
+								...end_node,
+								properties: {
+									...end_node.properties,
+									...properties[end_node.properties.label || end_node.properties.id] || {}
+								}
+							}, terms, record, aggr_scores, fields: [field, start_field, end_field],
+								...colors_func(end_type), ...misc_props}))
+						} 
+					})
+				}
+			} else if (misc_props.augment) {
+				for (const node of Object.values(nodes)) {
+					const node_type = node.labels.filter(i=>i!=="id")[0]
+					path.push({ 
+						data: {
+							id: node.properties.id,
+							kind: kind_mapper ? kind_mapper({node: node, type: node_type, ...misc_props})  : node_type,
+							label: node.properties.label || node.properties.id,
+							properties: {
+								...process_properties(node.properties),
+								...properties[node.properties.label || node.properties.id] || {}
+							},
+							...(get_node_color_and_type({node: {
+								...node,
+								properties: {
+									...node.properties,
+									...properties[node.properties.label || node.properties.id] || {},
+								}
+							}, terms, record, fields: [field, start_field, end_field], aggr_scores,
+								...colors_func(node_type), ...misc_props}))
+						} 
+					})
+				}
 			}
 			return path
 		  })
@@ -333,7 +359,7 @@ const resolve_term_and_end_type = async ({session, start_term, start_field, star
 }
 
 
-const resolve_one_term = async ({session, start, field, term, relation, limit, order, path_length=1, schema, aggr_scores, colors, expand: e, remove, gene_links}) => {
+const resolve_one_term = async ({session, start, field, term, relation, limit, order, path_length=1, schema, aggr_scores, colors, expand: e, remove, gene_links, augment, augment_limit=10}) => {
 	if (!parseInt(path_length)) throw {message: "Path length is not a number"}
 	let query = `
 		MATCH q=(st:\`${start}\` { ${field}: $term })-[*${path_length}]-(en)
@@ -384,7 +410,7 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 			} else {
 				query = query + `CALL {
 					WITH q, st
-					MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)-[:${rels.join("|")}]-(st)
+					MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)-[${rels.length ? ":" + rels.join("|"): ""}]-(st)
 					WHERE c in NODES(q)
 					RETURN p, nodes(p) as n, relationships(p) as r
 					UNION
@@ -413,11 +439,91 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 		}
 	}
 	const results = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
-	return resolve_results({results, terms: [term], schema, order, score_fields,  aggr_scores, colors, field})
+	if (!augment) return resolve_results({results, terms: [term], schema, order, score_fields,  aggr_scores, colors, field})
+	else {
+		const initial_results = resolve_results({results, terms: [term], schema, order, score_fields,  aggr_scores, colors, field})
+		const gene_list = []
+		let gene_nodes = []
+		let start_node
+		for (const i of initial_results) {
+			if (i.data.properties[field] === term && i.data.kind === start) {
+				start_node = i
+			}
+			if (i.data.kind === "Gene") {
+				const gene = i.data.label
+				if (gene_list.indexOf(gene) === -1) {
+					gene_list.push(gene)
+					gene_nodes.push(i)
+				}
+			}
+		}
+		const { augmented_genes } = await augment_gene_set({gene_list, augment_limit})
+		let query
+		if (gene_links) {
+			query = `
+				MATCH p=(a: Gene)-[:${gl.join("|")}]-(b: Gene)
+				WHERE a.label IN ${JSON.stringify(augmented_genes)} AND b.label IN ${JSON.stringify(augmented_genes)}
+				RETURN p, nodes(p) as n, relationships(p) as r
+			`
+		} else {
+			query = `
+				MATCH p=(a: Gene)
+				WHERE a.label IN ${JSON.stringify(augmented_genes)}
+				RETURN p, nodes(p) as n, relationships(p) as r
+			`
+		}	
+		const augmented_nodes = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
+		const augmented_results = resolve_results({results: augmented_nodes, terms: [term], schema, order, score_fields,  aggr_scores, get_node_color_and_type, colors, field, kind_mapper, misc_props: {augmented_genes, augment}})
+		const augmented_edges = []
+		for (const i of augmented_results) {
+			if (i.data.kind !== "Relation") {
+				augmented_edges.push({
+					"data": {
+					"source": start_node.data.id,
+					"target": i.data.id,
+					"kind": "Relation",
+					"relation": "Augmented Co-expression Gene",
+					"label": "Augmented Co-expression Gene",
+					"properties": {
+						"id": `${start_node.data.id}-${i.data.id}`,
+						"label": "Augmented Co-expression Gene",
+						"source_label": start_node.data.label,
+						"target_label": i.data.label,
+					},
+					"lineColor": "#81c784",
+					"directed": "none"
+					}
+				})
+			}
+			// for (const node of gene_nodes){
+			// 	if (i.data.kind !== "Relation") {
+			// 		augmented_edges.push({
+			// 			"data": {
+			// 			"source": node.data.id,
+			// 			"target": i.data.id,
+			// 			"kind": "Relation",
+			// 			"relation": "Augmented Co-expression Gene",
+			// 			"label": "Augmented Co-expression Gene",
+			// 			"properties": {
+			// 				"id": `${node.data.id}-${i.data.id}`,
+			// 				"label": "Augmented Co-expression Gene",
+			// 				"source_label": node.data.label,
+			// 				"target_label": i.data.label,
+			// 			},
+			// 			"lineColor": "#81c784",
+			// 			"directed": "none"
+			// 			}
+			// 		})
+			// 	}
+			// }
+		}
+		return [...initial_results, ...augmented_results, ...augmented_edges]
+
+	}
 }
 
 export default async function query(req, res) {
-  const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=25, path_length, order, remove, expand, gene_links } = await req.query
+  const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=25, path_length, order, remove, expand, gene_links, augment, augment_limit } = await req.query
   const schema = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/schema`)).json()
   const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/aggregate`)).json()
   const nodes = schema.nodes.map(i=>i.node)
@@ -430,15 +536,17 @@ export default async function query(req, res) {
 		})
 		try {
 			if (start && end && start_term && end_term) {
+				if(augment)  res.status(400).send("You can only augment on single search")
 				const results = await resolve_two_terms({session, start_term, start_field, start, end_term, end_field, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : [], gene_links})
 				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
 				res.status(200).send(results)
 			} else if (start && end && start_term ) {
+				if(augment)  res.status(400).send("You can only augment on single search")
 				const results = await resolve_term_and_end_type({session, start_term, start_field, start, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : [], gene_links})
 				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
 				res.status(200).send(results)
 			} else if (start) {
-				const results = await resolve_one_term({session, start, field: start_field, term: start_term, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : [], gene_links})
+				const results = await resolve_one_term({session, start, field: start_field, term: start_term, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : [], gene_links, augment, augment_limit })
 				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
 				res.status(200).send(results)
 			} else {
