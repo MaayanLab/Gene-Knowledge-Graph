@@ -88,7 +88,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
             setLoading(true)
             const formData = new FormData();
             // const gene_list = geneStr.trim().split(/[\t\r\n;]+/).join("\n")
-            const {genes, description} = input
+            const {genes, description=''} = input
             const gene_list = genes.join("\n")
             formData.append('list', gene_list)
             formData.append('description', description)
@@ -183,7 +183,14 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
     }, [input.genes])
 
     useEffect(()=>{
-        setDescription(input.description || '')
+        if (input.description === "null" || input.description === null) {
+            setInput({
+                ...input,
+                description: ''
+            })
+        } else {
+            setDescription(input.description || '')
+        }
     }, [input.description])
 
     return (
