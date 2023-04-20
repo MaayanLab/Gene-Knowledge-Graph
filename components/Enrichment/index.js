@@ -99,7 +99,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     const [collapsed, setCollapsed] = useState(null)
     const [shortId, setShortId] = useState(null)
     const [openShare, setOpenShare] = useState(false)
-    const [showTooltip, setShowTooltip] = useState(true)
+    const [showTooltip, setShowTooltip] = useState(false)
     const [tab, setTab] = useState("network")
     const [query, setQuery] = useState(rest||{})
     const [id, setId] = useState(0)
@@ -259,7 +259,8 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     useEffect(()=>{    
         const {page, ...rest} = router.query
         const userListId = rest.userListId
-        const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : (default_options.selected || [])     
+        const libraries = router.query.libraries ? JSON.parse(router.query.libraries) : (default_options.selected || [])
+        setGeneLinks(JSON.parse(router.query.gene_links || '[]'))
         if (userListId) {
             // setLoading(true)
             fetch_kg()
@@ -748,7 +749,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     </div>
                 </Grid>
             }
-            {(description !== '' && elements !== null) && <Grid item xs={12}><Typography variant="h5" align='center'><b>{`${description}${router.query.augment === 'true' ? ' (Augmented)':''}`}</b></Typography></Grid>} 
+            {(description !== '' && elements !== null) && <Grid item xs={12}><Typography variant="h5" align='center'><b>{`${description || ''}${router.query.augment === 'true' ? ' (Augmented)':''}`}</b></Typography></Grid>} 
             {(tab === 'network' && elements!==null) && <Grid item xs={12} style={{height: !userListId? "100%": !router.query.search ? "100%": 700, position: "relative"}}>
                 <Snackbar open={error!==null}
 					anchorOrigin={{ vertical:"bottom", horizontal:"left" }}

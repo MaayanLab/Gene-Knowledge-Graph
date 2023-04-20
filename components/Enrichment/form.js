@@ -66,7 +66,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                 await delay((counter + 5)*1000)
             } 
             else {    
-                const {genes, description} = await request.json()
+                const {genes, description=''} = await request.json()
                 setError(null)
                 if (genes.join("\n") !== input.genes.join('\n')) return false
                 if (description !== input.description) return false

@@ -119,7 +119,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   const [edgeStyle, setEdgeStyle] = React.useState({})
   const [id, setId] = React.useState(0)
   const [tab, setTab] = React.useState('network')
-  const [showTooltip, setShowTooltip] = React.useState(tooltip_viz!== undefined ? tooltip_viz: true)
+  const [showTooltip, setShowTooltip] = React.useState(tooltip_viz!== undefined ? tooltip_viz: false)
   const [elements, setElements] = React.useState(undefined)
   const [controller, setController] = React.useState(null)
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -350,6 +350,10 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   React.useEffect(()=>{
     setId(id+1)
   },[elements])
+
+  React.useEffect(()=>{
+    setGeneLinks(JSON.parse(router.query.gene_links || '[]'))
+  }, [router.query])
 
   const geneLinksRelations = schema.edges.reduce((acc, i)=>{
       if (i.gene_link) return [...acc, ...i.match]
