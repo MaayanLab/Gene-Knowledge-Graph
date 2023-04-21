@@ -597,7 +597,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 }}
                 style={{marginBottom: -5}}
                 min={10}
-                max={router.query.end ? 150: neighborCount}
+                max={(router.query.end || router.query.start === "Gene") ? 150: neighborCount}
                 aria-labelledby="continuous-slider" />
             </Grid>
             <Grid item>
@@ -835,7 +835,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 }}
                 style={{marginBottom: -5}}
                 min={10}
-                max={router.query.end ? 150: neighborCount}
+                max={(router.query.end || router.query.start === "Gene") ? 150: neighborCount}
                 aria-labelledby="continuous-slider" />
             </Grid>
             <Grid item>
