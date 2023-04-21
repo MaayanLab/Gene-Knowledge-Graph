@@ -225,8 +225,8 @@ const enrichment = async ({
             }
             let query_part = `
                 MATCH p = (a:Gene)-[r]-(b:Gene) 
-                WHERE a.label IN ${JSON.stringify(genes)} 
-                AND b.label IN ${JSON.stringify(genes)}
+                WHERE a.label IN ${JSON.stringify([...genes, ...augmented_genes])} 
+                AND b.label IN ${JSON.stringify([...genes, ...augmented_genes])}
                 AND r.relation IN ${JSON.stringify(gene_links)}
             `
             if ((remove || []).length) {
