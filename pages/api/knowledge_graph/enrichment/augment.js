@@ -97,7 +97,7 @@ export const kind_mapper = ({node, type, augmented_genes}) => {
     
 }
 
-const enrichr_query_wrapper = async ({libraries,  userListId, term_degree, min_lib, gene_degree, node_mapping, gene_limit, augmented_genes}) => {
+const enrichr_query_wrapper = async ({libraries,  userListId, term_degree, min_lib, gene_degree, node_mapping, gene_limit, augmented_genes, gene_list}) => {
     const nodes = []
     const node_library = {}
     const results = await Promise.all(libraries.map(async ({library, term_limit})=> {
@@ -137,16 +137,29 @@ const enrichr_query_wrapper = async ({libraries,  userListId, term_degree, min_l
         genes = Object.keys(gene_counts).filter(gene=>gene_counts[gene].libraries >= min_lib)
     } 
     if (gene_degree) {
-        genes = genes.filter(gene=>(augmented_genes || []).indexOf(gene) > -1 || gene_counts[gene].count >= gene_degree)
+        genes = genes.filter(gene=>gene_counts[gene].count >= gene_degree)
     }
     if (gene_limit) {
-        genes = genes.sort((a,b)=>gene_counts[b].count - gene_counts[a].count).slice(0,gene_limit)
+        const new_genes = []
+        let counter = 0
+        for (const gene of genes.sort((a,b)=>gene_counts[b].count - gene_counts[a].count)) {
+            if (counter === gene_limit) break
+            if (augmented_genes.indexOf(gene) > -1) {
+                new_genes.push(gene)
+            }
+            else {
+                new_genes.push(gene)
+                counter = counter + 1
+            }
+        }
+        genes = new_genes
+        // genes = genes.sort((a,b)=>gene_counts[b].count - gene_counts[a].count).slice(0,gene_limit + augmented_genes.length)
     } 
     return {genes, terms, max_pval, min_pval, nodes, library_terms}
 }
 
 const enrichment = async ({
-    userListId: inputUserListId,
+    userListId,
     libraries,
     gene_limit,
     term_degree,
@@ -156,7 +169,7 @@ const enrichment = async ({
     remove: r,
     expand:e,
     expand_limit=10,
-    augment_limit=50,
+    augment_limit=10,
     res,
     gene_links,
 }) => {
@@ -166,14 +179,14 @@ const enrichment = async ({
             throw new Error(`Error fetching node_map`)
         }
         const node_mapping = await nod.json()
-        const {genes: gene_list, description} = await resolve_genes({userListId: inputUserListId})
-        const {genes: top_genes} = await enrichr_query_wrapper(({libraries, userListId: inputUserListId, term_degree, min_lib, gene_degree, node_mapping, gene_limit}))
-        const { augmented_genes } = await augment_gene_set({gene_list: Object.values(top_genes), augment_limit})
-        const { userListId } = await add_list({
-            genes: [...gene_list, ...augmented_genes],
-            description: `${description} (Augmented)`
-        })
-        const {genes, terms, max_pval, min_pval, nodes, library_terms} = await enrichr_query_wrapper(({libraries, userListId, term_degree, min_lib, gene_degree, node_mapping, gene_limit, augmented_genes}))
+        // const {genes: gene_list, description} = await resolve_genes({userListId: inputUserListId})
+        const {genes, terms, max_pval, min_pval, nodes, library_terms} = await enrichr_query_wrapper(({libraries, userListId, term_degree, min_lib, gene_degree, node_mapping, gene_limit}))
+        const { augmented_genes } = await augment_gene_set({gene_list: Object.values(genes), augment_limit})
+        // const { userListId } = await add_list({
+        //     genes: [...gene_list, ...augmented_genes],
+        //     description: `${description} (Augmented)`
+        // })
+        // const {genes, terms, max_pval, min_pval, nodes, library_terms} = await enrichr_query_wrapper(({libraries, userListId, term_degree, min_lib, gene_degree, node_mapping, gene_limit, augmented_genes, gene_list}))
         
         const schema = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/schema`)).json()
         const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/aggregate`)).json()
@@ -187,7 +200,7 @@ const enrichment = async ({
             let query_part = `
                 MATCH p = (${node})--(b:Gene) 
                 WHERE a.label IN ${JSON.stringify(lib_terms)} 
-                AND b.label IN ${JSON.stringify(genes)}
+                AND b.label IN ${JSON.stringify([...genes, ...augmented_genes])}
             `
             if ((remove || []).length) {
                 for (const ind in remove) {
