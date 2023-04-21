@@ -473,7 +473,7 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 			`
 		}	
 		const augmented_nodes = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
-		const augmented_results = resolve_results({results: augmented_nodes, terms: [term], schema, order, score_fields,  aggr_scores, get_node_color_and_type, colors, field, kind_mapper, misc_props: {augmented_genes, augment}})
+		const augmented_results = resolve_results({results: augmented_nodes, terms: [term], schema, order, score_fields,  aggr_scores, get_node_color_and_type, colors, field, kind_mapper, misc_props: {augmented_genes, augment, gene_list}})
 		const augmented_edges = []
 		for (const i of augmented_results) {
 			if (i.data.kind !== "Relation") {
