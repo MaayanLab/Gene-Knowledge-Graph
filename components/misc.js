@@ -175,7 +175,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
     if (search) {
       colors["Search Term"] = <Grid item xs={12} key={"search"}>
       <Grid container alignItems={"center"} spacing={2} key="term">
-        <Grid item><Avatar sx={{background: "#F8333C", width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar></Grid>
+        <Grid item><Avatar sx={{background: "#ff8a80", width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar></Grid>
         <Grid item><Typography variant="subtitle1">Search Term</Typography></Grid>   
       </Grid></Grid>   
     }
@@ -192,7 +192,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
             <Grid item><Typography variant="subtitle1">{relation}</Typography></Grid>   
           </Grid></Grid>
       }
-      if (colors[kind]===undefined && color !== "#F8333C" && kind !== "Relation") {
+      if (colors[kind]===undefined && color !== "#ff8a80" && kind !== "Relation") {
         color_sum[kind] = color
         colors[kind] = <Grid item xs={12} key={kind}>
           <Grid container alignItems={"center"} spacing={1}>
@@ -200,7 +200,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
             <Grid item><Typography variant="subtitle1">{kind}</Typography></Grid>   
           </Grid></Grid> 
       }
-      if (colors[kind]!==undefined && color_sum[kind] === "#bdbdbd" && color !== "#F8333C" && kind !== "Relation") {
+      if (colors[kind]!==undefined && color_sum[kind] === "#bdbdbd" && color !== "#ff8a80" && kind !== "Relation") {
         color_sum[kind] = color
         colors[kind] = <Grid item xs={12} key={kind}>
           <Grid container alignItems={"center"} spacing={1}>
