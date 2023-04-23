@@ -180,7 +180,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
           pathname: `/${page || ''}`,
           query: {
             start,
-            start_term: current_node.example[0],
+            start_term: initial_query.start_term || current_node.example[0],
           }
         }, undefined, {shallow: true})
       }  
@@ -217,7 +217,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
         start,
         start_term: start_term.replace(/\+/g, "%2B"),
         start_field,
-        limit,
+        limit: router.query.limit || 25,
       }
       if (router.query.end) {
         body.end = router.query.end
