@@ -84,6 +84,7 @@ export const resolve_results = ({results,
 	get_node_color_and_type=default_get_node_color_and_type,
 	get_edge_color=default_get_edge_color,
 	properties = {},
+	kind_properties = {},
 	misc_props = {},
 	kind_mapper = null, 
 }) => {
@@ -123,20 +124,24 @@ export const resolve_results = ({results,
 					const relation_type = relation.type
 					const start_type = start_node.labels.filter(i=>i!=="id")[0]
 					const end_type = end_node.labels.filter(i=>i!=="id")[0]
+					const start_kind = kind_mapper ? kind_mapper({node: start_node, type: start_type, ...misc_props})  : start_type
+					const end_kind = kind_mapper ? kind_mapper({node: end_node, type: end_type, ...misc_props})  : end_type
 					path.push({ 
 						data: {
 							id: start_node.properties.id,
-							kind: kind_mapper ? kind_mapper({node: start_node, type: start_type, ...misc_props})  : start_type,
+							kind: start_kind,
 							label: start_node.properties.label || start_node.properties.id,
 							properties: {
 								...process_properties(start_node.properties),
-								...properties[start_node.properties.label || start_node.properties.id] || {}
+								...properties[start_node.properties.label || start_node.properties.id] || {},
+								...(kind_properties[start_kind] || {})[start_node.properties.label] || {}
 							},
 							...(get_node_color_and_type({node: {
 								...start_node,
 								properties: {
 									...start_node.properties,
 									...properties[start_node.properties.label || start_node.properties.id] || {},
+									...(kind_properties[start_kind] || {})[start_node.properties.label] || {}
 								}
 							}, terms, record, fields: [field, start_field, end_field], aggr_scores,
 								...colors_func(start_type), ...misc_props}))
@@ -164,17 +169,19 @@ export const resolve_results = ({results,
 					path.push({ 
 						data: {
 							id: end_node.properties.id,
-							kind: kind_mapper ? kind_mapper({node: end_node, type: end_type, ...misc_props})  : end_type,
+							kind: end_kind,
 							label: end_node.properties.label || end_node.properties.id,
 							properties: {
 								...process_properties(end_node.properties),
-								...properties[end_node.properties.label || end_node.properties.id] || {}
+								...properties[end_node.properties.label || end_node.properties.id] || {},
+								...(kind_properties[end_kind] || {})[end_node.properties.label] || {}
 							},
 							...(get_node_color_and_type({node: {
 								...end_node,
 								properties: {
 									...end_node.properties,
-									...properties[end_node.properties.label || end_node.properties.id] || {}
+									...properties[end_node.properties.label || end_node.properties.id] || {},
+									...(kind_properties[end_kind] || {})[end_node.properties.label] || {}
 								}
 							}, terms, record, aggr_scores, fields: [field, start_field, end_field],
 								...colors_func(end_type), ...misc_props}))
@@ -184,20 +191,23 @@ export const resolve_results = ({results,
 			} else if (misc_props.augment) {
 				for (const node of Object.values(nodes)) {
 					const node_type = node.labels.filter(i=>i!=="id")[0]
+					const node_kind = kind_mapper ? kind_mapper({node: node, type: node_type, ...misc_props})  : node_type
 					path.push({ 
 						data: {
 							id: node.properties.id,
-							kind: kind_mapper ? kind_mapper({node: node, type: node_type, ...misc_props})  : node_type,
+							kind: node_kind,
 							label: node.properties.label || node.properties.id,
 							properties: {
 								...process_properties(node.properties),
-								...properties[node.properties.label || node.properties.id] || {}
+								...properties[node.properties.label || node.properties.id] || {},
+								...(kind_properties[node_kind] || {})[node.properties.label] || {}
 							},
 							...(get_node_color_and_type({node: {
 								...node,
 								properties: {
 									...node.properties,
 									...properties[node.properties.label || node.properties.id] || {},
+									...(kind_properties[node_kind] || {})[node.properties.label] || {},
 								}
 							}, terms, record, fields: [field, start_field, end_field], aggr_scores,
 								...colors_func(node_type), ...misc_props}))

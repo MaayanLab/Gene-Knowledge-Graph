@@ -19,8 +19,9 @@ export const get_node_color_and_type = ({node, terms, color, aggr_scores, field,
     }
     else {
         const props = compute_colors({properties: node.properties, aggr_scores, color}) 
-        for (const [k,v] of Object.entries(node.properties.enrichment)) {
-            node.properties.enrichment[k] = { ...node.properties.enrichment[k], ...compute_colors({properties: v, aggr_scores, color}) }
+        for (const i in node.properties.enrichment || []) {
+            const v = node.properties.enrichment[i]
+            node.properties.enrichment[i] = { ...v, ...compute_colors({properties: v, aggr_scores, color}) }
         }
         return props
     }	

@@ -32,8 +32,9 @@ const get_node_color_and_type = ({node, terms, color, aggr_scores, field, aggr_f
     if (node.properties.pval === undefined) return default_get_node_color_and_type(({node, terms, color, aggr_scores, field, aggr_field, fields}))
     else {
         const props = compute_colors({properties: node.properties, aggr_scores, color}) 
-        for (const [k,v] of Object.entries(node.properties.enrichment)) {
-            node.properties.enrichment[k] = { ...node.properties.enrichment[k], ...compute_colors({properties: v, aggr_scores, color}) }
+        for (const i in node.properties.enrichment || []) {
+            const v = node.properties.enrichment[i]
+            node.properties.enrichment[i] = { ...v, ...compute_colors({properties: v, aggr_scores, color}) }
         }
         return props
     }	
@@ -67,21 +68,36 @@ export const enrichr_query = async ({userListId, library, term_limit, term_degre
         const overlapping_genes = i[5]
         const qval = i[6]
         if (term_degree===undefined || overlapping_genes.length >= term_degree) {
-            if (terms[label] === undefined) terms[label] = {enrichment: {}, pval: 1.0}
-            if (terms[label].enrichment[enrichr_label] === undefined){
-                if (pval > max_pval) max_pval = pval
-                if (pval < min_pval) min_pval = pval
-                terms[label].enrichment[enrichr_label] = {
-                    library,
+            if (terms[label] === undefined) terms[label] = {library, label}
+            if (pval > max_pval) max_pval = pval
+            if (pval < min_pval) min_pval = pval
+
+            // if there is no existing term just put it on top
+            if (terms[label].pval === undefined) {
+                terms[label].enrichr_label = enrichr_label
+                terms[label].pval = pval
+                terms[label].zscore = zscore
+                terms[label].combined_score = combined_score
+                terms[label].qval = qval
+                terms[label].logpval = -Math.log(pval)
+                terms[label].overlap = overlapping_genes.length
+            } else {
+                // if it appeared before (e.g. drug up, drug down) then use the one with lower pvalue 
+                // as default and push alternative enrichment to enrichment
+                if (terms[label].enrichment === undefined) {
+                    const {library, label: l, ...rest} = terms[label]
+                    terms[label].enrichment = [rest]
+                }
+                terms[label].enrichment.push({
                     enrichr_label,
                     pval,
                     zscore,
                     combined_score,
                     qval,
                     logpval: -Math.log(pval),
-                    overlap: overlapping_genes.length,
-                }
-                if (pval < terms[label].pval) {
+                    overlap: overlapping_genes.length
+                })
+                if (terms[label].pval > pval) {
                     terms[label].enrichr_label = enrichr_label
                     terms[label].pval = pval
                     terms[label].zscore = zscore
@@ -141,7 +157,7 @@ const enrichment = async ({
         let max_pval = 0
         let min_pval = 1
         for (const {genes: lib_genes, terms: lib_terms, max_pval: lib_max_pval, min_pval: lib_min_pval, library} of results) {
-            terms = {...terms, ...lib_terms}
+            terms[node_mapping[library]] = lib_terms
             library_terms[node_library[library]] = Object.keys(lib_terms)
             if (max_pval < lib_max_pval) max_pval = lib_max_pval
             if (min_pval > lib_min_pval) min_pval = lib_min_pval
@@ -237,7 +253,7 @@ const enrichment = async ({
         const query = query_list.join(' UNION ')
         const rs = await session.readTransaction(txc => txc.run(query, {limit: expand_limit, ...vars}))
         fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
-        return resolve_results({results: rs, schema,  aggr_scores, colors, properties: terms, get_node_color_and_type})
+        return resolve_results({results: rs, schema,  aggr_scores, colors, kind_properties: terms, get_node_color_and_type})
     } catch (error) {
         console.log(error)
         res.status(500).send({message: error.message})
