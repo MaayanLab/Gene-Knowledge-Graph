@@ -121,7 +121,7 @@ const Footer = ({schema, consentCookie, setConsentCookie, resetCookie}) => {
             <Grid container justifyContent="space-around" alignItems={"center"}>
                 {schema.footer.map((footer, i)=><React.Fragment  key={`footer-${i}`}><FooterContents footer={footer} schema={schema} consentCookie={consentCookie} setConsentCookie={setConsentCookie} resetCookie={resetCookie}/></React.Fragment>)}
 				{schema.footer_text &&
-					<Grid item xs="10" style={{marginTop: 30}}>
+					<Grid item xs={10} style={{marginTop: 30}}>
 						<Typography variant="caption">{parse(schema.footer_text)}</Typography>
 					</Grid>
 				}
