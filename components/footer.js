@@ -5,6 +5,7 @@ import { makeTemplate } from "../utils/helper";
 import * as default_schema from '../public/schema.json'
 import React from "react";
 import { Typography } from "@mui/material";
+import parse from 'html-react-parser';
 
 import Icon from '@mdi/react';
 import { mdiCookieOff, mdiCookie } from '@mdi/js';
@@ -12,7 +13,7 @@ import { mdiCookieOff, mdiCookie } from '@mdi/js';
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Paper = dynamic(() => import('@mui/material/Paper'));
 const Button = dynamic(async () => (await import('@mui/material')).Button);
-
+const Markdown = dynamic(() => import('./markdown'))
 
 
 const GitHubIcon = dynamic(()=>import('@mui/icons-material/GitHub'));
@@ -111,16 +112,19 @@ const Footer = ({schema, consentCookie, setConsentCookie, resetCookie}) => {
 
     return (
         <Paper square style={{boxShadow: "none",
-			height: 180,
+			minHeight: 180,
 			background: (schema.ui || {}).footer_background || "#000",
 			flexShrink: 0,
-			paddingTop: 30
+			paddingTop: 30,
+			paddingBottom: 30,
 		}}>
-            <Grid container justifyContent="space-around" alignItems={"center"} style={{
-				marginTop: "auto",
-				marginBottom: "auto",
-			}}>
+            <Grid container justifyContent="space-around" alignItems={"center"}>
                 {schema.footer.map((footer, i)=><React.Fragment  key={`footer-${i}`}><FooterContents footer={footer} schema={schema} consentCookie={consentCookie} setConsentCookie={setConsentCookie} resetCookie={resetCookie}/></React.Fragment>)}
+				{schema.footer_text &&
+					<Grid item xs="10" style={{marginTop: 30}}>
+						<Typography variant="caption">{parse(schema.footer_text)}</Typography>
+					</Grid>
+				}
             </Grid>
         </Paper>
     )
