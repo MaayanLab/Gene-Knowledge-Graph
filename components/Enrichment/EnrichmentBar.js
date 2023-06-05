@@ -79,7 +79,7 @@ export const EnrichmentBar = (props) => {
 	for (const index in data) {
 		const i = data[index]
 		if (yWidth < i.library.length) yWidth = i.library.length
-		data_cells.push(<Cell key={`${field}-${index}`} fill={i.color} />)
+		data_cells.push(<Cell key={`${field}-${index}`} fill={i.gradient_color  || i.color} />)
 	}
 
 	const handleDownload = useCallback(async () => {

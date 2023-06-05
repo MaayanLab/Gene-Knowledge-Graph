@@ -24,7 +24,8 @@ export const compute_colors = ({properties, aggr_scores, color}) => {
     const max_pval = aggr_scores.max_pval //aggr_scores.max_pval > 0.05 ? aggr_scores.max_pval: 0.05
     const min_pval = aggr_scores.min_pval
     const darken =  Math.abs((properties.pval - min_pval)/(max_pval-min_pval))
-    props.color = get_color({color, darken})
+    props.gradient_color = get_color({color, darken})
+    props.color = color
 
     return props
 }

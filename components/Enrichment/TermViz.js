@@ -80,7 +80,7 @@ const TermViz = ({data, tab, setTab}) => {
 			const entries = {}
             
 			for (const dt of data) {
-				const {label, id: i, kind, color} = dt.data
+				const {label, id: i, kind, color, gradient_color} = dt.data
                 if (dt.data.properties.pval !== undefined) {
 					for (const properties of dt.data.properties.enrichment || [dt.data.properties]) {
 						const {enrichr_label} = properties
@@ -97,7 +97,8 @@ const TermViz = ({data, tab, setTab}) => {
 								zscore: parseFloat(precise(properties.zscore)),
 								combined_score: parseFloat(precise(properties.combined_score)),
 								value: properties.logpval || 10000,
-								color
+								color,
+								gradient_color
 							}
 						}
 					}
