@@ -35,7 +35,7 @@ import HubIcon from '@mui/icons-material/Hub';
 import { mdiFamilyTree, mdiDotsCircle, mdiDna, mdiLinkVariant, mdiLinkVariantOff } from '@mdi/js';
 import Icon from '@mdi/react';
 
-import { toPng, toJpeg, toSvg } from 'html-to-image';
+import { toPng, toBlob, toSvg } from 'html-to-image';
 import download from 'downloadjs'
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
@@ -663,142 +663,147 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                 </IconButton>
             </Tooltip>
           </Grid>
-          <Grid item>
-            <Tooltip title={showTooltip ? "Hide tooltip": "Show tooltip"}>
-                <IconButton variant='contained'
-                    disabled={elements===null}
-                    onClick={()=>{
-                        setShowTooltip(!showTooltip)
+          {tab === "network" &&
+          <React.Fragment>
+            <Grid item>
+              <Tooltip title={showTooltip ? "Hide tooltip": "Show tooltip"}>
+                  <IconButton variant='contained'
+                      disabled={elements===null}
+                      onClick={()=>{
+                          setShowTooltip(!showTooltip)
+                      }}
+                      style={{marginLeft: 5}}
+                  >
+                      {showTooltip ? <span className='mdi mdi-tooltip-remove'/>: <span className='mdi mdi-tooltip'/>}
+                  </IconButton>
+              </Tooltip>
+            </Grid>  
+            <Grid item>
+              <Tooltip title="Switch Graph Layout">
+                  <IconButton variant='contained'
+                      disabled={elements===null}
+                      onClick={(e)=>handleClickMenu(e, setAnchorElLayout)}
+                      aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={anchorEl!==null ? 'true' : undefined}
+                      style={{marginLeft: 5}}
+                  >
+                      <FlipCameraAndroidIcon/>
+                  </IconButton>
+              </Tooltip>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorElLayout}
+                    open={anchorElLayout!==null}
+                    onClose={()=>handleCloseMenu(setAnchorElLayout)}
+                    MenuListProps={{
+                        'aria-labelledby': 'basic-button',
                     }}
-                    style={{marginLeft: 5}}
                 >
-                    {showTooltip ? <span className='mdi mdi-tooltip-remove'/>: <span className='mdi mdi-tooltip'/>}
-                </IconButton>
-            </Tooltip>
-          </Grid>  
-          <Grid item>
-            <Tooltip title="Switch Graph Layout">
-                <IconButton variant='contained'
-                    disabled={elements===null}
-                    onClick={(e)=>handleClickMenu(e, setAnchorElLayout)}
+                    { Object.entries(layouts).map(([label, {icon}])=>(
+                      <MenuItem key={'png'} onClick={()=> {
+                          setLayout(label)
+                          handleCloseMenu(setAnchorElLayout)
+                      }}>
+                        <ListItemIcon>
+                            {icon()}
+                        </ListItemIcon>
+                        <ListItemText>{label}</ListItemText>
+                      </MenuItem>
+                    ))}
+                </Menu>
+            </Grid>
+            <Grid item>
+              <Tooltip title={edgeStyle.label ? "Hide edge labels": "Show edge labels"}>
+                  <IconButton variant='contained'
+                      disabled={elements===null}
+                      onClick={()=>{
+                          if (edgeStyle.label) setEdgeStyle({})
+                          else setEdgeStyle({label: 'data(label)'})
+                      }}
+                      style={{marginLeft: 5}}
+                  >
+                      {edgeStyle.label ? <VisibilityOffIcon/>: <VisibilityIcon/>}
+                  </IconButton>
+              </Tooltip>
+            </Grid>          
+            <Grid item>
+              <Tooltip title={"Download graph as an image file"}>
+                <IconButton onClick={(e)=>handleClickMenu(e, setAnchorEl)}
                     aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={anchorEl!==null ? 'true' : undefined}
-                    style={{marginLeft: 5}}
-                >
-                    <FlipCameraAndroidIcon/>
-                </IconButton>
-            </Tooltip>
+                ><CameraAltOutlinedIcon/></IconButton>
+              </Tooltip>
               <Menu
                   id="basic-menu"
-                  anchorEl={anchorElLayout}
-                  open={anchorElLayout!==null}
-                  onClose={()=>handleCloseMenu(setAnchorElLayout)}
+                  anchorEl={anchorEl}
+                  open={anchorEl!==null}
+                  onClose={()=>handleCloseMenu(setAnchorEl)}
                   MenuListProps={{
                       'aria-labelledby': 'basic-button',
                   }}
               >
-                  { Object.entries(layouts).map(([label, {icon}])=>(
-                    <MenuItem key={'png'} onClick={()=> {
-                        setLayout(label)
-                        handleCloseMenu(setAnchorElLayout)
-                    }}>
-                      <ListItemIcon>
-                          {icon()}
-                      </ListItemIcon>
-                      <ListItemText>{label}</ListItemText>
-                    </MenuItem>
-                  ))}
+                  <MenuItem key={'png'} onClick={()=> {
+                      handleCloseMenu(setAnchorEl)
+                      // fileDownload(cyref.current.png({output: "blob"}), "network.png")
+                      toPng(document.getElementById('kg-network'))
+                      .then(function (fileUrl) {
+                          download(fileUrl, "network.png");
+                      });
+                  }}>PNG</MenuItem>
+                  <MenuItem key={'jpg'} onClick={()=> {
+                      handleCloseMenu(setAnchorEl)
+                      // fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
+                      toBlob(document.getElementById('kg-network'))
+                      .then(function (blob) {
+                          fileDownload(blob, "network.jpg");
+                      });
+                  }}>JPG</MenuItem>
+                  <MenuItem key={'svg'} onClick={()=> {
+                      handleCloseMenu(setAnchorEl)
+                      // fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
+                      toSvg(document.getElementById('kg-network'))
+                      .then(function (dataUrl) {
+                          download(dataUrl, "network.svg")
+                      });
+                  }}>SVG</MenuItem>
               </Menu>
-          </Grid>
-          <Grid item>
-            <Tooltip title={edgeStyle.label ? "Hide edge labels": "Show edge labels"}>
-                <IconButton variant='contained'
-                    disabled={elements===null}
-                    onClick={()=>{
-                        if (edgeStyle.label) setEdgeStyle({})
-                        else setEdgeStyle({label: 'data(label)'})
-                    }}
-                    style={{marginLeft: 5}}
-                >
-                    {edgeStyle.label ? <VisibilityOffIcon/>: <VisibilityIcon/>}
-                </IconButton>
-            </Tooltip>
-          </Grid>          
-          <Grid item>
-            <Tooltip title={"Download graph as an image file"}>
-              <IconButton onClick={(e)=>handleClickMenu(e, setAnchorEl)}
-                  aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={anchorEl!==null ? 'true' : undefined}
-              ><CameraAltOutlinedIcon/></IconButton>
-            </Tooltip>
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={anchorEl!==null}
-                onClose={()=>handleCloseMenu(setAnchorEl)}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                }}
-            >
-                 <MenuItem key={'png'} onClick={()=> {
-                    handleCloseMenu(setAnchorEl)
-                    // fileDownload(cyref.current.png({output: "blob"}), "network.png")
-                    toPng(document.getElementById('kg-network'))
-                    .then(function (fileUrl) {
-                        download(fileUrl, "network.png");
-                    });
-                }}>PNG</MenuItem>
-                <MenuItem key={'jpg'} onClick={()=> {
-                    handleCloseMenu(setAnchorEl)
-                    // fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
-                    toJpeg(document.getElementById('kg-network'))
-                    .then(function (fileUrl) {
-                        download(fileUrl, "network.jpg");
-                    });
-                }}>JPG</MenuItem>
-                <MenuItem key={'svg'} onClick={()=> {
-                    handleCloseMenu(setAnchorEl)
-                    // fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
-                    toSvg(document.getElementById('kg-network'))
-                    .then(function (dataUrl) {
-                        download(dataUrl, "network.svg")
-                    });
-                }}>SVG</MenuItem>
-            </Menu>
-          </Grid>
-          { (gene_link_button) &&
+            </Grid>
+            { (gene_link_button) &&
+                <Grid item>
+                    <Tooltip title={"Gene-gene connections"}>
+                        <IconButton variant='contained'
+                            onClick={()=>{
+                            setGeneLinksOpen(!geneLinksOpen)
+                            setAugmentOpen(false)
+                            }}
+                            style={{marginLeft: 5}}
+                        >
+                            <Icon path={router.query.gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
+                        </IconButton>
+                    </Tooltip>
+                </Grid>
+            }
+            { (!router.query.end && router.query.start !== "Gene" && coexpression_prediction) && 
               <Grid item>
-                  <Tooltip title={"Gene-gene connections"}>
-                      <IconButton variant='contained'
+                  <Tooltip title={router.query.augment ? "Reset network": "Augment network using co-expressed genes"}>
+                      <IconButton
+                          disabled={genes.length > 100}
                           onClick={()=>{
-                          setGeneLinksOpen(!geneLinksOpen)
-                          setAugmentOpen(false)
+                              setGeneLinksOpen(false)
+                              setAugmentOpen(!augmentOpen)
                           }}
-                          style={{marginLeft: 5}}
+                          style={{marginLeft: 5, borderRadius: 5, background: augmentOpen ? "#e0e0e0": "none"}}
                       >
-                          <Icon path={router.query.gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
+                          <Icon path={mdiDna} size={0.8} />
                       </IconButton>
                   </Tooltip>
               </Grid>
+            }
+          </React.Fragment>
           }
-          { (!router.query.end && router.query.start !== "Gene" && coexpression_prediction) && 
-            <Grid item>
-                <Tooltip title={router.query.augment ? "Reset network": "Augment network using co-expressed genes"}>
-                    <IconButton
-                        disabled={genes.length > 100}
-                        onClick={()=>{
-                            setGeneLinksOpen(false)
-                            setAugmentOpen(!augmentOpen)
-                        }}
-                        style={{marginLeft: 5, borderRadius: 5, background: augmentOpen ? "#e0e0e0": "none"}}
-                    >
-                        <Icon path={mdiDna} size={0.8} />
-                    </IconButton>
-                </Tooltip>
-            </Grid>
-          }
+          {tab === "network" &&
           <Grid item>
               <Tooltip title={!legendVisibility ? "Show legend": "Hide legend"}>
                   <IconButton variant='contained'
@@ -812,6 +817,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                   </IconButton>
               </Tooltip>
           </Grid>
+          }
           {legendVisibility &&
               <Grid item>
                   <Tooltip title="Adjust legend size">
