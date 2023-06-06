@@ -1,19 +1,24 @@
-import React, { useCallback } from 'react'
+import React, { useState } from 'react'
 import dynamic from 'next/dynamic';
 import {
 	BarChart, Bar, Cell, XAxis, YAxis, LabelList, Tooltip, ResponsiveContainer
 } from 'recharts';
 import Color from 'color'
 import { precise } from '../../utils/helper';
-import { useCurrentPng } from 'recharts-to-png';
-import Button from '@mui/material/Button';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import FileSaver from 'file-saver';
+import IconButton from '@mui/material/IconButton'
+
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import MuiTooltip from '@mui/material/Tooltip';
+import { toPng, toJpeg, toSvg } from 'html-to-image';
+import download from 'downloadjs'
+
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Card = dynamic(() => import('@mui/material/Card'));
 const CardContent = dynamic(() => import('@mui/material/CardContent'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
+const CameraAltOutlinedIcon  = dynamic(() => import('@mui/icons-material/CameraAltOutlined'));
 
 const renderCustomizedLabel = (props) => {
 	const {
@@ -62,34 +67,16 @@ export const EnrichmentBar = (props) => {
 		   min,
 		   max
 		} = props
-	// const [png, ref] = useRechartToPng();
-	// const handleDownload = React.useCallback(async () => {
-	// 	// Use FileSaver to download the PNG
-	// 	FileSaver.saveAs(png, `${filename}.png`);
-	//   }, [png]);
-	  const height = data.length === 10 ? maxHeight: maxHeight/10 * data.length
-	//   const yWidth = data.reduce((acc, i)=>{
-	// 		if (acc < i.library.length) acc = i.library.length
-	// 		return acc
-	// 	}, 0)
+	const height = data.length === 10 ? maxHeight: maxHeight/10 * data.length
+	const [anchorEl, setAnchorEl] = useState(null)
 	let yWidth = 0
 	const data_cells = []
-	const [getPng, { ref, isLoading }] = useCurrentPng();
 
 	for (const index in data) {
 		const i = data[index]
 		if (yWidth < i.library.length) yWidth = i.library.length
 		data_cells.push(<Cell key={`${field}-${index}`} fill={i.gradient_color  || i.color} />)
 	}
-
-	const handleDownload = useCallback(async () => {
-		const png = await getPng();
-		// Verify that png is not undefined
-		if (png) {
-		  // Download with FileSaver
-		  FileSaver.saveAs(png, 'enrichment.png');
-		}
-	  }, [getPng]);
 
 	return(
 		<Grid container>
@@ -107,7 +94,49 @@ export const EnrichmentBar = (props) => {
 				</Grid>: null
 			
 			} */}
-			<Grid item xs={12} align="right"><Button onClick={handleDownload}><PhotoCameraIcon/></Button></Grid>
+			<Grid item xs={12} align="right">
+				<MuiTooltip title={"Download graph as an image file"}>
+					<IconButton onClick={(e)=>setAnchorEl(e.currentTarget)}
+						aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
+						aria-haspopup="true"
+						aria-expanded={anchorEl!==null ? 'true' : undefined}
+					><CameraAltOutlinedIcon/></IconButton>
+				</MuiTooltip>
+				<Menu
+					id="basic-menu"
+					anchorEl={anchorEl}
+					open={anchorEl!==null}
+					onClose={()=>setAnchorEl(null)}
+					MenuListProps={{
+						'aria-labelledby': 'basic-button',
+					}}
+				>
+					<MenuItem key={'png'} onClick={()=> {
+						setAnchorEl(null)
+						// fileDownload(cyref.current.png({output: "blob"}), "network.png")
+						toPng(document.getElementById("bar-chart-viz"))
+						.then(function (fileUrl) {
+							download(fileUrl, "network.png");
+						});
+					}}>PNG</MenuItem>
+					<MenuItem key={'jpg'} onClick={()=> {
+						setAnchorEl(null)
+						// fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
+						toJpeg(document.getElementById("bar-chart-viz"))
+						.then(function (fileUrl) {
+							download(fileUrl, "network.jpg");
+						});
+					}}>JPG</MenuItem>
+					<MenuItem key={'svg'} onClick={()=> {
+						setAnchorEl(null)
+						// fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
+						toSvg(document.getElementById("bar-chart-viz"))
+						.then(function (dataUrl) {
+							download(dataUrl, "network.svg")
+						});
+					}}>SVG</MenuItem>
+				</Menu>
+			</Grid>
 			<Grid item xs={12}>
 				<ResponsiveContainer 
 						height={height}
@@ -115,10 +144,10 @@ export const EnrichmentBar = (props) => {
 				>
 					<BarChart
 						layout="vertical"
+						id="bar-chart-viz"
 						height={height}
 						width={width}
-						data={data}
-						ref={ref} // Save the ref of the chart
+						data={data}// Save the ref of the chart
 					>
 						<Tooltip content={<BarTooltip/>} />
 						<Bar dataKey="value" fill={color} barSize={barSize}>
