@@ -12,7 +12,6 @@ const Grid = dynamic(() => import('@mui/material/Grid'));
 const Card = dynamic(() => import('@mui/material/Card'));
 const CardContent = dynamic(() => import('@mui/material/CardContent'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
-const CameraAltOutlinedIcon  = dynamic(() => import('@mui/icons-material/CameraAltOutlined'));
 
 const renderCustomizedLabel = (props) => {
 	const {
@@ -69,7 +68,7 @@ export const EnrichmentBar = (props) => {
 	for (const index in data) {
 		const i = data[index]
 		if (yWidth < i.library.length) yWidth = i.library.length
-		data_cells.push(<Cell key={`${field}-${index}`} fill={i.gradient_color  || i.color} />)
+		data_cells.push(<Cell key={`${field}-${index}`} fill={i.color  || i.color} />)
 	}
 
 	return(
