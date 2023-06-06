@@ -37,10 +37,10 @@ import Alert from '@mui/material/Alert';
 import Slider from '@mui/material/Slider'
 import SendIcon from '@mui/icons-material/Send';
 import UndoIcon from '@mui/icons-material/Undo';
-import CableIcon from '@mui/icons-material/Cable';
 
-import { toPng, toJpeg, toSvg } from 'html-to-image';
+import { toPng, toBlob, toSvg } from 'html-to-image';
 import download from 'downloadjs'
+import fileDownload from 'js-file-download';
 
 // const Grid = dynamic(() => import('@mui/material/Grid'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
@@ -313,34 +313,38 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
             { (elements !== null && userListId !== undefined) && 
                 <Grid item>
                     <Grid container direction={"row"} justifyContent="flex-end" alignItems={"center"}>
-                        {legendVisibility &&
+                    { tab === "network" &&  
+                        <React.Fragment>
+                            {legendVisibility &&
+                                <Grid item>
+                                    <Tooltip title="Adjust legend size">
+                                        <IconButton variant='contained'
+                                            disabled={elements===null}
+                                            onClick={()=>{
+                                                setLegendSize((legendSize+1)%5)
+                                            }}
+                                            style={{marginLeft: 5}}
+                                        >
+                                            {legendSize < 4 ? <ZoomInIcon/>: <ZoomOutIcon/>}
+                                        </IconButton>
+                                    </Tooltip>
+                                </Grid>
+                            }
                             <Grid item>
-                                <Tooltip title="Adjust legend size">
+                                <Tooltip title={!legendVisibility ? "Show legend": "Hide legend"}>
                                     <IconButton variant='contained'
                                         disabled={elements===null}
                                         onClick={()=>{
-                                            setLegendSize((legendSize+1)%5)
+                                            setLegendVisibility(!legendVisibility)
                                         }}
                                         style={{marginLeft: 5}}
                                     >
-                                        {legendSize < 4 ? <ZoomInIcon/>: <ZoomOutIcon/>}
+                                        {!legendVisibility ? <LabelIcon />: <LabelOffIcon />}
                                     </IconButton>
                                 </Tooltip>
                             </Grid>
+                        </React.Fragment>
                         }
-                        <Grid item>
-                            <Tooltip title={!legendVisibility ? "Show legend": "Hide legend"}>
-                                <IconButton variant='contained'
-                                    disabled={elements===null}
-                                    onClick={()=>{
-                                        setLegendVisibility(!legendVisibility)
-                                    }}
-                                    style={{marginLeft: 5}}
-                                >
-                                    {!legendVisibility ? <LabelIcon />: <LabelOffIcon />}
-                                </IconButton>
-                            </Tooltip>
-                        </Grid>
                         <Grid item>
                             <Tooltip title={"Network view"}>
                                 <IconButton
@@ -380,115 +384,119 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                 </IconButton>
                             </Tooltip>
                         </Grid>
-                        <Grid item>
-                            <Tooltip title={"Save subnetwork"}>
-                                <IconButton
-                                    disabled={elements===null}
-                                    onClick={()=>{
-                                        if (elements) process_tables(elements)
+                        { tab === "network" &&  
+                        <React.Fragment>
+                            <Grid item>
+                                <Tooltip title={"Save subnetwork"}>
+                                    <IconButton
+                                        disabled={elements===null}
+                                        onClick={()=>{
+                                            if (elements) process_tables(elements)
+                                        }}
+                                        style={{marginLeft: 5, borderRadius: 5}}
+                                    >
+                                        <SaveIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                            <Grid item>
+                                <Tooltip title={showTooltip ? "Hide tooltip": "Show tooltip"}>
+                                    <IconButton variant='contained'
+                                        disabled={elements===null}
+                                        onClick={()=>{
+                                            setShowTooltip(!showTooltip)
+                                        }}
+                                        style={{marginLeft: 5}}
+                                    >
+                                        {showTooltip ? <span className='mdi mdi-tooltip-remove'/>: <span className='mdi mdi-tooltip'/>}
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid> 
+                            <Grid item>
+                                <Tooltip title="Refresh graph">
+                                    <IconButton variant='contained'
+                                        disabled={elements===null}
+                                        onClick={()=>{
+                                            setId(id+1)
+                                        }}
+                                        style={{marginLeft: 5}}
+                                    >
+                                        <RefreshIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                            <Grid item>
+                                <Tooltip title="Clear Graph">
+                                    <IconButton variant='contained'
+                                        disabled={elements===null}
+                                        onClick={()=>{
+                                            const {userListId, ...rest} = router.query
+                                            console.log(rest)
+                                            router.push({
+                                                pathname: `/${page || ''}`,
+                                                query: rest
+                                            }, undefined, { shallow: true })
+                                            setElements(null)
+                                        }}
+                                        style={{marginLeft: 5}}
+                                    >
+                                        <HighlightOffIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                            <Grid item>
+                                <Tooltip title="Switch Graph Layout">
+                                    <IconButton variant='contained'
+                                        disabled={elements===null}
+                                        onClick={(e)=>handleClickMenu(e, setAnchorElLayout)}
+                                        aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={anchorEl!==null ? 'true' : undefined}
+                                        style={{marginLeft: 5}}
+                                    >
+                                        <FlipCameraAndroidIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                                <Menu
+                                    id="basic-menu"
+                                    anchorEl={anchorElLayout}
+                                    open={anchorElLayout!==null}
+                                    onClose={()=>handleCloseMenu(setAnchorElLayout)}
+                                    MenuListProps={{
+                                        'aria-labelledby': 'basic-button',
                                     }}
-                                    style={{marginLeft: 5, borderRadius: 5}}
                                 >
-                                    <SaveIcon/>
-                                </IconButton>
-                            </Tooltip>
-                        </Grid>
-                        <Grid item>
-                            <Tooltip title={showTooltip ? "Hide tooltip": "Show tooltip"}>
-                                <IconButton variant='contained'
-                                    disabled={elements===null}
-                                    onClick={()=>{
-                                        setShowTooltip(!showTooltip)
-                                    }}
-                                    style={{marginLeft: 5}}
-                                >
-                                    {showTooltip ? <span className='mdi mdi-tooltip-remove'/>: <span className='mdi mdi-tooltip'/>}
-                                </IconButton>
-                            </Tooltip>
-                        </Grid> 
-                        <Grid item>
-                            <Tooltip title="Refresh graph">
-                                <IconButton variant='contained'
-                                    disabled={elements===null}
-                                    onClick={()=>{
-                                        setId(id+1)
-                                    }}
-                                    style={{marginLeft: 5}}
-                                >
-                                    <RefreshIcon/>
-                                </IconButton>
-                            </Tooltip>
-                        </Grid>
-                        <Grid item>
-                            <Tooltip title="Clear Graph">
-                                <IconButton variant='contained'
-                                    disabled={elements===null}
-                                    onClick={()=>{
-                                        const {userListId, ...rest} = router.query
-                                        console.log(rest)
-                                        router.push({
-                                            pathname: `/${page || ''}`,
-                                            query: rest
-                                        }, undefined, { shallow: true })
-                                        setElements(null)
-                                    }}
-                                    style={{marginLeft: 5}}
-                                >
-                                    <HighlightOffIcon/>
-                                </IconButton>
-                            </Tooltip>
-                        </Grid>
-                        <Grid item>
-                            <Tooltip title="Switch Graph Layout">
-                                <IconButton variant='contained'
-                                    disabled={elements===null}
-                                    onClick={(e)=>handleClickMenu(e, setAnchorElLayout)}
-                                    aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={anchorEl!==null ? 'true' : undefined}
-                                    style={{marginLeft: 5}}
-                                >
-                                    <FlipCameraAndroidIcon/>
-                                </IconButton>
-                            </Tooltip>
-                            <Menu
-                                id="basic-menu"
-                                anchorEl={anchorElLayout}
-                                open={anchorElLayout!==null}
-                                onClose={()=>handleCloseMenu(setAnchorElLayout)}
-                                MenuListProps={{
-                                    'aria-labelledby': 'basic-button',
-                                }}
-                            >
-                                { Object.entries(layouts).map(([label, {icon}])=>(
-                                    <MenuItem key={'png'} onClick={()=> {
-                                        setLayout(label)
-                                        handleCloseMenu(setAnchorElLayout)
-                                    }}>
-                                    <ListItemIcon>
-                                        {icon()}
-                                    </ListItemIcon>
-                                    <ListItemText>{label}</ListItemText>
-                                    </MenuItem>
-                                ))}
-                            </Menu>
-                        </Grid>
-                        <Grid item>
-                            <Tooltip title={edgeStyle.label ? "Hide edge labels": "Show edge labels"}>
-                                <IconButton variant='contained'
-                                    disabled={elements===null}
-                                    onClick={()=>{
-                                        if (edgeStyle.label) setEdgeStyle({})
-                                        else setEdgeStyle({label: 'data(label)'})
-                                    }}
-                                    style={{marginLeft: 5}}
-                                >
-                                    {edgeStyle.label ? <VisibilityOffIcon/>: <VisibilityIcon/>}
-                                </IconButton>
-                            </Tooltip>
-                        </Grid>
-                        <Grid item>
-                            <Tooltip title={"Download graph as an image file"}>
+                                    { Object.entries(layouts).map(([label, {icon}])=>(
+                                        <MenuItem key={'png'} onClick={()=> {
+                                            setLayout(label)
+                                            handleCloseMenu(setAnchorElLayout)
+                                        }}>
+                                        <ListItemIcon>
+                                            {icon()}
+                                        </ListItemIcon>
+                                        <ListItemText>{label}</ListItemText>
+                                        </MenuItem>
+                                    ))}
+                                </Menu>
+                            </Grid>
+                            <Grid item>
+                                <Tooltip title={edgeStyle.label ? "Hide edge labels": "Show edge labels"}>
+                                    <IconButton variant='contained'
+                                        disabled={elements===null}
+                                        onClick={()=>{
+                                            if (edgeStyle.label) setEdgeStyle({})
+                                            else setEdgeStyle({label: 'data(label)'})
+                                        }}
+                                        style={{marginLeft: 5}}
+                                    >
+                                        {edgeStyle.label ? <VisibilityOffIcon/>: <VisibilityIcon/>}
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                        </React.Fragment>
+                        }
+                        {tab !== "table" && <Grid item>
+                            <Tooltip title={`Download ${tab === "network" ? "graph": "bar graph"} as an image file`}>
                                 <IconButton onClick={(e)=>handleClickMenu(e, setAnchorEl)}
                                     aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
                                     aria-haspopup="true"
@@ -507,7 +515,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                 <MenuItem key={'png'} onClick={()=> {
                                     handleCloseMenu(setAnchorEl)
                                     // fileDownload(cyref.current.png({output: "blob"}), "network.png")
-                                    toPng(networkref.current)
+                                    toPng(document.getElementById("kg-network"))
                                     .then(function (fileUrl) {
                                         download(fileUrl, "network.png");
                                     });
@@ -515,21 +523,22 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                 <MenuItem key={'jpg'} onClick={()=> {
                                     handleCloseMenu(setAnchorEl)
                                     // fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
-                                    toJpeg(networkref.current)
+                                    toBlob(document.getElementById("kg-network"))
                                     .then(function (fileUrl) {
-                                        download(fileUrl, "network.jpg");
+                                        fileDownload(fileUrl, "network.jpg");
                                     });
                                 }}>JPG</MenuItem>
                                 <MenuItem key={'svg'} onClick={()=> {
                                     handleCloseMenu(setAnchorEl)
                                     // fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
-                                    toSvg(networkref.current)
+                                    toSvg(document.getElementById("kg-network"))
                                     .then(function (dataUrl) {
                                         download(dataUrl, "network.svg")
                                     });
                                 }}>SVG</MenuItem>
                             </Menu>
                         </Grid>
+                        }
                         <Grid item>
                             <Tooltip title={"View in Enrichr"}>
                                 <IconButton 
@@ -609,33 +618,37 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                 </IconButton>
                             </Tooltip>
                         </Grid>
-                        <Grid item>
-                            <Tooltip title={"Gene-gene connections"}>
-                                <IconButton variant='contained'
-                                    onClick={()=>{
-                                    setGeneLinksOpen(!geneLinksOpen)
-                                    setAugmentOpen(false)
-                                    }}
-                                    style={{marginLeft: 5}}
-                                >
-                                    <Icon path={router.query.gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
-                                </IconButton>
-                            </Tooltip>
-                        </Grid>
-                        <Grid item>
-                            <Tooltip title={router.query.augment ? "Reset network": "Augment network using co-expressed genes"}>
-                                <IconButton
-                                    disabled={!router.query.augment && genes.length > 100}
-                                    onClick={()=>{
-                                        setGeneLinksOpen(false)
-                                        setAugmentOpen(!augmentOpen)
-                                    }}
-                                    style={{marginLeft: 5, borderRadius: 5, background: augmentOpen ? "#e0e0e0": "none"}}
-                                >
-                                    <Icon path={mdiDna} size={0.8} />
-                                </IconButton>
-                            </Tooltip>
-                        </Grid>
+                        { tab === "network" &&  
+                        <React.Fragment>
+                            <Grid item>
+                                <Tooltip title={"Gene-gene connections"}>
+                                    <IconButton variant='contained'
+                                        onClick={()=>{
+                                        setGeneLinksOpen(!geneLinksOpen)
+                                        setAugmentOpen(false)
+                                        }}
+                                        style={{marginLeft: 5}}
+                                    >
+                                        <Icon path={router.query.gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                            <Grid item>
+                                <Tooltip title={router.query.augment ? "Reset network": "Augment network using co-expressed genes"}>
+                                    <IconButton
+                                        disabled={!router.query.augment && genes.length > 100}
+                                        onClick={()=>{
+                                            setGeneLinksOpen(false)
+                                            setAugmentOpen(!augmentOpen)
+                                        }}
+                                        style={{marginLeft: 5, borderRadius: 5, background: augmentOpen ? "#e0e0e0": "none"}}
+                                    >
+                                        <Icon path={mdiDna} size={0.8} />
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                        </React.Fragment>
+                        }
                         <Grid item>
                             <Summarizer elements={elements} schema={schema} augmented={router.query.augment}/>
                         </Grid>

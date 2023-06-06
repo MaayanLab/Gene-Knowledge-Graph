@@ -5,13 +5,7 @@ import {
 } from 'recharts';
 import Color from 'color'
 import { precise } from '../../utils/helper';
-import IconButton from '@mui/material/IconButton'
 
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import MuiTooltip from '@mui/material/Tooltip';
-import { toPng, toJpeg, toSvg } from 'html-to-image';
-import download from 'downloadjs'
 
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
@@ -94,49 +88,6 @@ export const EnrichmentBar = (props) => {
 				</Grid>: null
 			
 			} */}
-			<Grid item xs={12} align="right">
-				<MuiTooltip title={"Download graph as an image file"}>
-					<IconButton onClick={(e)=>setAnchorEl(e.currentTarget)}
-						aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
-						aria-haspopup="true"
-						aria-expanded={anchorEl!==null ? 'true' : undefined}
-					><CameraAltOutlinedIcon/></IconButton>
-				</MuiTooltip>
-				<Menu
-					id="basic-menu"
-					anchorEl={anchorEl}
-					open={anchorEl!==null}
-					onClose={()=>setAnchorEl(null)}
-					MenuListProps={{
-						'aria-labelledby': 'basic-button',
-					}}
-				>
-					<MenuItem key={'png'} onClick={()=> {
-						setAnchorEl(null)
-						// fileDownload(cyref.current.png({output: "blob"}), "network.png")
-						toPng(document.getElementById("bar-chart-viz"))
-						.then(function (fileUrl) {
-							download(fileUrl, "network.png");
-						});
-					}}>PNG</MenuItem>
-					<MenuItem key={'jpg'} onClick={()=> {
-						setAnchorEl(null)
-						// fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
-						toJpeg(document.getElementById("bar-chart-viz"))
-						.then(function (fileUrl) {
-							download(fileUrl, "network.jpg");
-						});
-					}}>JPG</MenuItem>
-					<MenuItem key={'svg'} onClick={()=> {
-						setAnchorEl(null)
-						// fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
-						toSvg(document.getElementById("bar-chart-viz"))
-						.then(function (dataUrl) {
-							download(dataUrl, "network.svg")
-						});
-					}}>SVG</MenuItem>
-				</Menu>
-			</Grid>
 			<Grid item xs={12}>
 				<ResponsiveContainer 
 						height={height}
@@ -144,7 +95,7 @@ export const EnrichmentBar = (props) => {
 				>
 					<BarChart
 						layout="vertical"
-						id="bar-chart-viz"
+						id="kg-network"
 						height={height}
 						width={width}
 						data={data}// Save the ref of the chart
