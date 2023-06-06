@@ -35,6 +35,8 @@ import HubIcon from '@mui/icons-material/Hub';
 import { mdiFamilyTree, mdiDotsCircle, mdiDna, mdiLinkVariant, mdiLinkVariantOff } from '@mdi/js';
 import Icon from '@mdi/react';
 
+import { toPng, toJpeg, toSvg } from 'html-to-image';
+import download from 'downloadjs'
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Box = dynamic(() => import('@mui/material/Box'));
@@ -153,6 +155,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
     setFocused(null)
   }
   const tableref = useRef(null);
+  const networkref = useRef(null);
   const redirect = (query) => {
     router.push({
       pathname: `/${page || ''}`,
@@ -739,17 +742,29 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                <MenuItem key={'png'} onClick={()=> {
+                 <MenuItem key={'png'} onClick={()=> {
                     handleCloseMenu(setAnchorEl)
-                    fileDownload(cyref.current.png({output: "blob"}), "network.png")
+                    // fileDownload(cyref.current.png({output: "blob"}), "network.png")
+                    toPng(document.getElementById('kg-network'))
+                    .then(function (fileUrl) {
+                        download(fileUrl, "network.png");
+                    });
                 }}>PNG</MenuItem>
                 <MenuItem key={'jpg'} onClick={()=> {
                     handleCloseMenu(setAnchorEl)
-                    fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
+                    // fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
+                    toJpeg(document.getElementById('kg-network'))
+                    .then(function (fileUrl) {
+                        download(fileUrl, "network.jpg");
+                    });
                 }}>JPG</MenuItem>
                 <MenuItem key={'svg'} onClick={()=> {
                     handleCloseMenu(setAnchorEl)
-                    fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
+                    // fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
+                    toSvg(document.getElementById('kg-network'))
+                    .then(function (dataUrl) {
+                        download(dataUrl, "network.svg")
+                    });
                 }}>SVG</MenuItem>
             </Menu>
           </Grid>
@@ -959,7 +974,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
             </Grid>
         }
       {tab === 'network' &&
-        <Grid item xs={12} style={{minHeight: 500, position: "relative"}}>
+        <Grid item xs={12} id="kg-network" style={{minHeight: 500, position: "relative"}} ref={networkref}>
           {(elements === undefined) ? (
             <Backdrop
               sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

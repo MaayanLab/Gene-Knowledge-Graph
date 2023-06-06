@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState, useRef } from 'react';
 import { layouts } from '../kg';
 import { process_tables } from '../../utils/helper';
-import fileDownload from 'js-file-download'
 import Tooltip from '@mui/material/Tooltip';
 import ShareIcon from '@mui/icons-material/Share';
 
@@ -39,6 +38,9 @@ import Slider from '@mui/material/Slider'
 import SendIcon from '@mui/icons-material/Send';
 import UndoIcon from '@mui/icons-material/Undo';
 import CableIcon from '@mui/icons-material/Cable';
+
+import { toPng, toJpeg, toSvg } from 'html-to-image';
+import download from 'downloadjs'
 
 // const Grid = dynamic(() => import('@mui/material/Grid'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
@@ -119,6 +121,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
     
     const cyref = useRef(null);
     const tableref = useRef(null);
+    const networkref = useRef(null);
 
 
     const [controller, setController] = React.useState(null)
@@ -503,15 +506,27 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                             >
                                 <MenuItem key={'png'} onClick={()=> {
                                     handleCloseMenu(setAnchorEl)
-                                    fileDownload(cyref.current.png({output: "blob"}), "network.png")
+                                    // fileDownload(cyref.current.png({output: "blob"}), "network.png")
+                                    toPng(networkref.current)
+                                    .then(function (fileUrl) {
+                                        download(fileUrl, "network.png");
+                                    });
                                 }}>PNG</MenuItem>
                                 <MenuItem key={'jpg'} onClick={()=> {
                                     handleCloseMenu(setAnchorEl)
-                                    fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
+                                    // fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
+                                    toJpeg(networkref.current)
+                                    .then(function (fileUrl) {
+                                        download(fileUrl, "network.jpg");
+                                    });
                                 }}>JPG</MenuItem>
                                 <MenuItem key={'svg'} onClick={()=> {
                                     handleCloseMenu(setAnchorEl)
-                                    fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
+                                    // fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
+                                    toSvg(networkref.current)
+                                    .then(function (dataUrl) {
+                                        download(dataUrl, "network.svg")
+                                    });
                                 }}>SVG</MenuItem>
                             </Menu>
                         </Grid>
@@ -750,7 +765,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                 </Grid>
             }
             {(description !== '' && elements !== null) && <Grid item xs={12}><Typography variant="h5" align='center'><b>{`${description || ''}${router.query.augment === 'true' ? ' (Augmented)':''}`}</b></Typography></Grid>} 
-            {(tab === 'network' && elements!==null) && <Grid item xs={12} style={{height: !userListId? "100%": !router.query.search ? "100%": 700, position: "relative"}}>
+            {(tab === 'network' && elements!==null) && <Grid ref={networkref} id="kg-network" item xs={12} style={{height: !userListId? "100%": !router.query.search ? "100%": 700, position: "relative"}}>
                 <Snackbar open={error!==null}
 					anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
 					autoHideDuration={4500}
