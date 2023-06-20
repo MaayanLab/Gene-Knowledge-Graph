@@ -36,7 +36,7 @@ yarn-error.log*
 data
 gene_data
 
-schema.json
+# schema.json
 .env.genekg
 
 data-*
