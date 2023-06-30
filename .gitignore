@@ -42,3 +42,4 @@ gene_data
 data-*
 dumps
 .env.deploy
+venv
