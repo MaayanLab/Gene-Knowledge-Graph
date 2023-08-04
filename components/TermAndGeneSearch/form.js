@@ -8,7 +8,6 @@ import fileDownload from 'js-file-download'
 import * as default_schema from '../../public/schema.json'
 import { isIFrame } from '../../utils/helper';
 import { usePrevious, shouldUpdateId } from '../Enrichment';
-import { process_tables } from '../../utils/helper';
 
 import Tooltip from '@mui/material/Tooltip';
 import Chip from '@mui/material/Chip';
@@ -68,7 +67,7 @@ const Selector = dynamic(async () => (await import('../misc')).Selector);
 const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
 const FormControlLabel = dynamic(() => import('@mui/material/FormControlLabel'));
 
-const process_relation = (r='[]') => {
+export const process_relation = (r='[]') => {
 	try {
         if (Array.isArray(r)) return r
 		const relations  = JSON.parse(r)
@@ -78,7 +77,7 @@ const process_relation = (r='[]') => {
 	}
 }
 // support old queries
-const process_filter = (query) => {
+export const process_filter = (query) => {
     const {
         start,
         start_field,
@@ -100,7 +99,7 @@ const process_filter = (query) => {
             end,
             end_field,
             end_term,
-            relation: relation,
+            relation: process_relation(relation),
             limit,
             ...filter
         }),
@@ -108,8 +107,7 @@ const process_filter = (query) => {
     }
 
 }
-const redirect = ({router, page, ...query}) => {
-    console.log(query)
+export const redirect = ({router, page, ...query}) => {
     router.push({
         pathname: `/${page || ''}`,
         query: process_filter(query)
@@ -132,13 +130,31 @@ export default function Form({
     genes = []
 }) {
     const router = useRouter()
+    const {
+        filter:f,
+        page
+    } = router.query
+    const filter = JSON.parse(f || '{}')
+    const {
+        start,
+        start_field,
+        start_term,
+        end,
+        end_field,
+        end_term,
+        relation=[],
+        limit,
+        gene_links,
+        augment
+    } = filter
+
     const [error, setError] = useState(null)
     const [anchorEl, setAnchorEl] = React.useState(null)
     const [anchorElLayout, setAnchorElLayout] = React.useState(null)
     const [augmentOpen, setAugmentOpen] = React.useState(false)
     const [augmentLimit, setAugmentLimit] = React.useState(10)
     const [geneLinksOpen, setGeneLinksOpen] = React.useState(false)
-    const [geneLinks, setGeneLinks] = React.useState(JSON.parse(router.query.gene_links || '[]'))
+    const [geneLinks, setGeneLinks] = React.useState(gene_links || [])
     
     const handleClickMenu = (e, setter) => {
 		setter(e.currentTarget);
@@ -152,7 +168,7 @@ export default function Form({
         const {page, ...query} = router.query
         if (!query.filter || Object.keys(JSON.parse(query.filter)).length === 0) {
             if (initial_query) {
-                if (initial_query.relation) initial_query.relation = process_relation(initial_query.relation)
+                // if (initial_query.relation) initial_query.relation = process_relation(initial_query.relation)
                 redirect({
                     router, 
                     page,
@@ -177,22 +193,7 @@ export default function Form({
             }
         }
     }, [router.query])
-    const {
-        filter='{}',
-        page
-    } = router.query
-    const {
-        start,
-        start_field,
-        start_term,
-        end,
-        end_field,
-        end_term,
-        relation=[],
-        limit,
-        gene_links,
-        augment
-    } = JSON.parse(filter)
+    
     const geneLinksRelations = schema.edges.reduce((acc, i)=>{
         if (i.gene_link) return [...acc, ...i.match]
         else return acc
@@ -313,7 +314,7 @@ export default function Form({
                         <Grid item>
                             <Button onClick={()=>{
                                 const {path_length, ...rest} = router.query
-                                const {limit, ...f} = JSON.parse(rest.filter)
+                                const {limit, augment, augment_limit, ...f} = JSON.parse(rest.filter)
                                 const filter = {
                                     ...f,
                                     end: start,
@@ -449,10 +450,14 @@ export default function Form({
                                 )}
                                 sx={{ width: '350px' }}
                                 onChange={(e, relation)=>{
-                                    const {page, filter: f, ...rest} = router.query
-                                    const filter = JSON.parse(f || '{}')
-                                    filter.relation = relation
-                                    redirect({router, page, filter, ...rest})
+                                    if (end || (!end && relation.length <= 5)) {
+                                        const {page, filter: f, ...rest} = router.query
+                                        const filter = JSON.parse(f || '{}')
+                                        filter.relation = relation
+                                        redirect({router, page, filter, ...rest})
+                                    } else if (!end && relation.length > 5) {
+                                        setError("Please include only 5 relationships for single search")
+                                    }
                                 }}
                                 renderTags={(value, getTagProps) =>
                                     value.map((option, index) => (
@@ -462,7 +467,6 @@ export default function Form({
                                                 onDelete={()=>{
                                                     const {page, filter:f, ...rest} = router.query
                                                     const filter = JSON.parse(f)
-                                                    // const relation = process_relations(r)
                                                     const rels = []
                                                     for (const i of filter.relation) {
                                                         if (i !== option) {
@@ -676,14 +680,14 @@ export default function Form({
                                             }}
                                             style={{marginLeft: 5}}
                                         >
-                                            <Icon path={router.query.gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
+                                            <Icon path={filter.gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
                                         </IconButton>
                                     </Tooltip>
                                 </Grid>
                             }
-                            { (!router.query.end && router.query.start !== "Gene" && coexpression_prediction) && 
+                            { (!filter.end && filter.start !== "Gene" && coexpression_prediction) && 
                                 <Grid item>
-                                    <Tooltip title={router.query.augment ? "Reset network": "Augment network using co-expressed genes"}>
+                                    <Tooltip title={filter.augment ? "Reset network": "Augment network using co-expressed genes"}>
                                         <IconButton
                                             disabled={genes.length > 100}
                                             onClick={()=>{

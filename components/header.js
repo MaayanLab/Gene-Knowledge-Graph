@@ -111,6 +111,15 @@ const styles = {
 	}
   }
 
+// handle old query
+const process_relations = (r='[]') => {
+	try {
+		const relations  = JSON.parse(r)
+		return relations.map(i=>i.name)
+	} catch (error) {
+		return r.split(",")
+	}
+}
 const IconRenderer = ({label, icon, height=100, width=100, href, router, subheader={}, icon_picker={}, setError, props, ...rest}) => {
 	let selected
 	let for_selection
@@ -125,7 +134,8 @@ const IconRenderer = ({label, icon, height=100, width=100, href, router, subhead
 				for_selection.push(i[subheader.list_field])
 			}
 		} else {
-			selected = router.query[subheader.field] ? router.query[subheader.field].split(","): []
+			const filter = JSON.parse(router.query.filter || '{}')
+			selected = router.query[subheader.field] ? router.query[subheader.field]: filter[subheader.field] ? filter[subheader.field]: []
 			for_selection = props[subheader.field]
 		}
 	}

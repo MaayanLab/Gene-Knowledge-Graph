@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 
-const KnowledgeGraph = dynamic(() => import('./kg'));
+const KnowledgeGraph = dynamic(() => import('./TermAndGeneSearch'));
 const Enrichment = dynamic(()=>import("./Enrichment"));
 const Markdown = dynamic(()=>import("./markdown"), {ssr: false});
 
