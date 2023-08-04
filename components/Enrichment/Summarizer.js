@@ -107,18 +107,20 @@ export const Summarizer = ({elements, schema, augmented}) => {
                     const index = parseInt(i)
                     const {relation, ...data} = Object.values(relationships)[index]
                     const template_object = templates[relation]
-                    let text
-                    if (data.gene !== undefined) {
-                        text = makeTemplate(template_object.singular, data)
-                    } else if (data.genes !== undefined) {
-                        data.genes = `${data.genes.slice(0, -1).join(", ")}, and ${data.genes[data.genes.length - 1]}`
-                        text = makeTemplate(template_object.multiple, data)
-                    } else if (data.gene_2 !== undefined) {
-                        if (typeof data.gene_2 === "string") {
+                    let text = ''
+                    if (template_object && template_object.multiple && template_object.singular) {
+                        if (data.gene !== undefined) {
                             text = makeTemplate(template_object.singular, data)
-                        } else {
-                            data.gene_2 = `${data.gene_2.slice(0, -1).join(", ")}, and ${data.gene_2[data.gene_2.length - 1]}`
+                        } else if (data.genes !== undefined) {
+                            data.genes = `${data.genes.slice(0, -1).join(", ")}, and ${data.genes[data.genes.length - 1]}`
                             text = makeTemplate(template_object.multiple, data)
+                        } else if (data.gene_2 !== undefined) {
+                            if (typeof data.gene_2 === "string") {
+                                text = makeTemplate(template_object.singular, data)
+                            } else {
+                                data.gene_2 = `${data.gene_2.slice(0, -1).join(", ")}, and ${data.gene_2[data.gene_2.length - 1]}`
+                                text = makeTemplate(template_object.multiple, data)
+                            }
                         }
                     }
                     summary = `${summary} ${text} `
