@@ -21,6 +21,7 @@
     "@mui/material": "^5.6.4",
     "@mui/x-data-grid": "^5.10.0",
     "color": "^4.2.3",
+    "cors": "^2.8.5",
     "cytoscape": "^3.21.0",
     "cytoscape-avsdf": "^1.0.0",
     "cytoscape-fcose": "^2.1.0",
