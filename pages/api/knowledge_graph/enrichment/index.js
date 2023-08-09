@@ -30,12 +30,12 @@ export const compute_colors = ({properties, aggr_scores, color}) => {
     return props
 }
 const get_node_color_and_type = ({node, terms, color, aggr_scores, field, aggr_field, fields}) => {
-    if (node.properties.pval === undefined) return default_get_node_color_and_type(({node, terms, color, aggr_scores, field, aggr_field, fields}))
+    if (node.pval === undefined) return default_get_node_color_and_type(({node, terms, color, aggr_scores, field, aggr_field, fields}))
     else {
-        const props = compute_colors({properties: node.properties, aggr_scores, color}) 
-        for (const i in node.properties.enrichment || []) {
-            const v = node.properties.enrichment[i]
-            node.properties.enrichment[i] = { ...v, ...compute_colors({properties: v, aggr_scores, color}) }
+        const props = compute_colors({properties: node, aggr_scores, color}) 
+        for (const i in node.enrichment || []) {
+            const v = node.enrichment[i]
+            node.enrichment[i] = { ...v, ...compute_colors({properties: v, aggr_scores, color}) }
         }
         return props
     }	
@@ -185,7 +185,7 @@ const enrichment = async ({
             genes = genes.sort((a,b)=>gene_counts[b].count - gene_counts[a].count).slice(0,gene_limit)
         } 
         const schema = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/schema`)).json()
-        const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/aggregate`)).json()
+        const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/initialize`)).json()
         aggr_scores.max_pval = max_pval
         aggr_scores.min_pval = min_pval
         const query_list = []

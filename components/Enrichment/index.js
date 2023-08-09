@@ -280,7 +280,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
             fetch_kg()
          }
     }, [error])
-    const genes = (elements || []).reduce((acc, i)=>{
+    const genes = ((elements || {}).nodes || []).reduce((acc, i)=>{
         if (i.data.kind === "Gene" && acc.indexOf(i.data.label) === -1) return [...acc, i.data.label]
         else return acc
     }, [])
@@ -920,7 +920,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                             style:{ 'opacity': '0.5' }
                         }
                         ]}
-                        elements={elements}
+                        elements={[...elements.nodes, ...elements.edges]}
                         layout={layouts[layout]}
                         cy={(cy) => {
                             cyref.current = cy
@@ -1004,7 +1004,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                     }}
                     />
                 }
-                {(elements && userListId && legendVisibility) && <Legend elements={elements.sort((a,b)=>((a.data.properties.pval || 1)-(b.data.properties.pval || 1)))} search={false} top={'45%'} left={'20%'} legendSize={legendSize}/>}
+                {(elements && userListId && legendVisibility) && <Legend elements={[...elements.nodes, ...elements.edges].sort((a,b)=>((a.data.pval || 1)-(b.data.pval || 1)))} search={false} top={'45%'} left={'20%'} legendSize={legendSize}/>}
                 {(focused === null && showTooltip && node) && <TooltipCard 
                     node={node}
                     schema={schema}

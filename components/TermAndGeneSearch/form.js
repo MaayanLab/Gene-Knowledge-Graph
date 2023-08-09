@@ -127,7 +127,8 @@ export default function Form({
     neighborCount=100,
     process_tables,
     layouts,
-    genes = []
+    genes = [],
+    elements = {},
 }) {
     const router = useRouter()
     const {
@@ -488,7 +489,7 @@ export default function Form({
                             <Typography variant="subtitle2">Size:</Typography>
                             <Tooltip title={!end ? 'Set limit per relationship:': 'Limit number of paths:'}>
                                 <Slider 
-                                    value={limit ? limit: !end ? 5: 25}
+                                    value={limit ? limit: !end ? relation.length === 1? ((elements || {}).edges || []).length: 5: 25}
                                     color="blues"
                                     onChange={(e, nv)=>{
                                         const {page, filter:f, ...rest} = router.query
@@ -502,7 +503,7 @@ export default function Form({
                                     aria-labelledby="continuous-slider"
                                 />
                             </Tooltip>
-                            <Typography variant="subtitle2">{limit ? limit: !end ? 5: 25}</Typography>
+                            <Typography variant="subtitle2">{limit ? limit: !end ? relation.length === 1? ((elements || {}).edges || []).length: 5: 25}</Typography>
                         </Stack>
                     </Grid>
                     <Grid item>

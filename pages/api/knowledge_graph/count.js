@@ -50,7 +50,7 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 export default async function query(req, res) {
   const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=25, path_length, order, remove, expand } = await req.query
   const schema = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/schema`)).json()
-  const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/aggregate`)).json()
+  const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/initialize`)).json()
   const nodes = schema.nodes.map(i=>i.node)
   if (nodes.indexOf(start) < 0) res.status(400).send("Invalid start node")
   else if (end && nodes.indexOf(end) < 0) res.status(400).send("Invalid end node")

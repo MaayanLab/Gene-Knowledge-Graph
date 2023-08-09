@@ -52,45 +52,44 @@ export const process_tables = async (results) => {
 	const relation_columns = ["source", "target", "relation"]
 	const relations = []
 	const ids = []
-	for (const {data} of results) {
-		if (data.kind === "Relation") {
-			const {source, target, relation, properties={}} = data
-			const {id, label, ...rest} = properties
-			const props = {
-				source,
-				target,
-				relation,
-				...rest
-			}
-			const row = []
-			for (const i of relation_columns) {
+	for (const {data} of results.nodes) {
+		const props = data.properties
+		const row = []
+		if (ids.indexOf(props["id"]) === -1) {
+			ids.push(props["id"])
+		
+			for (const i of node_columns) {
 				row.push(props[i] || '')
 			}
-			for (const [k,v] of Object.entries(rest)) {
-				if (relation_columns.indexOf(k) === -1) {
-					relation_columns.push(k)
+			for (const [k,v] of Object.entries(props)) {
+				if (node_columns.indexOf(k) === -1) {
+					node_columns.push(k)
 					row.push(v || '')
 				}
 			}
-			relations.push(row)
-		} else {
-			const props = data.properties
-			const row = []
-			if (ids.indexOf(props["id"]) === -1) {
-				ids.push(props["id"])
-			
-				for (const i of node_columns) {
-					row.push(props[i] || '')
-				}
-				for (const [k,v] of Object.entries(props)) {
-					if (node_columns.indexOf(k) === -1) {
-						node_columns.push(k)
-						row.push(v || '')
-					}
-				}
-				nodes.push(row)
+			nodes.push(row)
+		}
+	}
+	for (const {data} of results.edges) {
+		const {source, target, relation, properties={}} = data
+		const {id, label, ...rest} = properties
+		const props = {
+			source,
+			target,
+			relation,
+			...rest
+		}
+		const row = []
+		for (const i of relation_columns) {
+			row.push(props[i] || '')
+		}
+		for (const [k,v] of Object.entries(rest)) {
+			if (relation_columns.indexOf(k) === -1) {
+				relation_columns.push(k)
+				row.push(v || '')
 			}
 		}
+		relations.push(row)
 	}
 	let node_text = node_columns.join("\t") + "\n"
 	for (const node of nodes) {

@@ -4,7 +4,7 @@ import cache from "memory-cache";
 import fetch from "node-fetch";
 import { default_color } from "../../../utils/colors";
 
-const aggregates = async ({session, schema}) => {
+const initialize = async ({session, schema}) => {
 	const aggr_scores = {}
     const colors = {}
     for (const s of schema.edges) {	
@@ -29,11 +29,11 @@ const aggregates = async ({session, schema}) => {
                 query = `MATCH (st)-[rel]-(en)
                     RETURN ${order_pref}(rel.${field}) as ${edge_score_var}`
             }
-            const results = await session.readTransaction(txc => txc.run(query))
-            results.records.flatMap(record => {
-                const score = record.get(edge_score_var)
-                aggr_scores[edge_score_var] = score
-            })
+            // const results = await session.readTransaction(txc => txc.run(query))
+            // results.records.flatMap(record => {
+            //     const score = record.get(edge_score_var)
+            //     aggr_scores[edge_score_var] = score
+            // })
             for (const j of (s.match || [])) {
                 colors[j].aggr_field = edge_score_var
                 colors[j].field = field
@@ -75,7 +75,8 @@ const aggregates = async ({session, schema}) => {
 }
 
 export default async function query(req, res) {
-    const cached = cache.get("aggregate")
+    const cached = cache.get("initialize")
+    // const cached = false
     if (cached) {
         res.status(200).send(cached) 
     } else {
@@ -84,8 +85,8 @@ export default async function query(req, res) {
             const session = neo4jDriver.session({
                 defaultAccessMode: neo4j.session.READ
             })
-            const val = await aggregates({session, schema})
-            cache.put("aggregate", val);
+            const val = await initialize({session, schema})
+            cache.put("initialize", val);
             res.status(200).send(val) 
         } catch (error) {
             console.log(error)

@@ -49,22 +49,22 @@ export const Summarizer = ({elements, schema, augmented}) => {
     useEffect(()=>{
         if (templates !== null) {
             const node_type = {}
-            for (const i of elements) {
+            for (const i of elements.nodes) {
                 if (i.data.kind !== "Relation") {
                     node_type[i.data.id] = i.data.kind
                 }
             }
             const resource_relations = {}
-            for (const i of elements) {
+            for (const i of elements.edges) {
                 if (i.data.kind === "Relation") {
                     const source = i.data.source
                     const relation = i.data.relation
                     const target = i.data.target
                     const source_type = (node_type[source] !== "Gene" && node_type[source] !== "Predicted Gene (Co-Expression)") ? "term": (node_type[target] !== "Gene" && node_type[target] !== "Predicted Gene (Co-Expression)") ? "gene": "gene_1"
                     const target_type = (node_type[target] !== "Gene" && node_type[target] !== "Predicted Gene (Co-Expression)") ? "term": (node_type[source] !== "Gene" && node_type[source] !== "Predicted Gene (Co-Expression)") ? "gene": "gene_2"
-                    const resource = i.data.properties.resource || `${relation} associations`
-                    const source_label = i.data.properties.source_label
-                    const target_label = i.data.properties.target_label
+                    const resource = i.data.resource || `${relation} associations`
+                    const source_label = i.data.source_label
+                    const target_label = i.data.target_label
                     
                     if (resource_relations[resource] === undefined) resource_relations[resource] = {}
                     const data = {

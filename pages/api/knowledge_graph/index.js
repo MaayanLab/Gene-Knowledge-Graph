@@ -1,10 +1,29 @@
 import neo4j from "neo4j-driver"
+import Cors from 'cors'
 import { neo4jDriver } from "../../../utils/neo4j"
 import Color from 'color'
 import { toNumber } from "../../../utils/helper"
 import fetch from "node-fetch"
 import {default_color, mui_colors} from '../../../utils/colors'
 import { augment_gene_set, kind_mapper, get_node_color_and_type } from "./enrichment/augment"
+
+// Initializing the cors middleware
+const cors = Cors({
+  methods: ['POST', 'GET', 'HEAD'],
+})
+
+export function runMiddleware( req, res, fn) {
+	return new Promise((resolve, reject) => {
+	  fn(req, res, (result) => {
+		if (result instanceof Error) {
+		  return reject(result)
+		}
+  
+		return resolve(result)
+	  })
+	})
+  }
+
 let color_map = {}
 let score_fields
 const get_color = ({color, darken}) => {
@@ -16,14 +35,13 @@ const get_color = ({color, darken}) => {
 
 const highlight_color = '#ff8a80'
 
-export const default_get_node_color_and_type = ({node, terms, color=default_color, aggr_scores, field, aggr_field, aggr_type, fields}) => {
-	// if(terms.indexOf(node.properties.label) > -1){
-	if (fields.filter(i=>i && terms.indexOf(node.properties[i]) > -1).length > 0) {
+export const default_get_node_color_and_type = ({node, terms, color=default_color, aggr_scores, field, aggr_field, aggr_type, fields,}) => {
+	if (fields.filter(i=>i && terms.indexOf(node[i]) > -1).length > 0) {
 		return {color: highlight_color, node_type: 1}
-	} else if (node.properties[field] && aggr_field!==undefined && aggr_type!==undefined) {
+	} else if (node[field] && aggr_field!==undefined && aggr_type!==undefined) {
 		const max = aggr_scores[`max_${field}`] || 0
 		const min = aggr_scores[`min_${field}`] || 0
-		const score = node.properties[field]
+		const score = node[field]
 		// it's not neg to pos
 		if ((min >= 0 && max >= 0) || (min < 0 && max <= 0)) {
 			const ext_diff = Math.abs(max-min)
@@ -51,10 +69,10 @@ export const default_get_node_color_and_type = ({node, terms, color=default_colo
 }
 
 export const default_get_edge_color = ({relation, color, aggr_field, field, aggr_scores}) => {
-	if (relation.properties[field] && aggr_field) {
+	if (relation[field] && aggr_field) {
 		const aggr_score = aggr_scores[aggr_field]
 		return {
-			lineColor: get_color({color, darken: Math.abs(relation.properties[field]/aggr_score)}),
+			lineColor: get_color({color, darken: Math.abs(relation[field]/aggr_score)}),
 			node_type: 0
 		}
 	}
@@ -110,115 +128,64 @@ export const resolve_results = ({results,
 			}
 			return {...color_values[type]}
 		}
-		const res = results.records.flatMap(record => {
-			const relations = record.get('r')
-			const nodes = record.get('n').reduce((acc, i)=>({
-				...acc,
-				[i.identity]: i
-			}), {})
-			const path = []
-			if (relations.length > 0) {
-				for (const relation of relations) {
-					const start_node = nodes[relation.start]
-					const end_node = nodes[relation.end]
-					const relation_type = relation.type
-					const start_type = start_node.labels.filter(i=>i!=="id")[0]
-					const end_type = end_node.labels.filter(i=>i!=="id")[0]
-					const start_kind = kind_mapper ? kind_mapper({node: start_node, type: start_type, ...misc_props})  : start_type
-					const end_kind = kind_mapper ? kind_mapper({node: end_node, type: end_type, ...misc_props})  : end_type
-					path.push({ 
-						data: {
-							id: start_node.properties.id,
-							kind: start_kind,
-							label: start_node.properties.label || start_node.properties.id,
-							properties: {
-								...process_properties(start_node.properties),
-								...properties[start_node.properties.label || start_node.properties.id] || {},
-								...(kind_properties[start_kind] || {})[start_node.properties.label] || {}
-							},
-							...(get_node_color_and_type({node: {
-								...start_node,
-								properties: {
-									...start_node.properties,
-									...properties[start_node.properties.label || start_node.properties.id] || {},
-									...(kind_properties[start_kind] || {})[start_node.properties.label] || {}
-								}
-							}, terms, record, fields: [field, start_field, end_field], aggr_scores,
-								...colors_func(start_type), ...misc_props}))
-						} 
+		const nodes = {}
+		const edges = {}
+		for (const record of results.records) {
+			const node_list = record.get('n')
+			for (const node of node_list) {
+				if (nodes[node.identity] === undefined) {
+					const type = node.labels.filter(i=>i!=="id")[0]
+					const kind = kind_mapper ? kind_mapper({node, type, ...misc_props})  : type
+					const node_properties = {
+						id: node.properties.id,
+						kind,
+						label: node.properties.label || node.properties.id,
+						...process_properties(node.properties),
+						...properties[node.properties.label || node.properties.id] || {},
+						...(kind_properties[kind] || {})[node.properties.label] || {},
+					}
+					const node_color = get_node_color_and_type({node: node_properties, 
+						terms,
+						fields: [field, start_field, end_field],
+						aggr_scores,
+						...colors_func(type), 
+						...misc_props
 					})
-					path.push({ 
+					nodes[node.identity] = {
 						data: {
-							source: start_node.properties.id,
-							target: end_node.properties.id,
+							...node_properties,
+							...node_color
+						}
+					}
+				}	
+			}
+			const relations = record.get('r')
+			for (const relation of relations) {
+				const relation_id = `${nodes[relation.start].data.label}_${nodes[relation.end].data.label}`
+				if (edges[relation_id] === undefined) {
+					const relation_type = relation.type
+					edges[relation_id] = {
+						data: {
+							source: nodes[relation.start].data.id,
+							target: nodes[relation.end].data.id,
 							kind: "Relation",
 							relation: relation_type,
 							label: relation_type,
-							properties: {
-								id: `${start_node.properties.label}_${relation_type}_${end_node.properties.label}`,
-								label: relation_type,
-								source_label: start_node.properties.label,
-								target_label: end_node.properties.label,
-								...properties[`${start_node.properties.label}_${end_node.properties.label}`] || {},
-								...process_properties(relation.properties),
-							},
+							...properties[relation_type] || {},
+							...process_properties(relation.properties),
 							...(get_edge_color({relation, record, aggr_scores, ...colors[relation_type]})),
 							directed: relation.properties.directed ? 'triangle': 'none'
-						} 
-					})
-					path.push({ 
-						data: {
-							id: end_node.properties.id,
-							kind: end_kind,
-							label: end_node.properties.label || end_node.properties.id,
-							properties: {
-								...process_properties(end_node.properties),
-								...properties[end_node.properties.label || end_node.properties.id] || {},
-								...(kind_properties[end_kind] || {})[end_node.properties.label] || {}
-							},
-							...(get_node_color_and_type({node: {
-								...end_node,
-								properties: {
-									...end_node.properties,
-									...properties[end_node.properties.label || end_node.properties.id] || {},
-									...(kind_properties[end_kind] || {})[end_node.properties.label] || {}
-								}
-							}, terms, record, aggr_scores, fields: [field, start_field, end_field],
-								...colors_func(end_type), ...misc_props}))
-						} 
-					})
-				}
-			} else if (misc_props.augment) {
-				for (const node of Object.values(nodes)) {
-					const node_type = node.labels.filter(i=>i!=="id")[0]
-					const node_kind = kind_mapper ? kind_mapper({node: node, type: node_type, ...misc_props})  : node_type
-					path.push({ 
-						data: {
-							id: node.properties.id,
-							kind: node_kind,
-							label: node.properties.label || node.properties.id,
-							properties: {
-								...process_properties(node.properties),
-								...properties[node.properties.label || node.properties.id] || {},
-								...(kind_properties[node_kind] || {})[node.properties.label] || {}
-							},
-							...(get_node_color_and_type({node: {
-								...node,
-								properties: {
-									...node.properties,
-									...properties[node.properties.label || node.properties.id] || {},
-									...(kind_properties[node_kind] || {})[node.properties.label] || {},
-								}
-							}, terms, record, fields: [field, start_field, end_field], aggr_scores,
-								...colors_func(node_type), ...misc_props}))
-						} 
-					})
+						}
+					}
 				}
 			}
-			return path
-		  })
-		return res
+		}
+		return {
+			nodes: Object.values(nodes),
+			edges: Object.values(edges)
+		}
 	}
+
 
 const resolve_two_terms = async ({session, start_term, start_field, start, end_term, end_field, end, limit, order, path_length=4, schema, relation, aggr_scores, colors, remove, expand: e, gene_links}) => {
 	if (!parseInt(path_length)) throw {message: "Path length is not a number"}
@@ -232,9 +199,9 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 	  ]), [])
 	if (relation) {
 		const rels = []
-		for (const i of relation.split(",")) {
-			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
-			rels.push(`\`${i}\``)
+		for (const i of relation) {
+			if (edges.indexOf(i.name) === -1) throw {message: `Invalid relationship ${i.name}`}
+			rels.push(`\`${i.name}\``)
 		}
 		if (rels.length > 0) query = query.replace(`[*..${path_length}]`,`[:${rels.join("|")}*..${path_length}]`)
 	}
@@ -247,8 +214,7 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 	} 
 	const gl = []
 	if (gene_links) {
-		const links = JSON.parse(gene_links)
-		for (const i of links) {
+		for (const i of gene_links) {
 			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
 			gl.push(`\`${i}\``)
 		}
@@ -297,11 +263,11 @@ const resolve_term_and_end_type = async ({session, start_term, start_field, star
 		...acc,
 		...i.match
 	  ]), [])
-	if (relation) {
+	  if (relation) {
 		const rels = []
-		for (const i of relation.split(",")) {
-			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
-			rels.push(`\`${i}\``)
+		for (const i of relation) {
+			if (edges.indexOf(i.name) === -1) throw {message: `Invalid relationship ${i.name}`}
+			rels.push(`\`${i.name}\``)
 		}
 		if (rels.length > 0) query = query.replace(`[*..${path_length}]`,`[:${rels.join("|")}*..${path_length}]`)
 	}
@@ -325,8 +291,7 @@ const resolve_term_and_end_type = async ({session, start_term, start_field, star
 	}
 	const gl = []
 	if (gene_links) {
-		const links = JSON.parse(gene_links)
-		for (const i of links) {
+		for (const i of gene_links) {
 			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
 			gl.push(`\`${i}\``)
 		}
@@ -371,69 +336,80 @@ const resolve_term_and_end_type = async ({session, start_term, start_field, star
 
 const resolve_one_term = async ({session, start, field, term, relation, limit, order, path_length=1, schema, aggr_scores, colors, expand: e, remove, gene_links, augment, augment_limit=10}) => {
 	if (!parseInt(path_length)) throw {message: "Path length is not a number"}
-	let query = `
-		MATCH q=(st:\`${start}\` { ${field}: $term })-[*${path_length}]-(en)
-		USING INDEX st:\`${start}\`(${field})
-		WITH q, st
-		LIMIT TOINTEGER($limit) 
-		`
-		const edges = schema.edges.reduce((acc, i)=>([
-			...acc,
-			...i.match
-		  ]), [])
-		const rels = []
-		if (relation) {
-			for (const i of relation.split(",")) {
-				if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
-				rels.push(`\`${i}\``)
-			}
-			if (rels.length > 0) query = query.replace(`[*${path_length}]`,`[:${rels.join("|")}*..${path_length}]`)
-		}
-		const vars = {}
-		if ((remove || []).length) {
-			query = query + `
-				WHERE NOT a.id in ${JSON.stringify(remove)}
-				AND NOT b.id in ${JSON.stringify(remove)}
-			`
-		} 
-		const gl = []
-		if (gene_links) {
-			const links = JSON.parse(gene_links)
-			for (const i of links) {
-				if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
-				gl.push(`\`${i}\``)
-			}
-			if (start === "Gene") {
-
-			}
-			if (start === "Gene") {
-				query = query + `CALL {
-					WITH q, st
-					MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)
-					WHERE c in NODES(q)
-					RETURN p, nodes(p) as n, relationships(p) as r
-					UNION
-					WITH q
-					RETURN q as p, nodes(q) as n, relationships(q) as r
-				}
-				RETURN p, n, r`
-			} else {
-				query = query + `CALL {
-					WITH q, st
-					MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)-[${rels.length ? ":" + rels.join("|"): ""}]-(st)
-					WHERE c in NODES(q)
-					RETURN p, nodes(p) as n, relationships(p) as r
-					UNION
-					WITH q
-					RETURN q as p, nodes(q) as n, relationships(q) as r
-				}
-				RETURN p, n, r`
-			}
-			
-		}
+	const edges = schema.edges.reduce((acc, i)=>([
+		...acc,
+		...i.match
+		]), [])
+	const rels = []
+	const vars = {}
+	for (const r of relation) {
+		if (edges.indexOf(r.name) === -1) throw {message: `Invalid relationship ${i}`}
 		else {
-			query = query + `RETURN q as p, nodes(q) as n, relationships(q) as r LIMIT TOINTEGER($limit)`
+			let q = `
+				MATCH p=(st:\`${start}\` { ${field}: $term })-[:\`${r.name}\`*${path_length}]-(en)
+				USING INDEX st:\`${start}\`(${field})
+				WITH p, st
+				LIMIT ${parseInt(r.limit || 5)} 
+			`
+			if ((remove || []).length) {
+				q = q + `
+					WHERE NOT st.id in ${JSON.stringify(remove)}
+					AND NOT en.id in ${JSON.stringify(remove)}
+				`
+			}
+			q = q + `RETURN p, nodes(p) as n, relationships(p) as r, st`
+			rels.push(q)
 		}
+	}
+	let query = `MATCH p=(st:\`${start}\` { ${field}: $term })-[${rels.length ? ':' : ''}${rels.join("|")}*${path_length}]-(en) USING INDEX st:\`${start}\`(${field})`
+	if ((remove || []).length) {
+		query= query + `
+			WHERE NOT st.id in ${JSON.stringify(remove)}
+			AND NOT en.id in ${JSON.stringify(remove)}
+		`
+	}
+	query = query + ` RETURN p, nodes(p) as n, relationships(p) as r, st  LIMIT TOINTEGER($limit)`
+	
+	if (rels.length > 0) {
+		query = rels.join("\nUNION\n")
+	}
+	const gl = []
+	if (gene_links) {
+		for (const i of gene_links) {
+			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
+			gl.push(`\`${i}\``)
+		}
+		query = `
+			CALL {
+				${query}
+			}
+			WITH p as q, st
+		`
+		if (start === "Gene") {
+			query = query + `CALL {
+				WITH q, st
+				MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)
+				WHERE c in NODES(q)
+				RETURN p, nodes(p) as n, relationships(p) as r
+				UNION
+				WITH q
+				RETURN q as p, nodes(q) as n, relationships(q) as r
+			}
+			RETURN p, n, r`
+		} else {
+			query = query + `CALL {
+				WITH q, st
+				MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)-[${rels.length ? ":" + rels.join("|"): ""}]-(st)
+				WHERE c in NODES(q)
+				RETURN p, nodes(p) as n, relationships(p) as r
+				UNION
+				WITH q
+				RETURN q as p, nodes(q) as n, relationships(q) as r
+			}
+			RETURN p, n, r`
+		}
+			
+	}
 	// remove has precedence on expand
 	const expand = (e || []).filter(i=>(remove || []).indexOf(i) === -1)
 	if ((expand || []).length) {
@@ -449,14 +425,17 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 		}
 	}
 	const results = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
-	if (!augment) return resolve_results({results, terms: [term], schema, order, score_fields,  aggr_scores, colors, field})
+	if (!augment) {
+		console.log("Here")
+		return resolve_results({results, terms: [term], schema, order, score_fields,  aggr_scores, colors, field})
+	}
 	else {
 		const initial_results = resolve_results({results, terms: [term], schema, order, score_fields,  aggr_scores, colors, field})
 		const gene_list = []
 		let gene_nodes = []
 		let start_node
-		for (const i of initial_results) {
-			if (i.data.properties[field] === term && i.data.kind === start) {
+		for (const i of initial_results.nodes) {
+			if (i.data[field] === term && i.data.kind === start) {
 				start_node = i
 			}
 			if (i.data.kind === "Gene") {
@@ -485,7 +464,7 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 		const augmented_nodes = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
 		const augmented_results = resolve_results({results: augmented_nodes, terms: [term], schema, order, score_fields,  aggr_scores, get_node_color_and_type, colors, field, kind_mapper, misc_props: {augmented_genes, augment, gene_list}})
 		const augmented_edges = []
-		for (const i of augmented_results) {
+		for (const i of augmented_results.nodes) {
 			if (i.data.kind !== "Relation") {
 				augmented_edges.push({
 					"data": {
@@ -505,37 +484,22 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 					}
 				})
 			}
-			// for (const node of gene_nodes){
-			// 	if (i.data.kind !== "Relation") {
-			// 		augmented_edges.push({
-			// 			"data": {
-			// 			"source": node.data.id,
-			// 			"target": i.data.id,
-			// 			"kind": "Relation",
-			// 			"relation": "Augmented Co-expression Gene",
-			// 			"label": "Augmented Co-expression Gene",
-			// 			"properties": {
-			// 				"id": `${node.data.id}-${i.data.id}`,
-			// 				"label": "Augmented Co-expression Gene",
-			// 				"source_label": node.data.label,
-			// 				"target_label": i.data.label,
-			// 			},
-			// 			"lineColor": "#81c784",
-			// 			"directed": "none"
-			// 			}
-			// 		})
-			// 	}
-			// }
 		}
-		return [...initial_results, ...augmented_results, ...augmented_edges]
+		return {
+			nodes: [...initial_results.nodes, ...augmented_results.nodes],
+			edges: [...initial_results.edges, augmented_edges]
+		}
+		// return [...initial_results, ...augmented_results, ...augmented_edges]
 
 	}
 }
 
 export default async function query(req, res) {
-  const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=25, path_length, order, remove, expand, gene_links, augment, augment_limit } = await req.query
+  await runMiddleware(req, res, cors)
+  const { filter } = await req.query
+  const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=25, path_length, order, remove, expand, gene_links, augment, augment_limit } = JSON.parse(filter)
   const schema = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/schema`)).json()
-  const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/aggregate`)).json()
+  const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/initialize`)).json()
   const nodes = schema.nodes.map(i=>i.node)
   if (nodes.indexOf(start) < 0) res.status(400).send("Invalid start node")
   else if (end && nodes.indexOf(end) < 0) res.status(400).send("Invalid end node")
@@ -547,16 +511,16 @@ export default async function query(req, res) {
 		try {
 			if (start && end && start_term && end_term) {
 				if(augment)  res.status(400).send("You can only augment on single search")
-				const results = await resolve_two_terms({session, start_term, start_field, start, end_term, end_field, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : [], gene_links})
+				const results = await resolve_two_terms({session, start_term, start_field, start, end_term, end_field, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  remove: [], expand: expand ? expand : [], gene_links})
 				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
 				res.status(200).send(results)
 			} else if (start && end && start_term ) {
 				if(augment)  res.status(400).send("You can only augment on single search")
-				const results = await resolve_term_and_end_type({session, start_term, start_field, start, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : [], gene_links})
+				const results = await resolve_term_and_end_type({session, start_term, start_field, start, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  remove: [], expand: expand ? expand : [], gene_links})
 				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
 				res.status(200).send(results)
 			} else if (start) {
-				const results = await resolve_one_term({session, start, field: start_field, term: start_term, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  JSON.parse(remove): [], expand: expand ? JSON.parse(expand) : [], gene_links, augment, augment_limit })
+				const results = await resolve_one_term({session, start, field: start_field, term: start_term, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  remove: [], expand: expand ? expand : [], gene_links, augment, augment_limit })
 				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
 				res.status(200).send(results)
 			} else {

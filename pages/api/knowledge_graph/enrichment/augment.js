@@ -7,8 +7,8 @@ import {resolve_results} from '../index'
 import { enrichr_query, compute_colors } from ".";
 
 export const get_node_color_and_type = ({node, terms, color, aggr_scores, field, aggr_field, fields, augmented_genes, gene_list, ...rest }) => {
-    if (node.properties.pval === undefined) {
-        if (augmented_genes.indexOf(node.properties.label) > -1 && gene_list.indexOf(node.properties.label) === -1) {
+    if (node.pval === undefined) {
+        if (augmented_genes.indexOf(node.label) > -1 && gene_list.indexOf(node.label) === -1) {
             const props = default_get_node_color_and_type(({node, terms, color, aggr_scores, field, aggr_field, fields}))
             props.borderColor = "#ff80ab",
             props.borderWidth = 7
@@ -18,10 +18,10 @@ export const get_node_color_and_type = ({node, terms, color, aggr_scores, field,
         }
     }
     else {
-        const props = compute_colors({properties: node.properties, aggr_scores, color}) 
-        for (const i in node.properties.enrichment || []) {
-            const v = node.properties.enrichment[i]
-            node.properties.enrichment[i] = { ...v, ...compute_colors({properties: v, aggr_scores, color}) }
+        const props = compute_colors({properties: node, aggr_scores, color}) 
+        for (const i in node.enrichment || []) {
+            const v = node.enrichment[i]
+            node.enrichment[i] = { ...v, ...compute_colors({properties: v, aggr_scores, color}) }
         }
         return props
     }	
@@ -91,7 +91,7 @@ const add_list = async ({genes, description}) => {
 
 export const kind_mapper = ({node, type, augmented_genes, gene_list}) => {
     if (type !== "Gene") return type
-    const label = node.properties.label
+    const label = node.label
     if (augmented_genes.indexOf(label) > -1 && gene_list.indexOf(label) == -1) {
         return "Predicted Gene (Co-Expression)"
     } else return "Gene"
@@ -190,7 +190,7 @@ const enrichment = async ({
         // const {genes, terms, max_pval, min_pval, nodes, library_terms} = await enrichr_query_wrapper(({libraries, userListId, term_degree, min_lib, gene_degree, node_mapping, gene_limit, augmented_genes, gene_list}))
         
         const schema = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/schema`)).json()
-        const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/aggregate`)).json()
+        const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/initialize`)).json()
         aggr_scores.max_pval = max_pval
         aggr_scores.min_pval = min_pval
         const query_list = []

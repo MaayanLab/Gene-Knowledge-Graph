@@ -10,6 +10,7 @@ import { usePrevious, shouldUpdateId } from './Enrichment';
 import { process_tables } from '../utils/helper';
 
 import Tooltip from '@mui/material/Tooltip';
+import Chip from '@mui/material/Chip';
 
 import IconButton from '@mui/material/IconButton'
 
@@ -30,6 +31,8 @@ import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import SaveIcon from '@mui/icons-material/Save';
 import SendIcon from '@mui/icons-material/Send';
 import UndoIcon from '@mui/icons-material/Undo';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import FilterListOffIcon from '@mui/icons-material/FilterListOff';
 
 import HubIcon from '@mui/icons-material/Hub';
 import { mdiFamilyTree, mdiDotsCircle, mdiDna, mdiLinkVariant, mdiLinkVariantOff } from '@mdi/js';
@@ -39,7 +42,7 @@ import { toPng, toBlob, toSvg } from 'html-to-image';
 import download from 'downloadjs'
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
-const Box = dynamic(() => import('@mui/material/Box'));
+// const Chip = dynamic(() => import('@mui/material/Chip'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
 const TextField = dynamic(() => import('@mui/material/TextField'));
 const Button = dynamic(() => import('@mui/material/Button'));
@@ -88,10 +91,18 @@ export const layouts = {
 }
 
 
-
+const process_relations = (r='[]') => {
+	try {
+		const relations  = JSON.parse(r)
+		return relations
+	} catch (error) {
+		return r.split(",").map(name=>({name}))
+	}
+}
 
 export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema, initial_query={}, tooltip_viz, coexpression_prediction, gene_link_button}) {
-  if (!schema) schema=default_schema  
+  if (!schema) schema=default_schema 
+  console.log(entries)
   const router = useRouter()
   const {page,
         start_term,
@@ -135,7 +146,8 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
   const [geneLinksOpen, setGeneLinksOpen] = React.useState(false)
   const [geneLinks, setGeneLinks] = React.useState(JSON.parse(router.query.gene_links || '[]'))
   const [neighborCount, setNeighborCount] = React.useState(150)
-  const [legendCount, setLegendCount] = React.useState(0)
+  const [edgeLimitBool, setEdgeLimitBool] = React.useState(false)
+  const [edgeLimit, setEdgeLimit] = React.useState(5)
 
   const firstUpdate = useRef(true);
   const prevQuery = usePrevious(router.query)
@@ -232,10 +244,14 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       if (path_length) {
         body.path_length = path_length
       }
-      if (relation) {
-        body.relation = relation
+      if (router.query.relation) {
+        body.relation = router.query.relation
       } else if (!end_term){
-        body.relation = current_node.relation.join(",") || default_relations.join(",")
+        if (current_node.relation.join(",")) {
+          body.relation = current_node.relation.join(",")  
+        } else if (default_relations.length < edges.length) {
+          body.relation = default_relations.join(",")
+        }
       } else if (end_term) {
         body.relation = edges.join(",")
       }
@@ -255,7 +271,6 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
         body.gene_links = router.query.gene_links
       }
       const body_str = Object.entries(body).map(([k,v])=>`${k}=${v}`).join("&")
-      
       const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph?${body_str}`,
       {
         method: 'GET',
@@ -267,7 +282,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       const selected_edges = []
       for (const i of results) {
         if (i.data.relation && selected_edges.indexOf(i.data.relation) === -1) {
-          selected_edges.push(i.data.relation)
+          selected_edges.push({name: i.data.relation})
         }
       }
       setSelected(selected_edges)
@@ -368,6 +383,27 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       else return acc
   }, [])
 
+  React.useEffect(()=>{
+    const {page, relation: r, ...rest} = router.query
+    const relation = []
+    for (const i of process_relations(r)) {
+      if (edgeLimitBool) {
+        i.limit = edgeLimit
+      } else {
+        delete i.limit
+      }
+      relation.push(i)
+    }
+
+    router.push({
+      pathname: `/${page || ''}`,
+      query: {
+        ...rest,
+        relation: JSON.stringify(relation)
+      }
+    }, undefined, {shallow: true})
+  }, [edgeLimitBool])
+  
   return (
     <Grid container justifyContent="space-around" spacing={2}>
       <Grid item xs={12}>
@@ -557,10 +593,10 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
       }
       <Grid item xs={12}>
         <Grid container spacing={1} alignItems="center" justifyContent="flex-start">
-          {edges.length && <Grid item><Typography variant="body1"><b>Select relation:</b></Typography></Grid>}
+          {/* {edges.length && <Grid item><Typography variant="body1"><b>Select relation:</b></Typography></Grid>} */}
           {edges.length && 
             <Grid item>
-              <Selector entries={edges}
+              {/* <Selector entries={edges}
                 value={relation ? relation.split(","): selected.length > 0 ? selected: current_node.relation || default_relations}
                 prefix={"edge"}
                 onChange={(e)=>{
@@ -577,34 +613,87 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                     <Typography noWrap>{selected.join(", ")}</Typography>
                   </Box>
                 )}
-                multiple={true}/>
+                multiple={true}/> */}
+                <Autocomplete
+                  multiple
+                  limitTags={2}
+                  id="multiple-limit-tags"
+                  options={edges}
+                  // getOptionLabel={(option) => option.title}
+                  value={process_relations(router.query.relation)}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Select Relation" placeholder="Select Relation" />
+                  )}
+                  sx={{ width: '330px' }}
+                  onChange={(e, relation)=>{
+                    const {relation: r, page, ...query} = router.query
+                    query.relation = JSON.stringify(relation.map(name=>({name})))
+                    redirect(query)
+                  }}
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                      <Tooltip title={option.name} key={option.name}>
+                        <Chip label={option.name} {...getTagProps({ index })}
+                          style={{maxWidth: 120}}
+                          onDelete={()=>{
+                            const {relation: r, page, ...query} = router.query
+                            const relation = process_relations(r)
+                            const rels = []
+                            for (const i of relation) {
+                              if (i.name !== option.name) {
+                                rels.push({name: i.name})
+                              }
+                            }
+                            query.relation = JSON.stringify(rels)
+                            redirect(query)
+                          }}/>
+                        </Tooltip>
+                    ))
+                  }
+                />
             </Grid>
           }
           {isIFrame() ? null:
           <React.Fragment>
+            {router.query.relation && 
+              <Grid item>
+                <Tooltip title={edgeLimitBool ? "Limit number of edges": "Limit per edge type"}>
+                  <IconButton variant='contained'
+                        onClick={()=>setEdgeLimitBool(!edgeLimitBool)}
+                    >
+                        {edgeLimitBool ? <FilterListOffIcon/>: <FilterListIcon/>}
+                    </IconButton>
+                </Tooltip>
+              </Grid>
+            }
             <Grid item>
-              <Typography variant="body1"><b>Size:</b></Typography>
+              <Typography variant="body1"><b>{edgeLimitBool ? "Limit per edge": "Size"}:</b></Typography>
             </Grid>
             <Grid item xs={1}>
               <Slider 
-                value={parseInt(limit)}
+                value={parseInt(edgeLimitBool? edgeLimit: limit)}
                 color="blues"
                 onChange={(e, nv)=>{
+                  const {page, limit, relation, ...query} = router.query
+                  if (edgeLimitBool) {
+                    setEdgeLimit(nv)
+                    query.relation = relation.map(({name})=>({name, limit: nv}))
+
+                  } else {
+                    query.limit = limit
+                  }
                   router.push({
                     pathname: `/${page || ''}`,
-                    query: {
-                      ...router.query,
-                      limit: nv
-                    }
+                    query
                   }, undefined, { shallow: true })
                 }}
                 style={{marginBottom: -5}}
-                min={10}
-                max={(router.query.end || router.query.start === "Gene") ? 150: neighborCount}
+                min={edgeLimitBool ? 1: 10}
+                max={edgeLimitBool ? 10: (router.query.end || router.query.start === "Gene") ? 150: neighborCount}
                 aria-labelledby="continuous-slider" />
             </Grid>
             <Grid item>
-              <Typography variant="body1">{limit}</Typography>
+              <Typography variant="body1">{edgeLimitBool ? edgeLimit: limit}</Typography>
             </Grid>
           </React.Fragment>}
           <Grid item>
@@ -880,7 +969,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
                     <Stack direction="row" alignItems="center" justifyContent={"flex-end"}>
                         <Typography variant='subtitle2' style={{marginRight: 5}}>Select relationships:</Typography>
                         {geneLinksRelations.map(i=>(
-                              <FormControlLabel key={i} control={<Checkbox checked={geneLinks.indexOf(i)>-1} onChange={()=>{
+                              <FormControlLabel key={i.name} control={<Checkbox checked={geneLinks.indexOf(i)>-1} onChange={()=>{
                                 if (geneLinks.indexOf(i)===-1) setGeneLinks([...geneLinks, i])
                                 else setGeneLinks(geneLinks.filter(l=>l!==i))
                               }}/>} label={<Typography variant='subtitle2'>{i}</Typography>} />

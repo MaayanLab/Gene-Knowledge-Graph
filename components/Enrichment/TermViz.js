@@ -79,10 +79,10 @@ const TermViz = ({data, tab, setTab}) => {
 		if (data) {
 			const entries = {}
             
-			for (const dt of data) {
+			for (const dt of [...data.nodes, ...data.edges]) {
 				const {label, id: i, kind, color, gradient_color} = dt.data
-                if (dt.data.properties.pval !== undefined) {
-					for (const properties of dt.data.properties.enrichment || [dt.data.properties]) {
+                if (dt.data.pval !== undefined) {
+					for (const properties of dt.data.enrichment || [dt.data]) {
 						const {enrichr_label} = properties
 						const id = `${properties.library}: ${enrichr_label} (${i})`
 						if (entries[id] === undefined && kind !== "Gene") {
@@ -91,7 +91,7 @@ const TermViz = ({data, tab, setTab}) => {
 								label,
 								enrichr_label,
 								...properties,
-								library: dt.data.properties.library,
+								library: dt.data.library,
 								pval: parseFloat(precise(properties.pval)),
 								qval: parseFloat(precise(properties.qval)),
 								zscore: parseFloat(precise(properties.zscore)),

@@ -31,8 +31,8 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
     const field = node.kind === "Relation" ? node.label : node.kind.replace("Co-expressed Gene", "Gene")
     for (const i of tooltip_templates[field] || []) {
       if (i.type === "link") {
-        const text = makeTemplate(i.text, node.properties)
-        const href = makeTemplate(i.href, node.properties)
+        const text = makeTemplate(i.text, node)
+        const href = makeTemplate(i.href, node)
         if (text !== 'undefined') {
           elements.push(
             <Typography key={i.label} variant="subtitle2">
@@ -46,7 +46,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
           )
         }
       } else {
-        let e = makeTemplate(i.text, node.properties)
+        let e = makeTemplate(i.text, node)
         if (e !== 'undefined') {
           elements.push(
             <Typography key={i.label} variant="subtitle2">
@@ -160,7 +160,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
   
   }
   
-  export const Legend = ({elements=[], search=true, left, top, legendSize=0}) => {
+  export const Legend = ({elements={}, search=true, left, top, legendSize=0}) => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('lg'));
     const sm = useMediaQuery(theme.breakpoints.down('sm'));
@@ -182,9 +182,9 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
     let not_significant = false
     const color_sum = {}
     const relations = []
-    for (const i of elements) {
+    for (const i of [...elements.nodes, ...elements.edges]) {
       const {kind, color, borderColor, lineColor, relation} = i.data
-      if (i.data.properties.pval && i.data.properties.pval > 0.05) not_significant = true
+      if (i.data.pval && i.data.pval > 0.05) not_significant = true
       if (kind === "Relation" && lineColor !== "#e0e0e0" && relation_colors[relation]===undefined) {
         relation_colors[relation] = <Grid item xs={12} key={kind}>
           <Grid container alignItems={"center"} spacing={1}>
