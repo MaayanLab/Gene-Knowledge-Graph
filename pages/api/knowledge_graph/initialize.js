@@ -7,11 +7,13 @@ import { default_color } from "../../../utils/colors";
 const initialize = async ({session, schema}) => {
 	const aggr_scores = {}
     const colors = {}
+    const edges = []
     for (const s of schema.edges) {	
         for (const i of (s.match || [])) {
             colors[i] = {
                 color: s.color || default_color,
             }
+            edges.push(i)
         }
         if (s.order) {
             const [field, order] = s.order
@@ -71,7 +73,8 @@ const initialize = async ({session, schema}) => {
             colors[s.node].field = field
         }
     }
-    return {aggr_scores, colors}
+    
+    return {aggr_scores, colors, edges}
 }
 
 export default async function query(req, res) {
