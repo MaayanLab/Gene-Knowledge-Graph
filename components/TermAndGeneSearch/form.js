@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 
 import Link from 'next/link'
 import useAsyncEffect from 'use-async-effect'
-import { useRouter } from 'next/router'
+import { withRouter } from 'next/router'
 import fileDownload from 'js-file-download'
 import * as default_schema from '../../public/schema.json'
 import { isIFrame } from '../../utils/helper';
@@ -114,7 +114,7 @@ export const redirect = ({router, page, ...query}) => {
     }, undefined, {shallow: true})
 }
 
-export default function Form({
+function Form({
     entries,
     edges=[],
     default_relations,
@@ -129,8 +129,8 @@ export default function Form({
     layouts,
     genes = [],
     elements = {},
+    router,
 }) {
-    const router = useRouter()
     const {
         filter:f,
         page
@@ -167,30 +167,32 @@ export default function Form({
 
     useEffect(()=>{
         const {page, ...query} = router.query
-        if (!query.filter || Object.keys(JSON.parse(query.filter)).length === 0) {
-            if (initial_query) {
-                // if (initial_query.relation) initial_query.relation = process_relation(initial_query.relation)
-                redirect({
-                    router, 
-                    page,
-                    ...initial_query
-                })
-                // router.push({
-                //     pathname: `/${page || ''}`,
-                //     query: initial_query
-                // }, undefined, {shallow: true})
-            } else {
+        if (router.isReady) {
+            if (!query.filter || Object.keys(JSON.parse(query.filter)).length === 0) {
+                if (initial_query) {
+                    // if (initial_query.relation) initial_query.relation = process_relation(initial_query.relation)
+                    redirect({
+                        router, 
+                        page,
+                        ...initial_query
+                    })
+                    // router.push({
+                    //     pathname: `/${page || ''}`,
+                    //     query: initial_query
+                    // }, undefined, {shallow: true})
+                } else {
 
-                query.filter = {
-                    start: Object.keys(entries)[0],
-                    start_field: 'label',
-                    start_term: entries[query.start][query.start_field][0],
+                    query.filter = {
+                        start: Object.keys(entries)[0],
+                        start_field: 'label',
+                        start_term: entries[query.start][query.start_field][0],
+                    }
+                    redirect({
+                        router, 
+                        page,
+                        ...query
+                    })
                 }
-                redirect({
-                    router, 
-                    page,
-                    ...query
-                })
             }
         }
     }, [router.query])
@@ -825,3 +827,5 @@ export default function Form({
         </Grid>
     )
 }
+
+export default withRouter(Form)
