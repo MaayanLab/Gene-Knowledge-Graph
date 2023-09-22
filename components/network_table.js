@@ -32,8 +32,8 @@ const NetworkTable = ({data, schema}) => {
 			const id_mapper = {}
 			const node_tabs = []
 			const edge_tabs = []
-			for (const d of data) {
-				const {kind, relation, properties, source, target, label} = d.data
+			for (const d of [...data.nodes, ...data.edges]) {
+				const {kind, relation, source, target, label, "Unnamed: 0": _, ...properties} = d.data
 				const key = relation || kind
 				if (key) { 
 					if ( processed[key] === undefined) {
@@ -43,14 +43,6 @@ const NetworkTable = ({data, schema}) => {
 						const header = []
 						const columnVisibilityModel = {}
 						if (display[key]) {
-							// header.push({
-							// 	field: 'label',
-							// 	headerName: "Label",
-							// 	// flex: 1,
-							// 	style: {flexDirection: "row"},
-							// 	align: "left",
-							// 	type: relation ? "edge": "node",
-							// })
 							for (const prop of display[key]) {
 								const field = prop.label
 								columnVisibilityModel[field] = !(prop.hide)
@@ -82,7 +74,7 @@ const NetworkTable = ({data, schema}) => {
 								}
 							}
 						} else {
-							const {id, label, symbol, ref, ...rest} = properties
+							const {id, symbol, ref, ...rest} = properties
 							id_mapper[id] = label
 							header.push({
 								field: 'id',
@@ -117,7 +109,7 @@ const NetworkTable = ({data, schema}) => {
 						processed[key].columnVisibilityModel = columnVisibilityModel
 					}
 					if (processed[key].data[properties.id] === undefined) {
-						processed[key].data[properties.id] = {id: properties.id || `${source}_${target}`}
+						processed[key].data[properties.id] = {id: properties.id !== "" ? properties.id: `${source}_${target}`}
 					}
 					for (const i of processed[key].header) {
 						if (i.href) {
@@ -131,7 +123,11 @@ const NetworkTable = ({data, schema}) => {
 								i.count = i.count + 1
 							}
 						} else {
+							
 							const val = makeTemplate(i.text, properties)
+							if (i.field === "source label") {
+								console.log(i.text, properties, val)
+							}
 							processed[key].data[properties.id][i.field] = val === "undefined" ? "": precise(val)
 							if (val !== "undefined") {
 								i.count = i.count + 1
@@ -140,38 +136,6 @@ const NetworkTable = ({data, schema}) => {
 					}
 					if (processed[key].data[properties.id]["label"] === "") processed[key].data[properties.id]["label"] = label
 				} 
-				// else {
-				// 	if (processed["Relationships"] === undefined) {
-				// 		processed["Relationships"] = {header: [], data: []}
-				// 		const header = [
-				// 			{
-				// 				field: 'label',
-				// 				headerName: "Label",
-				// 				flex: 1,
-				// 				style: {flexDirection: "row"},
-				// 				align: "left",
-				// 			}
-				// 		]
-				// 		const {id, label, ...rest} = properties
-				// 		for (const field of Object.keys(rest)) {
-				// 			const headerName = field.replaceAll(".", " ")
-				// 			header.push({
-				// 				field,
-				// 				headerName: headerName.charAt(0).toUpperCase() + headerName.slice(1),
-				// 				flex: 1,
-				// 				style: {flexDirection: "row"},
-				// 				align: "left",
-				// 			})
-				// 		}
-				// 		processed["Relationships"].header= header
-				// 	}
-				// 	const id = `${d.data.source}_${d.data.target}`
-				// 	if (processed["Relationships"].data[id] === undefined)
-				// 		processed["Relationships"].data[id] = {
-				// 			id: `${d.data.source}_${d.data.target}`,
-				// 			...d.data.properties,
-				// 		}
-				// }
 			}
 			setMapper(id_mapper)
 			setTabs([...node_tabs, ...edge_tabs])
@@ -181,7 +145,9 @@ const NetworkTable = ({data, schema}) => {
 	}, [data])
 	if (processedData === null) return null
 	else {
+		console.log(processedData[tab])
 		const {data={}, header=[], columnVisibilityModel} = processedData[tab] || {}
+		console.log( processedData[tab])
 		return (
 			<Card style={{marginBottom: 10}}>
 				<CardContent>
