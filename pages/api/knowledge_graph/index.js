@@ -106,6 +106,7 @@ export const resolve_results = ({results,
 	misc_props = {},
 	kind_mapper = null, 
 }) => {
+		console.log("Resolving...")
 		const color_values = {}
 		let color_index = 0
 		let shade_index = 0
@@ -169,11 +170,11 @@ export const resolve_results = ({results,
 							source: nodes[relation.start].data.id,
 							target: nodes[relation.end].data.id,
 							kind: "Relation",
-							relation: relation_type,
 							label: relation_type,
 							...properties[relation_type] || {},
 							...process_properties(relation.properties),
 							...(get_edge_color({relation, record, aggr_scores, ...colors[relation_type]})),
+							relation: relation_type,
 							directed: relation.properties.directed ? 'triangle': 'none'
 						}
 					}
@@ -187,16 +188,12 @@ export const resolve_results = ({results,
 	}
 
 
-const resolve_two_terms = async ({session, start_term, start_field, start, end_term, end_field, end, limit, order, path_length=4, schema, relation, aggr_scores, colors, remove, expand: e, gene_links}) => {
+const resolve_two_terms = async ({session, edges,  start_term, start_field, start, end_term, end_field, end, limit, order, path_length=4, schema, relation, aggr_scores, colors, remove, expand: e, gene_links}) => {
 	if (!parseInt(path_length)) throw {message: "Path length is not a number"}
 	let query = `MATCH q=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\` {${end_field}: $end_term}))
 		USING INDEX a:\`${start}\`(${start_field})
 		USING INDEX b:\`${end}\`(${end_field})
 	`		
-	const edges = schema.edges.reduce((acc, i)=>([
-		...acc,
-		...i.match
-	  ]), [])
 	if (relation) {
 		const rels = []
 		for (const i of relation) {
@@ -252,17 +249,12 @@ const resolve_two_terms = async ({session, start_term, start_field, start, end_t
 	return resolve_results({results, terms: [start_term, end_term], schema, order, score_fields,  aggr_scores, colors, start_field, end_field})
 }
 
-const resolve_term_and_end_type = async ({session, start_term, start_field, start, end, limit, order, path_length=4, schema, relation, aggr_scores, colors, remove, expand: e, gene_links}) => {
+const resolve_term_and_end_type = async ({session, edges, start_term, start_field, start, end, limit, order, path_length=4, schema, relation, aggr_scores, colors, remove, expand: e, gene_links}) => {
 	
 	if (!parseInt(path_length)) throw {message: "Path length is not a number"}
 	let query = `MATCH q=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\`))
 		USING INDEX a:\`${start}\`(${start_field})
 	`
-
-	const edges = schema.edges.reduce((acc, i)=>([
-		...acc,
-		...i.match
-	  ]), [])
 	  if (relation) {
 		const rels = []
 		for (const i of relation) {
@@ -334,23 +326,27 @@ const resolve_term_and_end_type = async ({session, start_term, start_field, star
 }
 
 
-const resolve_one_term = async ({session, start, field, term, relation, limit, order, path_length=1, schema, aggr_scores, colors, expand: e, remove, gene_links, augment, augment_limit=10}) => {
+const resolve_one_term = async ({session, edges, start, field, term, relation, limit, order, path_length=1, schema, aggr_scores, colors, expand: e, remove, gene_links, augment, augment_limit=10}) => {
 	if (!parseInt(path_length)) throw {message: "Path length is not a number"}
-	const edges = schema.edges.reduce((acc, i)=>([
-		...acc,
-		...i.match
-		]), [])
 	const rels = []
 	const vars = {}
 	for (const r of relation) {
-		if (edges.indexOf(r.name) === -1) throw {message: `Invalid relationship ${i}`}
+		if (edges.indexOf(r.name) === -1) throw {message: `Invalid relationship ${r.name}`}
 		else {
+			const color_order = colors[r.name]
 			let q = `
-				MATCH p=(st:\`${start}\` { ${field}: $term })-[:\`${r.name}\`*${path_length}]-(en)
+				MATCH p=(st:\`${start}\` { ${field}: $term })-[r1:\`${r.name}\`*${path_length}]-(en)
 				USING INDEX st:\`${start}\`(${field})
 				WITH p, st
-				LIMIT ${parseInt(r.limit || 5)} 
+				
 			`
+			if (color_order) {
+				q = q + `, REDUCE(acc = 0.0, r in r1 |
+					CASE WHEN TYPE(r) = '${r.name}' THEN acc + r.evidence ELSE acc END) as evidence
+					ORDER BY  evidence ${color_order.aggr_type}	
+				`
+			}
+			q = q + `LIMIT ${parseInt(r.limit || 5)} `
 			if ((remove || []).length) {
 				q = q + `
 					WHERE NOT st.id in ${JSON.stringify(remove)}
@@ -424,9 +420,10 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 			`   
 		}
 	}
+	console.log(query)
+	
 	const results = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
 	if (!augment) {
-		console.log("Here")
 		return resolve_results({results, terms: [term], schema, order, score_fields,  aggr_scores, colors, field})
 	}
 	else {
@@ -497,9 +494,9 @@ const resolve_one_term = async ({session, start, field, term, relation, limit, o
 export default async function query(req, res) {
   await runMiddleware(req, res, cors)
   const { filter } = await req.query
-  const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=25, path_length, order, remove, expand, gene_links, augment, augment_limit } = JSON.parse(filter)
+  const { start, start_field="label", start_term, end, end_field="label", end_term, relation, limit=5, path_length, order, remove, expand, gene_links, augment, augment_limit } = JSON.parse(filter)
   const schema = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/schema`)).json()
-  const {aggr_scores, colors} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/initialize`)).json()
+  const {aggr_scores, colors, edges} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/initialize`)).json()
   const nodes = schema.nodes.map(i=>i.node)
   if (nodes.indexOf(start) < 0) res.status(400).send("Invalid start node")
   else if (end && nodes.indexOf(end) < 0) res.status(400).send("Invalid end node")
@@ -511,16 +508,16 @@ export default async function query(req, res) {
 		try {
 			if (start && end && start_term && end_term) {
 				if(augment)  res.status(400).send("You can only augment on single search")
-				const results = await resolve_two_terms({session, start_term, start_field, start, end_term, end_field, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  remove: [], expand: expand ? expand : [], gene_links})
+				const results = await resolve_two_terms({session, edges, start_term, start_field, start, end_term, end_field, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  remove: [], expand: expand ? expand : [], gene_links})
 				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
 				res.status(200).send(results)
 			} else if (start && end && start_term ) {
 				if(augment)  res.status(400).send("You can only augment on single search")
-				const results = await resolve_term_and_end_type({session, start_term, start_field, start, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  remove: [], expand: expand ? expand : [], gene_links})
+				const results = await resolve_term_and_end_type({session, edges, start_term, start_field, start, end, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  remove: [], expand: expand ? expand : [], gene_links})
 				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
 				res.status(200).send(results)
 			} else if (start) {
-				const results = await resolve_one_term({session, start, field: start_field, term: start_term, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  remove: [], expand: expand ? expand : [], gene_links, augment, augment_limit })
+				const results = await resolve_one_term({session, edges, start, field: start_field, term: start_term, relation, limit, path_length, schema, order, aggr_scores, colors, remove: remove ?  remove: [], expand: expand ? expand : [], gene_links, augment, augment_limit })
 				fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
 				res.status(200).send(results)
 			} else {
