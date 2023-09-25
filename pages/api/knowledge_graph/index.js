@@ -420,7 +420,6 @@ const resolve_one_term = async ({session, edges, start, field, term, relation, l
 			`   
 		}
 	}
-	console.log(query)
 	
 	const results = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
 	if (!augment) {
