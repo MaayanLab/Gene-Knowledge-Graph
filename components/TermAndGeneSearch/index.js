@@ -174,8 +174,8 @@ export default function TermAndGeneSearch(props){
                     const results = await res.json()
                     const selected_edges = []
                     for (const i of results.edges) {
-                        if (i.data.relation && selected_edges.indexOf(i.data.relation) === -1) {
-                            selected_edges.push(i.data.relation)
+                        if (i.data.relation && selected_edges.indexOf(i.data.label) === -1) {
+                            selected_edges.push(i.data.label)
                         }
                     }
                     setElements(results)
@@ -209,6 +209,7 @@ export default function TermAndGeneSearch(props){
         if (i.data.kind === "Gene" && acc.indexOf(i.data.label) === -1) return [...acc, i.data.label]
         else return acc
     }, [])
+    
     return (
         <Grid container spacing={1}>
             <Grid item xs={12}>
