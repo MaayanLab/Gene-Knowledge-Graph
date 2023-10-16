@@ -26,7 +26,7 @@ const CardActions = dynamic(() => import('@mui/material/CardActions'));
 const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
 const Avatar = dynamic(() => import('@mui/material/Avatar'));
 
-export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema, top, right, endpoint="/", expand=true, reset=null}) => {
+export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema, top=25, left=25, endpoint="/", expand=true, reset=null}) => {
     const elements = []
     const field = node.kind === "Relation" ? node.label : node.kind.replace("Co-expressed Gene", "Gene")
     for (const i of tooltip_templates[field] || []) {
@@ -60,8 +60,8 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
       <Box sx={{
         zIndex: 2,
         position: 'absolute',
-        top: 25,
-        left: 25,
+        top,
+        left,
         maxWidth: 400
       }}
       border={1}

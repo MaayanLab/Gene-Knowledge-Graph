@@ -1,72 +1,20 @@
 import React, { useRef, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic'
 
-import Link from 'next/link'
-import useAsyncEffect from 'use-async-effect'
 import { useRouter } from 'next/router'
-import fileDownload from 'js-file-download'
-import * as default_schema from '../../public/schema.json'
-import { isIFrame } from '../../utils/helper';
-import { usePrevious, shouldUpdateId } from '../Enrichment';
 import { process_tables } from '../../utils/helper';
 
-import Tooltip from '@mui/material/Tooltip';
-import Chip from '@mui/material/Chip';
-
-import IconButton from '@mui/material/IconButton'
-
-import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
-import CloseIcon from '@mui/icons-material/Close';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-
-import LabelIcon from '@mui/icons-material/Label';
-import LabelOffIcon from '@mui/icons-material/LabelOff';
-import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import ZoomOutIcon from '@mui/icons-material/ZoomOut';
-import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
-import SaveIcon from '@mui/icons-material/Save';
-import SendIcon from '@mui/icons-material/Send';
-import UndoIcon from '@mui/icons-material/Undo';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import FilterListOffIcon from '@mui/icons-material/FilterListOff';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Slider from '@mui/material/Slider';
-import Popper from '@mui/material/Popper';
-
 import HubIcon from '@mui/icons-material/Hub';
-import { mdiFamilyTree, mdiDotsCircle, mdiDna, mdiLinkVariant, mdiLinkVariantOff } from '@mdi/js';
+import { mdiFamilyTree, mdiDotsCircle } from '@mdi/js';
 import Icon from '@mdi/react';
-
-import { toPng, toBlob, toSvg } from 'html-to-image';
-import download from 'downloadjs'
 import { redirect } from './form';
 const Grid = dynamic(() => import('@mui/material/Grid'));
 
 // const Chip = dynamic(() => import('@mui/material/Chip'));
-const Typography = dynamic(() => import('@mui/material/Typography'));
-const TextField = dynamic(() => import('@mui/material/TextField'));
-const Button = dynamic(() => import('@mui/material/Button'));
-const Autocomplete = dynamic(() => import('@mui/material/Autocomplete'));
 const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
 const Backdrop = dynamic(() => import('@mui/material/Backdrop'));
-const Stack = dynamic(() => import('@mui/material/Stack'));
-
-const ListItemText = dynamic(() => import('@mui/material/ListItemText'));
-const ListItemIcon = dynamic(() => import('@mui/material/ListItemIcon'));
-
-const AddBoxIcon  = dynamic(() => import('@mui/icons-material/AddBox'));
-const IndeterminateCheckBoxIcon = dynamic(() => import('@mui/icons-material/IndeterminateCheckBox'));
 const TooltipCard = dynamic(async () => (await import('../misc')).TooltipCard);
 const Legend = dynamic(async () => (await import('../misc')).Legend);
-const Selector = dynamic(async () => (await import('../misc')).Selector);
-const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
-const FormControlLabel = dynamic(() => import('@mui/material/FormControlLabel'));
 
 const Form = dynamic(() => import('./form'));
 const Cytoscape = dynamic(() => import('../Cytoscape'), { ssr: false })
@@ -140,9 +88,9 @@ export default function TermAndGeneSearch(props){
     }
 
     for (const e of schema.edges) {
-    for (const i of e.match) {
-        tooltip_templates_edges[i] = e.display
-    }
+        for (const i of e.match) {
+            tooltip_templates_edges[i] = e.display
+        }
     }
     const reset_tooltip = () => {
         setNode(null)

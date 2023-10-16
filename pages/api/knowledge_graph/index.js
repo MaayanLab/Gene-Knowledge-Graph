@@ -8,7 +8,7 @@ import {default_color, mui_colors} from '../../../utils/colors'
 import { augment_gene_set, kind_mapper, get_node_color_and_type } from "./enrichment/augment"
 
 // Initializing the cors middleware
-const cors = Cors({
+export const cors = Cors({
   methods: ['POST', 'GET', 'HEAD'],
 })
 
@@ -317,7 +317,6 @@ const resolve_term_and_end_type = async ({session, edges, start_term, start_fiel
 			`   
 		}
 	}
-
 	
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 	// query = `${query} RETURN * ORDER BY rand() LIMIT ${limit}`
@@ -342,8 +341,8 @@ const resolve_one_term = async ({session, edges, start, field, term, relation, l
 			`
 			if (color_order) {
 				q = q + `, REDUCE(acc = 0.0, r in r1 |
-					CASE WHEN TYPE(r) = '${r.name}' THEN acc + r.evidence ELSE acc END) as evidence
-					ORDER BY  evidence ${color_order.aggr_type}	
+					CASE WHEN TYPE(r) = '${r.name}' THEN acc + r.${color_order.field} ELSE acc END) as ${color_order.field}
+					ORDER BY  ${color_order.field} ${color_order.aggr_type}	
 				`
 			}
 			q = q + `LIMIT ${parseInt(r.limit || 5)} `
@@ -420,7 +419,6 @@ const resolve_one_term = async ({session, edges, start, field, term, relation, l
 			`   
 		}
 	}
-	
 	const results = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
 	if (!augment) {
 		return resolve_results({results, terms: [term], schema, order, score_fields,  aggr_scores, colors, field})

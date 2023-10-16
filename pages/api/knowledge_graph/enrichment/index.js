@@ -3,7 +3,6 @@ import neo4j from "neo4j-driver"
 import { neo4jDriver } from "../../../../utils/neo4j"
 import { default_get_node_color_and_type } from "../index";
 import Color from 'color'
-import { mui_colors } from "../../../../utils/colors";
 
 import {resolve_results} from '../index'
 

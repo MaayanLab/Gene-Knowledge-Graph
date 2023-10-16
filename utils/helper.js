@@ -47,13 +47,13 @@ export function toNumber(value) {
 }
 
 export const process_tables = async (results) => {
+	console.log(results)
 	const node_columns = ["id", "label"]
 	const nodes = []
 	const relation_columns = ["source", "target", "relation"]
 	const relations = []
 	const ids = []
-	for (const {data} of results.nodes) {
-		const props = data.properties
+	for (const {data: props} of results.nodes) {
 		const row = []
 		if (ids.indexOf(props["id"]) === -1) {
 			ids.push(props["id"])
