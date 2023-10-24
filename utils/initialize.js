@@ -89,8 +89,12 @@ export const initialize_kg = async () => {
 	const edges = []
 	let default_relations = []
 	let schema = await fetch_kg_schema()
+	const tooltip_templates_node = {}
+  	const tooltip_templates_edges = {}
+  
   
 	for (const i of schema.nodes) {
+		tooltip_templates_node[i.node] = i.display
 		const {node, example, palette, search} = i
 		const results = await get_terms(node, search)
 		entries[node] = results
@@ -103,7 +107,12 @@ export const initialize_kg = async () => {
 		// contrastText: contrastText || "#000"
 		// }
 	}
+
+  let geneLinksRelations = []
   for (const i of schema.edges) {
+	for (const e of i.match) {
+		tooltip_templates_edges[e] = i.display
+	  }
 	if (!i.gene_link) {
 		for (const e of i.match) {
 			if (edges.indexOf(e) === -1) edges.push(e)
@@ -111,8 +120,11 @@ export const initialize_kg = async () => {
 		if (i.selected) {
 		  default_relations = [...default_relations,  ...(i.match || [])]
 		}
+	} else {
+		geneLinksRelations = [...geneLinksRelations, ...i.match]
 	}
   }
+  
 
   
   return {
@@ -123,7 +135,10 @@ export const initialize_kg = async () => {
         edges: edges.sort(function(a, b) {
 			return a.toLowerCase().localeCompare(b.toLowerCase());
 		 }),
-        default_relations
+		tooltip_templates_node,
+		tooltip_templates_edges,
+        default_relations,
+		geneLinksRelations
 	}
 }
 

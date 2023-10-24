@@ -295,7 +295,9 @@ const Header = ({schema, ...rest}) => {
 							{schema.header.tabs.map(t=>(
 								<MenuItem key={t.label} onClick={()=> {
 									handleCloseMenu()
-									router.push(t.endpoint)
+									router.push({
+										pathname: t.endpoint,
+									})
 								}}>{t.label}</MenuItem>
 							))}
 						</Menu>
