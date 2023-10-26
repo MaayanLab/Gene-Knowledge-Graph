@@ -190,7 +190,6 @@ const enrichment = async ({
         const query_list = []
         const vars = {}
         const remove = (JSON.parse(r || "[]"))
-        
         for (const [node, lib_terms] of Object.entries(library_terms)) {
             let query_part = `
                 MATCH p = (${node})--(b:Gene) 
@@ -251,6 +250,7 @@ const enrichment = async ({
             }
         }
         const query = query_list.join(' UNION ')
+        console.log(query)
         const rs = await session.readTransaction(txc => txc.run(query, {limit: expand_limit, ...vars}))
         fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
         return resolve_results({results: rs, schema,  aggr_scores, colors, kind_properties: terms, get_node_color_and_type})

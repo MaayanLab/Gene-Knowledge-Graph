@@ -106,7 +106,6 @@ export const resolve_results = ({results,
 	misc_props = {},
 	kind_mapper = null, 
 }) => {
-		console.log("Resolving...")
 		const color_values = {}
 		let color_index = 0
 		let shade_index = 0
@@ -339,7 +338,7 @@ const resolve_one_term = async ({session, edges, start, field, term, relation, l
 				WITH p, st
 				
 			`
-			if (color_order) {
+			if (color_order.field) {
 				q = q + `, REDUCE(acc = 0.0, r in r1 |
 					CASE WHEN TYPE(r) = '${r.name}' THEN acc + r.${color_order.field} ELSE acc END) as ${color_order.field}
 					ORDER BY  ${color_order.field} ${color_order.aggr_type}	
