@@ -196,7 +196,7 @@ const IconRenderer = ({label, icon, height=100, width=100, href, router, subhead
 			<Tooltip title={label} key={label}>
 				<Button 
 					sx={buttonStyle}
-					href={`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}`}
+					href={`${process.env.NEXT_PUBLIC_PREFIX}`}
 				>
 					<div style={{height, minWidth: width}}>
 						<Image

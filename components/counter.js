@@ -11,7 +11,7 @@ export const Counter = ({fontColor}) => {
     const query_counter = async (delay_time=5000) => {
         try {
             await delay(delay_time)
-            const {count} = await ( await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter`)).json()
+            const {count} = await ( await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/counter`)).json()
             setCount(count)
             setTimer(timer + 1)
         } catch (error) {
