@@ -61,6 +61,8 @@ export default function TermAndGeneSearch(props){
     const [node, setNode] = React.useState(null)
     const [edge, setEdge] = React.useState(null)
     const [focused, setFocused] = React.useState(null)
+    const [startSelected, setStartSelected] = useState(null)
+    const [endSelected, setEndSelected] = useState(null)
     const {
         edge_labels,
         view = "network",
@@ -161,17 +163,18 @@ export default function TermAndGeneSearch(props){
     return (
         <Grid container spacing={1}>
             <Grid item xs={12}>
-                <Form {...props} layouts={layouts} genes={genes} process_tables={()=>process_tables(elements)} elements={elements}/>
+                <Form {...props} layouts={layouts} genes={genes} process_tables={()=>process_tables(elements)} elements={elements} setStartSelected={setStartSelected} startSelected={startSelected} setEndSelected={setEndSelected} endSelected={endSelected}/>
             </Grid>
             {view === "network" && 
                 <Grid item xs={12} id="kg-network" style={{minHeight: 500, position: "relative"}} ref={networkref}>
                     {(elements === null) ? (
-                        <Backdrop
-                            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                            open={elements === null}
-                        >
-                            <CircularProgress/>
-                        </Backdrop> 
+                        // <Backdrop
+                        //     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                        //     open={elements === null}
+                        // >
+                        //     <CircularProgress/>
+                        // </Backdrop> 
+                        null
                     ) : elements.length === 0 ? (
                         <div>No results</div>
                     ) : loading ? 
