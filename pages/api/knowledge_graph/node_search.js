@@ -1,7 +1,6 @@
 import neo4j from "neo4j-driver"
 import { neo4jDriver } from "../../../utils/neo4j"
-import { cors, runMiddleware } from "../knowledge_graph"
-
+import { cors, runMiddleware, process_properties } from "../knowledge_graph"
 // This function returns a gene list based on a search term
 export default async function query(req, res) {
     try {
@@ -21,7 +20,7 @@ export default async function query(req, res) {
         }
         if (filter) JSON.parse(filter)
 
-        let query = `MATCH (a:${type}${filter ? " "+filter.replace(/"/g, "`"): ""})`
+        let query = `MATCH (a:\`${type}\`${filter ? " "+filter.replace(/"/g, "`"): ""})`
         // if (enzyme && enzyme.toLowerCase() === 'true') query = `MATCH (a:Gene ${filter})`
         if (term) {
             query = query + ` WHERE a.${field} =~ $term`
@@ -33,7 +32,7 @@ export default async function query(req, res) {
         for (const record of results.records) {
             const a = record.get('a')
             const value = a.properties[field]
-            if (value) records[value] = a.properties
+            if (value) records[value] = process_properties(a.properties)
         }
         res.status(200).send(records)    
         return

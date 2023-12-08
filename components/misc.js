@@ -139,7 +139,7 @@ export const TooltipCard = ({node, tooltip_templates, setFocused, router, schema
   }
   
   export const Selector = ({entries, value, onChange, prefix, sx, ...props }) => {
-    if (entries.length === 1) return null
+    if (entries.length < 2) return null
     else return (
       <FormControl>
         <Select

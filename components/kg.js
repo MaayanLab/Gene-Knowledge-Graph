@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import fileDownload from 'js-file-download'
 import * as default_schema from '../public/schema.json'
 import { isIFrame } from '../utils/helper';
-import { usePrevious, shouldUpdateId } from './Enrichment';
+import { usePrevious } from './Enrichment';
 import { process_tables } from '../utils/helper';
 
 import Tooltip from '@mui/material/Tooltip';

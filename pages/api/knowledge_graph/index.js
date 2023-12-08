@@ -80,7 +80,7 @@ export const default_get_edge_color = ({relation, color, aggr_field, field, aggr
 		lineColor: color
 	}
 }
-const process_properties = (properties) => {
+export const process_properties = (properties) => {
 	const props = {}
 	for ( const[k,v] of Object.entries(properties)) {
 		if (typeof v === "object") {
@@ -328,31 +328,33 @@ const resolve_one_term = async ({session, edges, start, field, term, relation, l
 	if (!parseInt(path_length)) throw {message: "Path length is not a number"}
 	const rels = []
 	const vars = {}
-	for (const r of relation) {
-		if (edges.indexOf(r.name) === -1) throw {message: `Invalid relationship ${r.name}`}
-		else {
-			const color_order = colors[r.name]
-			let q = `
-				MATCH p=(st:\`${start}\` { ${field}: $term })-[r1:\`${r.name}\`*${path_length}]-(en)
-				USING INDEX st:\`${start}\`(${field})
-				WITH p, st
-				
-			`
-			if (color_order.field) {
-				q = q + `, REDUCE(acc = 0.0, r in r1 |
-					CASE WHEN TYPE(r) = '${r.name}' THEN acc + r.${color_order.field} ELSE acc END) as ${color_order.field}
-					ORDER BY  ${color_order.field} ${color_order.aggr_type}	
+	if (relation) {
+		for (const r of relation) {
+			if (edges.indexOf(r.name) === -1) throw {message: `Invalid relationship ${r.name}`}
+			else {
+				const color_order = colors[r.name]
+				let q = `
+					MATCH p=(st:\`${start}\` { ${field}: $term })-[r1:\`${r.name}\`*${path_length}]-(en)
+					USING INDEX st:\`${start}\`(${field})
+					WITH p, st
+					
 				`
+				if (color_order.field) {
+					q = q + `, REDUCE(acc = 0.0, r in r1 |
+						CASE WHEN TYPE(r) = '${r.name}' THEN acc + r.${color_order.field} ELSE acc END) as ${color_order.field}
+						ORDER BY  ${color_order.field} ${color_order.aggr_type}	
+					`
+				}
+				q = q + `LIMIT ${parseInt(r.limit || 5)} `
+				if ((remove || []).length) {
+					q = q + `
+						WHERE NOT st.id in ${JSON.stringify(remove)}
+						AND NOT en.id in ${JSON.stringify(remove)}
+					`
+				}
+				q = q + `RETURN p, nodes(p) as n, relationships(p) as r, st`
+				rels.push(q)
 			}
-			q = q + `LIMIT ${parseInt(r.limit || 5)} `
-			if ((remove || []).length) {
-				q = q + `
-					WHERE NOT st.id in ${JSON.stringify(remove)}
-					AND NOT en.id in ${JSON.stringify(remove)}
-				`
-			}
-			q = q + `RETURN p, nodes(p) as n, relationships(p) as r, st`
-			rels.push(q)
 		}
 	}
 	let query = `MATCH p=(st:\`${start}\` { ${field}: $term })-[${rels.length ? ':' : ''}${rels.join("|")}*${path_length}]-(en) USING INDEX st:\`${start}\`(${field})`

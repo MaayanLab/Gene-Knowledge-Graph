@@ -3,24 +3,36 @@ import dynamic from 'next/dynamic'
 
 import { useRouter } from 'next/router'
 import { process_tables } from '../../utils/helper';
-
+import { usePrevious } from '../Enrichment';
 import HubIcon from '@mui/icons-material/Hub';
 import { mdiFamilyTree, mdiDotsCircle } from '@mdi/js';
 import Icon from '@mdi/react';
-import { redirect } from './form';
+import { process_filter } from './form';
+
 const Grid = dynamic(() => import('@mui/material/Grid'));
 
-// const Chip = dynamic(() => import('@mui/material/Chip'));
+const Button = dynamic(() => import('@mui/material/Button'));
 const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
 const Backdrop = dynamic(() => import('@mui/material/Backdrop'));
 const TooltipCard = dynamic(async () => (await import('../misc')).TooltipCard);
 const Legend = dynamic(async () => (await import('../misc')).Legend);
 
-const Form = dynamic(() => import('./form'));
+const StartButton  = dynamic(async () => (await (import('./buttons'))).StartButton);
+const EndButton  = dynamic(async () => (await (import('./buttons'))).EndButton);
+const IndeterminateCheckBoxIcon = dynamic(() => import('@mui/icons-material/IndeterminateCheckBox'));
+
+const Form = dynamic(() => import('./async_form'));
+const AsyncFormComponent = dynamic(() => import('./async_form_component'));
+
 const Cytoscape = dynamic(() => import('../Cytoscape'), { ssr: false })
 const NetworkTable =  dynamic(() => import('../network_table'))
 
-
+export const redirect = ({router, page, ...query}) => {
+    router.push({
+        pathname: `/${page || ''}`,
+        query: process_filter(query)
+    }, undefined, {shallow: true})
+}
 
 export const layouts = {
     "Force-directed": {
@@ -64,6 +76,7 @@ export default function TermAndGeneSearch(props){
     const [startSelected, setStartSelected] = useState(null)
     const [endSelected, setEndSelected] = useState(null)
     const {
+        filter:f,
         edge_labels,
         view = "network",
         tooltip,
@@ -71,6 +84,21 @@ export default function TermAndGeneSearch(props){
         legend,
         legend_size=0,
     } = router.query
+
+    const filter = JSON.parse(f || '{}')
+    const {
+        start,
+        start_field='label',
+        start_term,
+        end,
+        end_field='label',
+        end_term,
+        relation=[],
+        limit,
+        gene_links,
+        augment,
+    } = filter
+    const prevFilter = usePrevious(filter)
     const cyref = useRef(null);
     const tableref = useRef(null);
     const edgeStyle = edge_labels ? {label: 'data(label)'} : {}
@@ -99,71 +127,214 @@ export default function TermAndGeneSearch(props){
         setFocused(null)
     }
 
-    useEffect(()=>{
-        const resolve_elements = async(filter) => {
-            try {
-                const controller = get_controller()
-                if (!filter.start_field) filter.start_field = "label"
-                if (filter.end && !filter.end_field) filter.end_field = "label"
-                if (!filter.end) {
-                    filter.relation = filter.relation.map(name=>({name, limit: filter.limit || 5}))
-                    delete filter.limit
-                } else {
-                    filter.relation = filter.relation.map(name=>({name}))
-                    delete filter.augment
-                    delete filter.augment_limit
-                }
-                const res = await fetch(`${window.location.origin}/api/knowledge_graph?filter=${JSON.stringify(filter)}`,
-                {
-                    method: 'GET',
-                    signal: controller.signal,
-                    "Content-Type": "application/json"
-                }) 
-                if (!res.ok) setError(await res.text())
-                else {
-                    const results = await res.json()
-                    const selected_edges = []
-                    for (const i of results.edges) {
-                        if (i.data.relation && selected_edges.indexOf(i.data.label) === -1) {
-                            selected_edges.push(i.data.label)
+
+    // useEffect(()=>{
+    //     const resolve_elements = async(filter) => {
+    //         try {
+    //             const controller = get_controller()
+    //             if (!filter.start_field) filter.start_field = "label"
+    //             if (filter.end && !filter.end_field) filter.end_field = "label"
+    //             if (filter.relation) {
+    //                 if (!filter.end) {
+    //                     filter.relation = filter.relation.map(name=>({name, limit: filter.limit || 5}))
+    //                     delete filter.limit
+    //                 } else {
+    //                     filter.relation = filter.relation.map(name=>({name}))
+    //                     delete filter.augment
+    //                     delete filter.augment_limit
+    //                 }
+    //             }
+    //             const res = await fetch(`${window.location.origin}/api/knowledge_graph?filter=${JSON.stringify(filter)}`,
+    //             {
+    //                 method: 'GET',
+    //                 signal: controller.signal,
+    //                 "Content-Type": "application/json"
+    //             }) 
+    //             if (!res.ok) setError(await res.text())
+    //             else {
+    //                 const results = await res.json()
+    //                 const selected_edges = []
+    //                 for (const i of results.edges) {
+    //                     if (i.data.relation && selected_edges.indexOf(i.data.label) === -1) {
+    //                         selected_edges.push(i.data.label)
+    //                     }
+    //                 }
+    //                 setElements(results)
+    //                 setLoading(false)
+    //                 setId(id+1)
+    //                 if (!filter.relation || filter.relation.length === 0) {
+    //                     setSelectedEdges(selected_edges)
+    //                     const {page, filter: f, ...rest} = router.query
+    //                     const filter = JSON.parse(f || '{}')
+    //                     filter.relation = selected_edges
+    //                     // if (selected_edges.length === 1) {
+    //                     //     filter.limit = results.edges.length
+    //                     // }
+    //                     redirect({router, page, filter, ...rest})
+    //                 }
+    //             }
+    //         } catch (error) {
+    //             console.error(error)
+    //         }
+    //     }
+    //     if(!router.isReady) return;
+    //     const filter = JSON.parse(f || '{}')
+    //     if (selectedEdges !== null) {
+    //         setSelectedEdges(null)
+    //     } 
+    //     if (Object.keys(f).length > 0 && f.start && f.start_term) {
+    //         setLoading(true)
+    //         resolve_elements(f)
+    //     } else if (initial_query.start) {
+    //         redirect({
+    //             router, 
+    //             page,
+    //             filter: initial_query
+    //         })
+    //     } else {
+    //         const start = nodes['Gene'] !== undefined ? 'Gene': Object.keys(nodes).sort()[0]
+    //         redirect({
+    //             router, 
+    //             page,
+    //             filter: {
+    //                 start,
+    //                 start_field: 'label'
+    //             }
+    //         })
+    //     }
+    // }, [filter])
+
+    const resolve_elements = async(filter) => {
+                try {
+                    const controller = get_controller()
+                    if (!filter.start_field) filter.start_field = "label"
+                    if (filter.end && !filter.end_field) filter.end_field = "label"
+                    if (filter.relation) {
+                        if (!filter.end) {
+                            filter.relation = filter.relation.map(name=>({name, limit: filter.limit || 5}))
+                            delete filter.limit
+                        } else {
+                            filter.relation = filter.relation.map(name=>({name}))
+                            delete filter.augment
+                            delete filter.augment_limit
                         }
                     }
-                    setElements(results)
-                    setLoading(false)
-                    setId(id+1)
-                    if (!filter.relation || filter.relation.length === 0) {
-                        setSelectedEdges(selected_edges)
-                        const {page, filter: f, ...rest} = router.query
-                        const filter = JSON.parse(f || '{}')
-                        filter.relation = selected_edges
-                        // if (selected_edges.length === 1) {
-                        //     filter.limit = results.edges.length
-                        // }
-                        redirect({router, page, filter, ...rest})
+                    const res = await fetch(`${window.location.origin}/api/knowledge_graph?filter=${JSON.stringify(filter)}`,
+                    {
+                        method: 'GET',
+                        signal: controller.signal,
+                        "Content-Type": "application/json"
+                    }) 
+                    if (!res.ok) setError(await res.text())
+                    else {
+                        const results = await res.json()
+                        const selected_edges = []
+                        for (const i of results.edges) {
+                            if (i.data.relation && selected_edges.indexOf(i.data.label) === -1) {
+                                selected_edges.push(i.data.label)
+                            }
+                        }
+                        setElements(results)
+                        setLoading(false)
+                        setId(id+1)
+                        if (!filter.relation || filter.relation.length === 0) {
+                            setSelectedEdges(selected_edges)
+                            const {page, filter: f, ...rest} = router.query
+                            const filter = JSON.parse(f || '{}')
+                            filter.relation = selected_edges
+                            redirect({router, page, filter, ...rest})
+                        }
                     }
+                } catch (error) {
+                    console.error(error)
                 }
-            } catch (error) {
-                console.error(error)
             }
-        }
-        const {filter:f} = router.query
-        const filter = JSON.parse(f || '{}')
+
+    useEffect(()=>{
+        if(!router.isReady) return;
         if (selectedEdges !== null) {
             setSelectedEdges(null)
+        }
+        // default
+        if (!filter.start) {
+            console.log("Here")
+            const page = router.query.page
+            if (Object.keys(initial_query).length > 0) {
+                redirect({
+                    router, 
+                    page,
+                    filter: initial_query
+                })
+            } else {
+                redirect({
+                    router, 
+                    page,
+                    filter: {
+                        start: nodes.Gene !== undefined ? 'Gene': Object.keys(nodes)[0],
+                        start_field: 'label'
+                    }
+                })
+            }          
         } else if (Object.keys(filter).length > 0 && filter.start && filter.start_term) {
-            setLoading(true)
-            resolve_elements(filter)
+            let resolve = true
+            if ((prevFilter || {}).start_field !== start_field &&
+                startSelected !== null && 
+                startSelected[start_field] === start_term
+            ) {
+                if ((prevFilter || {}).end !== end) resolve = true
+                else resolve = false
+            } else if ((prevFilter || {}).end_field !== end_field &&
+                endSelected !== null && 
+                endSelected[end_field] === end_term
+            ) {
+                resolve = false
+            }
+            
+            if (resolve) {
+                setLoading(true)
+                resolve_elements(filter)
+            }
         }
     }, [router.query.filter])
+
     const genes = ((elements || {}).nodes || []).reduce((acc, i)=>{
         if (i.data.kind === "Gene" && acc.indexOf(i.data.label) === -1) return [...acc, i.data.label]
         else return acc
     }, [])
+
     
     return (
         <Grid container spacing={1}>
             <Grid item xs={12}>
-                <Form {...props} layouts={layouts} genes={genes} process_tables={()=>process_tables(elements)} elements={elements} setStartSelected={setStartSelected} startSelected={startSelected} setEndSelected={setEndSelected} endSelected={endSelected}/>
+                <Grid container justifyContent="space-around" spacing={1}>
+                    <Grid item xs={12}>
+                        <AsyncFormComponent 
+                            nodes={nodes}
+                            direction={'Start'}
+                            button_component={()=>(!end && <StartButton nodes={nodes}/>)}
+                            selected={startSelected}
+                            setSelected={setStartSelected}
+                        />
+                    </Grid>
+                    {end && <Grid item xs={12}>
+                        <AsyncFormComponent 
+                            nodes={nodes}
+                            direction={'End'}
+                            button_component={()=><EndButton/>}
+                            selected={endSelected}
+                            setSelected={setEndSelected}
+                        />
+                    </Grid>}
+                    <Grid item xs={12}>
+                        <Form 
+                            {...props} 
+                            layouts={layouts}
+                            genes={genes}
+                            process_tables={()=>process_tables(elements)}
+                            elements={elements}
+                        />
+                    </Grid>
+                </Grid>
             </Grid>
             {view === "network" && 
                 <Grid item xs={12} id="kg-network" style={{minHeight: 500, position: "relative"}} ref={networkref}>

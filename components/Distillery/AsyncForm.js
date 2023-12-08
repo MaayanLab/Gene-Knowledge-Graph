@@ -143,7 +143,7 @@ const AsyncForm = ({ router,
         <Grid container alignItems={"center"}>
             <Grid item xs={12}>
                 <Stack direction={"row"} spacing={1} alignItems={"center"}>
-                    <Typography><b>Select Gene:</b></Typography>
+                    <Typography><b>Select {type}:</b></Typography>
                     <Autocomplete
                         sx={{ width: 300 }}
                         value={term}
