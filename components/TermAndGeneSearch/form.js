@@ -203,7 +203,7 @@ function Form({
                                 }}
                                 renderTags={(value, getTagProps) =>
                                     value.map((option, index) => (
-                                        <Tooltip title={`${option}.${ !end ? '(Click to change number of edges returned.)' : ''}`} key={option} placement="top">
+                                        <Tooltip title={`${option}`} key={option} placement="top">
                                             <Chip label={option} {...getTagProps({ index })}
                                                 style={{maxWidth: 100}}
                                                 onDelete={()=>{
