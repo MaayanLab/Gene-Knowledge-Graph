@@ -231,7 +231,7 @@ function Form({
                             <Tooltip title={!end ? 'Set limit per relationship:': 'Limit number of paths:'}>
                                 <Slider 
                                     value={limit ? limit: !end ? relation.length === 1? ((elements || {}).edges || []).length: 5: 25}
-                                    color="blues"
+                                    color="secondary"
                                     onChange={(e, nv)=>{
                                         const {page, filter:f, ...rest} = router.query
                                         const filter = JSON.parse(f)

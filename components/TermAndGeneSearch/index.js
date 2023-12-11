@@ -21,7 +21,7 @@ const StartButton  = dynamic(async () => (await (import('./buttons'))).StartButt
 const EndButton  = dynamic(async () => (await (import('./buttons'))).EndButton);
 const IndeterminateCheckBoxIcon = dynamic(() => import('@mui/icons-material/IndeterminateCheckBox'));
 
-const Form = dynamic(() => import('./async_form'));
+const Form = dynamic(() => import('./form'));
 const AsyncFormComponent = dynamic(() => import('./async_form_component'));
 
 const Cytoscape = dynamic(() => import('../Cytoscape'), { ssr: false })

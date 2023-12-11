@@ -292,7 +292,7 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                         startIcon={<InputIcon/>}
                         variant="contained"
                         size="large"
-                        color="primary"
+                        color="secondary"
                     >
                         Input Gene Set
                     </Button>

@@ -1,13 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic'
 
 import Link from 'next/link'
-import useAsyncEffect from 'use-async-effect'
 import { withRouter } from 'next/router'
 import fileDownload from 'js-file-download'
-import * as default_schema from '../../public/schema.json'
 import { isIFrame } from '../../utils/helper';
-import { usePrevious, shouldUpdateId } from '../Enrichment';
 
 import Tooltip from '@mui/material/Tooltip';
 import Chip from '@mui/material/Chip';
@@ -18,7 +15,6 @@ import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
-import CloseIcon from '@mui/icons-material/Close';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
@@ -31,15 +27,9 @@ import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import SaveIcon from '@mui/icons-material/Save';
 import SendIcon from '@mui/icons-material/Send';
 import UndoIcon from '@mui/icons-material/Undo';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import FilterListOffIcon from '@mui/icons-material/FilterListOff';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-import Popper from '@mui/material/Popper';
 
-import HubIcon from '@mui/icons-material/Hub';
-import { mdiFamilyTree, mdiDotsCircle, mdiDna, mdiLinkVariant, mdiLinkVariantOff } from '@mdi/js';
+import {mdiDna, mdiLinkVariant, mdiLinkVariantOff } from '@mdi/js';
 import Icon from '@mdi/react';
 
 import { toPng, toBlob, toSvg } from 'html-to-image';
@@ -47,13 +37,10 @@ import download from 'downloadjs'
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 
-// const Chip = dynamic(() => import('@mui/material/Chip'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
 const TextField = dynamic(() => import('@mui/material/TextField'));
 const Button = dynamic(() => import('@mui/material/Button'));
 const Autocomplete = dynamic(() => import('@mui/material/Autocomplete'));
-const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
-const Backdrop = dynamic(() => import('@mui/material/Backdrop'));
 const Stack = dynamic(() => import('@mui/material/Stack'));
 
 const ListItemText = dynamic(() => import('@mui/material/ListItemText'));
@@ -61,11 +48,10 @@ const ListItemIcon = dynamic(() => import('@mui/material/ListItemIcon'));
 
 const AddBoxIcon  = dynamic(() => import('@mui/icons-material/AddBox'));
 const IndeterminateCheckBoxIcon = dynamic(() => import('@mui/icons-material/IndeterminateCheckBox'));
-const TooltipCard = dynamic(async () => (await import('../misc')).TooltipCard);
-const Legend = dynamic(async () => (await import('../misc')).Legend);
 const Selector = dynamic(async () => (await import('../misc')).Selector);
 const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
 const FormControlLabel = dynamic(() => import('@mui/material/FormControlLabel'));
+const AsyncFormComponent = dynamic(() => import('./async_form_component'));
 
 export const process_relation = (r='[]') => {
 	try {
@@ -115,13 +101,10 @@ export const redirect = ({router, page, ...query}) => {
 }
 
 function Form({
-    entries,
-    edges=[],
-    default_relations,
     nodes,
-    schema,
+    edges=[],
+    geneLinksRelations,
     initial_query={},
-    tooltip_viz,
     coexpression_prediction,
     gene_link_button,
     neighborCount=100,
@@ -130,6 +113,10 @@ function Form({
     genes = [],
     elements = {},
     router,
+    startSelected,
+    setStartSelected,
+    endSelected,
+    setEndSelected,
 }) {
     const {
         filter:f,
@@ -138,17 +125,13 @@ function Form({
     const filter = JSON.parse(f || '{}')
     const {
         start,
-        start_field,
-        start_term,
         end,
         end_field,
-        end_term,
         relation=[],
         limit,
         gene_links,
-        augment
+        augment,
     } = filter
-
     const [error, setError] = useState(null)
     const [anchorEl, setAnchorEl] = React.useState(null)
     const [anchorElLayout, setAnchorElLayout] = React.useState(null)
@@ -156,6 +139,7 @@ function Form({
     const [augmentLimit, setAugmentLimit] = React.useState(10)
     const [geneLinksOpen, setGeneLinksOpen] = React.useState(false)
     const [geneLinks, setGeneLinks] = React.useState(gene_links || [])
+
     
     const handleClickMenu = (e, setter) => {
 		setter(e.currentTarget);
@@ -163,280 +147,36 @@ function Form({
 	const handleCloseMenu = (setter) => {
 		setter(null);
 	};
-  
 
-    useEffect(()=>{
-        const {page, ...query} = router.query
-        if (router.isReady) {
-            if (!query.filter || Object.keys(JSON.parse(query.filter)).length === 0) {
-                if (initial_query) {
-                    // if (initial_query.relation) initial_query.relation = process_relation(initial_query.relation)
-                    redirect({
-                        router, 
-                        page,
-                        ...initial_query
-                    })
-                    // router.push({
-                    //     pathname: `/${page || ''}`,
-                    //     query: initial_query
-                    // }, undefined, {shallow: true})
-                } else {
 
-                    query.filter = {
-                        start: Object.keys(entries)[0],
-                        start_field: 'label',
-                        start_term: entries[query.start][query.start_field][0],
-                    }
-                    redirect({
-                        router, 
-                        page,
-                        ...query
-                    })
-                }
-            }
-        }
-    }, [router.query])
-    
-    const geneLinksRelations = schema.edges.reduce((acc, i)=>{
-        if (i.gene_link) return [...acc, ...i.match]
-        else return acc
-    }, [])
+    // useEffect(()=>{
+    //     if (filter.start === undefined) {
+    //         const {page} = router.query
+    //         console.log(initial_query)
+    //         if (initial_query.start) {
+                
+    //             redirect({
+    //                 router, 
+    //                 page,
+    //                 filter: initial_query
+    //             })
+    //         } else {
+    //             const startNode = Object.keys(nodes)[0]
+    //             redirect({
+    //                 router, 
+    //                 page,
+    //                 filter: {
+    //                     start: startNode,
+    //                     start_field: 'label'
+    //                 }
+    //             })
+    //         }
+            
+    //     }
+    // }, [filter])
     if (!start) return null
     return(
         <Grid container justifyContent="space-around" spacing={1}>
-            <Grid item xs={12}>
-                <Grid container spacing={2} justifyContent="flex-start" alignItems="center">
-                    <Grid item>
-                        <Typography variant="body1"><b>Start with</b></Typography>
-                    </Grid>
-                    <Grid item>
-                        <Selector entries={Object.keys(entries).sort()} value={start} prefix={"Start"} onChange={(e)=>redirect({
-                            router,
-                            page,
-                            filter: {
-                                start: e,
-                                start_field: "label",
-                                start_term: (entries || {})[e].label[0]
-                            } 
-                        })}/>
-                    </Grid>
-                    <Grid item>
-                        <Selector entries={Object.keys(entries[start])} value={start_field} prefix={"StartField"} onChange={(e)=>{
-                            const {page, ...query} = router.query  
-                            redirect({
-                                router,
-                                page,
-                                ...query,
-                                filter: {
-                                    ...JSON.parse(query.filter),
-                                    start_field: e, 
-                                    start_term: (entries || {})[start][e][0],
-                                }
-                            })
-                            }}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <Autocomplete
-                            id="my-input" aria-describedby="gene" 
-                            freeSolo
-                            options={(entries || {})[start][start_field] || []}
-                            value={start_term}
-                            onChange={(evt, value) => {
-                                if (value === null) value = ''
-                                if (value !== '') {
-                                    const {page, ...rest} = router.query
-                                    const filter = {
-                                        ...JSON.parse(rest.filter),
-                                        start_term: value
-                                    }
-                                    redirect({
-                                        router, 
-                                        page,
-                                        ...rest,
-                                        filter
-                                    })
-                                    // router.push({
-                                    //     pathname: `/${page || ''}`,
-                                    //     query
-                                    // }, undefined, { shallow: true })
-                                }
-                            }}
-                            style={{ width: 220}}
-                            renderInput={(params) => (
-                            <TextField {...params} 
-                                style={{
-                                    width: 220,
-                                    height: 50,
-                                    borderRadius: 5,
-                                    padding: 3
-                                }}
-                                InputProps={{
-                                    ...params.InputProps,
-                                    endAdornment: null,
-                                    style: {
-                                        fontSize: 12,
-                                        height: 45,
-                                        width: "100%",
-                                        paddingLeft: 5
-                                    }
-                                }}
-                            />
-                            )}
-                        />
-                    </Grid>
-                    <Grid item>
-                        <Typography variant="body1">Example:</Typography>
-                    </Grid>
-                    {((nodes[start] || {}).example || []).map((e,i)=>(
-                        <React.Fragment key={e}>
-                            <Grid item>
-                                <Link
-                                    href={{
-                                        pathname: `/${page || ''}`,
-                                        query: {
-                                            filter: JSON.stringify({
-                                                start,
-                                                start_field: "label",
-                                                start_term: e,
-                                            })
-                                        // relation
-                                        }
-                                    }}
-                                    shallow
-                                >
-                                <Button style={{height: 45}}><Typography variant="body2">{e}</Typography></Button>
-                                </Link> 
-                            </Grid>
-                            { i < (nodes[start] || {}).example.length - 1 && 
-                                <Grid item><Typography>/</Typography></Grid>
-                            }
-                        </React.Fragment>
-                    ))}
-                    {(!end && !isIFrame()) && 
-                        <Grid item>
-                            <Button onClick={()=>{
-                                const {path_length, ...rest} = router.query
-                                const {limit, augment, augment_limit, ...f} = JSON.parse(rest.filter)
-                                const filter = {
-                                    ...f,
-                                    end: start,
-                                    end_field: "label"
-                                }
-                                redirect({
-                                    page,
-                                    router,
-                                    ...rest,
-                                    filter
-                                })
-                            }} startIcon={<AddBoxIcon />}>
-                                Find Shortest Paths between Two Nodes
-                            </Button>
-                        </Grid>
-                    }
-                </Grid>
-            </Grid>
-            {end &&
-                <Grid item xs={12}>
-                    <Grid container spacing={2} justifyContent="flex-start" alignItems="center">
-                        <Grid item>
-                            <Typography variant="body1"><b>End with</b></Typography>
-                        </Grid>
-                        <Grid item>
-                            <Selector entries={Object.keys(entries).sort()} value={end} prefix={"End"} onChange={(e)=>{
-                                redirect({
-                                    router,
-                                    page,
-                                    filter: {
-                                        start,
-                                        start_field,
-                                        start_term,
-                                        end: e,
-                                        end_field: "label",
-                                    }
-                                })
-                            }}/>
-                        </Grid>
-                        <Grid item>
-                            <Selector entries={Object.keys(entries[end])} value={end_field} prefix={"EndField"} onChange={(e)=>{
-                                const {page, limit, ...query} = router.query
-                                const filter = {
-                                    start,
-                                    start_field,
-                                    start_term,
-                                    end,
-                                    end_field: e,
-                                }
-                                redirect({page, router, ...query, filter})
-                            }}/>
-                        </Grid>
-                        <Grid item>
-                            <Autocomplete
-                                id="my-input" aria-describedby="end-with"
-                                freeSolo 
-                                options={(entries || {})[end][end_field] ||[]}
-                                getOptionLabel={(option) => option[end_field] ?? option}
-                                placeholder="Optional"
-                                value={end_term || ''}
-                                onChange={(evt, value) => {
-                                    if (value === null) value = ''
-                                    if (value !== '') {
-                                        const {page, ...rest} = router.query
-                                        const filter = {
-                                            start,
-                                            start_field,
-                                            start_term,
-                                            end,
-                                            end_field,
-                                            end_term: value,
-                                        }
-                                        redirect({
-                                            router, 
-                                            page,
-                                            ...rest,
-                                            filter
-                                        })
-                                        // router.push({
-                                        //     pathname: `/${page || ''}`,
-                                        //     query
-                                        // }, undefined, { shallow: true })
-                                    }
-                                }}
-                                style={{ width: 220 }}
-                                renderInput={(params) => (
-                                <TextField {...params} 
-                                    style={{
-                                    width: 220,
-                                    height: 50,
-                                    borderRadius: 5,
-                                    padding: 3
-                                    }}
-                                    InputProps={{
-                                    ...params.InputProps,
-                                    endAdornment: null,
-                                    style: {
-                                        fontSize: 12,
-                                        height: 45,
-                                        width: "100%",
-                                        paddingLeft: 5
-                                    }
-                                    }}
-                                />
-                                )}
-                            />
-                        </Grid>
-                        <Grid item>
-                            <Button onClick={()=>{
-                                const { filter: f, ...rest} = router.query
-                                const {end, end_term, end_field, limit, ...filter} = JSON.parse(f)
-                                redirect({page, router, ...rest, filter})}
-                            } startIcon={<IndeterminateCheckBoxIcon />}>
-                                Collapse to Focus the Search on a Single Node
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            }
             <Grid item xs={12}>
                 <Grid container spacing={1} alignItems="center" justifyContent="flex-start">
                     {edges.length && 
@@ -446,7 +186,6 @@ function Form({
                                 limitTags={2}
                                 id="multiple-limit-tags"
                                 options={edges}
-                                // getOptionLabel={(option) => option.title}
                                 value={relation}
                                 renderInput={(params) => (
                                     <TextField {...params} label="Select Relation" placeholder="Select Relation" />
@@ -464,7 +203,7 @@ function Form({
                                 }}
                                 renderTags={(value, getTagProps) =>
                                     value.map((option, index) => (
-                                        <Tooltip title={`${option}.${ end === null ? '(Click to change number of edges returned.)' : ''}`} key={option} placement="top">
+                                        <Tooltip title={`${option}.${ !end ? '(Click to change number of edges returned.)' : ''}`} key={option} placement="top">
                                             <Chip label={option} {...getTagProps({ index })}
                                                 style={{maxWidth: 100}}
                                                 onDelete={()=>{
@@ -487,12 +226,12 @@ function Form({
                         </Grid>
                     }
                     <Grid item>
-                        <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                        <Stack direction={"row"} alignItems={"center"} spacing={2}>
                             <Typography variant="subtitle2">Size:</Typography>
                             <Tooltip title={!end ? 'Set limit per relationship:': 'Limit number of paths:'}>
                                 <Slider 
                                     value={limit ? limit: !end ? relation.length === 1? ((elements || {}).edges || []).length: 5: 25}
-                                    color="blues"
+                                    color="secondary"
                                     onChange={(e, nv)=>{
                                         const {page, filter:f, ...rest} = router.query
                                         const filter = JSON.parse(f)
@@ -510,7 +249,7 @@ function Form({
                     </Grid>
                     <Grid item>
                         <Tooltip title={router.query.fullscreen ? "Exit full screen": "Full screen"}>
-                            <IconButton variant='contained'
+                            <IconButton color="secondary"  variant='contained'
                                 onClick={()=>{
                                     const {page, fullscreen, filter, ...query} = router.query
                                     if (!fullscreen) query.fullscreen = 'true'
@@ -524,7 +263,7 @@ function Form({
                     </Grid>
                     <Grid item>
                         <Tooltip title={"Network view"}>
-                            <IconButton
+                            <IconButton color="secondary" 
                                 onClick={()=>{
                                     const {page, filter, view, ...query} = router.query
                                     // query.view = 'network'
@@ -538,7 +277,7 @@ function Form({
                     </Grid>
                     <Grid item>
                         <Tooltip title={"Table view"}>
-                            <IconButton
+                            <IconButton color="secondary" 
                                 onClick={()=>{
                                     const {page, filter, ...query} = router.query
                                     query.view = 'table'
@@ -552,7 +291,7 @@ function Form({
                     </Grid>
                     <Grid item>
                         <Tooltip title={"Save subnetwork"}>
-                            <IconButton
+                            <IconButton color="secondary" 
                                 onClick={()=>{
                                     process_tables()
                                 }}
@@ -566,7 +305,7 @@ function Form({
                         <React.Fragment>
                             <Grid item>
                                 <Tooltip title={router.query.tooltip ? "Hide tooltip": "Show tooltip"}>
-                                    <IconButton variant='contained'
+                                    <IconButton color="secondary"  variant='contained'
                                         onClick={()=>{
                                             const {page, filter, tooltip, ...query} = router.query
                                             if (!tooltip) query.tooltip = true
@@ -580,7 +319,7 @@ function Form({
                             </Grid>
                             <Grid item>
                                 <Tooltip title="Switch Graph Layout">
-                                    <IconButton variant='contained'
+                                    <IconButton color="secondary"  variant='contained'
                                         onClick={(e)=>handleClickMenu(e, setAnchorElLayout)}
                                         aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
                                         aria-haspopup="true"
@@ -616,7 +355,7 @@ function Form({
                             </Grid>
                             <Grid item>
                                 <Tooltip title={router.query.edge_labels ? "Hide edge labels": "Show edge labels"}>
-                                    <IconButton variant='contained'
+                                    <IconButton color="secondary"  variant='contained'
                                         onClick={()=>{
                                             // if (edgeStyle.label) setEdgeStyle({})
                                             // else setEdgeStyle({label: 'data(label)'})
@@ -632,7 +371,7 @@ function Form({
                             </Grid>  
                             <Grid item>
                                 <Tooltip title={"Download graph as an image file"}>
-                                    <IconButton onClick={(e)=>handleClickMenu(e, setAnchorEl)}
+                                    <IconButton color="secondary"  onClick={(e)=>handleClickMenu(e, setAnchorEl)}
                                         aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
                                         aria-haspopup="true"
                                         aria-expanded={anchorEl!==null ? 'true' : undefined}
@@ -676,7 +415,7 @@ function Form({
                             { (gene_link_button) &&
                                 <Grid item>
                                     <Tooltip title={"Gene-gene connections"}>
-                                        <IconButton variant='contained'
+                                        <IconButton color="secondary"  variant='contained'
                                             onClick={()=>{
                                                 setGeneLinksOpen(!geneLinksOpen)
                                                 setAugmentOpen(false)
@@ -688,10 +427,10 @@ function Form({
                                     </Tooltip>
                                 </Grid>
                             }
-                            { (!filter.end && filter.start !== "Gene" && coexpression_prediction) && 
+                            { (!end && start !== "Gene" && coexpression_prediction) && 
                                 <Grid item>
                                     <Tooltip title={filter.augment ? "Reset network": "Augment network using co-expressed genes"}>
-                                        <IconButton
+                                        <IconButton color="secondary" 
                                             disabled={genes.length > 100}
                                             onClick={()=>{
                                                 setGeneLinksOpen(false)
@@ -706,7 +445,7 @@ function Form({
                             }
                             <Grid item>
                                 <Tooltip title={!router.query.legend ? "Show legend": "Hide legend"}>
-                                    <IconButton variant='contained'
+                                    <IconButton color="secondary"  variant='contained'
                                         onClick={()=>{
                                             const {page, filter, legend, legend_size, ...query} = router.query
                                             if (!legend) query.legend = true
@@ -721,7 +460,7 @@ function Form({
                             {router.query.legend &&
                                 <Grid item>
                                     <Tooltip title="Adjust legend size">
-                                        <IconButton variant='contained'
+                                        <IconButton color="secondary"  variant='contained'
                                             onClick={()=>{
                                                 const {page, filter, legend_size=0, ...query} = router.query
                                                 query.legend_size = (parseInt(legend_size) +1)%5
@@ -745,7 +484,7 @@ function Form({
                                             }}/>} label={<Typography variant='subtitle2'>{i}</Typography>} />
                                         ))}
                                         <Tooltip title="Show gene links">
-                                            <IconButton
+                                            <IconButton color="secondary" 
                                                 disabled={geneLinks.length === 0}
                                                 onClick={()=>{
                                                     const {page, filter: f, ...query} = router.query
@@ -759,7 +498,7 @@ function Form({
                                             </IconButton>
                                         </Tooltip>
                                         <Tooltip title="Reset network">
-                                            <IconButton disabled={!gene_links}
+                                            <IconButton color="secondary"  disabled={!gene_links}
                                                 onClick={()=>{
                                                     const {page, filter: f, ...query} = router.query
                                                     const {gene_links, ...filter} = JSON.parse(f)
@@ -791,7 +530,7 @@ function Form({
                                         />
                                         <Typography variant='subtitle2'>{augmentLimit}</Typography>
                                         <Tooltip title="Augment genes">
-                                            <IconButton
+                                            <IconButton color="secondary" 
                                                 disabled={genes.length > 100}
                                                 onClick={()=>{
                                                     const {filter:f, page, ...query} = router.query
@@ -806,7 +545,7 @@ function Form({
                                             </IconButton>
                                         </Tooltip>
                                         <Tooltip title="Reset network">
-                                            <IconButton disabled={!augment}
+                                            <IconButton color="secondary"  disabled={!augment}
                                                 onClick={()=>{
                                                     const { filter:f, page, ...query} = router.query
                                                     const {augment, augment_limit, ...filter} = JSON.parse(f)

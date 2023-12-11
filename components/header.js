@@ -13,11 +13,14 @@ import parse from 'html-react-parser';
 import Alert from '@mui/material/Alert';
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
+const Container = dynamic(() => import('@mui/material/Container'));
+
 const Stack = dynamic(() => import('@mui/material/Stack'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
 const MenuIcon = dynamic(import('@mui/icons-material/Menu'));
 const Counter = dynamic(import('./counter'));
 const Snackbar = dynamic(() => import('@mui/material/Snackbar'));
+const Logo = dynamic(() => import('./cfde_logo'));
 
 
 const function_mapper = {
@@ -251,81 +254,68 @@ const Header = ({schema, ...rest}) => {
 	if (schema === undefined || schema.header === undefined) return null
 	
 	return(
-	<Grid container justifyContent="center" style={schema.header.style}>
-		<Grid item xs={12} align="center">
-			<Grid container justifyContent={"space-between"} alignItems={"center"} style={{padding: 15, marginBottom: 10, background:( schema.header.background || {}).backgroundColor}}>
-				<Grid item>
-					<Button href={`${process.env.NEXT_PUBLIC_PREFIX || "/"}`}>
+	<Container maxWidth="xl">
+		<Grid container justifyContent="center" style={{...schema.header.style}}>
+			<Grid item xs={12} align="center">
+				<Grid container justifyContent={"space-between"} alignItems={"center"} style={{padding: 15, marginBottom: 10, background:( schema.header.background || {}).backgroundColor}}>
+					<Grid item>
+						<Logo color={"secondary"}/>
+					</Grid>
+					<Grid item align="left">
 						<Stack direction={"row"} alignItems="center">
-							<div style={{height: schema.header.icon.height || 30, 
-								minWidth: schema.header.icon.width || 30}}>
-								<Image 
-									layout="responsive"
-									objectFit="contain"
-									width={schema.header.icon.width || 30}
-									height={schema.header.icon.height || 30}
-									src={makeTemplate(schema.header.icon.src, {})}
-									alt={makeTemplate(schema.header.icon.alt, {})}
-								/>
-							</div>
-							<Typography variant="h4">{parse(schema.header.title)}</Typography>
+						<Counter fontColor={(schema.header.background || {}).contrastText || "#000"}/>
+						{schema.header.tabs && 
+						<Button onClick={handleClickMenu}
+							aria-controls={open ? 'basic-menu' : undefined}
+							aria-haspopup="true"
+							aria-expanded={open ? 'true' : undefined}
+							sx={{color: (schema.header.background || {}).contrastText || "#000"}}
+						><MenuIcon/></Button>}
+						{ schema.header.tabs && 
+							<Menu
+								id="basic-menu"
+								anchorEl={anchorEl}
+								open={open}
+								onClose={handleCloseMenu}
+								MenuListProps={{
+									'aria-labelledby': 'basic-button',
+								}}
+							>
+								{schema.header.tabs.map(t=>(
+									<MenuItem key={t.label} onClick={()=> {
+										handleCloseMenu()
+										router.push({
+											pathname: t.endpoint,
+										})
+									}}>{t.label}</MenuItem>
+								))}
+							</Menu>
+						}
 						</Stack>
-					</Button>
-				</Grid>
-				<Grid item align="left">
-					<Stack direction={"row"} alignItems="center">
-					<Counter fontColor={(schema.header.background || {}).contrastText || "#000"}/>
-					{schema.header.tabs && 
-					<Button onClick={handleClickMenu}
-						aria-controls={open ? 'basic-menu' : undefined}
-						aria-haspopup="true"
-						aria-expanded={open ? 'true' : undefined}
-						sx={{color: (schema.header.background || {}).contrastText || "#000"}}
-					><MenuIcon/></Button>}
-					{ schema.header.tabs && 
-						<Menu
-							id="basic-menu"
-							anchorEl={anchorEl}
-							open={open}
-							onClose={handleCloseMenu}
-							MenuListProps={{
-								'aria-labelledby': 'basic-button',
-							}}
-						>
-							{schema.header.tabs.map(t=>(
-								<MenuItem key={t.label} onClick={()=> {
-									handleCloseMenu()
-									router.push({
-										pathname: t.endpoint,
-									})
-								}}>{t.label}</MenuItem>
-							))}
-						</Menu>
-					}
-					</Stack>
-					<Snackbar open={error!==null}
-						anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
-						autoHideDuration={4500}
-						onClose={()=>{
-							setError(null)
-						}}
-					>
-						<Alert 
+						<Snackbar open={error!==null}
+							anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
+							autoHideDuration={4500}
 							onClose={()=>{
 								setError(null)
 							}}
-							severity={'error'}
-							sx={{ width: '100%' }} 
-							variant="filled"
-							elevation={6}
 						>
-							<Typography>{error}</Typography>
-						</Alert>
-					</Snackbar>
-				</Grid>
-			</Grid>	
+							<Alert 
+								onClose={()=>{
+									setError(null)
+								}}
+								severity={'error'}
+								sx={{ width: '100%' }} 
+								variant="filled"
+								elevation={6}
+							>
+								<Typography>{error}</Typography>
+							</Alert>
+						</Snackbar>
+					</Grid>
+				</Grid>	
+			</Grid>
+			{icon_buttons}
 		</Grid>
-		{icon_buttons}
-	</Grid>
+	</Container>
 )}
 export default Header

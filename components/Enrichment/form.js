@@ -205,7 +205,7 @@ const GeneSetForm = ({default_options, setLoading, libraries_list, get_controlle
                                         {input.genes.length === 0 && <Typography variant="subtitle2" align='left' style={{paddingLeft: 12, paddingTop: 15, fontSize: 13.75, color: "#bdbdbd"}}>Paste a set of valid Entrez gene symbols (e.g. STAT3) on each row in the text-box</Typography> }
                                         <CardContent>
                                             {input.genes.map(i=>{
-                                                if (verified.indexOf(i.toUpperCase()) > -1) return <Typography color="green" align='left' style={{fontSize: 14}}>{i}</Typography>
+                                                if (verified.indexOf(i.toUpperCase()) > -1) return <Typography color="secondary" align='left' style={{fontSize: 14}}>{i}</Typography>
                                                 else {
                                                     if (i === '') return null
                                                     else return <Stack direction='row' spacing={1} alignItems={"center"} justifyContent="flex-start"><Typography align='left' color={verified.length > 0 ? 'error': 'default'} style={{fontSize: 14}}>{i}</Typography><ErrorIcon color="error" style={{width: 15}}/></Stack>

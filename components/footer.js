@@ -13,7 +13,7 @@ import { mdiCookieOff, mdiCookie } from '@mdi/js';
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Paper = dynamic(() => import('@mui/material/Paper'));
 const Button = dynamic(async () => (await import('@mui/material')).Button);
-const Markdown = dynamic(() => import('./markdown'))
+const Logo = dynamic(() => import('../components/cfde_logo'))
 
 
 const GitHubIcon = dynamic(()=>import('@mui/icons-material/GitHub'));
@@ -119,7 +119,8 @@ const Footer = ({schema, consentCookie, setConsentCookie, resetCookie}) => {
 			paddingBottom: 30,
 		}}>
             <Grid container justifyContent="space-around" alignItems={"center"}>
-                {schema.footer.map((footer, i)=><React.Fragment  key={`footer-${i}`}><FooterContents footer={footer} schema={schema} consentCookie={consentCookie} setConsentCookie={setConsentCookie} resetCookie={resetCookie}/></React.Fragment>)}
+                <Grid item><Logo color="white"/></Grid>
+				{schema.footer.map((footer, i)=><React.Fragment  key={`footer-${i}`}><FooterContents footer={footer} schema={schema} consentCookie={consentCookie} setConsentCookie={setConsentCookie} resetCookie={resetCookie}/></React.Fragment>)}
 				{schema.footer_text &&
 					<Grid item xs={10} style={{marginTop: 30}}>
 						<Typography variant="caption">{parse(schema.footer_text)}</Typography>

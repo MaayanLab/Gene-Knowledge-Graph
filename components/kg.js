@@ -672,7 +672,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
             <Grid item xs={1}>
               <Slider 
                 value={parseInt(edgeLimitBool? edgeLimit: limit)}
-                color="blues"
+                color="secondary"
                 onChange={(e, nv)=>{
                   const {page, limit, relation, ...query} = router.query
                   if (edgeLimitBool) {
@@ -933,7 +933,7 @@ export default function KnowledgeGraph({entries, edges=[], default_relations, no
             <Grid item xs={2}>
               <Slider 
                 value={parseInt(limit)}
-                color="blues"
+                color="secondary"
                 onChange={(e, nv)=>{
                   router.push({
                     pathname: `/${page || ''}`,

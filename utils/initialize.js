@@ -96,8 +96,8 @@ export const initialize_kg = async () => {
 	for (const i of schema.nodes) {
 		tooltip_templates_node[i.node] = i.display
 		const {node, example, palette, search} = i
-		const results = await get_terms(node, search)
-		entries[node] = results
+		// const results = await get_terms(node, search)
+		// entries[node] = results
 		nodes[node] = i
 		// const {name, main, light, dark, contrastText} = palette
 		// palettes[name] = {

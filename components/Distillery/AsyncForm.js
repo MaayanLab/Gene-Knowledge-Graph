@@ -221,7 +221,7 @@ const AsyncForm = ({ router,
                     <Typography><b>Limit per relation:</b></Typography>
                     <Slider 
                         value={limit || 5}
-                        color="blues"
+                        color="secondary"
                         onChange={(e, nv)=>{
                             const {limit, page, ...query} = router.query
                             query.limit = nv || 5

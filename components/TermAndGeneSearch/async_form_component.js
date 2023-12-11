@@ -274,7 +274,7 @@ const AsyncFormComponent = ({direction,
                             }}
                             shallow
                         >
-                        <Button style={{height: 45}}><Typography variant="body2">{e}</Typography></Button>
+                        <Button style={{height: 45}}><Typography variant="body2" color="secondary">{e}</Typography></Button>
                         </Link> 
                     </Grid>
                     { i < (nodes[type] || {}).example.length - 1 && 

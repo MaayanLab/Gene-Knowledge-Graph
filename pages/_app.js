@@ -9,10 +9,14 @@ import { makeTemplate } from '../utils/helper';
 import { isIFrame } from '../utils/helper';
 import withCookie from '../components/CookieWrapper';
 import '../styles/kg.css'
+import { cfde_theme } from '../themes/cfde';
+const Grid = dynamic(() => import('@mui/material/Grid'));
+
 const Container = dynamic(() => import('@mui/material/Container'));
 const Header = dynamic(() => import('../components/header'));
 const Footer = dynamic(() => import('../components/footer'));
 const ConsentCookie = dynamic(() => import('../components/ConsentCookie'));
+const Background = dynamic(() => import('../components/background'));
 
 
 const theme_object = {
@@ -78,37 +82,55 @@ function MyApp({ Component, pageProps, consentCookie, setConsentCookie, resetCoo
   const router = useRouter()
   const {fullscreen="false"} = router.query
   return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={cfde_theme}>
         <Head>
           <meta charSet="utf-8" />
           <title>{((pageProps.schema || default_schema).header || {}).icon.faviconTitle}</title>
           <link rel="shortcut icon" type="image/x-icon" alt={((pageProps.schema || default_schema).header || {}).icon.faviconTitle} href={makeTemplate((((pageProps.schema || default_schema).header || {}).icon).favicon || '', {})} />
+          {/* font */}
+          <link rel="preconnect" href="https://fonts.googleapis.com"/>
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+          <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,500;9..40,700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+          {/* font end */}
           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
           <script async defer src="https://buttons.github.io/buttons.js"></script>
         </Head>
         <div>
           <ConsentCookie consentCookie={consentCookie} setConsentCookie={setConsentCookie} resetCookie={resetCookie}/>
         </div>
-        {(fullscreen.toLowerCase() !== "false" || isIFrame())  ? 
-          <Container id={"main"} maxWidth={"xl"} style={{background: "#fff", marginTop: 10}}>
-            <Component 
-              {...pageProps}
-            />
-          </Container>
-          :
-          <div style={{backgroundColor: ((schema || {}).ui || {}).background || "#C5F8F8"}}  id={"main"}>
-            <Container maxWidth={"lg"} style={{background: "#fff", padding: 0, flexGrow: 1, display: "flex", flexDirection: "column"}}>
+        <Grid container direction={"column"} justifyContent={"space-between"}>
+           {(fullscreen.toLowerCase() === "false" && !isIFrame()) ? 
+            <>
+            <Grid item>
               <Header {...pageProps}/>
-              <div className='container'>
+            </Grid>
+              <Grid item>
+                <Background>
+                  <Container maxWidth={"lg"} style={{padding: 0, flexGrow: 1, display: "flex", flexDirection: "column"}}>
+                
+                    <div className='container'>
+                      <Component 
+                        {...pageProps}
+                      />
+                    </div>
+                    
+                  </Container>
+                </Background>
+            </Grid>
+            </>:
+            <Grid item>
+              <Container id={"main"} maxWidth={"xl"} sx={{background: "linear-gradient(180deg, #FFFFFF 26.13%, #DBE0ED 104.21%)", marginTop: 10}}>
                 <Component 
                   {...pageProps}
                 />
-              </div>
-              <Footer {...pageProps} consentCookie={consentCookie} setConsentCookie={setConsentCookie} resetCookie={resetCookie}/>
-            </Container>
-          </div>
-        }
-        {consentCookie === "allow" && <GoogleAnalytics trackPageViews />}
+              </Container>
+            </Grid>
+           }
+          <Grid item>
+            <Footer {...pageProps} consentCookie={consentCookie} setConsentCookie={setConsentCookie} resetCookie={resetCookie}/>
+            {consentCookie === "allow" && <GoogleAnalytics trackPageViews />}
+          </Grid>
+        </Grid>
       </ThemeProvider>
   )
 }

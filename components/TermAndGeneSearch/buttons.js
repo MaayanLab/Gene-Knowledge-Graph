@@ -3,6 +3,8 @@ import { withRouter } from "next/router";
 import { process_filter } from "./form";
 
 const Button = dynamic(() => import('@mui/material/Button'));
+const Typography = dynamic(() => import('@mui/material/Typography'));
+
 const AddBoxIcon  = dynamic(() => import('@mui/icons-material/AddBox'));
 const IndeterminateCheckBoxIcon = dynamic(() => import('@mui/icons-material/IndeterminateCheckBox'));
 
@@ -18,14 +20,15 @@ export const StartButton = withRouter(({router, nodes}) => (
                 end_field: 'label'
             })
         }
-        console.log(query)
         router.push({
             pathname: `/${page || ''}`,
             query: process_filter(query)
         }, undefined, {shallow: true})
-    }} startIcon={<AddBoxIcon />}
+    }} 
+    color="secondary"
+    startIcon={<AddBoxIcon />}
     >
-        Find Shortest Paths between Two Nodes
+        <Typography variant="body2" color="secondary">Find Shortest Paths between Two Nodes</Typography>
     </Button>
 ))
 
@@ -43,7 +46,9 @@ export const EndButton = withRouter(({router}) => (
             query: process_filter(query)
         }, undefined, {shallow: true})
 
-    }} startIcon={<IndeterminateCheckBoxIcon />}>
-        Collapse to Focus the Search on a Single Node
+    }} 
+        color="secondary"
+        startIcon={<IndeterminateCheckBoxIcon />}>
+        <Typography variant="body2" color="secondary">Collapse to Focus the Search on a Single Node</Typography>
     </Button>
 ))
