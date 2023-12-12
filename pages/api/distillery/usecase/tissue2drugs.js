@@ -15,7 +15,6 @@ async function process_query({session, term, limit, relation, schema, aggr_score
             queries.push(q)
     }
     const query = queries.join(" UNION ")
-    console.log(query)
     const results = await session.readTransaction(txc => txc.run(query, { term, limit }))
     return resolve_results({results, terms: [term], schema,  aggr_scores, colors, field})
 }
