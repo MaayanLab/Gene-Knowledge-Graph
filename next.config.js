@@ -15,9 +15,6 @@ module.exports = {
     )
     return config
   },
-  experimental: {
-    outputStandalone: true,
-  },
   basePath: process.env.NEXT_PUBLIC_PREFIX || "",
   images: {
     path: `${process.env.NEXT_PUBLIC_PREFIX || ""}/_next/image`,
