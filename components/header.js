@@ -11,6 +11,7 @@ import Tooltip  from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 import parse from 'html-react-parser';
 import Alert from '@mui/material/Alert';
+import Link from "next/link";
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const Container = dynamic(() => import('@mui/material/Container'));
@@ -262,35 +263,17 @@ const Header = ({schema, ...rest}) => {
 						<Logo color={"secondary"}/>
 					</Grid>
 					<Grid item align="left">
-						<Stack direction={"row"} alignItems="center">
-						<Counter fontColor={(schema.header.background || {}).contrastText || "#000"}/>
-						{schema.header.tabs && 
-						<Button onClick={handleClickMenu}
-							aria-controls={open ? 'basic-menu' : undefined}
-							aria-haspopup="true"
-							aria-expanded={open ? 'true' : undefined}
-							sx={{color: (schema.header.background || {}).contrastText || "#000"}}
-						><MenuIcon/></Button>}
-						{ schema.header.tabs && 
-							<Menu
-								id="basic-menu"
-								anchorEl={anchorEl}
-								open={open}
-								onClose={handleCloseMenu}
-								MenuListProps={{
-									'aria-labelledby': 'basic-button',
-								}}
-							>
-								{schema.header.tabs.map(t=>(
-									<MenuItem key={t.label} onClick={()=> {
-										handleCloseMenu()
-										router.push({
-											pathname: t.endpoint,
-										})
-									}}>{t.label}</MenuItem>
-								))}
-							</Menu>
-						}
+						<Stack direction={"row"} spacing={1} alignItems="center">
+							{(schema.header.tabs || []).map(t=>(
+								<Link href={t.endpoint}>
+									<Button>
+										<Typography variant="nav" color="secondary">
+											{t.label}
+										</Typography>
+									</Button>
+								</Link>
+							))}
+							<Counter fontColor={(schema.header.background || {}).contrastText || "#000"}/>
 						</Stack>
 						<Snackbar open={error!==null}
 							anchorOrigin={{ vertical:"bottom", horizontal:"left" }}

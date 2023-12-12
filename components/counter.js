@@ -27,9 +27,7 @@ export const Counter = ({fontColor}) => {
     }, [timer])
 
     return (
-        <Stack direction={"row"}>
-            <Typography variant="subtitle1" color={fontColor}>Queries Submitted: <b>{count}</b></Typography>
-        </Stack>
+        <Typography variant="nav" color={"secondary"} sx={{textTransform: "capitalize"}}>Queries Submitted: <b>{count}</b></Typography>
     )
 }
 
