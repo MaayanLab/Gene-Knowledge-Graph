@@ -17,7 +17,6 @@ export default async function query(req, res) {
 
     }
     query = query + "  RETURN a LIMIT 100"
-    console.log(query)
     const results = await session.readTransaction(txc => txc.run(query, {term: term.toUpperCase().replace("GENE", "gene")}))
     const genes = []
     for (const record of results.records) {

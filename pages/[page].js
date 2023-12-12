@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { withRouter } from "next/router";
 import { init_function, fetch_kg_schema } from '../utils/initialize';
 import { get_path } from "../components/markdown";
 import { makeTemplate } from "../utils/helper";
@@ -6,8 +6,7 @@ import { makeTemplate } from "../utils/helper";
 
 import {components} from '../components/ComponentSelector'
 
-export default function Page({schema, component, ...props}){
-  const router = useRouter()
+function Page({router, schema, component, ...props}){
   if (components[component] !== undefined){
       return components[component]({schema, ...props})
   } else {
@@ -56,3 +55,5 @@ export async function getStaticProps(ctx) {
       }
     };
   }
+
+export default withRouter(Page)

@@ -6,7 +6,7 @@ const Grid = dynamic(() => import('@mui/material/Grid'));
 
 export default function Error() {
     return (
-        <Grid container justifyContent={"center"} sx={{height: "100%"}}>
+        <Grid container justifyContent={"center"} sx={{height: "100%", flexGrow: 1}}>
             <Grid item>
                 <Typography variant="h5">Oops... we cannot find that page</Typography>
             </Grid>

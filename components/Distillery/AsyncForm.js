@@ -25,6 +25,7 @@ import download from 'downloadjs'
 import fileDownload from 'js-file-download'
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
+
 const Autocomplete = dynamic(() => import('@mui/material/Autocomplete'));
 const Typography = dynamic(() => import('@mui/material/Typography'));
 const TextField = dynamic(() => import('@mui/material/TextField'));
@@ -110,7 +111,7 @@ const AsyncForm = ({ router,
     useEffect(()=>{
         setTerm(default_term)
         setFilter(checkbox_filter)
-    },[router.query.page])
+    },[router.query.page, router.query.group_page])
 
     useEffect(()=>{
         setTerm(router.query.term)
@@ -130,7 +131,7 @@ const AsyncForm = ({ router,
         if (selected) {        
             setTerm(selected[field])
             router.push({
-                pathname: `/${router.query.page || ''}`,
+                pathname: `/${router.query.page}/${router.query.group_page}`,
                 query: {
                     term: selected[field],
                     field
@@ -158,46 +159,55 @@ const AsyncForm = ({ router,
                         loading={loading}
                         filterOptions={(x) => x}
                         onChange={(e, value)=> {
-                            const {term, page, ...query} = router.query
+                            const {term, page, group_page, ...query} = router.query
                             if (!value) {
                                 setTerm('')
                             }
                             else {
                                 setTerm(value)
                                 router.push({
-                                    pathname: `/${page || ''}`,
+                                    pathname: `/${page}/${group_page}`,
                                     query: {...query, term: value}
                                 }, undefined, {shallow: true})
                             }
                         }}
                         renderInput={(params) => (
                             <TextField
-                            {...params}
-                            onChange={(e)=> {
-                                {
-                                    setTerm(e.target.value)
-                                }
-                            }}
-                            style={{
-                                height: 50,
-                                borderRadius: 5,
-                                padding: 3
-                            }}
-                            InputProps={{
-                                ...params.InputProps,
-                                style: {
-                                    fontSize: 12,
-                                    height: 45,
-                                    width: "100%",
-                                    paddingLeft: 5
-                                },
-                                endAdornment: (
-                                <React.Fragment>
-                                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                                    {params.InputProps.endAdornment}
-                                </React.Fragment>
-                                ),
-                            }}
+                                {...params}
+                                onChange={(e)=> {
+                                    {
+                                        setTerm(e.target.value)
+                                    }
+                                }}
+                                style={{
+                                    height: 50,
+                                    borderRadius: 5,
+                                    padding: 3
+                                }}
+                                InputProps={{
+                                    ...params.InputProps,
+                                    style: {
+                                        fontSize: 12,
+                                        height: 45,
+                                        fontSize: 16, 
+                                        width: "100%",
+                                        paddingLeft: 5,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "center",
+                                        alignContent: "flex-start"
+                                    },
+                                    endAdornment: (
+                                    <React.Fragment>
+                                        {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                                        {params.InputProps.endAdornment}
+                                    </React.Fragment>
+                                    ),
+                                }}
+                                inputProps={{
+                                    ...params.inputProps,
+                                    style: {width: "100%"}
+                                }}
                             />
                         )}
                     />
@@ -209,9 +219,9 @@ const AsyncForm = ({ router,
                     <Selector entries={fields} 
                         value={field ||"label"} 
                         prefix={"Field"} onChange={(e)=>{
-                            const {field="label", page, ...query} = router.query
+                            const {field="label", page='', group_page='', ...query} = router.query
                             router.push({
-                                pathname: `/${page || ''}`,
+                                pathname: `/${page}/${group_page}`,
                                 query: {
                                     ...query,
                                     field: e
@@ -223,10 +233,10 @@ const AsyncForm = ({ router,
                         value={limit || 5}
                         color="secondary"
                         onChange={(e, nv)=>{
-                            const {limit, page, ...query} = router.query
+                            const {limit, page='', group_page, ...query} = router.query
                             query.limit = nv || 5
                             router.push({
-                                pathname: `/${page || ''}`,
+                                pathname: `/${page}/${group_page}`,
                                 query
                             }, undefined, {shallow: true})
                         }}
@@ -243,10 +253,10 @@ const AsyncForm = ({ router,
                     <Tooltip title={fullscreen ? "Exit full screen": "Full screen"}>
                         <IconButton variant='contained'
                             onClick={()=>{
-                                const {fullscreen, page, ...query} = router.query
+                                const {fullscreen, page='', group_page, ...query} = router.query
                                 if (!fullscreen) query.fullscreen = 'true'
                                 router.push({
-                                    pathname: `/${page || ''}`,
+                                    pathname: `/${page}/${group_page}`,
                                     query
                                 }, undefined, {shallow: true})
                             }}
@@ -258,10 +268,10 @@ const AsyncForm = ({ router,
                     <Tooltip title={"Network view"}>
                         <IconButton
                             onClick={()=>{
-                                const {view, page, ...query} = router.query
+                                const {view, page, group_page, ...query} = router.query
                                 // query.view = 'network'
                                 router.push({
-                                    pathname: `/${page || ''}`,
+                                    pathname: `/${page}/${group_page}`,
                                     query
                                 }, undefined, {shallow: true})
                             }}
@@ -298,10 +308,10 @@ const AsyncForm = ({ router,
                             <Tooltip title={tooltip ? "Hide tooltip": "Show tooltip"}>
                                 <IconButton variant='contained'
                                     onClick={()=>{
-                                        const {tooltip, page, ...query} = router.query
+                                        const {tooltip, page='', group_page, ...query} = router.query
                                         if (!tooltip) query.tooltip = true
                                         router.push({
-                                            pathname: `/${page || ''}`,
+                                            pathname: `/${page}/${group_page}`,
                                             query
                                         }, undefined, {shallow: true})
                                     }}
@@ -332,10 +342,10 @@ const AsyncForm = ({ router,
                             >
                                 { Object.entries(layouts).map(([label, {icon}])=>(
                                 <MenuItem key={label} onClick={()=> {
-                                    const {layout, page, ...query} = router.query
+                                    const {layout, page, group_page, ...query} = router.query
                                     query.layout = label
                                     router.push({
-                                        pathname: `/${page || ''}`,
+                                        pathname: `/${page}/${group_page}`,
                                         query
                                     }, undefined, {shallow: true})
                                     handleCloseMenu(setAnchorElLayout)
@@ -352,10 +362,10 @@ const AsyncForm = ({ router,
                                     onClick={()=>{
                                         // if (edgeStyle.label) setEdgeStyle({})
                                         // else setEdgeStyle({label: 'data(label)'})
-                                        const {edge_labels, page, ...query} = router.query
+                                        const {edge_labels, page, group_page, ...query} = router.query
                                         if (!edge_labels) query.edge_labels = true
                                         router.push({
-                                            pathname: `/${page || ''}`,
+                                            pathname: `/${page}/${group_page}`,
                                             query
                                         }, undefined, {shallow: true})
                                     }}
@@ -408,10 +418,10 @@ const AsyncForm = ({ router,
                                 <Tooltip title={!legend ? "Show legend": "Hide legend"}>
                                     <IconButton variant='contained'
                                         onClick={()=>{
-                                            const {legend, legend_size, page, ...query} = router.query
+                                            const {legend, legend_size, page, group_page, ...query} = router.query
                                             if (!legend) query.legend = true
                                             router.push({
-                                                pathname: `/${page || ''}`,
+                                                pathname: `/${page}/${group_page}`,
                                                 query
                                             }, undefined, {shallow: true})
                                         }}
@@ -424,10 +434,10 @@ const AsyncForm = ({ router,
                                     <Tooltip title="Adjust legend size">
                                         <IconButton variant='contained'
                                             onClick={()=>{
-                                                const {legend_size=0, page, ...query} = router.query
+                                                const {legend_size=0, page, group_page, ...query} = router.query
                                                 query.legend_size = (parseInt(legend_size) +1)%5
                                                 router.push({
-                                                    pathname: `/${page || ''}`,
+                                                    pathname: `/${page}/${group_page}`,
                                                     query
                                                 }, undefined, {shallow: true})
                                             }}

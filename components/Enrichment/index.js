@@ -431,7 +431,6 @@ const Enrichment = ({default_options, libraries: l, schema, ...props}) => {
                                         disabled={elements===null}
                                         onClick={()=>{
                                             const {userListId, ...rest} = router.query
-                                            console.log(rest)
                                             router.push({
                                                 pathname: `/${page || ''}`,
                                                 query: rest

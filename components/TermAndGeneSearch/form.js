@@ -39,19 +39,14 @@ const Grid = dynamic(() => import('@mui/material/Grid'));
 
 const Typography = dynamic(() => import('@mui/material/Typography'));
 const TextField = dynamic(() => import('@mui/material/TextField'));
-const Button = dynamic(() => import('@mui/material/Button'));
 const Autocomplete = dynamic(() => import('@mui/material/Autocomplete'));
 const Stack = dynamic(() => import('@mui/material/Stack'));
 
 const ListItemText = dynamic(() => import('@mui/material/ListItemText'));
 const ListItemIcon = dynamic(() => import('@mui/material/ListItemIcon'));
 
-const AddBoxIcon  = dynamic(() => import('@mui/icons-material/AddBox'));
-const IndeterminateCheckBoxIcon = dynamic(() => import('@mui/icons-material/IndeterminateCheckBox'));
-const Selector = dynamic(async () => (await import('../misc')).Selector);
 const Checkbox = dynamic(() => import('@mui/material/Checkbox'));
 const FormControlLabel = dynamic(() => import('@mui/material/FormControlLabel'));
-const AsyncFormComponent = dynamic(() => import('./async_form_component'));
 
 export const process_relation = (r='[]') => {
 	try {
@@ -205,7 +200,7 @@ function Form({
                                     value.map((option, index) => (
                                         <Tooltip title={`${option}`} key={option} placement="top">
                                             <Chip label={option} {...getTagProps({ index })}
-                                                style={{maxWidth: 100}}
+                                                style={{maxWidth: 120}}
                                                 onDelete={()=>{
                                                     const {page, filter:f, ...rest} = router.query
                                                     const filter = JSON.parse(f)

@@ -8,6 +8,7 @@ import { usePrevious } from "../Enrichment";
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
+const Container = dynamic(() => import('@mui/material/Container'));
 
 const Typography = dynamic(() => import('@mui/material/Typography'));
 const Cytoscape = dynamic(() => import('../Cytoscape'), { ssr: false })
@@ -29,7 +30,6 @@ function DistilleryUseCase({
         type,
         ...props
     }){
-    
     const [selected, setSelected] = useState(null)
     const [term, setTerm] = useState(router.query.term)
     const [loading, setLoading] = useState(false)
@@ -98,7 +98,7 @@ function DistilleryUseCase({
         }
         else if (props.default_term && !router.query.term) {
             router.push({
-                pathname: `/${router.query.page || ''}`,
+                pathname: `/${router.query.page}/${router.query.group_page}`,
                 query: {
                     term: props.default_term
                 }
@@ -112,13 +112,15 @@ function DistilleryUseCase({
     // }, [router.query.limit])
     return (
         <Grid container alignItems={"center"} sx={{marginTop: -6}}>
-            <Grid item xs={12}>
-                <Typography variant="h5">
-                    <b>{title}</b>
-                </Typography>
-                <Typography>
-                    {description}
-                </Typography>
+            <Grid item xs={12} align="center" sx={{marginBottom: 5, marginTop: 5}}>
+                <Container maxWidth="md">
+                    <Typography variant="h5">
+                        <b>{title}</b>
+                    </Typography>
+                    <Typography>
+                        {description}
+                    </Typography>
+                </Container>
             </Grid>
             <Grid item xs={12}>
                 <AsyncForm setSelected={setSelected} selected={selected} type={type} fields={fields} {...props}/>

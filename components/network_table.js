@@ -125,9 +125,7 @@ const NetworkTable = ({data, schema}) => {
 						} else {
 							
 							const val = makeTemplate(i.text, properties)
-							if (i.field === "source label") {
-								console.log(i.text, properties, val)
-							}
+
 							processed[key].data[properties.id][i.field] = val === "undefined" ? "": precise(val)
 							if (val !== "undefined") {
 								i.count = i.count + 1
@@ -145,9 +143,7 @@ const NetworkTable = ({data, schema}) => {
 	}, [data])
 	if (processedData === null) return null
 	else {
-		console.log(processedData[tab])
 		const {data={}, header=[], columnVisibilityModel} = processedData[tab] || {}
-		console.log( processedData[tab])
 		return (
 			<Card style={{marginBottom: 10}}>
 				<CardContent>

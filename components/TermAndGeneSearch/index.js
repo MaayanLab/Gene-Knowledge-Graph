@@ -8,10 +8,11 @@ import HubIcon from '@mui/icons-material/Hub';
 import { mdiFamilyTree, mdiDotsCircle } from '@mdi/js';
 import Icon from '@mdi/react';
 import { process_filter } from './form';
+import { Typography } from '@mui/material';
 
 const Grid = dynamic(() => import('@mui/material/Grid'));
 
-const Button = dynamic(() => import('@mui/material/Button'));
+const Container = dynamic(() => import('@mui/material/Container'));
 const CircularProgress = dynamic(() => import('@mui/material/CircularProgress'));
 const Backdrop = dynamic(() => import('@mui/material/Backdrop'));
 const TooltipCard = dynamic(async () => (await import('../misc')).TooltipCard);
@@ -19,7 +20,6 @@ const Legend = dynamic(async () => (await import('../misc')).Legend);
 
 const StartButton  = dynamic(async () => (await (import('./buttons'))).StartButton);
 const EndButton  = dynamic(async () => (await (import('./buttons'))).EndButton);
-const IndeterminateCheckBoxIcon = dynamic(() => import('@mui/icons-material/IndeterminateCheckBox'));
 
 const Form = dynamic(() => import('./form'));
 const AsyncFormComponent = dynamic(() => import('./async_form_component'));
@@ -61,7 +61,7 @@ export const layouts = {
 
 
 export default function TermAndGeneSearch(props){
-    const {entries, edges=[], default_relations, nodes, schema, initial_query={}, tooltip_viz, coexpression_prediction, gene_link_button} = props
+    const {title, description, nodes, schema, initial_query={}} = props
     const router = useRouter()
     const page = router.query.page
     const [elements, setElements] = useState(null)
@@ -122,87 +122,7 @@ export default function TermAndGeneSearch(props){
             tooltip_templates_edges[i] = e.display
         }
     }
-    const reset_tooltip = () => {
-        setNode(null)
-        setFocused(null)
-    }
-
-
-    // useEffect(()=>{
-    //     const resolve_elements = async(filter) => {
-    //         try {
-    //             const controller = get_controller()
-    //             if (!filter.start_field) filter.start_field = "label"
-    //             if (filter.end && !filter.end_field) filter.end_field = "label"
-    //             if (filter.relation) {
-    //                 if (!filter.end) {
-    //                     filter.relation = filter.relation.map(name=>({name, limit: filter.limit || 5}))
-    //                     delete filter.limit
-    //                 } else {
-    //                     filter.relation = filter.relation.map(name=>({name}))
-    //                     delete filter.augment
-    //                     delete filter.augment_limit
-    //                 }
-    //             }
-    //             const res = await fetch(`${window.location.origin}/api/knowledge_graph?filter=${JSON.stringify(filter)}`,
-    //             {
-    //                 method: 'GET',
-    //                 signal: controller.signal,
-    //                 "Content-Type": "application/json"
-    //             }) 
-    //             if (!res.ok) setError(await res.text())
-    //             else {
-    //                 const results = await res.json()
-    //                 const selected_edges = []
-    //                 for (const i of results.edges) {
-    //                     if (i.data.relation && selected_edges.indexOf(i.data.label) === -1) {
-    //                         selected_edges.push(i.data.label)
-    //                     }
-    //                 }
-    //                 setElements(results)
-    //                 setLoading(false)
-    //                 setId(id+1)
-    //                 if (!filter.relation || filter.relation.length === 0) {
-    //                     setSelectedEdges(selected_edges)
-    //                     const {page, filter: f, ...rest} = router.query
-    //                     const filter = JSON.parse(f || '{}')
-    //                     filter.relation = selected_edges
-    //                     // if (selected_edges.length === 1) {
-    //                     //     filter.limit = results.edges.length
-    //                     // }
-    //                     redirect({router, page, filter, ...rest})
-    //                 }
-    //             }
-    //         } catch (error) {
-    //             console.error(error)
-    //         }
-    //     }
-    //     if(!router.isReady) return;
-    //     const filter = JSON.parse(f || '{}')
-    //     if (selectedEdges !== null) {
-    //         setSelectedEdges(null)
-    //     } 
-    //     if (Object.keys(f).length > 0 && f.start && f.start_term) {
-    //         setLoading(true)
-    //         resolve_elements(f)
-    //     } else if (initial_query.start) {
-    //         redirect({
-    //             router, 
-    //             page,
-    //             filter: initial_query
-    //         })
-    //     } else {
-    //         const start = nodes['Gene'] !== undefined ? 'Gene': Object.keys(nodes).sort()[0]
-    //         redirect({
-    //             router, 
-    //             page,
-    //             filter: {
-    //                 start,
-    //                 start_field: 'label'
-    //             }
-    //         })
-    //     }
-    // }, [filter])
+    
 
     const resolve_elements = async(filter) => {
                 try {
@@ -257,7 +177,6 @@ export default function TermAndGeneSearch(props){
         }
         // default
         if (!filter.start) {
-            console.log("Here")
             const page = router.query.page
             if (Object.keys(initial_query).length > 0) {
                 redirect({
@@ -307,6 +226,20 @@ export default function TermAndGeneSearch(props){
         <Grid container spacing={1}>
             <Grid item xs={12}>
                 <Grid container justifyContent="space-around" spacing={1}>
+                    {title &&
+                        <Grid item xs={12} align={"center"}  sx={{marginBottom: 5}}>
+                            <Container maxWidth="md">
+                                <Typography variant="h5">
+                                    <b>{title}</b>
+                                </Typography>
+                                {description &&
+                                    <Typography>
+                                        {description}
+                                    </Typography>
+                                }
+                            </Container>
+                        </Grid>    
+                    }
                     <Grid item xs={12}>
                         <AsyncFormComponent 
                             nodes={nodes}

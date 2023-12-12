@@ -20,9 +20,11 @@ export const Logo = ({color}) => (
                 aria-label="menu"
                 sx={{width: 35, height: 35}}
             >
-                <Image style={{marginLeft: -3, padding: 2,  objectFit: "contain"}} width={30} height={30} alt="cfde-logo" src="https://minio.dev.maayanlab.cloud/datadistillery-kg/img/favicon.png" />
+                <div style={{width: 30, height: 30, position: "relative", marginLeft: -2}}>
+                    <Image style={{ padding: 2,  objectFit: "contain"}} layout='fill' alt="cfde-logo" src="https://minio.dev.maayanlab.cloud/datadistillery-kg/img/favicon.png" />
+                </div>
             </ElevatedIconButton>
-            <Typography variant='cfde' color={color}>Data Distillery KG</Typography>
+            <Typography variant='cfde' color={color}>CFDE Data Distillery KG</Typography>
         </Stack>
     </Link>
 )

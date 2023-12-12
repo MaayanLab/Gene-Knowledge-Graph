@@ -102,7 +102,6 @@ const process_relations = (r='[]') => {
 
 export default function KnowledgeGraph({entries, edges=[], default_relations, nodes, schema, initial_query={}, tooltip_viz, coexpression_prediction, gene_link_button}) {
   if (!schema) schema=default_schema 
-  console.log(entries)
   const router = useRouter()
   const {page,
         start_term,

@@ -98,15 +98,15 @@ function MyApp({ Component, pageProps, consentCookie, setConsentCookie, resetCoo
         <div>
           <ConsentCookie consentCookie={consentCookie} setConsentCookie={setConsentCookie} resetCookie={resetCookie}/>
         </div>
-        <Grid container direction={"column"} justifyContent={"space-between"}>
+        <Grid container direction={"column"} justifyContent={"space-between"} sx={{minHeight: "100vh"}}>
            {(fullscreen.toLowerCase() === "false" && !isIFrame()) ? 
             <>
             <Grid item>
               <Header {...pageProps}/>
             </Grid>
-              <Grid item>
+              <Grid item style={{flexGrow: 1}}>
                 <Background>
-                  <Container maxWidth={"lg"} style={{padding: 0, flexGrow: 1, display: "flex", flexDirection: "column"}}>
+                  <Container maxWidth={"lg"} style={{padding: 0, display: "flex", flexDirection: "column"}}>
                 
                     <div className='container'>
                       <Component 
@@ -118,7 +118,7 @@ function MyApp({ Component, pageProps, consentCookie, setConsentCookie, resetCoo
                 </Background>
             </Grid>
             </>:
-            <Grid item>
+            <Grid item style={{flexGrow: 1}}>
               <Container id={"main"} maxWidth={"xl"} sx={{background: "linear-gradient(180deg, #FFFFFF 26.13%, #DBE0ED 104.21%)", marginTop: 10}}>
                 <Component 
                   {...pageProps}

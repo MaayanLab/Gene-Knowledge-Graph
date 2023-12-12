@@ -241,14 +241,19 @@ const AsyncFormComponent = ({direction,
                             ...params.InputProps,
                             endAdornment: null,
                             style: {
-                                fontSize: 12,
+                                fontSize: 16,
                                 height: 45,
                                 width: "100%",
-                                paddingLeft: 5
+                                paddingLeft: 5,
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                alignContent: "flex-start"
                             }
                         }}
                         inputProps={{
                             ...params.inputProps,
+                            style: {width: "100%"}
                           }}
                     />
                     )}
