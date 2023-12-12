@@ -334,7 +334,7 @@ const resolve_one_term = async ({session, edges, start, field, term, relation, l
 			else {
 				const color_order = colors[r.name]
 				let q = `
-					MATCH p=(st:\`${start}\` { ${field}: $term })-[r1:\`${r.name}\`*${path_length}]-(en)
+					MATCH p=(st:\`${start}\` { ${field}: $term })-[r1:\`${r.name}\`*${path_length}]-(en${r.end? ": " + r.end :""})
 					USING INDEX st:\`${start}\`(${field})
 					WITH p, st
 					

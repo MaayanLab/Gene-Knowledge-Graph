@@ -65,7 +65,14 @@ function DistilleryUseCase({
             setLoading(true)
             setElements(null)
             const controller = get_controller()
-            const relation = relations.map(name=>({name, limit: router.query.limit || 5}))
+            const relation = relations.map(rel=>{
+                if (typeof rel === 'string') {
+                    return {name: rel, limit: router.query.limit || 5}
+                } else if (typeof rel === "object") {
+                    console.log(rel)
+                    return {limit: router.query.limit || 5, ...rel}
+                }
+            })
             const body = {
                 start: type,
                 start_term: term,
