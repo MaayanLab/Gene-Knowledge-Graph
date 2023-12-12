@@ -265,7 +265,7 @@ const Header = ({schema, ...rest}) => {
 					<Grid item align="left">
 						<Stack direction={"row"} spacing={1} alignItems="center">
 							{(schema.header.tabs || []).map(t=>(
-								<Link href={t.endpoint}>
+								<Link href={t.endpoint} key={t.label}>
 									<Button>
 										<Typography variant="nav" color="secondary">
 											{t.label}

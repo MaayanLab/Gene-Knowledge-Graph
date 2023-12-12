@@ -23,7 +23,7 @@ export default function DistilleryLanding({
                 <Typography>{description}</Typography>
             </Grid>
             {pages.map(page=>(
-                 <Grid item>
+                 <Grid item key={page.props.title}>
                     <Card sx={{ maxWidth: 345, height: 300 }}>
                         <CardHeader
                             avatar={
