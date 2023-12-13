@@ -1,10 +1,10 @@
 import { withRouter } from "next/router";
-import { init_function, fetch_kg_schema } from '../utils/initialize';
-import { get_path } from "../components/markdown";
-import { makeTemplate } from "../utils/helper";
+import { init_function, fetch_kg_schema } from '../../utils/initialize';
+import { get_path } from "../../components/markdown";
+import { makeTemplate } from "../../utils/helper";
 
 
-import {components} from '../components/ComponentSelector'
+import {components} from '../../components/ComponentSelector'
 
 function Page({router, schema, component, ...props}){
   if (components[component] !== undefined){

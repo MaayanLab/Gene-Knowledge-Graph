@@ -221,7 +221,7 @@ export default function TermAndGeneSearch(props){
         else return acc
     }, [])
 
-    
+    if (!start) return null
     return (
         <Grid container spacing={1}>
             <Grid item xs={12}>
