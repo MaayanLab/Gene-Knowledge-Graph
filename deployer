@@ -1,6 +1,6 @@
 #!/bin/bash
 docker-compose build kg
 docker-compose push kg
-docker tag maayanlab/dd_knowledge_graph:1.4.3 maayanlab/dd_knowledge_graph:latest
+docker tag maayanlab/dd_knowledge_graph:1.4.4 maayanlab/dd_knowledge_graph:latest
 docker push maayanlab/dd_knowledge_graph:latest
 # dokku git:from-image cfde-gskg maayanlab/knowledge_graph:1.1.48
