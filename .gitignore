@@ -43,3 +43,5 @@ data-*
 dumps
 .env.deploy
 venv
+
+legacy/

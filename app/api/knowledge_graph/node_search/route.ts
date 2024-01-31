@@ -1,25 +1,27 @@
 import neo4j from "neo4j-driver"
-import { neo4jDriver } from "../../../utils/neo4j"
-import { cors, runMiddleware, process_properties } from "../knowledge_graph"
+import { neo4jDriver } from "@/utils/neo4j"
+import {process_properties} from "@/utils/helper"
+import { NextResponse } from "next/server"
+import type { NextRequest } from 'next/server'
+
 // This function returns a gene list based on a search term
-export default async function query(req, res) {
+export async function GET(req: NextRequest) {
     try {
-        await runMiddleware(req, res, cors)
         const node_properties = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/search_properties`)).json()
-        const { type, term="", field="label", filter, limit=100} = await req.query
+        const type = req.nextUrl.searchParams.get("type")
+        const term = req.nextUrl.searchParams.get("term") || ""
+        const field = req.nextUrl.searchParams.get("field") || "label"
+        const limit:number = parseInt(req.nextUrl.searchParams.get("limit")) || 100
+        const filter = JSON.stringify(JSON.parse(req.nextUrl.searchParams.get("filter") || "{}"))
         const session = neo4jDriver.session({
             defaultAccessMode: neo4j.session.READ
         })
         if (node_properties[type] === undefined) {
-            res.status(400).send({message: `Invalid node: ${node}`}) 
-            return
+            return NextResponse.json({ error: `Invalid node: ${type}` }, { status: 400 })
         }
         if (node_properties[type].indexOf(field) === -1) {
-            res.status(400).send({message: `Invalid field: ${field}`}) 
-            return
+            return NextResponse.json({ error: `Invalid field: ${field}` }, { status: 400 })
         }
-        if (filter) JSON.parse(filter)
-
         let query = `MATCH (a:\`${type}\`${filter ? " "+filter.replace(/"/g, "`"): ""})`
         // if (enzyme && enzyme.toLowerCase() === 'true') query = `MATCH (a:Gene ${filter})`
         if (term) {
@@ -34,10 +36,9 @@ export default async function query(req, res) {
             const value = a.properties[field]
             if (value) records[value] = process_properties(a.properties)
         }
-        res.status(200).send(records)    
-        return
+        return NextResponse.json(records, { status: 200 })
     } catch (error) {
-        res.status(400).send(error) 
+        return NextResponse.error()
     }
      
 }

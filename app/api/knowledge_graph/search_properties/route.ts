@@ -1,10 +1,11 @@
 import cache from "memory-cache";
-import { fetch_kg_schema } from "../../../utils/initialize"
+import { fetch_kg_schema } from "@/utils/initialize"
+import { NextResponse } from "next/server";
 
-export default async function query(req, res) {
+export async function GET() {
     const cached = cache.get("node_properties")
     if (cached) {
-        res.status(200).send(cached) 
+        return NextResponse.json(cached, {status: 200})
     } else {
         const schema = await fetch_kg_schema()
         const nodes = {}
@@ -12,6 +13,6 @@ export default async function query(req, res) {
             nodes[i.node] = i.search
         }
         cache.put("properties", nodes);
-        res.status(200).send(nodes)    
+        return NextResponse.json(nodes, {status: 200})
     }
 }

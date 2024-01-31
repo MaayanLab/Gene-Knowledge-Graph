@@ -28,7 +28,6 @@ export const mui_colors = {
     blue,
     purple,
     // red,
-    purple,
     yellow,
     indigo,
     deepOrange,
@@ -38,7 +37,6 @@ export const mui_colors = {
     blueGrey,
     deepPurple,
     pink,
-    amber,
     brown,
     lightGreen,
 

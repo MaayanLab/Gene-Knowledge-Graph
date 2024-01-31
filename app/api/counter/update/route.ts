@@ -1,8 +1,9 @@
 import neo4j from "neo4j-driver"
-import { neo4jDriver } from "../../../utils/neo4j"
-import { toNumber } from "../../../utils/helper";
+import { neo4jDriver } from "@/utils/neo4j"
+import { toNumber } from "@/utils/math"; 
+import { NextResponse } from "next/server";
 
-export default async function query(req, res) {
+export async function GET() {
     try {
         const read_session = neo4jDriver.session({
             defaultAccessMode: neo4j.session.READ
@@ -15,20 +16,20 @@ export default async function query(req, res) {
         if (rs.records.length === 0) {
             const query = "CREATE (n:Counter {count: 1})"
             const rs = await write_session.run(query)
-            res.status(200).send({count: 1})
-            
+            return NextResponse.json({count: 1},  {status: 200})
         } else {
             const query = `MATCH (p:Counter)
             SET p.count = p.count + 1
             RETURN p.count as count`
             const rs = await write_session.run(query)
-            res.status(200).send(rs.records.flatMap(record => {
+            const results = rs.records.flatMap(record => {
                 const count = toNumber(record.get("count"))
                 return {count}
-            })[0])
+            })[0]
+            return NextResponse.json(results,  {status: 200})
         }
     } catch (error) {
         console.log(error)
-        res.status(500).send(error)
+        return NextResponse.error()
     }
 }

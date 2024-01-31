@@ -1,19 +1,10 @@
 import JSZip from "jszip";
 import fileDownload from "js-file-download";
-export const precise = (value) => {
-	if (isNaN(value)) return value
-	if (Number.isInteger(Number(value))) return value
-	let v = Number.parseFloat(value).toPrecision(4);
-	if (Math.abs(value) < 0.0001 && Math.abs(v).toString().length > 5){
-	  return Number.parseFloat(value).toExponential(4);
-	} else {
-	  return v
-	}
-  }
+import {toNumber} from './math'
 
-  export function makeTemplate(
-    templateString,
-    templateVariables
+export function makeTemplate(
+    templateString: string,
+    templateVariables: string,
 ) {
   const keys = [...Object.keys(templateVariables).map((key) => key.replace(/ /g, '_')), 'PREFIX']
   const values = [...Object.values(templateVariables), process.env.NEXT_PUBLIC_PREFIX]
@@ -25,19 +16,7 @@ export const precise = (value) => {
   }
 }
 
-export function toNumber(value) {
-	if (typeof value !== 'object') return value
-	const { low, high } = value
-	let res = high
-  
-	for (let i = 0; i < 32; i++) {
-	  res *= 2
-	}
-  
-	return low + res
-  }
-
-  export const isIFrame = () => {
+export const isIFrame = () => {
 	try {
 		if ( window.location !== window.parent.location ) return true
     	else false	
@@ -118,4 +97,17 @@ export const process_tables = async (results) => {
 		// see FileSaver.js
 		fileDownload(content, "subnetwork.zip");
 	});
+}
+
+export const process_properties = (properties) => {
+	const props = {}
+	for ( const k of Object.keys(properties)) {
+		const v:string | number | {low: number, high: number} = properties[k]
+		if (typeof v === "object") {
+			props[k] = toNumber(v)
+		} else {
+			props[k] = v
+		}
+	}
+	return props
 }

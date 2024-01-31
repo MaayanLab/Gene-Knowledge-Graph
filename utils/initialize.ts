@@ -2,7 +2,7 @@ import neo4j from "neo4j-driver"
 import { neo4jDriver } from "./neo4j"
 import fetch from 'isomorphic-unfetch'
 import * as default_schema from '../public/schema.json'
-import { toNumber } from "./helper"
+import { toNumber } from "./math"
 import Color from 'color'
 
 export async function get_terms(node, search) {
@@ -113,7 +113,7 @@ export const initialize_kg = async () => {
 	for (const e of i.match) {
 		tooltip_templates_edges[e] = i.display
 	  }
-	if (!i.gene_link) {
+	if (!i["gene_link"]) {
 		for (const e of i.match) {
 			if (edges.indexOf(e) === -1) edges.push(e)
 		}
@@ -146,7 +146,7 @@ export const initialize_enrichment = async () => {
 	const schema = await fetch_kg_schema()
 	const icon_picker = {}
 	for (const i of schema.header.subheader) {
-		icon_picker[i.label] = i.props.libraries.map(j=>j.library)
+		icon_picker[i.label] = i.props["libraries"].map((j:{library:string})=>j.library)
 	}
 	return {
 		icon_picker

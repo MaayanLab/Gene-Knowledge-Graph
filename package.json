@@ -26,7 +26,6 @@
     "cytoscape": "^3.21.0",
     "cytoscape-avsdf": "^1.0.0",
     "cytoscape-fcose": "^2.1.0",
-    "cytoscape-popper": "^2.0.0",
     "cytoscape-svg": "^0.4.0",
     "downloadjs": "^1.4.7",
     "file-saver": "^2.0.5",
@@ -38,13 +37,13 @@
     "jszip": "^3.10.1",
     "memory-cache": "^0.2.0",
     "neo4j-driver": "^4.4.5",
-    "next": "^12.1.0",
+    "next": "^14.1.0",
     "nextjs-google-analytics": "^2.2.2",
     "node-fetch": "^3.2.10",
     "number-to-words": "^1.2.4",
-    "react": "17.0.2",
+    "react": "^18.2.0",
     "react-cytoscapejs": "^1.2.1",
-    "react-dom": "17.0.2",
+    "react-dom": "^18.2.0",
     "react-markdown": "^8.0.3",
     "recharts": "^2.1.9",
     "recharts-to-png": "^2.2.1",
@@ -55,7 +54,7 @@
   "devDependencies": {
     "@types/node": "^17.0.31",
     "eslint": "8.14.0",
-    "eslint-config-next": "12.1.6",
+    "eslint-config-next": "^14.1.0",
     "typescript": "^4.6.4"
   }
 }
