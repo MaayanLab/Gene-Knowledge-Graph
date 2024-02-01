@@ -49,7 +49,9 @@
     "recharts-to-png": "^2.2.1",
     "remark-gfm": "^3.0.1",
     "sanitize-html": "^2.11.0",
-    "use-async-effect": "^2.2.5"
+    "use-async-effect": "^2.2.5",
+    "zod": "^3.22.4",
+    "zod_utilz": "^0.7.3"
   },
   "devDependencies": {
     "@types/node": "^17.0.31",

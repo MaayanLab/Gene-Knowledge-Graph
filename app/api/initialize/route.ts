@@ -5,6 +5,12 @@ import fetch from "node-fetch";
 import { default_color } from "@/utils/colors";
 import { NextResponse } from "next/server";
 
+export interface Initialize_Type {
+    aggr_scores?: {[key:string]: {max: number, min: number}},
+    colors?: {[key:string]: {color?: string, aggr_field?: string, field?: string, aggr_type?: string}},
+    edges?: Array<string>
+}
+
 const initialize = async ({session, schema}) => {
 	const aggr_scores = {}
     const colors = {}
@@ -32,11 +38,6 @@ const initialize = async ({session, schema}) => {
                 query = `MATCH (st)-[rel]-(en)
                     RETURN ${order_pref}(rel.${field}) as ${edge_score_var}`
             }
-            // const results = await session.readTransaction(txc => txc.run(query))
-            // results.records.flatMap(record => {
-            //     const score = record.get(edge_score_var)
-            //     aggr_scores[edge_score_var] = score
-            // })
             for (const j of (s.match || [])) {
                 colors[j].aggr_field = edge_score_var
                 colors[j].field = field
@@ -56,6 +57,7 @@ const initialize = async ({session, schema}) => {
         if (s.order) {
             const [field, order] = s.order
             let score_var
+            const aggr = {field}
             for (const order_pref of ['max', 'min']) {
                 score_var = `${order_pref}_${field}`
                 const query = `MATCH (st)
@@ -64,9 +66,10 @@ const initialize = async ({session, schema}) => {
                 const results = await session.readTransaction(txc => txc.run(query))
                 results.records.flatMap(record => {
                     const score = record.get(score_var)
-                    aggr_scores[score_var] = score
+                    aggr[order_pref] = score
                 })
             }
+            aggr_scores[field] = aggr
             
             
             colors[s.node].aggr_field = score_var

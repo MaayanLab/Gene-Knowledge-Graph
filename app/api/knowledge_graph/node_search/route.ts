@@ -3,16 +3,22 @@ import { neo4jDriver } from "@/utils/neo4j"
 import {process_properties} from "@/utils/helper"
 import { NextResponse } from "next/server"
 import type { NextRequest } from 'next/server'
+import { z } from "zod"
+import { zu } from 'zod_utilz'
+import { convert_query } from "@/utils/helper"
 
+const query_schema = z.object({
+    type: z.string(),
+    field: z.optional(z.string()),
+    term: z.optional(z.string()),
+    limit: z.optional(z.number()),
+    filter: z.optional(zu.stringToJSON())
+})
 // This function returns a gene list based on a search term
 export async function GET(req: NextRequest) {
     try {
         const node_properties = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/search_properties`)).json()
-        const type = req.nextUrl.searchParams.get("type")
-        const term = req.nextUrl.searchParams.get("term") || ""
-        const field = req.nextUrl.searchParams.get("field") || "label"
-        const limit:number = parseInt(req.nextUrl.searchParams.get("limit")) || 100
-        const filter = JSON.stringify(JSON.parse(req.nextUrl.searchParams.get("filter") || "{}"))
+        const {type, field="label", term, limit=100, filter={}} = query_schema.parse(convert_query(req))
         const session = neo4jDriver.session({
             defaultAccessMode: neo4j.session.READ
         })
@@ -22,7 +28,7 @@ export async function GET(req: NextRequest) {
         if (node_properties[type].indexOf(field) === -1) {
             return NextResponse.json({ error: `Invalid field: ${field}` }, { status: 400 })
         }
-        let query = `MATCH (a:\`${type}\`${filter ? " "+filter.replace(/"/g, "`"): ""})`
+        let query = `MATCH (a:\`${type}\`${filter ? " "+JSON.stringify(filter).replace(/"/g, "`"): ""})`
         // if (enzyme && enzyme.toLowerCase() === 'true') query = `MATCH (a:Gene ${filter})`
         if (term) {
             query = query + ` WHERE a.${field} =~ $term`
@@ -38,7 +44,7 @@ export async function GET(req: NextRequest) {
         }
         return NextResponse.json(records, { status: 200 })
     } catch (error) {
-        return NextResponse.error()
+        return NextResponse.json(error, { status: 400 })
     }
      
 }
