@@ -3,7 +3,7 @@ import fileDownload from "js-file-download";
 import {toNumber} from './math'
 import type { NextRequest } from 'next/server'
 import Color from 'color'
-import { default_get_node_color_and_type } from '@/app/api/knowledge_graph/s'
+import { default_get_node_color_and_type } from '@/app/api/knowledge_graph/route'
 
 export function makeTemplate(
     templateString: string,
@@ -29,7 +29,6 @@ export const isIFrame = () => {
 }
 
 export const process_tables = async (results) => {
-	console.log(results)
 	const node_columns = ["id", "label"]
 	const nodes = []
 	const relation_columns = ["source", "target", "relation"]
@@ -218,8 +217,7 @@ export const get_node_color_and_type_augmented = ({node,
         fields?: Array<string>,
         augmented_genes?: Array<string>,
         gene_list?: Array<string>
-    }
-    ) => {
+    }) => {
     if (node.pval === undefined) {
         if (augmented_genes.indexOf(node.label) > -1 && gene_list.indexOf(node.label) === -1) {
             const props = default_get_node_color_and_type(({node, terms, color, aggr_scores, field, aggr_field, fields}))
@@ -231,10 +229,10 @@ export const get_node_color_and_type_augmented = ({node,
         }
     }
     else {
-        const props = compute_colors({properties: node, aggr_scores: aggr_scores[field], color}) 
+        const props = compute_colors({properties: node, aggr_scores: aggr_scores.pval, color}) 
         for (const i in node.enrichment || []) {
             const v = node.enrichment[i]
-            node.enrichment[i] = { ...v, ...compute_colors({properties: v, aggr_scores: aggr_scores[field], color}) }
+            node.enrichment[i] = { ...v, ...compute_colors({properties: v, aggr_scores: aggr_scores.pval, color}) }
         }
         return props
     }	

@@ -1,12 +1,10 @@
 import neo4j from "neo4j-driver"
-import Cors from 'cors'
 import { neo4jDriver } from "@/utils/neo4j"
 import Color from 'color'
 import { process_properties } from "@/utils/helper"
 import fetch from "node-fetch"
 import {default_color, mui_colors} from '@/utils/colors'
 import { z } from "zod"
-import { zu } from "zod_utilz"
 import { NextResponse } from "next/server"
 import type { NextRequest } from 'next/server'
 import { augment_gene_set, kind_mapper, get_node_color_and_type_augmented, typed_fetch } from "@/utils/helper"
@@ -46,7 +44,7 @@ const get_color = ({color, darken}: {color: string, darken?: number}) => {
 
 const highlight_color = '#ff8a80'
 
-export const default_get_node_color_and_type = ({node, terms, color=default_color, aggr_scores, field, aggr_field, aggr_type, fields}: {
+export const default_get_node_color_and_type = ({node, terms, color=default_color, aggr_scores, field, aggr_field, aggr_type, fields=[]}: {
     node: {[key:string]: any},
     terms?: Array<string>,
     color?: string,
@@ -123,8 +121,8 @@ export const resolve_results = async ({
 }: {
     query: string,
     query_params?: {[key:string]: any},
-    terms: Array<string>,
-    fields: Array<string>,
+    terms?: Array<string>,
+    fields?: Array<string>,
     colors?: {[key: string]: {color?: string, field?: string, aggr_type?: string}},
     aggr_scores?: {[key:string]: {max: number, min: number}},
     get_node_color_and_type?: Function,

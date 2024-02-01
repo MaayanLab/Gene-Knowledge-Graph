@@ -27,7 +27,7 @@ export interface UISchema {
             text: string,
             type: string
         }>,
-
+        gene_link: Boolean
     }>,
     header: {
         title: string,
