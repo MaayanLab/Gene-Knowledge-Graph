@@ -12,7 +12,7 @@ export async function GET() {
         for (const i of schema.nodes) {
             nodes[i.node] = i.search
         }
-        cache.put("properties", nodes);
+        cache.put("node_properties", nodes);
         return NextResponse.json(nodes, {status: 200})
     }
 }
