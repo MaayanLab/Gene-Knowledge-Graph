@@ -44,7 +44,8 @@ export interface UISchema {
             label: string,
             type: string,
             component: string,
-            props: {
+            position?: 'top' | 'bottom',
+            props?: {
                 [key: string]: any
             }
         }>,
@@ -58,16 +59,17 @@ export interface UISchema {
             },
             href: string
         }>
-    }
+    },
+    ui_theme?: string,
 }
 
 export async function GET() {
-    const cached = cache.get("schema")
+    const cached = cache.get("schema3")
     if (cached) {
         return NextResponse.json(cached, {status: 200})
     } else {
         const schema = await fetch_kg_schema()
-        cache.put("schema", schema);
+        cache.put("schema3", schema);
         return NextResponse.json(schema, {status: 200})
     }
 }

@@ -45,3 +45,5 @@ dumps
 venv
 
 legacy/
+
+legacy_components/

@@ -1,9 +1,32 @@
 import { createTheme } from "@mui/material"
+import { Inter, DM_Sans, Montserrat, Hanken_Grotesk } from 'next/font/google'
+
+export const dm_sans = DM_Sans({ 
+    weight: ['500', '700'],
+    subsets: ['latin'],
+    display: 'swap',
+})
+export const inter = Inter({ 
+    weight: ['400', '600', '700'],
+    subsets: ['latin'],
+    display: 'swap',
+})
+export const montserrat = Montserrat({ 
+    weight: ['600'],
+    subsets: ['latin'],
+    display: 'swap',
+})
+
+export const hanken_grotesk = Hanken_Grotesk({
+    weight: ['400', '500', '600', '700'],
+    subsets: ['latin'],
+    display: 'swap',
+})
 
 
 export const cfde_theme = createTheme({
     typography: {
-        fontFamily: "Hanken Grotesk",
+        fontFamily: hanken_grotesk.style.fontFamily,
         h1: {
             fontSize: 40,
             fontStyle: "normal",
@@ -30,9 +53,16 @@ export const cfde_theme = createTheme({
             fontWeight: 500,
         },
         cfde: {
+            fontSize: "40px",
+            fontStyle: "normal",
+            fontWeight: 500,
+            textTransform: "uppercase"
+        },
+        cfde_small: {
             fontSize: 24,
             fontStyle: "normal",
             fontWeight: 500,
+            textTransform: "uppercase"
         },
         subtitle1: {
             fontSize: 16,
@@ -43,12 +73,12 @@ export const cfde_theme = createTheme({
             fontWeight: 500,
         },
         body1: {
-            fontFamily: "DM Sans",
+            fontFamily: dm_sans.style.fontFamily,
             fontSize: 16,
             fontWeight: 500,
         },
         body2: {
-            fontFamily: "DM Sans",
+            fontFamily: dm_sans.style.fontFamily,
             fontSize: 15,
             fontWeight: 500,
         },
@@ -58,14 +88,14 @@ export const cfde_theme = createTheme({
             fontWeight: 500,
         },
         nav: {
-            fontSize: 14,
+            fontSize: 16,
             fontStyle: "normal",
             fontWeight: 600,
             textTransform: "uppercase",
             color: "#336699"
         },
         footer: {
-            fontFamily: "DM Sans",
+            fontFamily: dm_sans.style.fontFamily,
             fontSize: 16,
             fontStyle: "normal",
             fontWeight: 400,
@@ -225,3 +255,63 @@ export const cfde_theme = createTheme({
         },
     }
 })
+
+declare module '@mui/material/styles' {
+    interface TypographyVariants {
+      cfde: React.CSSProperties;
+      cfde_small: React.CSSProperties;
+      nav: React.CSSProperties;
+      footer: React.CSSProperties;
+      stats_h3: React.CSSProperties;
+      stats_sub: React.CSSProperties;
+    }
+  
+    // allow configuration using `createTheme`
+    interface TypographyVariantsOptions {
+      cfde?: React.CSSProperties;
+      cfde_small?: React.CSSProperties;
+      nav?: React.CSSProperties;
+      footer?: React.CSSProperties;
+      stats_h3?: React.CSSProperties;
+      stats_sub?: React.CSSProperties;
+    }
+
+    interface Palette {
+        paperGray: Palette['primary'];
+        tertiary: Palette['primary'];
+    }
+
+    interface PaletteOptions {
+        paperGray?: PaletteOptions['primary'];
+        tertiary?: PaletteOptions['primary'];
+    }
+  }
+
+  declare module "@mui/material" {
+    interface ButtonPropsColorOverrides {
+        tertiary: true;
+    }
+
+    interface ChipPropsColorOverrides {
+        tertiary: true;
+    }
+  }
+  
+  // Update the Typography's variant prop options
+  declare module '@mui/material/Typography' {
+    interface TypographyPropsVariantOverrides {
+      cfde: true;
+      cfde_small: true;
+      nav: true;
+      footer: true;
+      stats_h3: true;
+      stats_sub: true;
+    }
+  }
+
+  
+  declare module '@mui/material/Paper' {
+    interface PaperPropsVariantOverrides {
+      "rounded-top": true;
+    }
+  }
