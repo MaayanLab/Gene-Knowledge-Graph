@@ -61,15 +61,28 @@ export interface UISchema {
         }>
     },
     ui_theme?: string,
+    footer: {
+        style?: {
+            [key: string]: string | number
+        },
+        layout: Array<Array<
+            {
+                component: string,
+                props?: {
+                    [key:string]: string|number
+                }
+            }
+        >>
+    }
 }
 
 export async function GET() {
-    const cached = cache.get("schema3")
+    const cached = cache.get("schema7")
     if (cached) {
         return NextResponse.json(cached, {status: 200})
     } else {
         const schema = await fetch_kg_schema()
-        cache.put("schema3", schema);
+        cache.put("schema7", schema);
         return NextResponse.json(schema, {status: 200})
     }
 }
