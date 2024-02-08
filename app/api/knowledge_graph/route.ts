@@ -17,6 +17,7 @@ export interface NetworkSchema {
             id: string,
             kind: string,
             label: string,
+			pval?: number,
             [key: string]: string | number | boolean,
         }
     }>,
@@ -28,6 +29,7 @@ export interface NetworkSchema {
             target_label: string,
             kind: string,
             label: string,
+			relation?: string,
             [key: string]: string | number | boolean,
         }
     }>

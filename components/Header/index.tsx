@@ -25,7 +25,7 @@ export const Nav = ({tabs}:
 	for (const tab of tabs) {
 		const position = tab.position || 'top'
 		tab_component[position].push(
-			<Link href={tab.endpoint}>
+			<Link href={tab.endpoint} key={tab.label}>
 				<Typography variant="nav">{tab.label}</Typography>
 			</Link>
 		)

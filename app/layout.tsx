@@ -39,7 +39,6 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const schema = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
-  console.log(schema.footer)
   return (
     <html lang="en">
       <body>

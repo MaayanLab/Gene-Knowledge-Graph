@@ -7,7 +7,7 @@ import { default_get_node_color_and_type } from '@/app/api/knowledge_graph/route
 
 export function makeTemplate(
     templateString: string,
-    templateVariables: string,
+    templateVariables: {[key:string]: string|number|boolean},
 ) {
   const keys = [...Object.keys(templateVariables).map((key) => key.replace(/ /g, '_')), 'PREFIX']
   const values = [...Object.values(templateVariables), process.env.NEXT_PUBLIC_PREFIX]
@@ -236,4 +236,73 @@ export const get_node_color_and_type_augmented = ({node,
         }
         return props
     }	
+}
+
+// support old queries
+export interface FilterSchema {
+    start?: string,
+    start_field?: string,
+    start_term?: string,
+    end?: string,
+    end_field?: string,
+    end_term?: string,
+    relation?: string| Array<string | {name?: string, limit?: string}>,
+    limit?: number,
+    page?: number,
+    gene_links?: Array<string>,
+    augment?: boolean,
+    augment_limit?: number,
+}
+
+export const process_relation = (r:Array<string | {name?: string, limit?: string}>|string) => {
+    if (Array.isArray(r)) return r
+    try {
+		const relations  = JSON.parse(r || '[]')
+		return relations
+	} catch (error) {
+		return r.split(",")
+	}
+}
+
+export const process_filter = (query: {
+    start?: string,
+    start_field?: string,
+    start_term?: string,
+    end?: string,
+    end_field?: string,
+    end_term?: string,
+    relation?: string| Array<string | {name?: string, limit?: string}>,
+    limit?: number,
+    page?: number,
+    filter?: FilterSchema,
+    [key: string]: any
+}) => {
+    const {
+        start,
+        start_field,
+        start_term,
+        end,
+        end_field,
+        end_term,
+        relation,
+        limit,
+        page,
+        filter={},
+        ...rest
+    } = query
+    return {
+        filter: JSON.stringify({
+            start,
+            start_field,
+            start_term,
+            end,
+            end_field,
+            end_term,
+            relation: process_relation(relation),
+            limit,
+            ...filter
+        }),
+        ...rest
+    }
+
 }
