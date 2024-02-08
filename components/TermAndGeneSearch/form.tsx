@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react';
+// import { useQueryState } from 'next-usequerystate'
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import fileDownload from 'js-file-download'
 import { 
@@ -91,20 +92,21 @@ export const layouts = {
         fullscreen?: 'true',
         view?:string,
         tooltip?: 'true',
-        edge_labels?: 'true',
         legend?: 'true',
+        edge_labels?: 'true',
         legend_size?: string,
         layout?: string,
     },
 }) {
     const pathname = usePathname()
     const router = useRouter()
+
     const {
         filter:f,
-        edge_labels,
         view,
         tooltip,
         layout,
+        edge_labels,
         legend,
         legend_size,
         fullscreen
@@ -118,6 +120,7 @@ export const layouts = {
         gene_links,
         augment,
     } = filter
+    // const [edge_labels, setEdgeLabels] = useQueryState('edge_labels')
     const relation = process_relation(r || [])
     const [error, setError] = useState<{error: string} | null>(null)
     const [anchorEl, setAnchorEl] = useState<HTMLElement>(null)
@@ -336,9 +339,12 @@ export const layouts = {
                                         onClick={()=>{
                                             // if (edgeStyle.label) setEdgeStyle({})
                                             // else setEdgeStyle({label: 'data(label)'})
-
                                             const {edge_labels, ...query} = searchParams
                                             if (!edge_labels) query['edge_labels'] = 'true'
+                                            router_push(router, pathname, query)
+                                            
+                                            // if (edge_labels) setEdgeLabels('')
+                                            // else setEdgeLabels('true')
                                             router_push(router, pathname, query)
                                             
                                         }}

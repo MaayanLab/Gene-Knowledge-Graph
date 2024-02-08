@@ -3,6 +3,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import { useRef, useEffect } from "react"
 export const router_push = (router: AppRouterInstance, pathname:string, query: {[key: string]: string }) => {
 	const newSearchParams = new URLSearchParams(query)
+  console.log(pathname + '?' + newSearchParams.toString())
 	router.push(pathname + '?' + newSearchParams.toString())
 }
 

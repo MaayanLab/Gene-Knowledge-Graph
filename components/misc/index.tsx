@@ -54,7 +54,7 @@ export const Legend = ({
     legendSize=0
 }: {
     elements: NetworkSchema,
-    search: boolean,
+    search?: boolean,
     legendSize: number
 }) => {
     const colors = {  

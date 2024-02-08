@@ -5,20 +5,18 @@ import { Selector } from "../misc"
 import Link from 'next/link'
 import { Typography, TextField, Button, Autocomplete, Grid } from "@mui/material";
 import { router_push } from "@/utils/client_side"
-
+import { FormButton } from "./buttons"
 const AsyncFormComponent = ({direction,
-    button_component,
+    button_type,
     nodes, 
-    selected, 
-    setSelected,
-    searchParams
+    searchParams,
+    initial_query
 }: {
 		direction: string,
-		button_component: ()=>ReactNode,
+        initial_query: {[key: string]: string},
+		button_type: 'start'| 'end' | 'none',
 		nodes: {[key:string]: {[key:string]: any}},
-		selected: {[key:string]: any},
-		setSelected: Function,
-        searchParams: {
+		searchParams: {
             filter?: string,
             fullscreen?: 'true',
             view?:string,
@@ -52,6 +50,16 @@ const AsyncFormComponent = ({direction,
         end_field,
         end_term
     }
+
+    useEffect(()=>{
+        if (button_type === 'start') {
+            if (f === undefined || f === '{}') {
+                router_push(router, pathname, {
+                    filter: JSON.stringify(initial_query)
+                })
+            }
+        }
+    }, [f])
     const type = direction === 'Start' ? start: end
     const field = direction === 'Start' ? start_field: end_field
     const term = (direction === 'Start' ? start_term: end_term) || ''
@@ -59,7 +67,7 @@ const AsyncFormComponent = ({direction,
     const [controller, setController] = useState<{signal: AbortSignal, abort: Function} | null>(null)
     const [loading, setLoading] = useState<boolean>(false)
     const [options, setOptions] = useState<{[key:string]: {[key:string]: string|number}} | null>(null)
-
+    const [selected, setSelected] = React.useState(null)
     const get_controller = () => {
         if (controller) controller.abort()
         const c = new AbortController()
@@ -69,32 +77,34 @@ const AsyncFormComponent = ({direction,
 
     const resolve_options = async () => {
         try {
-            const controller = get_controller()
-            const query = {
-                type,
-                field,
-				term: ""
+            if (type !== undefined){
+                const controller = get_controller()
+                const query = {
+                    type,
+                    field,
+                    term: ""
+                }
+                // if (filter) query.filter=JSON.stringify(filter)
+                if (inputTerm) query.term = inputTerm
+                const query_str = Object.entries(query).map(([k,v])=>(`${k}=${v}`)).join("&")
+                const options = await (await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/node_search${query_str ? "?" + query_str : ""}`, {
+                    method: 'GET',
+                    signal: controller.signal
+                })).json()
+                if (inputTerm) setSelected(options[inputTerm])
+                else if (direction === 'Start') {
+                    router_push(router, pathname, {
+                        ...rest,
+                        filter: JSON.stringify({
+                            ...filter,
+                            start_term: Object.keys(options)[0],
+                        })
+                    })
+                } else {
+                    setSelected(null)
+                }
+                setOptions(options)  
             }
-            // if (filter) query.filter=JSON.stringify(filter)
-            if (inputTerm) query.term = inputTerm
-            const query_str = Object.entries(query).map(([k,v])=>(`${k}=${v}`)).join("&")
-            const options = await (await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/node_search${query_str ? "?" + query_str : ""}`, {
-                method: 'GET',
-                signal: controller.signal
-            })).json()
-            if (inputTerm) setSelected(options[inputTerm])
-            else if (direction === 'Start') {
-				router_push(router, pathname, {
-					...rest,
-					filter: JSON.stringify({
-						...filter,
-						start_term: Object.keys(options)[0],
-					})
-				})
-            } else {
-                setSelected(null)
-            }
-            setOptions(options)  
         } catch (error) {
             // console.error(error)
         } finally {
@@ -287,9 +297,9 @@ const AsyncFormComponent = ({direction,
                     }
                 </React.Fragment>
             ))}
-            {button_component && 
+            {button_type !== 'none' && 
                 <Grid item>
-                    {button_component()}
+                    <FormButton type={button_type} nodes={nodes} searchParams={searchParams}/>
                 </Grid>
             }
         </Grid>

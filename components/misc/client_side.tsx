@@ -24,7 +24,6 @@ export const TooltipCard = ({node,
 	schema, 
 	top=25, 
 	left=25, 
-	endpoint="/", 
 	expand=true,
 	reset=null
 }: {
@@ -37,9 +36,8 @@ export const TooltipCard = ({node,
 	tooltip_templates: {[key: string]: Array<{[key: string]: string}>}, 
 	setFocused: Function, 
 	schema: UISchema, 
-	top: number, 
-	left: number, 
-	endpoint: string, 
+	top?: number, 
+	left?: number, 
 	expand: boolean,
 	reset: null | Function
 }) => {

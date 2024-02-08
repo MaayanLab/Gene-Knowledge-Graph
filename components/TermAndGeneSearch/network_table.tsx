@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { makeTemplate } from "@/utils/helper";
 import { precise } from "@/utils/math";
@@ -16,6 +16,7 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 		}
 	} | null>(null)
 	// const [mapper, setMapper] = useState({})
+	const tableRef = useRef(null)
 	const [tab, setTab] = useState<null | string>(null)
 	const [tabs, setTabs] = useState<Array<string>>(null)
 	const display = {}
@@ -35,7 +36,8 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 			const node_tabs = []
 			const edge_tabs = []
 			for (const d of [...data.nodes, ...data.edges]) {
-				const {kind, relation, source, target, label, "Unnamed: 0": _, ...properties} = d.data
+				const properties = d.data
+				const {kind, relation, source, target, label, "Unnamed: 0": _, ...rest} = d.data
 				const key = relation || kind
 				if (key && typeof key === 'string') { 
 					if ( processed[key] === undefined) {
@@ -125,9 +127,7 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 								i.count = i.count + 1
 							}
 						} else {
-							
 							const val = makeTemplate(i.text, properties)
-
 							processed[key].data[properties.id][i.field] = val === "undefined" ? "": precise(val)
 							if (val !== "undefined") {
 								i.count = i.count + 1
@@ -143,14 +143,13 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 			setProcessedData(processed)	
 		}
 	}, [data])
-	
 	if (processedData === null) return null
 	else {
 		const {data={}, header=[], columnVisibilityModel} = processedData[tab] || {}
 		const columns: GridColDef[] = header.filter(i=>i.count === undefined || i.count > 0)
-	
+		console.log(Object.values(data), header)
 		return (
-			<Card style={{marginBottom: 10}}>
+			<Card style={{marginBottom: 10}} ref={tableRef}>
 				<CardContent>
 					<Grid container justifyContent={"center"} style={{paddingBottom: 10}}>
 						<Grid item xs={12}>

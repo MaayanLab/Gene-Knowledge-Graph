@@ -13,11 +13,16 @@ export function toNumber(value:{low: number, high: number} ) {
 export const precise = (value: number | string) => {
 	if (typeof value === 'number' && isNaN(value)) return value
 	if (Number.isInteger(Number(value))) return value
-    if (typeof value === 'string') value = Number.parseFloat(value)
-	let v = value.toPrecision(4);
-	if (Math.abs(value) < 0.0001 && v.length > 5){
-	  return Number.parseFloat(v).toExponential(4);
-	} else {
-	  return v
-	}
+  if (typeof value === 'string') {
+    const val = Number.parseFloat(value)
+    if (isNaN(val)) return value
+    else {
+      let v = val.toPrecision(4);
+      if (Math.abs(val) < 0.0001 && v.length > 5){
+        return Number.parseFloat(v).toExponential(4);
+      } else {
+        return val
+      }
+    }
+  } 
   }
