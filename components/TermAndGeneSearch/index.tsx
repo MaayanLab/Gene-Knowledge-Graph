@@ -72,7 +72,9 @@ const TermAndGeneSearch = async ({searchParams, props}: {
         nodes,
         tooltip_templates_nodes,
         tooltip_templates_edges,
-        edges
+        edges,
+        geneLinksRelations,
+        default_relations
     } = await get_static_props()
     const filter: FilterSchema = searchParams.filter ? JSON.parse(searchParams.filter): {}
     const controller = new AbortController()
@@ -128,6 +130,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                 description={props.description}
                 initial_query={props.initial_query}
                 edges={edges}
+                geneLinksRelations={geneLinksRelations}
                 {...props}
             />
         // return null
