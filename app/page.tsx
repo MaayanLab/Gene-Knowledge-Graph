@@ -8,10 +8,6 @@ export default async function Home({searchParams}: {
       filter?: string,
       fullscreen?: 'true',
       view?:string,
-      tooltip?: 'true',
-      edge_labels?: 'true',
-      legend?: 'true',
-      legend_size: string,
   }
 }) {
   const schema = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
@@ -23,7 +19,7 @@ export default async function Home({searchParams}: {
     }
   }
   return (
-    <main className="mt-24">
+    <main className="mt-8 mb-8">
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Component searchParams={searchParams} {...root_tab}/>

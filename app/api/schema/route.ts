@@ -77,12 +77,12 @@ export interface UISchema {
 }
 
 export async function GET() {
-    const cached = cache.get("schema7")
+    const cached = cache.get("schema")
     if (cached) {
         return NextResponse.json(cached, {status: 200})
     } else {
         const schema = await fetch_kg_schema()
-        cache.put("schema7", schema);
+        cache.put("schema", schema, 10000);
         return NextResponse.json(schema, {status: 200})
     }
 }

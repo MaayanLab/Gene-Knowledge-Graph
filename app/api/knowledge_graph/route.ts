@@ -669,7 +669,6 @@ export async function GET(req: NextRequest) {
                         fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
                         return NextResponse.json(results, {status: 200})
                     } else if (start) {
-                        console.log(start)
                         const results = await resolve_one_term({edges, start, field: start_field, term: start_term, relation, limit, path_length, aggr_scores, colors, remove, expand, gene_links, augment, augment_limit })
                         fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
                         return NextResponse.json(results, {status: 200})

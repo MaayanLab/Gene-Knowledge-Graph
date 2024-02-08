@@ -153,7 +153,6 @@ const enrichment = async ({
         const schema = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
         const {aggr_scores, colors} = await typed_fetch<Initialize_Type>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/initialize`)
         aggr_scores.pval = {max: max_pval, min: min_pval}
-        console.log(aggr_scores)
         const query_list = []
         const vars = {}
         for (const [node, lib_terms] of Object.entries(library_terms)) {

@@ -11,7 +11,7 @@ import { TooltipCard } from '../client_side';
 import { Legend } from '..';
 import { UISchema } from '@/app/api/schema/route';
 import { useSearchParams } from 'next/navigation';
-// import { useQueryState } from 'next-usequerystate'
+import { useQueryState, parseAsString } from 'next-usequerystate';
 
 export default function Cytoscape ({
 	elements,
@@ -23,7 +23,6 @@ export default function Cytoscape ({
 	tooltip_templates_edges: {[key: string]: Array<{[key: string]: string}>}, 
 	tooltip_templates_nodes: {[key: string]: Array<{[key: string]: string}>}, 
 }) {
-	console.log(elements)
 	const cyref = useRef(null);
 	const networkRef = useRef(null);
 	const [ready, setReady] = useState<boolean>(false)
@@ -31,15 +30,17 @@ export default function Cytoscape ({
 	const [node, setNode] = useState(null)
     const [edge, setEdge] = useState(null)
     const [focused, setFocused] = useState(null)
-    const searchParams = useSearchParams()
-	const edge_labels = searchParams.get('edge_labels')
-	const legend = searchParams.get('legend')
-	const legend_size = parseInt(searchParams.get('legend_size') || '0')
-	const layout = searchParams.get('layout') || 'Hierarchical Layout'
-	const tooltip = searchParams.get('tooltip')
+    // const searchParams = useSearchParams()
+	// const edge_labels = searchParams.get('edge_labels')
+	// const legend = searchParams.get('legend')
+	// const legend_size = parseInt(searchParams.get('legend_size') || '0')
+	// const layout = searchParams.get('layout') || 'Hierarchical Layout'
 	
-	// const [edge_labels, setEdgeLabels] = useQueryState('edge_labels')
-	console.log(edge_labels)
+	const [edge_labels, setEdgeLabels] = useQueryState('edge_labels')
+	const [tooltip, setTooltip] = useQueryState('tooltip')
+	const [layout, setLayout] = useQueryState('layout', parseAsString.withDefault('Hierarchical Layout'))
+	const [legend, setLegend] = useQueryState('legend')
+	const [legend_size, setLegendSize] = useQueryState('legend_size')
 	const edgeStyle = edge_labels ? {label: 'data(label)'} : {}
 	
 
@@ -60,7 +61,6 @@ export default function Cytoscape ({
 	useEffect(()=>{
 		setId(id+1)
 	},[elements])
-	console.log(elements)
 	if (!ready) return <CircularProgress/>
 	return (
 		<div id="kg-network" style={{minHeight: 500, position: "relative"}} ref={networkRef}>
@@ -254,7 +254,7 @@ export default function Cytoscape ({
 				/> 
 			}
 			{ (elements && legend) &&
-				<Legend elements={elements} legendSize={legend_size}/>
+				<Legend elements={elements} legendSize={parseInt(legend_size || "0")}/>
 			}
                     { (focused === null && tooltip && node) && 
 						<TooltipCard 

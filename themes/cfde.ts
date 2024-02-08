@@ -125,7 +125,8 @@ export const cfde_theme = createTheme({
             dark: "#1F3D5C"
         },
         tertiary: {
-            main: "#7187C3"
+            main: "#7187C3",
+            light: "#EDF0F8",
         },
         paperGray: {
             main: "#FAFAFA",

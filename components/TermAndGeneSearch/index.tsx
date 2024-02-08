@@ -4,7 +4,7 @@ import { UISchema } from "@/app/api/schema/route"
 import { typed_fetch } from "@/utils/helper"
 import { process_relation } from "@/utils/helper"
 // import ClientTermAndGeneSearch from './client_side'
-import { Grid, Typography, CircularProgress } from "@mui/material"
+import { Grid, Typography, CircularProgress, Card, CardContent, Stack } from "@mui/material"
 import AsyncFormComponent from "./async_form"
 import { StartButton, EndButton } from "./buttons"
 import Form from "./form"
@@ -59,11 +59,6 @@ const TermAndGeneSearch = async ({searchParams, props}: {
             filter?: string,
             fullscreen?: 'true',
             view?:string,
-            tooltip?: 'true',
-            edge_labels?: 'true',
-            legend?: 'true',
-            legend_size?: string,
-            layout?: string
         },
         props: {
             title?: string
@@ -93,7 +88,6 @@ const TermAndGeneSearch = async ({searchParams, props}: {
     try {
         if (filter.relation) {
             if (!filter.end) {
-                console.log(filter.relation)
                 if (typeof filter.relation[0] === 'string') {
                     filter.relation = process_relation(filter.relation).map((name)=>({name, limit: filter.limit || 5}))
                 } else {
@@ -112,28 +106,33 @@ const TermAndGeneSearch = async ({searchParams, props}: {
             }
         }
         let elements = null
+        const selected_edges = []
+        const genes = []
         if (Object.keys(filter).length > 0) {
             const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/knowledge_graph?filter=${JSON.stringify(filter)}`,
             {
                 method: 'GET',
                 signal: controller.signal,
             }) 
-            if (!res.ok) throw await res.text()
-            elements = await res.json()
-        }  
-        const selected_edges = []
-        for (const i of (elements || {}).edges || []) {
-            if (i.data.relation && selected_edges.indexOf(i.data.label) === -1) {
-                selected_edges.push({name: i.data.label})
+            if (!res.ok) console.log(await res.text())
+            else elements = await res.json()
+        
+        
+            for (const i of (elements || {}).edges || []) {
+                if (i.data.relation && selected_edges.indexOf(i.data.label) === -1) {
+                    selected_edges.push({name: i.data.label})
+                }
             }
-        }
-        if (!filter.relation || filter.relation.length === 0) {
-            filter.relation = selected_edges
-        }
-        const genes = ((elements || {}).nodes || []).reduce((acc, i)=>{
-            if (i.data.kind === "Gene" && acc.indexOf(i.data.label) === -1) return [...acc, i.data.label]
-            else return acc
-        }, [])
+            for (const i of (elements || {}).nodes || []) {
+                if (i.data.kind === "Gene" && genes.indexOf(i.data.label) === -1) {
+                    genes.push(i.data.label)
+                }
+            }
+        }  
+        // if (!filter.relation || filter.relation.length === 0) {
+        //     filter.relation = selected_edges
+        // }
+         
         // return <ClientTermAndGeneSearch
         //         searchParams={searchParams}
         //         elements={elements}
@@ -149,58 +148,60 @@ const TermAndGeneSearch = async ({searchParams, props}: {
         //         {...props}
         //     />
         return (
-            <Grid container spacing={1}>
+            <Grid container spacing={2}>
                 {props.title && <Grid item xs={12}>
                     <Typography variant={"h2"}>{props.title}</Typography>
                 </Grid>}
                 {props.description && <Grid item xs={12}>
                     <Typography variant={"subtitle1"}>{props.description}</Typography>
                 </Grid>}
-                <Grid item xs={12}>
-                    <AsyncFormComponent 
-                        nodes={nodes}
-                        initial_query={props.initial_query}
-                        direction={'Start'}
-                        button_type={!filter.end ? 'start': 'none'}
-                        searchParams={searchParams}
-                    />
+                <Grid item xs={12} md={3}>
+                    <Card elevation={0} sx={{borderRadius: "8px", backgroundColor: "tertiary.light"}}>
+                        <CardContent>
+                            <Stack>
+                                <AsyncFormComponent 
+                                    nodes={nodes}
+                                    initial_query={props.initial_query}
+                                    direction={'Start'}
+                                    searchParams={searchParams}
+                                />
+                                {filter.end && 
+                                <AsyncFormComponent 
+                                    initial_query={props.initial_query}
+                                    nodes={nodes}
+                                    direction={'End'}
+                                    searchParams={searchParams}
+                                />}
+                            </Stack>
+                        </CardContent>
+                    </Card>
                 </Grid>
-                {filter.end && <Grid item xs={12}>
-                    <AsyncFormComponent 
-                        initial_query={props.initial_query}
-                        nodes={nodes}
-                        direction={'End'}
-                        button_type={filter.end ? 'end': 'none'}
-                        searchParams={searchParams}
-                    />
-                </Grid>
-                }
-                <Grid item xs={12}>
-                    <Form searchParams={searchParams}
-                        edges={edges}
-                        genes={genes}
-                        coexpression_prediction={props.coexpression_prediction}
-                        gene_link_button={props.gene_link_button}
-                        neighborCount={props.neighborCount}
-                        geneLinksRelations={geneLinksRelations}
-                        elements={elements}
-                    />
-                </Grid>
-                {(searchParams.view === "network" || searchParams.view === undefined) && 
-                    <Grid item xs={12}>
-                        <Cytoscape 
+                <Grid item xs={12} md={9}>
+                    <Stack>
+                        <Form searchParams={searchParams}
+                            edges={edges}
+                            genes={genes}
+                            coexpression_prediction={props.coexpression_prediction}
+                            gene_link_button={props.gene_link_button}
+                            neighborCount={props.neighborCount}
+                            geneLinksRelations={geneLinksRelations}
                             elements={elements}
-                            schema={schema}
-                            tooltip_templates_edges={tooltip_templates_edges}
-                            tooltip_templates_nodes={tooltip_templates_nodes}
-                        /> 
+                        />
+                        <Card sx={{borderRadius: "24px"}}>
+                            <CardContent>
+                            {(searchParams.view === "table") ? 
+                                <div style={{minHeight: 700}}><NetworkTable data={elements} schema={schema}/></div>:
+                                <Cytoscape 
+                                    elements={elements}
+                                    schema={schema}
+                                    tooltip_templates_edges={tooltip_templates_edges}
+                                    tooltip_templates_nodes={tooltip_templates_nodes}
+                                /> 
+                            }
+                            </CardContent>
+                        </Card>
+                    </Stack>
                 </Grid>
-            }
-            {searchParams.view === 'table' && 
-                <Grid item xs={12} sx={{minHeight: 700}}>
-                    <NetworkTable data={elements} schema={schema}/>
-                </Grid>
-            }
             </Grid>
         )
     } catch (error) {

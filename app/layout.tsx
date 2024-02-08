@@ -28,7 +28,7 @@ export async function generateMetadata(
     title: header.title,
     description: '',
     icons: {
-      icon: header.icon.src
+      icon: header.icon.favicon
     }
   }
 }
