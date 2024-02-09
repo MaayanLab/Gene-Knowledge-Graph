@@ -85,4 +85,7 @@ export async function GET() {
         cache.put("schema", schema, 10000);
         return NextResponse.json(schema, {status: 200})
     }
+    // const schema = await fetch_kg_schema()
+    //     // cache.put("schemaz", schema, 10000);
+    // return NextResponse.json(schema, {status: 200})
 }

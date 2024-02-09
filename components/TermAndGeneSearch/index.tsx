@@ -15,7 +15,7 @@ const Cytoscape = dynamic(()=>import('../misc/Cytoscape'),
         loading: ()=><CircularProgress/>
     }
 )
-const get_static_props = async () => {
+export const initialize_kg = async () => {
     const schema = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
     const nodes = {}
 	const tooltip_templates_nodes = {}
@@ -81,8 +81,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
         tooltip_templates_edges,
         edges,
         geneLinksRelations,
-        default_relations
-    } = await get_static_props()
+    } = await initialize_kg()
     const filter: FilterSchema = searchParams.filter ? JSON.parse(searchParams.filter): {}
     const controller = new AbortController()
     try {
@@ -109,7 +108,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
         const selected_edges = []
         const genes = []
         if (Object.keys(filter).length > 0) {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/knowledge_graph?filter=${JSON.stringify(filter)}`,
+            const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph?filter=${JSON.stringify(filter)}`,
             {
                 method: 'GET',
                 signal: controller.signal,
