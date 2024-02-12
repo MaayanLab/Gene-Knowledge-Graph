@@ -10,7 +10,6 @@ import CytoscapeComponent from 'react-cytoscapejs';
 import { TooltipCard } from '../client_side';
 import { Legend } from '..';
 import { UISchema } from '@/app/api/schema/route';
-import { useSearchParams } from 'next/navigation';
 import { useQueryState, parseAsString } from 'next-usequerystate';
 import HubIcon from '@mui/icons-material/Hub';
 import { mdiFamilyTree,  mdiDotsCircle} from '@mdi/js';
