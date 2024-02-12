@@ -2,7 +2,7 @@
 import React, {useState, useEffect} from "react";
 import dynamic from "next/dynamic";
 import { useRouter, usePathname } from "next/navigation";
-import { layouts } from "../TermAndGeneSearch/form";
+import { layouts } from "../misc/Cytoscape";
 import { useQueryState } from 'next-usequerystate'
 
 import { Tooltip, 
@@ -233,10 +233,6 @@ const AsyncForm = ({
                     />
                 )}
             />
-            {checkbox_filter && <FormControlLabel control={<Checkbox checked={filter!==null} onClick={()=>{
-                if (filter) setFilter(null)
-                else setFilter(checkbox_filter)
-            }}/>} label={filter_text} />}
             <Typography><b>Select Field:</b></Typography>
             <Selector entries={fields} 
                 value={field ||"label"} 
@@ -247,6 +243,11 @@ const AsyncForm = ({
                         field: e
                     })
                 }}/>
+
+            {checkbox_filter && <FormControlLabel control={<Checkbox checked={filter!==null} onClick={()=>{
+                if (filter) setFilter(null)
+                else setFilter(checkbox_filter)
+            }}/>} label={filter_text} />}
         </Stack>
     )
 

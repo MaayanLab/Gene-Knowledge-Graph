@@ -48,30 +48,7 @@ import download from 'downloadjs'
 import { router_push } from '@/utils/client_side';
 import { NetworkSchema } from '@/app/api/knowledge_graph/route';
 import { process_tables } from '@/utils/helper';
-export const layouts = {
-    "Force-directed": {
-      name: 'fcose',
-      quality: 'proof',
-      randomize: 'false',
-      animate: true,
-      idealEdgeLength: edge => 150,
-      icon: ()=><HubIcon/>
-    },
-    "Hierarchical Layout": {
-      name: "breadthfirst",
-      animate: true,
-      spacingFactor: 1,
-      padding: 15,
-      avoidOverlap: true,
-      icon: ()=><Icon path={mdiFamilyTree} size={0.8} />
-    },
-    Geometric: {
-      name: 'avsdf',
-      nodeSeparation: 150,
-      icon: ()=><Icon path={mdiDotsCircle} size={0.8} />
-    },
-  }
-  
+import { layouts } from '../misc/Cytoscape';  
   function Form({
     elements = {nodes: [], edges: []},
     searchParams
@@ -279,7 +256,7 @@ export const layouts = {
 								// const {...query} = searchParams
 								// query.layout = label
 								// router_push(router, pathname, query)
-								// handleCloseMenu(setAnchorElLayout)
+								handleCloseMenu(setAnchorElLayout)
 								setLayout(label)
 								
 							}}>

@@ -9,9 +9,7 @@
     "lint": "next lint",
     "version:major": "npm version --no-git-tag-version major",
     "version:minor": "npm version --no-git-tag-version minor",
-    "version:patch": "npm version --no-git-tag-version patch",
-    "install:cytoscape": "cd components/react-cytoscapejs && npm i",
-    "install": "npm run install:cytoscape"
+    "version:patch": "npm version --no-git-tag-version patch"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
@@ -47,6 +45,8 @@
     "node-fetch": "^2.6.1",
     "number-to-words": "^1.2.4",
     "react": "^18.2.0",
+    "react-cytoscape": "^1.0.6",
+    "react-cytoscapejs": "^2.0.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^8.0.3",
     "recharts": "^2.1.9",

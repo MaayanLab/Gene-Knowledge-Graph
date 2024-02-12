@@ -36,13 +36,10 @@ import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import SaveIcon from '@mui/icons-material/Save';
 import SendIcon from '@mui/icons-material/Send';
 import UndoIcon from '@mui/icons-material/Undo';
-import HubIcon from '@mui/icons-material/Hub';
 
 import {mdiDna, 
     mdiLinkVariant,
     mdiLinkVariantOff,
-    mdiFamilyTree,
-    mdiDotsCircle,
     mdiGraph,
     mdiTable,
     mdiTooltip,
@@ -58,29 +55,7 @@ import { router_push } from '@/utils/client_side';
 import { NetworkSchema } from '@/app/api/knowledge_graph/route';
 import { FilterSchema, process_relation } from '@/utils/helper';
 import { process_tables } from '@/utils/helper';
-export const layouts = {
-    "Force-directed": {
-      name: 'fcose',
-      quality: 'proof',
-      randomize: 'false',
-      animate: true,
-      idealEdgeLength: edge => 150,
-      icon: ()=><HubIcon/>
-    },
-    "Hierarchical Layout": {
-      name: "breadthfirst",
-      animate: true,
-      spacingFactor: 1,
-      padding: 15,
-      avoidOverlap: true,
-      icon: ()=><Icon path={mdiFamilyTree} size={0.8} />
-    },
-    Geometric: {
-      name: 'avsdf',
-      nodeSeparation: 150,
-      icon: ()=><Icon path={mdiDotsCircle} size={0.8} />
-    },
-  }
+import { layouts } from '../misc/Cytoscape';  
   
   function Form({
     edges=[],

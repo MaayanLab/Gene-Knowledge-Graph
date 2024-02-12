@@ -1,4 +1,6 @@
 import { Metadata, ResolvingMetadata } from 'next'
+import Script from 'next/script'
+import Head from 'next/head'
 import ThemeRegistry from './ThemeRegistry'
 import { typed_fetch } from '@/utils/helper'
 import { UISchema } from './api/schema/route'
@@ -55,6 +57,13 @@ export default async function RootLayout({
             </Grid>
           </Grid>
         </ThemeRegistry>
+        {/* <Script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js" strategy='beforeInteractive'/>
+        <Script src="https://unpkg.com/layout-base/layout-base.js" strategy='beforeInteractive'/>
+        <Script src="https://unpkg.com/avsdf-base/avsdf-base.js" strategy='beforeInteractive'/>
+        <Script src="https://unpkg.com/cytoscape-avsdf/cytoscape-avsdf.js" strategy='beforeInteractive'/>
+        <Script src="https://unpkg.com/layout-base/layout-base.js" strategy='beforeInteractive'/>
+        <Script src="https://unpkg.com/cose-base/cose-base.js" strategy='beforeInteractive'/>
+        <Script src="https://unpkg.com/cytoscape-fcose/cytoscape-fcose.js" strategy='beforeInteractive'/> */}
       </body>
     </html>
   )

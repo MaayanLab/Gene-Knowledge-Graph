@@ -1,17 +1,44 @@
 'use client'
 import { useRef, useState, useEffect } from 'react';
-import cytoscape from 'cytoscape';
-// cytoscape.use(fcose)
+// import dynamic from 'next/dynamic';
+// import cytoscape from 'cytoscape';
+
 import { CircularProgress } from '@mui/material';
 
 import { NetworkSchema } from '@/app/api/knowledge_graph/route';
-import { layouts } from '../../TermAndGeneSearch/form';
-import CytoscapeComponent from '../../react-cytoscapejs/src/component';
+import CytoscapeComponent from 'react-cytoscapejs';
 import { TooltipCard } from '../client_side';
 import { Legend } from '..';
 import { UISchema } from '@/app/api/schema/route';
 import { useSearchParams } from 'next/navigation';
 import { useQueryState, parseAsString } from 'next-usequerystate';
+import HubIcon from '@mui/icons-material/Hub';
+import { mdiFamilyTree,  mdiDotsCircle} from '@mdi/js';
+import Icon from '@mdi/react';
+export const layouts = {
+    "Force-directed": {
+      name: 'cose',
+      quality: 'proof',
+      randomize: 'false',
+      animate: true,
+      idealEdgeLength: edge => 150,
+      icon: ()=><HubIcon/>
+    },
+    "Hierarchical Layout": {
+      name: "breadthfirst",
+      animate: true,
+      spacingFactor: 1,
+      padding: 15,
+      avoidOverlap: true,
+      icon: ()=><Icon path={mdiFamilyTree} size={0.8} />
+    },
+    Geometric: {
+      name: 'circle',
+      nodeSeparation: 150,
+      icon: ()=><Icon path={mdiDotsCircle} size={0.8} />
+    },
+  }
+
 
 export default function Cytoscape ({
 	elements,
@@ -38,7 +65,7 @@ export default function Cytoscape ({
 	
 	const [edge_labels, setEdgeLabels] = useQueryState('edge_labels')
 	const [tooltip, setTooltip] = useQueryState('tooltip')
-	const [layout, setLayout] = useQueryState('layout', parseAsString.withDefault('Hierarchical Layout'))
+	const [layout, setLayout] = useQueryState('layout', parseAsString.withDefault('Force-directed'))
 	const [legend, setLegend] = useQueryState('legend')
 	const [legend_size, setLegendSize] = useQueryState('legend_size')
 	const edgeStyle = edge_labels ? {label: 'data(label)'} : {}
@@ -46,21 +73,23 @@ export default function Cytoscape ({
 
 	useEffect(()=>{
 		const useFunctions = async () => {
-			// const cytoscape = require('cytoscape')
-			const fcose = require('cytoscape-fcose')
-			const avsdf = require('cytoscape-avsdf')
-			const svg = require('cytoscape-svg')
-			cytoscape.use(svg);
-			cytoscape.use(fcose);
-			cytoscape.use(avsdf);			
-			setReady(true)
+			if (window !== undefined) {
+				// const cytoscape = require('cytoscape')
+				// const fcose = require('cytoscape-fcose')
+				// const avsdf = require('cytoscape-avsdf')
+				// const svg = require('cytoscape-svg')
+				// cytoscape.use(svg);
+				// cytoscape.use(fcose);
+				// cytoscape.use(avsdf);
+				setReady(true)	
+			}
 		}
         useFunctions()
     },[])
 
 	useEffect(()=>{
 		setId(id+1)
-	},[elements])
+	},[elements, layout])
 	if (!ready) return <CircularProgress/>
 	return (
 		<div id="kg-network" style={{minHeight: 500, position: "relative"}} ref={networkRef}>

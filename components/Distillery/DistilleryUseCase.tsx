@@ -60,10 +60,9 @@ async function DistilleryUseCase({
             }
             const relation = relations.map(rel=>{
                 if (typeof rel === 'string') {
-                    return {name: rel, limit: searchParams.limit || 5}
+                    return {name: rel, limit: parseInt(searchParams.limit) || 5}
                 } else if (typeof rel === "object") {
-                    console.log(rel)
-                    return {limit: searchParams.limit || 5, ...rel}
+                    return {limit: parseInt(searchParams.limit)|| 5, ...rel}
                 }
             })
             let elements = null

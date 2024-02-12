@@ -6,7 +6,6 @@ import { process_relation } from "@/utils/helper"
 // import ClientTermAndGeneSearch from './client_side'
 import { Grid, Typography, CircularProgress, Card, CardContent, Stack } from "@mui/material"
 import AsyncFormComponent from "./async_form"
-import { StartButton, EndButton } from "./buttons"
 import Form from "./form"
 import NetworkTable from "./network_table"
 const Cytoscape = dynamic(()=>import('../misc/Cytoscape'),
