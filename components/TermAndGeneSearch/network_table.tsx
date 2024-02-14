@@ -147,7 +147,6 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 	else {
 		const {data={}, header=[], columnVisibilityModel} = processedData[tab] || {}
 		const columns: GridColDef[] = header.filter(i=>i.count === undefined || i.count > 0)
-		console.log(Object.values(data), header)
 		return (
 			<Card style={{marginBottom: 10}} ref={tableRef}>
 				<CardContent>

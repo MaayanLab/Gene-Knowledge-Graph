@@ -161,7 +161,7 @@ import { layouts } from '../misc/Cytoscape';
                     <Grid item xs={12} md={7}>
                         <Grid container spacing={1} alignItems="center">
                             {relation.map((value) => (
-                                <Grid item>
+                                <Grid item key={value}>
                                     <Tooltip title={`${value}`} key={value} placement="top">
                                         <Chip label={value}
                                             color="primary"

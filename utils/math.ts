@@ -10,19 +10,28 @@ export function toNumber(value:{low: number, high: number} ) {
     return low + res
 }
 
-export const precise = (value: number | string) => {
-	if (typeof value === 'number' && isNaN(value)) return value
-	if (Number.isInteger(Number(value))) return value
-  if (typeof value === 'string') {
-    const val = Number.parseFloat(value)
-    if (isNaN(val)) return value
-    else {
-      let v = val.toPrecision(4);
-      if (Math.abs(val) < 0.0001 && v.length > 5){
-        return Number.parseFloat(v).toExponential(4);
-      } else {
-        return val
-      }
+const convert_float = (value: number) => {
+  if (isNaN(value)) return ''
+  else {
+    const v = value.toPrecision(4)
+    if (Math.abs(value) < 0.0001 && v.length > 5){
+      return `${Number.parseFloat(v).toExponential(4)}`;
+    } else {
+      return v
     }
-  } 
   }
+}
+
+export const precise = (value: number | string) => {
+	// if (typeof value === 'number' && isNaN(value)) return `${value}`
+  if (typeof value === 'number') {
+    if (isNaN(value)) return ''
+    if (Number.isInteger(value)) return `${value}`
+    else {
+      return convert_float(value)
+    }
+  } else {
+    const val = Number.parseFloat(value)
+    return convert_float(val)
+  }
+}

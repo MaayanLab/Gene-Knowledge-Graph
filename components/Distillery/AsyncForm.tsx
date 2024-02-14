@@ -5,9 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { layouts } from "../misc/Cytoscape";
 import { useQueryState } from 'next-usequerystate'
 
-import { Tooltip, 
-    IconButton,
-    Grid,
+import { 
     Autocomplete,
     Typography,
     TextField,
@@ -15,30 +13,8 @@ import { Tooltip,
     Checkbox,
     FormControlLabel,
     Stack,
-    Slider,
-    ListItemIcon,
-    ListItemText
 } from "@mui/material";
 import { Selector } from "../misc";
-
-import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
-import SaveIcon from '@mui/icons-material/Save';
-import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
-import LabelIcon from '@mui/icons-material/Label';
-import LabelOffIcon from '@mui/icons-material/LabelOff';
-import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import ZoomOutIcon from '@mui/icons-material/ZoomOut';
-
-import { process_tables } from "../../utils/helper";
-import { toPng, toBlob, toSvg } from 'html-to-image';
-import download from 'downloadjs'
-import fileDownload from 'js-file-download'
 import { router_push } from "@/utils/client_side";
 import { NetworkSchema } from "@/app/api/knowledge_graph/route";
 const AsyncForm = ({ 
@@ -75,14 +51,7 @@ const AsyncForm = ({
     const [open, setOpen] = useState(false)
     const [controller, setController] = useState(null)
     const [loading, setLoading] = useState(true)
-    const [anchorEl, setAnchorEl] = useState(null)
-    const [anchorElLayout, setAnchorElLayout] = useState(null)
     const [selected, setSelected] = useState(null)
-    const [tooltip, setTooltip] = useQueryState('tooltip')
-    const [edge_labels, setEdgeLabels] = useQueryState('edge_labels')
-    const [legend, setLegend] = useQueryState('legend')
-    const [legend_size, setLegendSize] = useQueryState('legend_size')
-    const [layout, setLayout] = useQueryState('layout')
     const {
         field='label',
         limit,

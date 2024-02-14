@@ -53,11 +53,8 @@ export const enrichr_query = async ({
         throw new Error(`Error communicating with Enrichr`)
     }
     const regex = {}
-    const reg = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment/get_regex`)
-    if (reg.ok !== true) {
-        throw new Error(`Error fetching Regex`)
-    }
-    for (const [k,v] of Object.entries(await reg.json())) {
+    const reg = await typed_fetch<{[key: string]: string}>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment/get_regex`)
+    for (const [k,v] of Object.entries(reg)) {
         regex[k] = new RegExp(v)
     }
     const results = await res.json()

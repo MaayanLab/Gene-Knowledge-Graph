@@ -154,8 +154,11 @@ export const augment_gene_set = async ({gene_list, augment_limit}) => {
 }
 
 
-export function typed_fetch<T>(url: string): Promise<T> {
-    return fetch(url)
+export function typed_fetch<T>(url: string, controller?:AbortController): Promise<T> {
+    const params = {}
+    if (controller) params["signal"] = controller.signal
+    params["revalidate"] = 10
+    return fetch(url, params)
       .then(response => {
         if (!response.ok) {
           throw new Error(response.statusText)
@@ -306,3 +309,4 @@ export const process_filter = (query: {
     }
 
 }
+export const delay = (ms: number) => new Promise(res => setTimeout(res, ms));

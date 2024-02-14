@@ -36,7 +36,6 @@ export default async function Page({params, searchParams}: {
 		}
     }
   }
-  console.log(root_tab)
   return (
     <main className="mt-8 mb-8">
       <Grid container spacing={2}>
