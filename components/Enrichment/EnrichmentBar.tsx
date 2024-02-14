@@ -10,7 +10,6 @@ import {
 import Color from 'color'
 import { precise } from '@/utils/math';
 import { Grid, Card, CardContent, Typography } from '@mui/material';
-import { cp } from 'fs';
 
 
 const renderCustomizedLabel = (props) => {
