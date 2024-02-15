@@ -42,7 +42,7 @@ const Enrichment = async ({
     ...props
 }: {
     default_options?: {
-        term_limit?: number,
+        // term_limit?: number,
         gene_limit?: number,
         min_lib?: number,
         gene_degree?: number,
@@ -179,7 +179,7 @@ const Enrichment = async ({
                             >
                                 <Summarizer elements={elements} schema={schema} augmented={parsedParams.augment}/>
                             </InteractiveButtons>
-                            <Card sx={{borderRadius: "24px"}}>
+                            <Card sx={{borderRadius: "24px", minHeight: 450}}>
                                 <CardContent>
                                     <TermViz
                                         elements={elements} 

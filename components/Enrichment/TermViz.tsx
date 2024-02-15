@@ -6,6 +6,7 @@ import { NetworkSchema } from "@/app/api/knowledge_graph/route";
 import Cytoscape from "../misc/Cytoscape";
 import { UISchema } from "@/app/api/schema/route";
 import NetworkTable from "./NetworkTable";
+import { Typography } from "@mui/material";
 
 const TermViz = ({elements, schema, tooltip_templates_edges, tooltip_templates_nodes}:
 	{
@@ -15,7 +16,6 @@ const TermViz = ({elements, schema, tooltip_templates_edges, tooltip_templates_n
 		tooltip_templates_nodes: {[key: string]: Array<{[key: string]: string}>}, 
 	}) => {
 	const [view, setView] = useQueryState('view')
-	console.log(view)
 	const entries:{[key:string]: {library: string, value: number, color:string, pval: number, [key: string]: number | string | boolean}} = {}
 	for (const dt of [...elements.nodes, ...elements.edges]) {
 		const {label, id: i, kind, color, gradient_color, ...properties} = dt.data
@@ -58,7 +58,7 @@ const TermViz = ({elements, schema, tooltip_templates_edges, tooltip_templates_n
 		}
 	}
 	const sorted_entries = Object.values(entries).sort((a,b)=>a["pval"]-b["pval"])
-	if (sorted_entries.length === 0) return null
+	if (sorted_entries.length === 0) return <Typography variant="h5">No Results Found</Typography>
 	else {
 		if (view === 'network' || !view) return (
 			<Cytoscape 
