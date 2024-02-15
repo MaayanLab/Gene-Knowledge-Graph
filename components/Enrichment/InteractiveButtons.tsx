@@ -334,14 +334,14 @@ const InteractiveButtons = ({
                             </Grid>
                             <Grid item xs={11}>
                                 <TextField size='small'
-                                    value={window.location.toString()}
+                                    value={window ? window.location.toString(): ''}
                                     style={{width: "100%"}}
                                 />
                             </Grid>
                             <Grid item xs={1}>
                                 <Stack direction={"row"}>
                                     <Tooltip title="Copy Link">
-                                        <IconButton onClick={()=>navigator.clipboard.writeText(window.location.toString())}><ContentCopyIcon/></IconButton>
+                                        <IconButton onClick={()=>navigator.clipboard.writeText(window ? window.location.toString():'')}><ContentCopyIcon/></IconButton>
                                     </Tooltip>
                                     <Tooltip title="Close">
                                         <IconButton onClick={()=>setOpenShare(false)}><HighlightOffIcon/></IconButton>
