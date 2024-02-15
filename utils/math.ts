@@ -31,6 +31,7 @@ export const precise = (value: number | string) => {
       return convert_float(value)
     }
   } else {
+    if (value.split(".").length === 1) return value
     const val = Number.parseFloat(value)
     return convert_float(val)
   }

@@ -70,26 +70,26 @@ export default function Cytoscape ({
 	const edgeStyle = edge_labels ? {label: 'data(label)'} : {}
 	
 
-	useEffect(()=>{
-		const useFunctions = async () => {
-			if (window !== undefined) {
-				// const cytoscape = require('cytoscape')
-				// const fcose = require('cytoscape-fcose')
-				// const avsdf = require('cytoscape-avsdf')
-				// const svg = require('cytoscape-svg')
-				// cytoscape.use(svg);
-				// cytoscape.use(fcose);
-				// cytoscape.use(avsdf);
-				setReady(true)	
-			}
-		}
-        useFunctions()
-    },[])
+	// useEffect(()=>{
+	// 	const useFunctions = async () => {
+	// 		if (window !== undefined) {
+	// 			// const cytoscape = require('cytoscape')
+	// 			// const fcose = require('cytoscape-fcose')
+	// 			// const avsdf = require('cytoscape-avsdf')
+	// 			// const svg = require('cytoscape-svg')
+	// 			// cytoscape.use(svg);
+	// 			// cytoscape.use(fcose);
+	// 			// cytoscape.use(avsdf);
+	// 			setReady(true)	
+	// 		}
+	// 	}
+    //     useFunctions()
+    // },[])
 
 	useEffect(()=>{
 		setId(id+1)
 	},[elements, layout])
-	if (!ready) return <CircularProgress/>
+	// if (!ready) return <CircularProgress/>
 	return (
 		<div id="kg-network" style={{minHeight: 500, position: "relative"}} ref={networkRef}>
 			{(elements === null) ? (

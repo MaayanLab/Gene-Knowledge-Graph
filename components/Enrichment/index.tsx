@@ -121,6 +121,19 @@ const Enrichment = async ({
                 augment_limit,
                 gene_links
             }))
+            console.log(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`)
+            console.log(JSON.stringify({
+                userListId,
+                libraries,
+                min_lib,
+                gene_limit,
+                gene_degree,
+                term_degree,
+                expand,
+                remove,
+                augment_limit,
+                gene_links
+            }))
             const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`,
                 {
                     method: "POST",
@@ -137,6 +150,7 @@ const Enrichment = async ({
                         gene_links
                     }),
                 })
+            console.log(res.ok)
             if (!res.ok) console.log(await res.text())
             else{
                 elements = await res.json()
@@ -159,7 +173,6 @@ const Enrichment = async ({
         })
         let short_url=null
         if (request.ok) short_url = (await request.json())['shorturl']
-        
         return (
             <Grid container spacing={1}>
                 <Grid item xs={12}>

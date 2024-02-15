@@ -105,11 +105,11 @@ export const TooltipCard = ({node,
                 <IconButton
                   onClick={()=>{
                     setFocused(null)
-                    const searchParams: {filter: string, [key:string]: string} = {filter: '{}'}
-					useSearchParams().forEach((value, key) => {
-						searchParams[key] = value;
+                    const queryParams: {filter: string, [key:string]: string} = {filter: '{}'}
+          searchParams.forEach((value, key) => {
+						queryParams[key] = value;
 					});
-					const {page, remove: r, ...rest} = searchParams
+					const {page, remove: r, ...rest} = queryParams
 					const remove = r !== undefined ? JSON.parse(r) : []
 					const query = {
                         ...rest,
@@ -123,11 +123,11 @@ export const TooltipCard = ({node,
                 <IconButton
                   onClick={()=>{
                     setFocused(null)
-					const searchParams: {filter: string, [key:string]: string} = {filter: '{}'}
-					useSearchParams().forEach((value, key) => {
-						searchParams[key] = value;
+					const queryParams: {filter: string, [key:string]: string} = {filter: '{}'}
+					searchParams.forEach((value, key) => {
+						queryParams[key] = value;
 					});
-					const {page, expand: e, ...rest} = searchParams
+					const {page, expand: e, ...rest} = queryParams
 					const expand = e !== undefined ? JSON.parse(e) : []
 					const query = {
                         ...rest,

@@ -3,10 +3,11 @@ import { precise } from "@/utils/math";
 import { useQueryState } from "next-usequerystate";
 import EnrichmentBar from "./EnrichmentBar";
 import { NetworkSchema } from "@/app/api/knowledge_graph/route";
-import Cytoscape from "../misc/Cytoscape";
 import { UISchema } from "@/app/api/schema/route";
 import NetworkTable from "./NetworkTable";
-import { Typography } from "@mui/material";
+import { Typography, CircularProgress } from "@mui/material";
+import dynamic from "next/dynamic";
+import Cytoscape from "../misc/Cytoscape";
 
 const TermViz = ({elements, schema, tooltip_templates_edges, tooltip_templates_nodes}:
 	{
@@ -60,6 +61,7 @@ const TermViz = ({elements, schema, tooltip_templates_edges, tooltip_templates_n
 	const sorted_entries = Object.values(entries).sort((a,b)=>a["pval"]-b["pval"])
 	if (sorted_entries.length === 0) return <Typography variant="h5">No Results Found</Typography>
 	else {
+		console.log(Cytoscape)
 		if (view === 'network' || !view) return (
 			<Cytoscape 
 				elements={elements}

@@ -132,6 +132,10 @@ export const cfde_theme = createTheme({
             main: "#FAFAFA",
             light: "#fdfdfd",
             dark: "#afafaf"
+        },
+        dataGrid: {
+            main: "#C9D2E9",
+            contrastText: "#336699"
         }
     },
     components: {
@@ -279,11 +283,13 @@ declare module '@mui/material/styles' {
 
     interface Palette {
         paperGray: Palette['primary'];
+        dataGrid: Palette['primary'];
         tertiary: Palette['primary'];
     }
 
     interface PaletteOptions {
         paperGray?: PaletteOptions['primary'];
+        dataGrid?: PaletteOptions['primary'];
         tertiary?: PaletteOptions['primary'];
     }
   }

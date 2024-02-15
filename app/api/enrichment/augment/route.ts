@@ -1,38 +1,14 @@
-import { resolve_results } from "../../knowledge_graph/route";
+import { resolve_results } from "../../knowledge_graph/helper";
 import fetch from "node-fetch";
-import { enrichr_query } from "../route";
+import { enrichr_query } from "../helper";
 import { typed_fetch, kind_mapper, get_node_color_and_type_augmented as get_node_color_and_type } from "@/utils/helper";
 import { NextResponse } from "next/server";
 import { NextRequest } from 'next/server'
 import { UISchema } from "../../schema/route";
 import { Initialize_Type } from "../../initialize/route";
 import { z } from 'zod';
+import { augment_gene_set } from "./helper";
 
-export const augment_gene_set = async ({gene_list, augment_limit}: {
-    gene_list: Array<string>,
-    augment_limit: number
-}) => {
-    const request = await fetch(`${process.env.NEXT_PUBLIC_GENESHOT_URL}/api/associate`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            gene_list,
-            similarity: "coexpression",
-            limit: augment_limit
-        }),
-    })
-    if (!request.ok) {
-        throw new Error("Error communicating with GeneShot API")
-    } 
-    const result = await request.json()
-    
-    const augmented_genes = (result["association"] !== undefined) ? Object.keys(result["association"]): []
-    return {
-        augmented_genes
-    }
-}
 
 const enrichr_query_wrapper = async ({
     libraries,
@@ -260,6 +236,7 @@ const EnrichmentInput = z.object({
 export async function POST(req: NextRequest) {
     try {
         const {userListId, libraries=[], gene_limit, term_degree, min_lib, gene_degree, remove, expand, gene_links, expand_limit, augment_limit} = EnrichmentInput.parse(await req.json())
+        console.log(userListId)
         if (userListId === undefined) {
             return NextResponse.json({error: "userListId is undefined"}, {status: 400})
         }

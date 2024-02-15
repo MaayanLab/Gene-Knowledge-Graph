@@ -3,7 +3,7 @@ import fileDownload from "js-file-download";
 import {toNumber} from './math'
 import type { NextRequest } from 'next/server'
 import Color from 'color'
-import { default_get_node_color_and_type } from '@/app/api/knowledge_graph/route'
+import { default_get_node_color_and_type } from '@/app/api/knowledge_graph/helper'
 
 export function makeTemplate(
     templateString: string,
