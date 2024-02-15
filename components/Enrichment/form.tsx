@@ -87,7 +87,6 @@ const GeneSetForm = ({
       }
     
     const libraries = query.libraries || parsedParams.libraries
-    
     const prevInput = usePrevious(input) || {genes: [], description: ''}
 
     const same_prev_input = async () => {
@@ -133,7 +132,7 @@ const GeneSetForm = ({
             ).json()
             const query = {...combined_query}
             // if (query.libraries === undefined) query.libraries = JSON.stringify(default_options.libraries)
-            setSubmitted(false)
+            // setSubmitted(false)
             const {augment, augment_limit, gene_links, ...rest} = query
             router_push(router, pathname, {
                 q: JSON.stringify({
@@ -166,6 +165,9 @@ const GeneSetForm = ({
         }
     }
 
+    useEffect(()=>{
+        setLoading(false)
+    },[verified])
 
     useEffect(()=>{
         setLoading(false)
@@ -314,31 +316,31 @@ const GeneSetForm = ({
                             <Stack direction={"row"} spacing={1} alignItems="center">
                                 <Button 
                                     onClick={async ()=>{
-                                        setSubmitted(true)
+                                        // setSubmitted(true)
                                         if (!(await same_prev_input())) {
                                             if (input.genes.length > 0 && libraries.length > 0) {
                                                 addList()
                                             }
                                         } else {
                                             const {search, augment, augment_limit, gene_links, ...rest} = combined_query
-                                            setSubmitted(false)
+                                            // setSubmitted(false)
                                             router_push(router, pathname, {
                                                 q: JSON.stringify({
                                                     ...rest,
-                                                    libraries: JSON.stringify(libraries),
+                                                    libraries: libraries,
                                                     search: true
                                                 })
                                             })
                                         }
                                     }}
-                                    disabled={submitted || (loading && combined_query.search) || libraries.length === 0 || input.genes.length === 0}
+                                    disabled={loading || libraries.length === 0 || input.genes.length === 0}
                                     size="large"
                                     variant="contained"
                                     sx={{
                                         padding: "15px 30px"
                                     }}
                                     // disabled={input.genes.length === 0}
-                                >{((loading && combined_query.search) || submitted ) ? "Searching...": "Submit"}</Button>
+                                >{loading ? "Searching...": "Submit"}</Button>
                                 {(verified.length > 0 && input.genes.length > 0) && <Tooltip title="Matched genes"><Button onClick={()=>setIsFocused(false)}><Typography color={'secondary'} variant='subtitle2'> {`${verified.length} matched genes`}</Typography></Button></Tooltip>}
                             </Stack>
                         </Grid>
