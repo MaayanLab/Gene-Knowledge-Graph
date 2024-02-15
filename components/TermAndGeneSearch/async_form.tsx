@@ -138,7 +138,6 @@ const AsyncFormComponent = ({direction,
             setOptions(new_options)
         }
     }, [field])
-    
     return (
         <Grid container spacing={2} justifyContent="flex-start" alignItems="center">
             <Grid item xs={12}>
@@ -279,30 +278,49 @@ const AsyncFormComponent = ({direction,
                     )}
                 />
             </Grid>
-            {direction === "Start" &&<Grid item xs={12}>
+            <Grid item xs={12}>
                 <Stack>
                     <Typography variant="caption">Example</Typography>
-                    {direction === "Start" && ((nodes[type] || {}).example || []).map((e,i)=>(
-                        <Link
-                            key={e}
-                            href={{
-                                pathname,
-                                query: {
-                                    filter: JSON.stringify({
-                                        start: type,
-                                        start_field: "label",
-                                        start_term: e,
-                                    })
-                                // relation
+                    {((nodes[type] || {}).example || []).map((e,i)=>{
+                        let query = {}
+                        if (direction === 'Start') {
+                            query = {
+                                start: type,
+                                start_field: "label",
+                                start_term: e,
+                            }
+                            if (end_filter.end) {
+                                query = {
+                                    ...query,
+                                    ...end_filter
                                 }
-                            }}
-                            shallow
-                        >
-                        <Button style={{padding: 0}}><Typography variant="body2" color="secondary">{e}</Typography></Button>
-                    </Link> 
-                ))}
+                            }
+                        } else {
+                            query = {
+                                ...start_filter,
+                                end: type,
+                                end_field: "label",
+                                end_term: e,
+                            }
+                        }
+                        return (
+                            <Link
+                                key={e}
+                                href={{
+                                    pathname,
+                                    query: {
+                                        filter: JSON.stringify(query)
+                                    },
+                                    // relation
+                                }}
+                                // shallow
+                            >
+                            <Button style={{padding: 0}}><Typography variant="body2" color="secondary">{e}</Typography></Button>
+                        </Link> 
+                    )
+                    })}
                 </Stack>
-            </Grid>}
+            </Grid>
             
             {direction === "Start" && 
                 <Grid item xs={12}>
