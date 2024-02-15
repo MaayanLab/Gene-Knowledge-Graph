@@ -25,17 +25,15 @@ import {
 import EnrichrTermSearch from './EnrichrTermSearch';
 import LibraryPicker from './LibraryPicker';
 import { NetworkSchema } from '@/app/api/knowledge_graph/route';
-// const GeneSetForm = ({
-//     default_options, 
-//     setLoading, 
-//     libraries_list, get_controller, loading, setError, setDescription, ...props}) => {
+import { useQueryState, parseAsJson } from 'next-usequerystate';
+import { EnrichmentParams } from '.';
 
 const GeneSetForm = ({
     default_options,
     disableLibraryLimit,  
     example,
     libraries_list,
-    searchParams,
+    parsedParams,
     fullWidth,
     elements
 }: {
@@ -57,24 +55,11 @@ const GeneSetForm = ({
         gene_set?: string,
     },
     libraries_list: Array<string>,
-    searchParams: {
-        libraries?: string,
-        userListId?: string,
-        term_limit?: number,
-        gene_limit?: number,
-        min_lib?: number,
-        gene_degree?: number,
-        term_degree?: number,
-        augment?: boolean,
-        augment_limit?: number,
-        gene_links?: string,
-        search?: boolean,
-        expand?: string,
-        remove?: string
-    }
+    parsedParams: EnrichmentParams
 }) => {
     const router = useRouter()
-    const default_term_limit = default_options.term_limit
+    const [query, setQuery] = useQueryState('query', parseAsJson<EnrichmentParams>().withDefault({}))
+        
     const pathname = usePathname()
     const [input, setInput] = useState<{genes: Array<string>, description: string}>({genes: [], description: ''})
     const [verified, setVerified] = useState<Array<string>>([])
@@ -85,13 +70,14 @@ const GeneSetForm = ({
     const [controller, setController] = useState<AbortController>(null)
     const [error, setError] = useState<{message: string, type: string}>(null)
     const [showForm, setShowForm] = useState<boolean>(false)
+    const combined_query = {...parsedParams, ...query}
     const {
         userListId,
-        gene_limit=default_options.gene_limit,
-        min_lib=default_options.min_lib,
-        gene_degree=default_options.gene_degree,
-        term_degree=default_options.term_degree,
-    } = searchParams
+        gene_limit,
+        min_lib,
+        gene_degree,
+        term_degree,
+    } = combined_query
 
     const get_controller = () => {
         if (controller) controller.abort()
@@ -100,7 +86,7 @@ const GeneSetForm = ({
         return c
       }
     
-    const libraries = searchParams.libraries ? JSON.parse(searchParams.libraries) : default_options.libraries || []
+    const libraries = query.libraries || parsedParams.libraries
     
     const prevInput = usePrevious(input) || {genes: [], description: ''}
 
@@ -145,14 +131,16 @@ const GeneSetForm = ({
                     signal: controller.signal
                 })
             ).json()
-            const query = {...searchParams}
-            if (query.libraries === undefined) query.libraries = JSON.stringify(default_options.libraries)
+            const query = {...combined_query}
+            // if (query.libraries === undefined) query.libraries = JSON.stringify(default_options.libraries)
             setSubmitted(false)
             const {augment, augment_limit, gene_links, ...rest} = query
             router_push(router, pathname, {
-                ...rest,
-                userListId,
-                search: true
+                q: JSON.stringify({
+                    ...rest,
+                    userListId: `${userListId}`,
+                    search: true
+                })
             })
         } catch (error) {
             console.error(error)
@@ -178,8 +166,10 @@ const GeneSetForm = ({
         }
     }
 
+
     useEffect(()=>{
         setLoading(false)
+        setQuery(null)
     }, [elements])
 
     useEffect(()=> {
@@ -249,6 +239,7 @@ const GeneSetForm = ({
 					onClose={()=>{
                         if ((error || {} ).type === "fail") {
                             router_push(router, pathname, {})
+                            setQuery(null)
                             setError(null)
                         } else {
                             setError(null)
@@ -259,6 +250,7 @@ const GeneSetForm = ({
                         onClose={()=>{
                             if ((error || {} ).type === "fail") {
                                 router_push(router, pathname, {})
+                                setQuery(null)
                                 setError(null)
                             } else {
                                 setError(null)
@@ -328,23 +320,25 @@ const GeneSetForm = ({
                                                 addList()
                                             }
                                         } else {
-                                            const {search, augment, augment_limit, gene_links, ...rest} = searchParams
+                                            const {search, augment, augment_limit, gene_links, ...rest} = combined_query
                                             setSubmitted(false)
                                             router_push(router, pathname, {
-                                                libraries: JSON.stringify(libraries),
-                                                ...rest,
-                                                search: true
+                                                q: JSON.stringify({
+                                                    ...rest,
+                                                    libraries: JSON.stringify(libraries),
+                                                    search: true
+                                                })
                                             })
                                         }
                                     }}
-                                    disabled={submitted || (loading && searchParams.search) || libraries.length === 0 || input.genes.length === 0}
+                                    disabled={submitted || (loading && combined_query.search) || libraries.length === 0 || input.genes.length === 0}
                                     size="large"
                                     variant="contained"
                                     sx={{
                                         padding: "15px 30px"
                                     }}
                                     // disabled={input.genes.length === 0}
-                                >{((loading && searchParams.search) || submitted ) ? "Searching...": "Submit"}</Button>
+                                >{((loading && combined_query.search) || submitted ) ? "Searching...": "Submit"}</Button>
                                 {(verified.length > 0 && input.genes.length > 0) && <Tooltip title="Matched genes"><Button onClick={()=>setIsFocused(false)}><Typography color={'secondary'} variant='subtitle2'> {`${verified.length} matched genes`}</Typography></Button></Tooltip>}
                             </Stack>
                         </Grid>
@@ -396,11 +390,15 @@ const GeneSetForm = ({
                                         <Slider 
                                             value={min_lib || 1}
                                                 onChange={(e, nv:number)=>{
-                                                const {search, augment, augment_limit, gene_links, ...rest} = searchParams
-                                                router_push(router, pathname, {
-                                                    ...rest,
+                                                // const {search, augment, augment_limit, gene_links, ...rest} = combined_query
+                                                setQuery({
+                                                    ...query,
                                                     min_lib: nv
                                                 })
+                                                // router_push(router, pathname, {
+                                                //     ...rest,
+                                                //     min_lib: nv
+                                                // })
                                             }}
                                             style={{width: "100%"}}
                                             min={1}
@@ -425,9 +423,13 @@ const GeneSetForm = ({
                                         <Slider 
                                             value={gene_degree || 1}
                                             onChange={(e, nv:number)=>{
-                                                const {search, augment, augment_limit, gene_links, ...rest} = searchParams
-                                                router_push(router, pathname, {
-                                                    ...rest,
+                                                // const {search, augment, augment_limit, gene_links, ...rest} = searchParams
+                                                // router_push(router, pathname, {
+                                                //     ...rest,
+                                                //     gene_degree: nv
+                                                // })
+                                                setQuery({
+                                                    ...query,
                                                     gene_degree: nv
                                                 })
                                             }}
@@ -454,9 +456,13 @@ const GeneSetForm = ({
                                         <Slider 
                                             value={term_degree || 1}
                                             onChange={(e, nv:number)=>{
-                                                const {search, augment, augment_limit, gene_links, ...rest} = searchParams
-                                                router_push(router, pathname, {
-                                                    ...rest,
+                                                // const {search, augment, augment_limit, gene_links, ...rest} = searchParams
+                                                // router_push(router, pathname, {
+                                                //     ...rest,
+                                                //     term_degree: nv
+                                                // })
+                                                setQuery({
+                                                    ...query,
                                                     term_degree: nv
                                                 })
                                             }}
@@ -481,11 +487,15 @@ const GeneSetForm = ({
                                 <Grid item style={{ flexGrow: 1 }}>
                                     <Tooltip title={`How many genes should the knowledge graph return? (Prioritized by gene connectivity)`}>
                                         <Slider 
-                                            value={searchParams.gene_limit || verified.length || input.genes.length || 100}
+                                            value={combined_query.gene_limit || verified.length || input.genes.length || 100}
                                             onChange={(e, nv:number)=>{
-                                                const {search, augment, augment_limit, gene_links, ...rest} = searchParams
-                                                router_push(router, pathname, {
-                                                    ...rest,
+                                                // const {search, augment, augment_limit, gene_links, ...rest} = searchParams
+                                                // router_push(router, pathname, {
+                                                //     ...rest,
+                                                //     gene_limit: nv
+                                                // })
+                                                setQuery({
+                                                    ...query,
                                                     gene_limit: nv
                                                 })
                                             }}
@@ -498,7 +508,7 @@ const GeneSetForm = ({
                                 </Grid>
                                 <Grid item>
                                     <Typography variant='subtitle2'>
-                                        {searchParams.gene_limit || verified.length || input.genes.length || 100}
+                                        {combined_query.gene_limit || verified.length || input.genes.length || 100}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -516,7 +526,7 @@ const GeneSetForm = ({
                                 <Typography variant={'subtitle2'}>
                                     Select libraries to include
                                 </Typography>
-                                <LibraryPicker searchParams={searchParams}
+                                <LibraryPicker parsedParams={parsedParams}
                                     libraries_list={libraries_list}
                                     fullWidth={fullWidth}
                                     disableLibraryLimit={disableLibraryLimit || true}

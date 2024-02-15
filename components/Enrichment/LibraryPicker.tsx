@@ -20,8 +20,10 @@ import {
 import { router_push } from "@/utils/client_side"
 import { mdiClose, mdiCloseCircle, mdiMinusCircleOutline, mdiPlusCircleOutline } from "@mdi/js"
 import Icon from "@mdi/react"
+import { EnrichmentParams } from "."
+import { useQueryState, parseAsJson } from "next-usequerystate"
 const LibraryPicker = ({
-	searchParams,
+	parsedParams,
 	libraries_list,
 	default_libraries,
 	disableLibraryLimit,
@@ -34,33 +36,20 @@ const LibraryPicker = ({
 	}>,
     disableLibraryLimit?: boolean,
     libraries_list: Array<string>,
-    searchParams: {
-        libraries?: string,
-        userListId?: string,
-        term_limit?: number,
-        gene_limit?: number,
-        min_lib?: number,
-        gene_degree?: number,
-        term_degree?: number,
-        augment?: boolean,
-        augment_limit?: number,
-        gene_links?: string,
-        search?: boolean,
-        expand?: string,
-        remove?: string
-    }
+    parsedParams: EnrichmentParams
 }) => {
 	const router = useRouter()
 	const pathname = usePathname()
 	const [error, setError] = useState<{message: string, type: string}>(null)
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	const [query, setQuery] = useQueryState('query', parseAsJson<EnrichmentParams>().withDefault({}))
 
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(anchorEl ? null : event.currentTarget);
 	};
 	const open = Boolean(anchorEl);
 	const id = open ? 'simple-popper' : undefined;
-	const libraries = searchParams.libraries ? JSON.parse(searchParams.libraries) : default_libraries || []
+	const libraries = query.libraries || parsedParams.libraries
 	return (
 		<Grid container spacing={1}>
 			<Grid item xs={12} md={fullWidth ? 12:5}>
@@ -102,10 +91,20 @@ const LibraryPicker = ({
 					onChange={(e, libs)=>{
 						if (libs.length <= 5) {
 							const new_libraries = libs.map(library=>({library, term_limit: 5}))
-							router_push(router, pathname, {
-								...searchParams,
-								libraries: JSON.stringify(new_libraries)
-							})
+							if (fullWidth) {
+								setQuery({
+									...query,
+									libraries: new_libraries
+								})
+							} else {
+								router_push(router, pathname, {
+									q: JSON.stringify({
+										...parsedParams,
+										libraries: new_libraries
+									})	
+								})
+							}
+							
 						} else if (libs.length > 5) {
 							setError({message: "Please select up to 5 libraries", type: "fail"})
 						}	
@@ -127,10 +126,19 @@ const LibraryPicker = ({
 												const new_libraries = libraries.filter(l=>l.library !== library)
 												if (new_libraries.length === 0) setError({message: "Please select at least one library", type: "fail"})
 												else {
-													router_push(router, pathname, {
-														...searchParams,
-														libraries: JSON.stringify(new_libraries)
-													})    
+													if (fullWidth) {
+														setQuery({
+															...query,
+															libraries: new_libraries
+														})
+													} else {
+														router_push(router, pathname, {
+															q: JSON.stringify({
+																...parsedParams,
+																libraries: new_libraries
+															})	
+														})
+													}    
 												}                                             
                                         }}/>
                                     </Tooltip>
@@ -152,10 +160,19 @@ const LibraryPicker = ({
 															})
 															else new_libraries.push(i)
 														}
-														router_push(router, pathname, {
-															...searchParams,
-															libraries: JSON.stringify(new_libraries)
-														})
+														if (fullWidth) {
+															setQuery({
+																...query,
+																libraries: new_libraries
+															})
+														} else {
+															router_push(router, pathname, {
+																q: JSON.stringify({
+																	...parsedParams,
+																	libraries: new_libraries
+																})	
+															})
+														}
 													}}
 													style={{width: "100%"}}
 													valueLabelDisplay='auto'

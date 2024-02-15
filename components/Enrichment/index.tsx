@@ -2,8 +2,6 @@ import dynamic from 'next/dynamic'
 import React from 'react';
 
 import { typed_fetch } from '../../utils/helper';
-
-
 import {
     Grid,
     Stack,
@@ -16,9 +14,26 @@ import TermViz from './TermViz';
 import { Summarizer } from './Summarizer';
 import { UISchema } from '@/app/api/schema/route';
 import { NetworkSchema } from '@/app/api/knowledge_graph/route';
-
+import { parseAsJson } from 'next-usequerystate';
 import InteractiveButtons from './InteractiveButtons';
-import LibraryPicker from './LibraryPicker';
+
+export interface EnrichmentParams {
+    libraries?: Array<{library: string, term_limit: number}>,
+    userListId?: string,
+    term_limit?: number,
+    gene_limit?: number,
+    min_lib?: number,
+    gene_degree?: number,
+    term_degree?: number,
+    augment?: boolean,
+    augment_limit?: number,
+    gene_links?: Array<string>,
+    search?: boolean,
+    expand?: Array<string>,
+    remove?: Array<string>,
+    fullscreen?: boolean
+}
+
 
 const Enrichment = async ({
     libraries: l,
@@ -46,23 +61,11 @@ const Enrichment = async ({
     title?: string,
     description?: string,
     searchParams: {
-        libraries?: string,
-        userListId?: string,
-        term_limit?: number,
-        gene_limit?: number,
-        min_lib?: number,
-        gene_degree?: number,
-        term_degree?: number,
-        augment?: boolean,
-        augment_limit?: number,
-        gene_links?: string,
-        search?: boolean,
-        expand?: string,
-        remove?: string,
-        view?: string
+        q?:string
     }
 
 }) => {
+    const query_parser = parseAsJson<EnrichmentParams>().withDefault(props.default_options)
     const schema = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
     const libraries_list = sortLibraries ? l.sort(function(a, b) {
         return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
@@ -85,6 +88,7 @@ const Enrichment = async ({
         else return acc
     }, [])    
     try {
+        const parsedParams: EnrichmentParams = query_parser.parseServerSide(searchParams.q)
         const {
             userListId,
             gene_limit=props.default_options.gene_limit,
@@ -94,17 +98,28 @@ const Enrichment = async ({
             expand,
             remove,
             augment_limit,
-            search,
             gene_links
-        } = searchParams
-        const libraries = searchParams.libraries ? JSON.parse(searchParams.libraries) : (props.default_options.libraries || [])
+        } = parsedParams
+        const libraries = parsedParams.libraries || []
         let elements:NetworkSchema = null
         let shortId = ''
         let genes = []
-        if (search && userListId !==undefined && libraries.length > 0) {
+        if (userListId !==undefined && libraries.length > 0) {
             const request = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
             if (request.ok) shortId = (await (request.json())).link_id
-            const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${searchParams.augment===true ? '/augment': ''}`,
+            console.log(JSON.stringify({
+                userListId,
+                libraries,
+                min_lib,
+                gene_limit,
+                gene_degree,
+                term_degree,
+                expand,
+                remove,
+                augment_limit,
+                gene_links
+            }))
+            const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`,
                 {
                     method: "POST",
                     body: JSON.stringify({
@@ -114,10 +129,10 @@ const Enrichment = async ({
                         gene_limit,
                         gene_degree,
                         term_degree,
-                        expand: JSON.parse(expand || '[]'),
-                        remove: JSON.parse(remove || '[]'),
+                        expand,
+                        remove,
                         augment_limit,
-                        gene_links: JSON.parse(gene_links || '[]')
+                        gene_links
                     }),
                 })
             if (!res.ok) console.log(await res.text())
@@ -140,7 +155,7 @@ const Enrichment = async ({
                         <CardContent>
                             <GeneSetForm 
                                 libraries_list={libraries_list.map(l=>l.name)}
-                                searchParams={searchParams}
+                                parsedParams={parsedParams}
                                 fullWidth={elements===null}
                                 elements={elements}
                                 {...props}
@@ -157,15 +172,16 @@ const Enrichment = async ({
                                 disableLibraryLimit={props.disableLibraryLimit}
                                 geneLinksRelations={geneLinksRelations}
                                 shortId={shortId}
-                                searchParams={searchParams}
+                                parsedParams={parsedParams}
+                                // searchParams={parsedParams}
                                 gene_count={genes.length}
                                 elements={elements}
                             >
-                                <Summarizer elements={elements} schema={schema} augmented={searchParams.augment}/>
+                                <Summarizer elements={elements} schema={schema} augmented={parsedParams.augment}/>
                             </InteractiveButtons>
                             <Card sx={{borderRadius: "24px"}}>
                                 <CardContent>
-                                    <TermViz view={searchParams.view}
+                                    <TermViz
                                         elements={elements} 
                                         schema={schema}
                                         tooltip_templates_edges={tooltip_templates_edges}

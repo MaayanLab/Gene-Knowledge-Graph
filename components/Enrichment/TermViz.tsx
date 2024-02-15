@@ -1,18 +1,21 @@
+'use client'
 import { precise } from "@/utils/math";
+import { useQueryState } from "next-usequerystate";
 import EnrichmentBar from "./EnrichmentBar";
 import { NetworkSchema } from "@/app/api/knowledge_graph/route";
 import Cytoscape from "../misc/Cytoscape";
 import { UISchema } from "@/app/api/schema/route";
 import NetworkTable from "./NetworkTable";
 
-const TermViz = ({elements, view, schema, tooltip_templates_edges, tooltip_templates_nodes}:
+const TermViz = ({elements, schema, tooltip_templates_edges, tooltip_templates_nodes}:
 	{
 		elements:NetworkSchema,
-		view: string,
 		schema: UISchema,
 		tooltip_templates_edges: {[key: string]: Array<{[key: string]: string}>}, 
 		tooltip_templates_nodes: {[key: string]: Array<{[key: string]: string}>}, 
 	}) => {
+	const [view, setView] = useQueryState('view')
+	console.log(view)
 	const entries:{[key:string]: {library: string, value: number, color:string, pval: number, [key: string]: number | string | boolean}} = {}
 	for (const dt of [...elements.nodes, ...elements.edges]) {
 		const {label, id: i, kind, color, gradient_color, ...properties} = dt.data
