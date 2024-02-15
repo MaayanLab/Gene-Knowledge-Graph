@@ -144,7 +144,6 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 			setProcessedData(processed)	
 		}
 	}, [data])
-	console.log(processedData)
 	if (processedData === null) return null
 	else {
 		const {data={}, header=[], columnVisibilityModel} = processedData[tab] || {}

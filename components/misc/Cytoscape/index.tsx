@@ -43,8 +43,11 @@ export default function Cytoscape ({
 	elements,
 	schema,
 	tooltip_templates_edges,
-	tooltip_templates_nodes
-}: {elements: null | NetworkSchema, 
+	tooltip_templates_nodes,
+	search
+}: {
+	elements: null | NetworkSchema, 
+	search?:boolean,
 	schema: UISchema,
 	tooltip_templates_edges: {[key: string]: Array<{[key: string]: string}>}, 
 	tooltip_templates_nodes: {[key: string]: Array<{[key: string]: string}>}, 
@@ -282,7 +285,7 @@ export default function Cytoscape ({
 				/> 
 			}
 			{ (elements && legend) &&
-				<Legend elements={elements} legendSize={parseInt(legend_size || "0")}/>
+				<Legend search={search} elements={elements} legendSize={parseInt(legend_size || "0")}/>
 			}
                     { (focused === null && tooltip && node) && 
 						<TooltipCard 

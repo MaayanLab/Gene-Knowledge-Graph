@@ -76,16 +76,23 @@ export const Legend = ({
     const color_sum = {}
     const relations = []
     for (const i of [...elements.nodes, ...elements.edges]) {
-      const {kind, color, borderColor, lineColor, relation} = i.data
-      if (i.data.pval && typeof i.data.pval === 'number' && i.data.pval > 0.05) not_significant = true
-      if (kind === "Relation" && typeof lineColor === 'string' && lineColor !== "#e0e0e0" && typeof relation === 'string' && relation_colors[relation]===undefined) {
+      const {kind, color, borderColor, lineColor, relation, pval}: {
+        kind?:string,
+        color?:string,
+        borderColor?: string,
+        lineColor?: string,
+        relation?: string,
+        pval?: number,
+      } = i.data
+      if (pval && pval > 0.05) not_significant = true
+      if (kind === "Relation" && lineColor !== "#e0e0e0" && relation_colors[relation]===undefined) {
         relation_colors[relation] = <Grid item xs={12} key={kind}>
           <Grid container alignItems={"center"} spacing={1}>
             <Grid item><hr style={{color: lineColor, height: lineHeight[legendSize], backgroundColor: lineColor, width: lineWidth[legendSize]}}/></Grid>
             <Grid item><Typography variant="subtitle1">{relation}</Typography></Grid>   
           </Grid></Grid>
       }
-      if (colors[kind]===undefined && typeof color === 'string' && typeof borderColor === 'string' && color !== "#ff8a80" && kind !== "Relation") {
+      if (colors[kind]===undefined && color !== "#ff8a80" && kind !== "Relation") {
         color_sum[kind] = color
         colors[kind] = <Grid item xs={12} key={kind}>
           <Grid container alignItems={"center"} spacing={1}>
@@ -93,7 +100,7 @@ export const Legend = ({
             <Grid item><Typography variant="subtitle1">{kind}</Typography></Grid>   
           </Grid></Grid> 
       }
-      if (colors[kind]!==undefined && color_sum[kind] === "#bdbdbd" && color !== "#ff8a80" && kind !== "Relation" && typeof borderColor === 'string' && typeof color === 'string') {
+      if (colors[kind]!==undefined && color_sum[kind] === "#bdbdbd" && color !== "#ff8a80" && kind !== "Relation" ) {
         color_sum[kind] = color
         colors[kind] = <Grid item xs={12} key={kind}>
           <Grid container alignItems={"center"} spacing={1}>

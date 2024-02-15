@@ -109,31 +109,6 @@ const Enrichment = async ({
         if (userListId !==undefined && libraries.length > 0) {
             const request = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
             if (request.ok) shortId = (await (request.json())).link_id
-            console.log(JSON.stringify({
-                userListId,
-                libraries,
-                min_lib,
-                gene_limit,
-                gene_degree,
-                term_degree,
-                expand,
-                remove,
-                augment_limit,
-                gene_links
-            }))
-            console.log(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`)
-            console.log(JSON.stringify({
-                userListId,
-                libraries,
-                min_lib,
-                gene_limit,
-                gene_degree,
-                term_degree,
-                expand,
-                remove,
-                augment_limit,
-                gene_links
-            }))
             const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`,
                 {
                     method: "POST",
@@ -150,7 +125,6 @@ const Enrichment = async ({
                         gene_links
                     }),
                 })
-            console.log(res.ok)
             if (!res.ok) console.log(await res.text())
             else{
                 elements = await res.json()

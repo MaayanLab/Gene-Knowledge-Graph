@@ -236,7 +236,6 @@ const EnrichmentInput = z.object({
 export async function POST(req: NextRequest) {
     try {
         const {userListId, libraries=[], gene_limit, term_degree, min_lib, gene_degree, remove, expand, gene_links, expand_limit, augment_limit} = EnrichmentInput.parse(await req.json())
-        console.log(userListId)
         if (userListId === undefined) {
             return NextResponse.json({error: "userListId is undefined"}, {status: 400})
         }

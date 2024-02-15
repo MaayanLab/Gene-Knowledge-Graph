@@ -61,13 +61,13 @@ const TermViz = ({elements, schema, tooltip_templates_edges, tooltip_templates_n
 	const sorted_entries = Object.values(entries).sort((a,b)=>a["pval"]-b["pval"])
 	if (sorted_entries.length === 0) return <Typography variant="h5">No Results Found</Typography>
 	else {
-		console.log(Cytoscape)
 		if (view === 'network' || !view) return (
 			<Cytoscape 
 				elements={elements}
 				schema={schema}
 				tooltip_templates_edges={tooltip_templates_edges}
 				tooltip_templates_nodes={tooltip_templates_nodes}
+				search={false}
 			/> 
 		) 
 		else if (view === "table") return (
