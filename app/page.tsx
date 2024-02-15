@@ -17,7 +17,7 @@ export default async function Home({searchParams}: {
   }
 }) {
   const schema = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
-  const root_tab = {component: '', props: {}}
+  const root_tab = {component: '', props: {}, endpoint: ""}
   for (const tab of schema.header.tabs) {
     if (tab.endpoint === "/") {
       root_tab.component = tab.component

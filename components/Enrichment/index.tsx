@@ -39,6 +39,7 @@ const Enrichment = async ({
     libraries: l,
     sortLibraries,
     searchParams,
+    endpoint,
     ...props
 }: {
     default_options?: {
@@ -62,7 +63,8 @@ const Enrichment = async ({
     description?: string,
     searchParams: {
         q?:string
-    }
+    },
+    endpoint: string
 
 }) => {
     const query_parser = parseAsJson<EnrichmentParams>().withDefault(props.default_options)
@@ -144,6 +146,20 @@ const Enrichment = async ({
                 }, [])
             }
         }
+        const payload = {
+            'url': `${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}${endpoint}?q=${searchParams.q}`,
+            'apikey': process.env.NEXT_PUBLIC_TURL  
+        }
+        const request = await fetch(process.env.NEXT_PUBLIC_TURL_URL, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        })
+        let short_url=null
+        if (request.ok) short_url = (await request.json())['shorturl']
+        
         return (
             <Grid container spacing={1}>
                 <Grid item xs={12}>
@@ -176,6 +192,7 @@ const Enrichment = async ({
                                 // searchParams={parsedParams}
                                 gene_count={genes.length}
                                 elements={elements}
+                                short_url={short_url}
                             >
                                 <Summarizer elements={elements} schema={schema} augmented={parsedParams.augment}/>
                             </InteractiveButtons>

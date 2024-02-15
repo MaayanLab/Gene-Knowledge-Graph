@@ -63,7 +63,9 @@ const InteractiveButtons = ({
         disableLibraryLimit,
         libraries_list,
         parsedParams,
+        short_url,
     }: {
+        short_url?: string,
         libraries_list?:Array<string>,
         disableLibraryLimit?:boolean,
         default_libraries:Array<{
@@ -334,14 +336,14 @@ const InteractiveButtons = ({
                             </Grid>
                             <Grid item xs={11}>
                                 <TextField size='small'
-                                    value={window ? window.location.toString(): ''}
+                                    value={short_url ? short_url: window.location.toString()}
                                     style={{width: "100%"}}
                                 />
                             </Grid>
                             <Grid item xs={1}>
                                 <Stack direction={"row"}>
                                     <Tooltip title="Copy Link">
-                                        <IconButton onClick={()=>navigator.clipboard.writeText(window ? window.location.toString():'')}><ContentCopyIcon/></IconButton>
+                                        <IconButton onClick={()=>navigator.clipboard.writeText(short_url ? short_url: window.location.toString())}><ContentCopyIcon/></IconButton>
                                     </Tooltip>
                                     <Tooltip title="Close">
                                         <IconButton onClick={()=>setOpenShare(false)}><HighlightOffIcon/></IconButton>

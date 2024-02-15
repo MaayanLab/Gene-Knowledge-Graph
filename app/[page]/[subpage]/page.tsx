@@ -21,16 +21,16 @@ export default async function Page({params, searchParams}: {
 	}
 }) {
   const schema = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
-  const root_tab = {component: '', props: {}}
   const page = params.page
   const subpage = params.subpage
+  const root_tab = {component: '', props: {}, endpoint: `${page}/${subpage}`}
   for (const tab of schema.header.tabs) {
     if (tab.endpoint === `/${page}`) {
 		if (tab.props.pages) {
 			for (const p of tab.props.pages) {
 				if (p.endpoint === `/${page}/${subpage}`) {
 					root_tab.component = p.component
-      				root_tab.props = p.props
+      		root_tab.props = p.props
 				}
 			}
 		}

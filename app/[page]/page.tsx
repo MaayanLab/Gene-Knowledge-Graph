@@ -20,8 +20,8 @@ export default async function Page({params, searchParams}: {
 	}
 }) {
   const schema = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
-  const root_tab = {component: '', props: {}}
   const page = params.page
+  const root_tab = {component: '', props: {}, endpoint: `${page}`}
   for (const tab of schema.header.tabs) {
     if (tab.endpoint === `/${page}`) {
       root_tab.component = tab.component
