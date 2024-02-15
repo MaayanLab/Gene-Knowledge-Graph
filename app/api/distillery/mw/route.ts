@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { resolve_results } from "../../knowledge_graph/route";
+import { resolve_results } from "../../knowledge_graph/helper";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { z } from 'zod';
