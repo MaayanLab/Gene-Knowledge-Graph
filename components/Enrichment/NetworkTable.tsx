@@ -1,5 +1,12 @@
 'use client'
-import { DataGrid, GridToolbar, GridColDef } from "@mui/x-data-grid";
+import { Stack } from "@mui/material";
+import { 
+    DataGrid,
+    GridColDef,
+    GridToolbarContainer,
+    GridToolbarQuickFilter,
+    GridToolbarExport,
+} from "@mui/x-data-grid";
 const header: GridColDef[] = [
     {
         field: 'enrichr_label',
@@ -37,9 +44,19 @@ const header: GridColDef[] = [
     }
 ]
 
+export function CustomToolbar() {
+    return (
+      <GridToolbarContainer sx={{padding: 2}}>
+        <GridToolbarQuickFilter variant="outlined" placeholder="Search Results"/>
+        <GridToolbarExport sx={{color: "secondary.main"}}/>
+      </GridToolbarContainer>
+    );
+  }
+
+
 const NetworkTable = ({sorted_entries}:{sorted_entries:Array<{[key:string]:any}>}) => (
 	<DataGrid
-		components={{ Toolbar: GridToolbar }}
+		components={{ Toolbar: CustomToolbar }}
 		sortingOrder={['desc', 'asc']}
 		rows={sorted_entries}
 		columns={header}
@@ -48,6 +65,17 @@ const NetworkTable = ({sorted_entries}:{sorted_entries:Array<{[key:string]:any}>
 		autoHeight
 		pageSize={10}
 		rowsPerPageOptions={[5, 10, 25]}
+        sx={{
+            '.MuiDataGrid-columnHeaders': {
+                color: 'dataGrid.contrastText',
+                backgroundColor: 'dataGrid.main',
+                borderRadius: "1rem 1rem 0 0",
+            },
+            borderRadius: "0 0 4px 4px",
+            '.MuiDataGrid-columnSeparator': {
+                display: 'none',
+            },
+        }}
 	/>
 )
 

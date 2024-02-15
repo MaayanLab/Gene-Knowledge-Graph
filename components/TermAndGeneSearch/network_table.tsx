@@ -1,12 +1,12 @@
 'use client'
 import { useState, useEffect, useRef } from "react";
-import dynamic from "next/dynamic";
 import { makeTemplate } from "@/utils/helper";
 import { precise } from "@/utils/math";
 import { Grid, Button, Tabs, Tab, Card, CardContent } from "@mui/material";
 import { DataGrid, GridToolbar, GridColDef } from "@mui/x-data-grid";
 import { UISchema } from "@/app/api/schema/route";
 import { NetworkSchema } from "@/app/api/knowledge_graph/route";
+import { CustomToolbar } from "../Enrichment/NetworkTable";
 const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) => {
 	const [processedData, setProcessedData] = useState<{
 		[key:string]: {
@@ -38,6 +38,7 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 			for (const d of [...data.nodes, ...data.edges]) {
 				const properties = d.data
 				const {kind, relation, source, target, label, "Unnamed: 0": _, ...rest} = d.data
+				if (properties.id === undefined) properties.id = `${source}_${target}`
 				const key = relation || kind
 				if (key && typeof key === 'string') { 
 					if ( processed[key] === undefined) {
@@ -80,14 +81,14 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 						} else if (typeof properties.id === 'string') {
 							const {id, symbol, ref, ...rest} = properties
 							id_mapper[id] = label
-							header.push({
-								field: 'id',
-								headerName: "ID",
-								flex: 1,
-								style: {flexDirection: "row"},
-								align: "left",
-								type: relation ? "edge": "node",
-							})
+							// header.push({
+							// 	field: 'id',
+							// 	headerName: "ID",
+							// 	flex: 1,
+							// 	style: {flexDirection: "row"},
+							// 	align: "left",
+							// 	type: relation ? "edge": "node",
+							// })
 							header.push({
 								field: 'label',
 								headerName: "Label",
@@ -113,7 +114,7 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 						processed[key].columnVisibilityModel = columnVisibilityModel
 					}
 					if (processed[key].data[properties.id] === undefined) {
-						processed[key].data[properties.id] = {id: properties.id !== "" ? properties.id: `${source}_${target}`}
+						processed[key].data[properties.id] = {id: properties.id}
 					}
 					for (const i of processed[key].header) {
 						if (i.href) {
@@ -143,6 +144,7 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 			setProcessedData(processed)	
 		}
 	}, [data])
+	console.log(processedData)
 	if (processedData === null) return null
 	else {
 		const {data={}, header=[], columnVisibilityModel} = processedData[tab] || {}
@@ -172,7 +174,7 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 									columnVisibilityModel
 									},
 								}}
-								components={{ Toolbar: GridToolbar }}
+								components={{ Toolbar: CustomToolbar }}
 								sortingOrder={['desc', 'asc']}
 								rows={Object.values(data)}
 								columns={columns}
@@ -181,6 +183,17 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 								autoHeight
 								pageSize={10}
 								rowsPerPageOptions={[5, 10, 25]}
+								sx={{
+									'.MuiDataGrid-columnHeaders': {
+										color: 'dataGrid.contrastText',
+										backgroundColor: 'dataGrid.main',
+										borderRadius: "1rem 1rem 0 0",
+									},
+									borderRadius: "0 0 4px 4px",
+									'.MuiDataGrid-columnSeparator': {
+										display: 'none',
+									},
+								}}
 							/>
 						</Grid>
 					</Grid>
