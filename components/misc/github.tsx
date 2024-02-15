@@ -1,10 +1,10 @@
 import Link from "next/link"
 import Icon from '@mdi/react'
 import { mdiGithub, mdiBugOutline} from '@mdi/js';
-import { Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 const Github = ({code, issues}: {code: string, issues:string}) => (
-    <>
+    <Stack spacing={2}>
         <Link href={code}>
             <div className='flex items-center space-x-1'>
                 <Icon path={mdiGithub} size={1} /> 
@@ -21,7 +21,7 @@ const Github = ({code, issues}: {code: string, issues:string}) => (
                 </Typography>
             </div>
         </Link>
-    </>
+    </Stack>
 )
 
 export default Github
