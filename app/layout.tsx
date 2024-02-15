@@ -9,13 +9,13 @@ import Footer from '@/components/Footer'
 import { Container, Grid } from '@mui/material'
 import './global.css'
 
-type Props = {
-  params: { id: string }
-  searchParams: { [key: string]: string | string[] | undefined }
-}
+
  
 export async function generateMetadata(
-  { params, searchParams }: Props,
+  { params, searchParams }: {
+    params: { id: string }
+    searchParams: { [key: string]: string | string[] | undefined }
+  },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params
@@ -57,13 +57,6 @@ export default async function RootLayout({
             </Grid>
           </Grid>
         </ThemeRegistry>
-        {/* <Script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js" strategy='beforeInteractive'/>
-        <Script src="https://unpkg.com/layout-base/layout-base.js" strategy='beforeInteractive'/>
-        <Script src="https://unpkg.com/avsdf-base/avsdf-base.js" strategy='beforeInteractive'/>
-        <Script src="https://unpkg.com/cytoscape-avsdf/cytoscape-avsdf.js" strategy='beforeInteractive'/>
-        <Script src="https://unpkg.com/layout-base/layout-base.js" strategy='beforeInteractive'/>
-        <Script src="https://unpkg.com/cose-base/cose-base.js" strategy='beforeInteractive'/>
-        <Script src="https://unpkg.com/cytoscape-fcose/cytoscape-fcose.js" strategy='beforeInteractive'/> */}
       </body>
     </html>
   )
