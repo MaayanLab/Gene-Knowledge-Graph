@@ -1,6 +1,6 @@
 {
   "name": "cfde-knowledge-exchange",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development next dev",
@@ -53,6 +53,7 @@
     "recharts-to-png": "^2.2.1",
     "remark-gfm": "^3.0.1",
     "sanitize-html": "^2.11.0",
+    "sharp": "^0.33.2",
     "tailwindcss": "^3.4.1",
     "use-async-effect": "^2.2.5",
     "zod": "^3.22.4",
