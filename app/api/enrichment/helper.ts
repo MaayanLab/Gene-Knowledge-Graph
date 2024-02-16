@@ -1,4 +1,4 @@
-import { typed_fetch } from "@/utils/helper"
+import { get_regex } from "./get_regex/helper"
 export const enrichr_query = async ({
     userListId,
     library,
@@ -15,7 +15,7 @@ export const enrichr_query = async ({
         throw new Error(`Error communicating with Enrichr`)
     }
     const regex = {}
-    const reg = await typed_fetch<{[key: string]: string}>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment/get_regex`)
+    const reg:{[key:string]: string} = await get_regex()
     for (const [k,v] of Object.entries(reg)) {
         regex[k] = new RegExp(v)
     }

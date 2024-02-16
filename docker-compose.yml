@@ -6,7 +6,16 @@ services:
     platform: linux/x86_64
     env_file: .env
     ports:
-      - 3002:3000
+      - 3000:3000
+  ui:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.next
+    image: maayanlab/cfde-gse:2.0.0
+    platform: linux/x86_64
+    env_file: .env
+    ports:
+      - 3000:3000
   ingest:
     build: scripts/ingestion
     image: maayanlab/kg-ingest:0.1.5

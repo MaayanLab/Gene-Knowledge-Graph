@@ -3,9 +3,7 @@ import { resolve_results } from "../../knowledge_graph/helper";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { z } from 'zod';
-import { Initialize_Type } from "../../initialize/route";
-import { typed_fetch } from "@/utils/helper";
-import { UISchema } from "../../schema/route";
+import { initialize } from "../../initialize/helper";
 async function process_query({
     term,
     limit,
@@ -50,7 +48,7 @@ export async function GET(req: NextRequest) {
         if (!filter) return NextResponse.json({error: "No filter inputted"}, {status: 400})
         const { start, start_term, limit=10, relation=['bioactivity', 'positively regulates', 'negatively regulates'], start_field="label" } = InputSchema.parse(JSON.parse(filter))
         
-        const {aggr_scores, colors} = await typed_fetch<Initialize_Type>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/initialize`)
+        const {aggr_scores, colors} = await initialize()
         
         if (start_term === undefined) return NextResponse.json({error: "No term inputted"}, {status: 400})
         else { 

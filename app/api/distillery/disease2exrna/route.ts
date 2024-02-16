@@ -1,6 +1,5 @@
 import fetch from "node-fetch";
-import { typed_fetch, convert_query } from "@/utils/helper";
-import { Initialize_Type } from "../../initialize/route";
+import { initialize } from "../../initialize/helper";
 import { resolve_results } from "../../knowledge_graph/helper";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
@@ -39,7 +38,7 @@ export async function GET(req: NextRequest) {
         const filter = req.nextUrl.searchParams.get("filter")
         if (!filter) return NextResponse.json({error: "No filter inputted"}, {status: 400})
         const { start_term, limit=10, start_field="label" } = InputSchema.parse(JSON.parse(filter))
-        const {aggr_scores, colors} = await typed_fetch<Initialize_Type>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/initialize`)
+        const {aggr_scores, colors} = await initialize()
         if (start_term === undefined) return NextResponse.json({error: "No term inputted"}, {status: 400})
         else { 
             try {

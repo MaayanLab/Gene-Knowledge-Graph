@@ -1,13 +1,12 @@
 import dynamic from "next/dynamic"
 import { FilterSchema } from "@/utils/helper"
-import { UISchema } from "@/app/api/schema/route"
-import { typed_fetch } from "@/utils/helper"
 import { process_relation } from "@/utils/helper"
 // import ClientTermAndGeneSearch from './client_side'
 import { Grid, Typography, CircularProgress, Card, CardContent, Stack } from "@mui/material"
 import AsyncFormComponent from "./async_form"
 import Form from "./form"
 import NetworkTable from "./network_table"
+import { fetch_kg_schema } from "@/utils/initialize"
 const Cytoscape = dynamic(()=>import('../misc/Cytoscape'),
     {
         ssr: false,
@@ -15,7 +14,7 @@ const Cytoscape = dynamic(()=>import('../misc/Cytoscape'),
     }
 )
 export const initialize_kg = async () => {
-    const schema = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
+    const schema = await fetch_kg_schema()
     const nodes = {}
 	const tooltip_templates_nodes = {}
   	const tooltip_templates_edges = {}

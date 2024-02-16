@@ -1,7 +1,5 @@
-import dynamic from 'next/dynamic'
 import React from 'react';
 
-import { typed_fetch } from '../../utils/helper';
 import {
     Grid,
     Stack,
@@ -16,6 +14,7 @@ import { UISchema } from '@/app/api/schema/route';
 import { NetworkSchema } from '@/app/api/knowledge_graph/route';
 import { parseAsJson } from 'next-usequerystate';
 import InteractiveButtons from './InteractiveButtons';
+import { fetch_kg_schema } from '@/utils/initialize';
 
 export interface EnrichmentParams {
     libraries?: Array<{library: string, term_limit: number}>,
@@ -68,7 +67,7 @@ const Enrichment = async ({
 
 }) => {
     const query_parser = parseAsJson<EnrichmentParams>().withDefault(props.default_options)
-    const schema = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
+    const schema = await fetch_kg_schema()
     const libraries_list = sortLibraries ? l.sort(function(a, b) {
         return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
      }): l

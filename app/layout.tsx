@@ -2,12 +2,11 @@ import { Metadata, ResolvingMetadata } from 'next'
 import Script from 'next/script'
 import Head from 'next/head'
 import ThemeRegistry from './ThemeRegistry'
-import { typed_fetch } from '@/utils/helper'
-import { UISchema } from './api/schema/route'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { Container, Grid } from '@mui/material'
 import './global.css'
+import { fetch_kg_schema } from '@/utils/initialize'
 
 
  
@@ -22,8 +21,7 @@ export async function generateMetadata(
   const id = params.id
  
   // fetch data
-  const {header} = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
- 
+  const {header} = await fetch_kg_schema()
   // optionally access and extend (rather than replace) parent metadata
  
   return {
@@ -40,7 +38,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const schema = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
+  const schema = await fetch_kg_schema()
   return (
     <html lang="en">
       <body>

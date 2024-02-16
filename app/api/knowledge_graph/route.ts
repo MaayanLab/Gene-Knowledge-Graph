@@ -1,16 +1,13 @@
 import neo4j from "neo4j-driver"
 import { neo4jDriver } from "@/utils/neo4j"
-import Color from 'color'
-import { process_properties } from "@/utils/helper"
 import fetch from "node-fetch"
-import {default_color, mui_colors} from '@/utils/colors'
 import { z } from "zod"
 import { NextResponse } from "next/server"
 import type { NextRequest } from 'next/server'
-import { augment_gene_set, kind_mapper, get_node_color_and_type_augmented, typed_fetch } from "@/utils/helper"
-import { Initialize_Type } from "../initialize/route"
-import { UISchema } from "../schema/route"
+import { augment_gene_set, kind_mapper, get_node_color_and_type_augmented } from "@/utils/helper"
 import { resolve_results } from "./helper"
+import { fetch_kg_schema } from "@/utils/initialize"
+import { initialize } from "../initialize/helper"
 export interface NetworkSchema {
     nodes: Array<{
         data: {
@@ -445,7 +442,7 @@ const input_query_schema = z.object({
 })
 
 export async function GET(req: NextRequest) {
-    const schema = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
+    const schema = await fetch_kg_schema()
     try {
         const { start,
                 start_field="label",
@@ -461,7 +458,7 @@ export async function GET(req: NextRequest) {
                 gene_links,
                 augment,
                 augment_limit } = input_query_schema.parse(JSON.parse(req.nextUrl.searchParams.get("filter")))
-        const {aggr_scores, colors, edges} = await typed_fetch<Initialize_Type>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/initialize`)
+        const {aggr_scores, colors, edges} = await initialize()
         const nodes = schema.nodes.map(i=>i.node)
         if (nodes.indexOf(start) < 0) return NextResponse.json({error: "Invalid start node"}, {status: 400})
         else if (end && nodes.indexOf(end) < 0) return NextResponse.json({error: "Invalid end node"}, {status: 400})

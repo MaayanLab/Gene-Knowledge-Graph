@@ -1,13 +1,14 @@
 import { resolve_results } from "../../knowledge_graph/helper";
 import fetch from "node-fetch";
 import { enrichr_query } from "../helper";
-import { typed_fetch, kind_mapper, get_node_color_and_type_augmented as get_node_color_and_type } from "@/utils/helper";
+import { kind_mapper, get_node_color_and_type_augmented as get_node_color_and_type } from "@/utils/helper";
 import { NextResponse } from "next/server";
 import { NextRequest } from 'next/server'
-import { UISchema } from "../../schema/route";
-import { Initialize_Type } from "../../initialize/route";
 import { z } from 'zod';
 import { augment_gene_set } from "./helper";
+import { get_node_mapping } from "../node_mapping/helper";
+import { fetch_kg_schema } from "@/utils/initialize";
+import { initialize } from "../../initialize/helper";
 
 
 const enrichr_query_wrapper = async ({
@@ -116,7 +117,7 @@ const enrichment = async ({
     augment_limit?: number,
 }) => {
     try {
-        const node_mapping = await typed_fetch<{[key:string]: string}>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment/node_mapping`)
+        const node_mapping = await get_node_mapping()
         
         const {genes, terms, max_pval, min_pval, nodes, library_terms} = await enrichr_query_wrapper(({libraries, userListId, term_degree, min_lib, gene_degree, node_mapping, gene_limit}))
         const { augmented_genes } = await augment_gene_set({gene_list: Object.values(genes), augment_limit})
@@ -126,9 +127,9 @@ const enrichment = async ({
         // })
         // const {genes, terms, max_pval, min_pval, nodes, library_terms} = await enrichr_query_wrapper(({libraries, userListId, term_degree, min_lib, gene_degree, node_mapping, gene_limit, augmented_genes, gene_list}))
         
-        const schema = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
-        const {aggr_scores, colors} = await typed_fetch<Initialize_Type>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/initialize`)
-        aggr_scores.pval = {max: max_pval, min: min_pval}
+        const schema = await fetch_kg_schema()
+        const {aggr_scores, colors} = await initialize()
+        aggr_scores["pval"] = {max: max_pval, min: min_pval}
         const query_list = []
         const vars = {}
         for (const [node, lib_terms] of Object.entries(library_terms)) {

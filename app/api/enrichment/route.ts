@@ -1,13 +1,12 @@
 import fetch from "node-fetch";
 import { resolve_results, default_get_node_color_and_type } from "../knowledge_graph/helper";
 import { compute_colors } from "@/utils/helper";
-import { typed_fetch } from "@/utils/helper";
-import { UISchema } from "../schema/route";
-import { Initialize_Type } from "../initialize/route";
 import { NextResponse } from "next/server";
 import { NextRequest } from 'next/server'
 import { z } from 'zod';
 import { enrichr_query } from "./helper";
+import { fetch_kg_schema } from "@/utils/initialize";
+import { initialize } from "../initialize/helper";
 const get_node_color_and_type = ({node,
     terms,
     color,
@@ -113,9 +112,9 @@ const enrichment = async ({
         if (gene_limit) {
             genes = genes.sort((a,b)=>gene_counts[b].count - gene_counts[a].count).slice(0,gene_limit)
         } 
-        const schema = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
-        const {aggr_scores, colors} = await typed_fetch<Initialize_Type>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/initialize`)
-        aggr_scores.pval = {max: max_pval, min: min_pval}
+        const schema = await fetch_kg_schema()
+        const {aggr_scores, colors} = await initialize()
+        aggr_scores["pval"] = {max: max_pval, min: min_pval}
         const query_list = []
         const vars = {}
         for (const [node, lib_terms] of Object.entries(library_terms)) {

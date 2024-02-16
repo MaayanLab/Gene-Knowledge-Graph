@@ -13,7 +13,8 @@ export interface UISchema {
             type: string
         }>,
         search?: Array<string>,
-        color?: string
+        color?: string,
+        order?: Array<string>
     }>,
     edges: Array<{
         match: Array<string>,
@@ -27,7 +28,9 @@ export interface UISchema {
             text: string,
             type: string
         }>,
-        gene_link: Boolean
+        gene_link: Boolean,
+        color?: string,
+        order?: Array<string>
     }>,
     header: {
         title: string,

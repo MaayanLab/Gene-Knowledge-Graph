@@ -1,8 +1,7 @@
 import Link from "next/link"
 import { Grid } from '@mui/material'
-import { typed_fetch } from "@/utils/helper"
-import { UISchema } from "./api/schema/route"
 import { Component } from "./component_selector"
+import { fetch_kg_schema } from "@/utils/initialize"
 export default async function Home({searchParams}: {
     searchParams: {
       filter?: string,
@@ -16,7 +15,7 @@ export default async function Home({searchParams}: {
       view?:string
   }
 }) {
-  const schema = await typed_fetch<UISchema>(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/schema`)
+  const schema = await fetch_kg_schema()
   const root_tab = {component: '', props: {}, endpoint: ""}
   for (const tab of schema.header.tabs) {
     if (tab.endpoint === "/") {

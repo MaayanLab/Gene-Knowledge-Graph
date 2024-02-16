@@ -4,6 +4,7 @@ import fetch from 'isomorphic-unfetch'
 import * as default_schema from '../public/schema.json'
 import { toNumber } from "./math"
 import Color from 'color'
+import { UISchema } from "@/app/api/schema/route"
 
 export async function get_terms(node, search) {
   try {
@@ -69,7 +70,7 @@ export async function get_terms(node, search) {
 }
 
 export const fetch_kg_schema = async () => {
-	let schema = default_schema
+	let schema:UISchema 
 	if (process.env.NEXT_PUBLIC_SCHEMA) {
 		const r = await fetch(`${process.env.NEXT_PUBLIC_SCHEMA}`)
 		if (!r.ok) {
