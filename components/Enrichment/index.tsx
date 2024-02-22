@@ -124,7 +124,22 @@ const Enrichment = async ({
                         gene_links
                     }),
                 })
-            if (!res.ok) console.log(await res.text())
+            if (!res.ok) {
+                console.log(`failed connecting to ${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`)
+                console.log(`with the following params: ${JSON.stringify({
+                    userListId,
+                    libraries,
+                    min_lib,
+                    gene_limit,
+                    gene_degree,
+                    term_degree,
+                    expand,
+                    remove,
+                    augment_limit,
+                    gene_links
+                })}`)
+                console.log(await res.text())
+            }
             else{
                 elements = await res.json()
                 genes = ((elements || {}).nodes || []).reduce((acc, i)=>{
@@ -146,6 +161,7 @@ const Enrichment = async ({
         })
         let short_url=null
         if (request.ok) short_url = (await request.json())['shorturl']
+        else console.log("failed turl")
         return (
             <Grid container spacing={1}>
                 <Grid item xs={12}>
