@@ -67,7 +67,9 @@ const Enrichment = async ({
 
 }) => {
     const query_parser = parseAsJson<EnrichmentParams>().withDefault(props.default_options)
+    console.log("Getting schema...")
     const schema = await fetch_kg_schema()
+    console.log("Schema fetched")
     const libraries_list = sortLibraries ? l.sort(function(a, b) {
         return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
      }): l
@@ -106,9 +108,12 @@ const Enrichment = async ({
         let shortId = ''
         let genes = []
         if (userListId !==undefined && libraries.length > 0) {
+            console.log("Getting shortID...")
             const request = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
             if (request.ok) shortId = (await (request.json())).link_id
             else console.log(`failed ${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
+            console.log(`ShortID: ${shortId}`)
+            console.log(`Enrichment`)
             const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`,
                 {
                     method: "POST",
@@ -142,6 +147,7 @@ const Enrichment = async ({
                 console.log(await res.text())
             }
             else{
+                console.log(`fetched`)
                 elements = await res.json()
                 genes = ((elements || {}).nodes || []).reduce((acc, i)=>{
                     if (i.data.kind === "Gene" && acc.indexOf(i.data.label) === -1) return [...acc, i.data.label]
@@ -153,6 +159,7 @@ const Enrichment = async ({
             'url': `${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}${endpoint}?q=${searchParams.q}`,
             'apikey': process.env.NEXT_PUBLIC_TURL  
         }
+        console.log("Getting short url")
         const request = await fetch(process.env.NEXT_PUBLIC_TURL_URL, {
             method: 'POST',
             headers: {
@@ -163,6 +170,7 @@ const Enrichment = async ({
         let short_url=null
         if (request.ok) short_url = (await request.json())['shorturl']
         else console.log("failed turl")
+        console.log("Got url")
         return (
             <Grid container spacing={1}>
                 <Grid item xs={12}>
