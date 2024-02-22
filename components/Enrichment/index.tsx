@@ -109,11 +109,12 @@ const Enrichment = async ({
         let genes = []
         if (userListId !==undefined && libraries.length > 0) {
             console.log("Getting shortID...")
+            console.log(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
             const request = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
             if (request.ok) shortId = (await (request.json())).link_id
             else console.log(`failed ${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
             console.log(`ShortID: ${shortId}`)
-            console.log(`Enrichment`)
+            console.log(`Enrichment ${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`)
             const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`,
                 {
                     method: "POST",
