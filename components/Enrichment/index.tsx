@@ -108,6 +108,7 @@ const Enrichment = async ({
         if (userListId !==undefined && libraries.length > 0) {
             const request = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
             if (request.ok) shortId = (await (request.json())).link_id
+            else console.log(`failed ${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
             const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`,
                 {
                     method: "POST",
