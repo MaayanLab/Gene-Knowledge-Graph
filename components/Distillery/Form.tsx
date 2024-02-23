@@ -32,8 +32,6 @@ import SaveIcon from '@mui/icons-material/Save';
 import HubIcon from '@mui/icons-material/Hub';
 
 import {
-    mdiFamilyTree,
-    mdiDotsCircle,
     mdiGraph,
     mdiTable,
     mdiTooltip,
