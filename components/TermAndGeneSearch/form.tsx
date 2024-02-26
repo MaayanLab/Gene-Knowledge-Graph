@@ -98,7 +98,7 @@ import { layouts } from '../misc/Cytoscape';
         start,
         end,
         relation:r,
-        limit,
+        limit=5,
         gene_links,
         augment,
     } = filter
@@ -127,24 +127,25 @@ import { layouts } from '../misc/Cytoscape';
     return(
         <Grid container justifyContent="space-around" spacing={1}>
             <Grid item xs={12}>
-                <Grid container spacing={1} alignItems="center" justifyContent="flex-start">
+                <Grid container spacing={1} alignItems="flex-start" justifyContent="flex-start">
                     {edges.length && 
-                        <Grid item xs={12} md={5}>
+                        <Grid item xs={12} md={4} lg={5}>
                             <Autocomplete
                                 multiple
                                 limitTags={2}
                                 id="multiple-limit-tags"
                                 options={edges}
-                                value={relation}
+                                // getOptionLabel={(option)=>option.name}
+                                value={relation.map(({name}:{name:string})=>name)}
                                 renderInput={(params) => (
                                     <TextField {...params} label="Select Relation" placeholder="Select Relation" />
                                 )}
-                                sx={{ width: '350px' }}
-                                onChange={(e, relation)=>{
-                                    if (end || (!end && relation.length <= 5)) {
+                                sx={{ width: '100%' }}
+                                onChange={(e, r)=>{
+                                    if (end || (!end && r.length <= 5)) {
                                         const {filter: f, ...rest} = searchParams
                                         const filter = JSON.parse(f || '{}')
-                                        filter.relation = relation
+                                        filter.relation = r.map((name:string)=>({name, limit: limit || 5}))
                                         const query = {
                                             ...rest,
                                             filter: JSON.stringify(filter)
@@ -158,20 +159,20 @@ import { layouts } from '../misc/Cytoscape';
                             />
                         </Grid>
                         }
-                    <Grid item xs={12} md={7}>
+                    <Grid item xs={12} md={8} lg={7}>
                         <Grid container spacing={1} alignItems="center">
                             {relation.map((value) => (
-                                <Grid item key={value}>
-                                    <Tooltip title={`${value}`} key={value} placement="top">
-                                        <Chip label={value}
+                                <Grid item key={value.name}>
+                                    <Tooltip title={`${value.name}`} key={value.name} placement="top">
+                                        <Chip label={value.name}
                                             color="primary"
                                             style={{padding: 0, borderRadius: "8px"}}
                                             onDelete={()=>{
                                                 const {filter: f, ...rest} = searchParams
                                                 const filter = JSON.parse(f || '{}')
                                                 const rels = []
-                                                for (const i of filter.relation) {
-                                                    if (i !== value) {
+                                                for (const i of filter.relation || []) {
+                                                    if (i.name !== value.name) {
                                                         rels.push(i)
                                                     }
                                                 }
@@ -200,6 +201,7 @@ import { layouts } from '../misc/Cytoscape';
                                         const {filter: f, ...rest} = searchParams
                                         const filter = JSON.parse(f || '{}')
                                         filter.limit = nv
+                                        if (filter.relation) filter.relation = relation.map(({name, limit})=>({name, limit: nv}))
                                         const query = {
                                             ...rest,
                                             filter: JSON.stringify(filter)

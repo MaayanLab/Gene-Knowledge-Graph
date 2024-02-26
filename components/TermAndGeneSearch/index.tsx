@@ -84,28 +84,30 @@ const TermAndGeneSearch = async ({searchParams, props}: {
     const controller = new AbortController()
     try {
         if (filter.relation) {
-            if (!filter.end) {
-                if (typeof filter.relation[0] === 'string') {
-                    filter.relation = process_relation(filter.relation).map((name)=>({name, limit: filter.limit || 5}))
-                } else {
-                    filter.relation = process_relation(filter.relation).map(({name, limit})=>({name, limit: limit || filter.limit || 5}))
-                }
-                delete filter.limit
-            } else {
-                if (typeof filter.relation[0] === 'string') {
-                    filter.relation = process_relation(filter.relation).map((name)=>({name}))
-                } else {
-                    filter.relation = process_relation(filter.relation).map(({name})=>({name}))
-                }
-                filter.relation = process_relation(filter.relation).map(({name})=>({name}))
-                delete filter.augment
-                delete filter.augment_limit
-            }
+            filter.relation = process_relation(filter.relation)
+            // if (!filter.end) {
+            //     if (typeof filter.relation[0] === 'string') {
+            //         filter.relation = process_relation(filter.relation).map((name)=>({name, limit: filter.limit || 5}))
+            //     } else {
+            //         filter.relation = process_relation(filter.relation).map(({name, limit})=>({name, limit: limit || filter.limit || 5}))
+            //     }
+            //     delete filter.limit
+            // } else {
+            //     if (typeof filter.relation[0] === 'string') {
+            //         filter.relation = process_relation(filter.relation).map((name)=>({name}))
+            //     } else {
+            //         filter.relation = process_relation(filter.relation).map(({name, limit})=>({name, limit}))
+            //     }
+            //     // filter.relation = process_relation(filter.relation).map(({name})=>({name}))
+            //     delete filter.augment
+            //     delete filter.augment_limit
+            // }
         }
         let elements = null
         const selected_edges = []
         const genes = []
         if (Object.keys(filter).length > 0) {
+            console.log(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph?filter=${JSON.stringify(filter)}`)
             const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph?filter=${JSON.stringify(filter)}`,
             {
                 method: 'GET',
@@ -152,7 +154,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                 {props.description && <Grid item xs={12}>
                     <Typography variant={"subtitle1"}>{props.description}</Typography>
                 </Grid>}
-                <Grid item xs={12} md={3}>
+                <Grid item xs={12} md={4} lg={3}>
                     <Card elevation={0} sx={{borderRadius: "8px", backgroundColor: "tertiary.light"}}>
                         <CardContent>
                             <Stack>
@@ -173,7 +175,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item xs={12} md={9}>
+                <Grid item xs={12} md={8} lg={9}>
                     <Stack>
                         <Form searchParams={searchParams}
                             edges={edges}

@@ -144,34 +144,37 @@ const AsyncFormComponent = ({direction,
                 <Typography variant="body1" color="secondary"><b>{direction} with</b></Typography>
             </Grid>
             <Grid item xs={12}>
-                <Selector entries={Object.keys(nodes).sort()} value={type} prefix={direction} onChange={(type:string)=>{
-                    if (direction === 'Start') {
-                        setInputTerm('')
-						router_push(router, pathname,
-							{
-								// ...rest,
-								filter: JSON.stringify({
-									start: type,
-									start_field: field,
-                                    start_term: nodes[type].example[0]
-								})
-							}
-						)
-                    } else {
-                        setInputTerm('')
-						router_push(router, pathname,
-							{
-                                // ...rest,
-                                filter: JSON.stringify({
-                                    ...start_filter,
-                                    end: type,
-                                    end_field: field,
-                                    end_term: nodes[type].example[0]
-                                })
-                            }
-						)
-                    }
-                    
+                <Selector 
+                    entries={Object.keys(nodes).sort()} 
+                    value={type} 
+                    prefix={direction} 
+                    onChange={(type:string)=>{
+                        if (direction === 'Start') {
+                            setInputTerm('')
+                            router_push(router, pathname,
+                                {
+                                    // ...rest,
+                                    filter: JSON.stringify({
+                                        start: type,
+                                        start_field: field,
+                                        start_term: nodes[type].example[0]
+                                    })
+                                }
+                            )
+                        } else {
+                            setInputTerm('')
+                            router_push(router, pathname,
+                                {
+                                    // ...rest,
+                                    filter: JSON.stringify({
+                                        ...start_filter,
+                                        end: type,
+                                        end_field: field,
+                                        end_term: nodes[type].example[0]
+                                    })
+                                }
+                            )
+                        }
                 }}/>
             </Grid>
             <Grid item xs={12}>
@@ -244,15 +247,15 @@ const AsyncFormComponent = ({direction,
 							)
                         }
                     }}
-                    style={{ width: 220}}
+                    style={{ width: '100%'}}
                     renderInput={(params) => (
                     <TextField {...params} 
                         value={inputTerm}
                         style={{
-                            width: 220,
+                            width: '100%',
                             height: 50,
                             borderRadius: 5,
-                            padding: 3
+                            padding: 0
                         }}
                         onChange={(e)=> setInputTerm(e.target.value)}
                         InputProps={{

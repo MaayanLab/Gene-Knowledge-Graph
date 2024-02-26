@@ -257,14 +257,20 @@ export interface FilterSchema {
     augment_limit?: number,
 }
 
-export const process_relation = (r:Array<string | {name?: string, limit?: string}>|string) => {
-    if (Array.isArray(r)) return r
-    try {
-		const relations  = JSON.parse(r || '[]')
-		return relations
-	} catch (error) {
-		return r.split(",")
-	}
+export const process_relation = (r:Array<string | {name?: string, limit?: string}>|string, limit?:number) => {
+    if (Array.isArray(r)) {
+        if (r.length === 0) return r
+        else if (typeof r[0] === 'string') return r.map(name=>({name, limit: limit || 5}))
+        else if (r[0]["name"]!==undefined) return r
+    } else if (typeof r === 'string') {
+        try {
+            const relations  = JSON.parse(r || '[]')
+            if (typeof relations[0] === 'string') return relations.map(name=>({name, limit: limit || 5}))
+            else if (r["name"]!==undefined) return relations
+        } catch (error) {
+            return r.split(",").map(name=>({name, limit: limit || 5}))
+        }
+    }
 }
 
 export const process_filter = (query: {

@@ -29,14 +29,15 @@ export const Selector = ({entries,
 }) => {
     if (entries.length < 2) return null
     else return (
-      <FormControl>
+      <FormControl sx={{width: '100%'}}>
         <Select
           labelId={`${prefix}layouts-select`}
           id={`${prefix}-label`}
           value={value}
           onChange={(e,v)=>onChange(e.target.value)}
           variant="outlined"
-          sx={{width: 215, padding: 0, height: 45, ...sx}}
+          fullWidth={true}
+          sx={{padding: 0, height: 45, ...sx}}
           {...props}
           >
           {entries.map(val=>(

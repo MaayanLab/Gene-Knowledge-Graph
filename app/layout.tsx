@@ -39,6 +39,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const schema = await fetch_kg_schema()
+  console.log(schema.footer)
   return (
     <html lang="en">
       <body>
