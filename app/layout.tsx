@@ -6,7 +6,7 @@ import Footer from '@/components/Footer'
 import { Container, Grid } from '@mui/material'
 import './global.css'
 import { fetch_kg_schema } from '@/utils/initialize'
-
+import { Suspense } from 'react'
 
  
 export async function generateMetadata(
@@ -46,7 +46,7 @@ export default async function RootLayout({
             <Grid item>
               <Container maxWidth="lg" sx={{marginTop: 1}}>
                 <Header schema={schema}/>
-                <Subheader schema={schema}/>  
+                <Suspense><Subheader schema={schema}/></Suspense>
                 {children}
               </Container>
             </Grid>

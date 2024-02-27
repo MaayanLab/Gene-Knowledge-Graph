@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material'
 import { Component } from "../component_selector"
 import { fetch_kg_schema } from "@/utils/initialize"
+import { Suspense } from 'react'
 export default async function Page({params, searchParams}: {
     searchParams: {
       filter?: string,
@@ -30,7 +31,9 @@ export default async function Page({params, searchParams}: {
     <main className="mt-8 mb-8">
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Component searchParams={searchParams} {...root_tab}/>
+          <Suspense>
+            <Component searchParams={searchParams} {...root_tab}/>
+          </Suspense>
         </Grid>
       </Grid>
     </main>
