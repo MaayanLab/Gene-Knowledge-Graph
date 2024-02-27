@@ -25,15 +25,9 @@ import { useQueryState, parseAsJson } from "next-usequerystate"
 const LibraryPicker = ({
 	parsedParams,
 	libraries_list,
-	default_libraries,
-	disableLibraryLimit,
 	fullWidth
 }: {
 	fullWidth: boolean,
-    default_libraries: Array<{
-		library: string,
-		term_limit: number
-	}>,
     disableLibraryLimit?: boolean,
     libraries_list: Array<string>,
     parsedParams: EnrichmentParams
@@ -78,7 +72,7 @@ const LibraryPicker = ({
 					id="multiple-limit-tags"
 					options={libraries_list}
 					title="Select libraries to include"
-					value={libraries.map(i=>i.library)}
+					value={libraries.map(i=>i.name)}
 					renderInput={(params) => (
 						<TextField 
 							{...params} 
@@ -87,10 +81,10 @@ const LibraryPicker = ({
 							placeholder="Select libraries" 
 						/>
 					)}
-					sx={{ width: '350px' }}
+					sx={{ width: '100%' }}
 					onChange={(e, libs)=>{
 						if (libs.length <= 5) {
-							const new_libraries = libs.map(library=>({library, term_limit: 5}))
+							const new_libraries = libs.map(name=>({name, limit: 5}))
 							if (fullWidth) {
 								setQuery({
 									...query,
@@ -115,15 +109,15 @@ const LibraryPicker = ({
 			</Grid>
 			<Grid item xs={12} md={fullWidth ? 12: 7}>
                 <Grid container spacing={1} alignItems="center">
-					{libraries.map(({library, term_limit}) => (
-                                <Grid item key={library} xs={fullWidth ? 12: undefined}>
-                                    <Tooltip title={`Click chip to adjust limits`} key={library} placement="top">
-                                        <Chip label={`${library}: ${term_limit}`}
+					{libraries.map(({name, limit}) => (
+                                <Grid item key={name} xs={fullWidth ? 12: undefined}>
+                                    <Tooltip title={`Click chip to adjust limits`} key={name} placement="top">
+                                        <Chip label={`${name}: ${limit}`}
 											onClick={handleClick}
                                             color="primary"
                                             style={{padding: 0, borderRadius: "8px"}}
                                             onDelete={()=>{
-												const new_libraries = libraries.filter(l=>l.library !== library)
+												const new_libraries = libraries.filter(l=>l.name !== name)
 												if (new_libraries.length === 0) setError({message: "Please select at least one library", type: "fail"})
 												else {
 													if (fullWidth) {
@@ -150,13 +144,13 @@ const LibraryPicker = ({
 											<Stack direction={"row"} spacing={1} alignItems={"center"}>
 												<Icon path={mdiMinusCircleOutline} size={0.8} />
 												<Slider 
-													value={term_limit}
+													value={limit}
 													onChange={(e, nv)=>{
 														const new_libraries = []
 														for (const i of libraries) {
-															if (i.library === library) new_libraries.push({
-																library,
-																term_limit: nv
+															if (i.name === name) new_libraries.push({
+																name,
+																limit: nv
 															})
 															else new_libraries.push(i)
 														}

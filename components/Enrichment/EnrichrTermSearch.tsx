@@ -78,7 +78,7 @@ export const EnrichrTermSearch = ({setInput}: {setInput: Function}) => {
                 options={options.sort((a, b) => -b.library.localeCompare(a.library))}
                 groupBy={(option) => option.library}
                 getOptionLabel={(option) => option.term}
-                sx={{ width: "90%" }}
+                sx={{ width: "100%" }}
                 loading={loading}
                 renderInput={(params) => <TextField 
                     {...params} 

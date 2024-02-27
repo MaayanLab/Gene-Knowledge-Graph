@@ -17,7 +17,12 @@ import InteractiveButtons from './InteractiveButtons';
 import { fetch_kg_schema } from '@/utils/initialize';
 
 export interface EnrichmentParams {
-    libraries?: Array<{library: string, term_limit: number}>,
+    libraries?: Array<{
+        name?: string,
+        limit?: number,
+        library?: string,
+        term_limit?: number, 
+    }>,
     userListId?: string,
     term_limit?: number,
     gene_limit?: number,
@@ -48,8 +53,10 @@ const Enrichment = async ({
         gene_degree?: number,
         term_degree?: number,
         libraries: Array<{
-            library: string,
-            term_limit: number
+            name?: string,
+            limit?: number,
+            library?: string,
+            term_limit?: number
         }>,
     },
     example?: {
@@ -92,6 +99,10 @@ const Enrichment = async ({
     }, [])    
     try {
         const parsedParams: EnrichmentParams = query_parser.parseServerSide(searchParams.q)
+        parsedParams.libraries = parsedParams.libraries.map(({name, library, limit, term_limit})=>({
+            name: name || library,
+            limit: limit || term_limit,
+        }))
         const {
             userListId,
             gene_limit=props.default_options.gene_limit,
@@ -115,12 +126,30 @@ const Enrichment = async ({
             else console.log(`failed ${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
             console.log(`ShortID: ${shortId}`)
             console.log(`Enrichment ${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`)
+            console.log(JSON.stringify({
+                userListId,
+                libraries: libraries.map(({name, limit, library, term_limit})=>({
+                    library: library || name,
+                    term_limit: limit || term_limit
+                })),
+                min_lib,
+                gene_limit,
+                gene_degree,
+                term_degree,
+                expand,
+                remove,
+                augment_limit,
+                gene_links
+            }))
             const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`,
                 {
                     method: "POST",
                     body: JSON.stringify({
                         userListId,
-                        libraries,
+                        libraries: libraries.map(({name, limit, library, term_limit})=>({
+                            library: library || name,
+                            term_limit: limit || term_limit
+                        })),
                         min_lib,
                         gene_limit,
                         gene_degree,
@@ -133,18 +162,6 @@ const Enrichment = async ({
                 })
             if (!res.ok) {
                 console.log(`failed connecting to ${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`)
-                console.log(`with the following params: ${JSON.stringify({
-                    userListId,
-                    libraries,
-                    min_lib,
-                    gene_limit,
-                    gene_degree,
-                    term_degree,
-                    expand,
-                    remove,
-                    augment_limit,
-                    gene_links
-                })}`)
                 console.log(await res.text())
             }
             else{
@@ -195,7 +212,6 @@ const Enrichment = async ({
                     <Grid item xs={12} md={9}>
                         <Stack direction={"column"} spacing={1}>
                             <InteractiveButtons 
-                                default_libraries={props.default_options.libraries}
                                 libraries_list={libraries_list.map(l=>l.name)}
                                 disableLibraryLimit={props.disableLibraryLimit}
                                 geneLinksRelations={geneLinksRelations}

@@ -46,8 +46,10 @@ const GeneSetForm = ({
         gene_degree?: number,
         term_degree?: number,
         libraries: Array<{
-            library: string,
-            term_limit: number
+            name?: string,
+            limit?: number,
+            library?: string,
+            term_limit?: number
         }>
     },
     disableLibraryLimit?: boolean,
@@ -437,7 +439,7 @@ const GeneSetForm = ({
                                             }}
                                             style={{width: "100%"}}
                                             min={1}
-                                            max={libraries.reduce((acc, i)=>(acc+i.term_limit), 0) || 5}
+                                            max={libraries.reduce((acc, i)=>(acc+i.limit), 0) || 5}
                                             marks
                                             valueLabelDisplay='auto'
                                             aria-labelledby="degree-slider" />
@@ -532,7 +534,6 @@ const GeneSetForm = ({
                                     libraries_list={libraries_list}
                                     fullWidth={fullWidth}
                                     disableLibraryLimit={disableLibraryLimit || true}
-                                    default_libraries={default_options.libraries || []}
                                 />
                             </Grid>
                         </Grid>    

@@ -59,7 +59,6 @@ const InteractiveButtons = ({
         gene_count=0,
         elements,
         children,
-        default_libraries,
         disableLibraryLimit,
         libraries_list,
         parsedParams,
@@ -68,10 +67,6 @@ const InteractiveButtons = ({
         short_url?: string,
         libraries_list?:Array<string>,
         disableLibraryLimit?:boolean,
-        default_libraries:Array<{
-            library: string,
-            term_limit: number
-        }>,
         geneLinksRelations?:Array<string>,
         shortId?: string,
         gene_count?: number,
@@ -81,7 +76,6 @@ const InteractiveButtons = ({
     }) => {
     const router = useRouter()
     const pathname = usePathname()
-    const searchParams = useSearchParams()
     const [edge_labels, setEdgeLabels] = useQueryState('edge_labels')
     const [view, setView] = useQueryState('view')
 	const [layout, setLayout] = useQueryState('layout')
@@ -117,7 +111,6 @@ const InteractiveButtons = ({
                     libraries_list={libraries_list}
                     fullWidth={false}
                     disableLibraryLimit={disableLibraryLimit || true}
-                    default_libraries={default_libraries || []}
                 />
             </Grid>
             <Grid item xs={12}>
