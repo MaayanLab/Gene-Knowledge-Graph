@@ -1,8 +1,7 @@
 import { Metadata, ResolvingMetadata } from 'next'
-import Script from 'next/script'
-import Head from 'next/head'
 import ThemeRegistry from './ThemeRegistry'
 import Header from '@/components/Header'
+import Subheader from '@/components/Subheader'
 import Footer from '@/components/Footer'
 import { Container, Grid } from '@mui/material'
 import './global.css'
@@ -39,7 +38,6 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const schema = await fetch_kg_schema()
-  console.log(schema.footer)
   return (
     <html lang="en">
       <body>
@@ -47,7 +45,8 @@ export default async function RootLayout({
           <Grid container direction={"column"} justifyContent="space-between" sx={{minHeight: "100vh", marginTop: 2}}>
             <Grid item>
               <Container maxWidth="lg" sx={{marginTop: 1}}>
-                <Header schema={schema}/>    
+                <Header schema={schema}/>
+                <Subheader schema={schema}/>  
                 {children}
               </Container>
             </Grid>

@@ -49,6 +49,10 @@ export interface UISchema {
             component: string,
             position?: 'top' | 'bottom',
             props?: {
+                subheader?: {
+                    url_field: string,
+                    query_field: string,
+                },
                 [key: string]: any
             }
         }>,
