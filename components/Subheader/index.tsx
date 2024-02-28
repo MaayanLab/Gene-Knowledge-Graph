@@ -86,7 +86,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
                     </Alert>
                 </Snackbar>
 				{subheader.map(i=>{
-					const {url_field, query_field} = subheader_props
+					const {url_field, query_field} = subheader_props || {}
 					const query_parser = parseAsJson<EnrichmentParams | FilterSchema>()
 					const query = query_parser.parse(searchParams.get(url_field)) || {}	
 					const selected = query[query_field] || default_options[query_field] || []
@@ -100,6 +100,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 						<Grid item key={i.label}>
 							<Tooltip title={i.label} placement="top">
 								<Button
+									disabled={!subheader_props}
 									className="flex items-center justify-center relative" 
 									sx={{padding: 5, margin: 1, ...style}}
 									onClick={()=>{
