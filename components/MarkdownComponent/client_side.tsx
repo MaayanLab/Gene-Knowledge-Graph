@@ -1,7 +1,7 @@
 'use client'
 import { Typography } from '@mui/material';
 import { MuiMarkdown, getOverrides } from 'mui-markdown';
-const ClientSide = async ({md}: {md?:string,}) => {
+const ClientSide = ({md}: {md?:string,}) => {
     return <MuiMarkdown
 		overrides={{
 			...getOverrides({}), // This will keep the other default overrides.
