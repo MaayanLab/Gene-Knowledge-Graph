@@ -6,7 +6,7 @@ const options = {
   
 const SanitizedHTML = async ({src}: {src?: string}) => {
 	const fetch_html = async (src:string) => {
-		const html = await (await fetch(src)).text()
+		const html = await (await fetch(src, { next: { revalidate: 3600 } })).text()
 		if (html) return(html)
 		else return('<div></div>')
 	}

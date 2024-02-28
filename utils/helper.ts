@@ -157,7 +157,7 @@ export const augment_gene_set = async ({gene_list, augment_limit}) => {
 export function typed_fetch<T>(url: string, controller?:AbortController): Promise<T> {
     const params = {}
     if (controller) params["signal"] = controller.signal
-    params["revalidate"] = 10
+    params["revalidate"] = 3600
     return fetch(url, params)
       .then(response => {
         if (!response.ok) {

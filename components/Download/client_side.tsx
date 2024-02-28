@@ -14,7 +14,7 @@ const header: GridColDef[] = [
     {
         field: 'source',
         headerName: "Source",
-        flex: 1,
+        // flex: 1,
         // style: {flexDirection: "row"},
         align: "left"
     },
@@ -39,6 +39,12 @@ const header: GridColDef[] = [
         field: 'edges',
         headerName: "Edges",
         align: "left"
+    },
+    {
+        field: 'updated',
+        headerName: "Last Updated",
+        align: "left",
+		minWidth: 120
     },
     {
         field: 'url',
