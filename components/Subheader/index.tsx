@@ -114,7 +114,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 												[url_field]: JSON.stringify(query)
 											})
 										} else { // add
-											if (selected.length >= 5) setError({message: `Too many ${query_field} selected`, type: "fail"})
+											if (selected.length >= 5) setError({message: `A maximum of only five ${query_field} can selected`, type: "fail"})
 											else {
 												query[query_field] = [...selected, ...i.props[query_field].map((name:string)=>({name, limit: 5}))]
 												router_push(router, pathname, {
