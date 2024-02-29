@@ -3,6 +3,6 @@ docker-compose build kg
 docker-compose push kg
 
 
-docker tag maayanlab/knowledge_graph:2.0.10 maayanlab/knowledge_graph:latest
+docker tag maayanlab/knowledge_graph:2.0.11 maayanlab/knowledge_graph:latest
 docker push maayanlab/knowledge_graph:latest
-dokku git:from-image distillery maayanlab/knowledge_graph:2.0.10
+dokku git:from-image distillery maayanlab/knowledge_graph:2.0.11
