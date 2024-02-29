@@ -1,7 +1,6 @@
 import { typed_fetch } from "@/utils/helper"
-import { Grid, Typography, } from "@mui/material"
-
-import ClientSide from "./client_side";
+import EdgeOnly from "./edge_only"
+import NodesAndEdges from "./node_and_edges"
 
 const Download = async ({src}: {src?: string}) => {
 	const download = await typed_fetch<Array<{
@@ -11,24 +10,29 @@ const Download = async ({src}: {src?: string}) => {
 		edges: number,
 		url: string,
 		size: string
-	}>>(src)
-	return (
-		<Grid container spacing={2}>
-			<Grid item xs={12}>
-				<Typography variant={"h2"}>Download Page</Typography>
-			</Grid>
-			<Grid item xs={12}>
-				<Typography variant={"body1"}>
-					Each entry below contains a link to `[source].edges.csv` file. 
-					These files contains the triple source, relation, and target signigfying an edge in the network. 
-					Additionally these files may also include associated metadata for the source and target nodes as well as the edges.
-				</Typography>
-			</Grid>
-			<Grid item xs={12}>
-				<ClientSide download={download.map(i=>({id: i.source, ...i}))}/>
-			</Grid>
-		</Grid>
-	)
+	}>| {
+		nodes: Array<{
+			node_type: string,
+			resource: string,
+			description?: string,
+			terms: number,
+			url: string,
+			size: string
+		}>,
+		edges: Array<{
+			resource: string,
+			source: string,
+			relation: string,
+			target: string,
+			description?: string,
+			edges: number,
+			gene_coverage?: number,
+			url: string,
+			size: string
+		}>
+	}>(src)
+	if (Array.isArray(download))  return <EdgeOnly download={download}/>
+	else return <NodesAndEdges download={download}/>
 }
 
 export default Download
