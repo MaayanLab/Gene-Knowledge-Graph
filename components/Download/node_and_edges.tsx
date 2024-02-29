@@ -2,7 +2,7 @@ import { Grid, Typography, } from "@mui/material"
 
 import ClientSide from "./client_side";
 
-const NodesAndEdges = async ({download}: {download: {
+const NodesAndEdges = ({download}: {download: {
 	nodes: Array<{
 		node_type: string,
 		resource: string,
