@@ -32,12 +32,14 @@ export default function DistilleryLanding({
                 <Typography variant={"h2"}>{title}</Typography>
                 <Typography variant={"subtitle1"}>{description}</Typography>
             </Grid>
-            {pages.map(page=>(
+            {pages.map((page)=>(
                  <Grid item key={page.props.title}>
                     <Card sx={{ maxWidth: 345, height: 300 }}>
                         <CardHeader
                             avatar={
-                            <Avatar aria-label="recipe">
+                            page.props.icon ?
+                            <Avatar src={page.props.icon} alt={page.props.title}/>:
+                            <Avatar>
                                 {page.props.title[0]}
                             </Avatar>
                             }
