@@ -20,8 +20,8 @@ export default function DistilleryLanding({
 	title?: string,
 	description?: string,
 	pages?: Array<{
-		endpoint,
-		label,
+		endpoint: string,
+		label: string,
 		props: {
 			[key: string]: any
 		}
@@ -35,7 +35,7 @@ export default function DistilleryLanding({
             </Grid>
             {pages.map((page)=>(
                  <Grid item key={page.props.title}>
-                    <Card sx={{ maxWidth: 345, minHeight: 300 }}>
+                    <Card sx={{ maxWidth: 345, minHeight: 320 }}>
                         <CardHeader
                             avatar={<Avatar>
                                 {page.props.title[0]}
@@ -51,7 +51,7 @@ export default function DistilleryLanding({
                         />
                         {page.props.icon &&
                                 <div className="flex flex-row justify-center">
-                                    <Image src={page.props.icon} alt={page.props.title} height={100} width={100}/>
+                                    <Image src={page.props.icon} alt={page.props.title} height={page.props.height || 100} width={page.props.width || 100}/>
                                 </div>
                                 // <div className="flex flex-row justify-center"
                                 //     style={{
