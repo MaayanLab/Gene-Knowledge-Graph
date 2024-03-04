@@ -72,7 +72,7 @@ export async function get_terms(node, search) {
 export const fetch_kg_schema = async () => {
 	let schema:UISchema 
 	if (process.env.NEXT_PUBLIC_SCHEMA) {
-		const r = await fetch(`${process.env.NEXT_PUBLIC_SCHEMA}`, { next: { revalidate: 3600 } })
+		const r = await fetch(`${process.env.NEXT_PUBLIC_SCHEMA}`, { next: { revalidate: process.env.NODE_ENV === 'development'? 0: 3600 } })
 		if (!r.ok) {
 			throw new Error(`Error communicating with ${process.env.NEXT_PUBLIC_SCHEMA}`)
 		}
