@@ -1,6 +1,6 @@
 {
   "name": "cfde-knowledge-exchange",
-  "version": "2.0.14",
+  "version": "2.0.15",
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development next dev",
