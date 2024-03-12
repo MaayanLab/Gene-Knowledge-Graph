@@ -12,7 +12,7 @@ import { Suspense } from 'react'
 export async function generateMetadata(
   { params, searchParams }: {
     params: { id: string }
-    searchParams: { [key: string]: string | string[] | undefined }
+    searchParams: { [key: string]: any }
   },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
