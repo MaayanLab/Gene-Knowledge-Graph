@@ -1,0 +1,50 @@
+version: '3.9'
+services:
+  kg:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.next
+    platform: linux/amd64
+    image: maayanlab/${APP_NAME}:${VERSION}
+    x-kubernetes:
+      imagePullPolicy: IfNotPresent
+    ports:
+      - 3000:3000
+    environment:
+      - NEXT_PUBLIC_NEO4J_URL=bolt://neo4j:7687
+      - NEXT_PUBLIC_ENRICHR_URL=https://maayanlab.cloud/Enrichr
+      - NEXT_PUBLIC_GENESHOT_URL=https://maayanlab.cloud/geneshot
+      - NEXT_PUBLIC_NEO4J_USER
+      - NEXT_PUBLIC_NEO4J_NAME
+      - NEXT_PUBLIC_NEO4J_PASSWORD
+      - NEXT_PUBLIC_PREFIX
+      - NEXT_PUBLIC_GA_MEASUREMENT_ID
+      - NEXT_PUBLIC_HOST
+      - NEXT_PUBLIC_SCHEMA
+      - NEXT_PUBLIC_TURL
+      - NEXT_PUBLIC_TURL_URL
+
+  neo4j:
+    image: neo4j:5.17
+    x-kubernetes:
+      imagePullPolicy: IfNotPresent
+    environment:
+      - NEO4JLABS_PLUGINS='["apoc", "n10s"]'
+      - NEO4J_AUTH=${NEO4J_USER}/${NEO4J_PASSWORD}
+      - NEO4J_dbms_memory_heap_max__size=8G
+      - NEO4J_dbms_memory_heap_initial__size=2G
+    ports:
+      - 7687:7687
+      - 7474:7474
+    volumes:
+      - neo4j:/data
+
+volumes:
+  neo4j:
+    x-kubernetes:
+      size: 15Gi
+      class: gp2
+
+x-kubernetes:
+  name: ${APP_NAME}
+  namespace: ${APP_NAME}

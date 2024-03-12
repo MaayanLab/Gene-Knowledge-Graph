@@ -7,9 +7,7 @@
     "build": "NODE_ENV=production next build",
     "start": "next start",
     "lint": "next lint",
-    "version:major": "npm version --no-git-tag-version major",
-    "version:minor": "npm version --no-git-tag-version minor",
-    "version:patch": "npm version --no-git-tag-version patch"
+    "version": "npm run build && ts-node cli/version-compose.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
@@ -29,6 +27,7 @@
     "cytoscape-fcose": "^2.1.0",
     "cytoscape-svg": "^0.4.0",
     "downloadjs": "^1.4.7",
+    "fs": "^0.0.1-security",
     "html-to-image": "^1.11.11",
     "js-cookie": "^3.0.1",
     "js-file-download": "^0.4.12",
