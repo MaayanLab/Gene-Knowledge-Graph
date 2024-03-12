@@ -1,5 +1,4 @@
 import { resolve_results } from "../../knowledge_graph/helper";
-import fetch from "node-fetch";
 import { enrichr_query } from "../helper";
 import { kind_mapper, get_node_color_and_type_augmented as get_node_color_and_type } from "@/utils/helper";
 import { NextResponse } from "next/server";

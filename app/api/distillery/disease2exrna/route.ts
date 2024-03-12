@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 import { initialize } from "../../initialize/helper";
 import { resolve_results } from "../../knowledge_graph/helper";
 import { NextResponse } from "next/server";

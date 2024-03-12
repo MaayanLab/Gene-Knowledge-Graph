@@ -1,6 +1,5 @@
 import neo4j from "neo4j-driver"
 import { neo4jDriver } from "@/utils/neo4j"
-import fetch from "node-fetch"
 import { z } from "zod"
 import { NextResponse } from "next/server"
 import type { NextRequest } from 'next/server'

@@ -1,9 +1,6 @@
 import neo4j from "neo4j-driver"
 import { neo4jDriver } from "./neo4j"
-import fetch from 'isomorphic-unfetch'
-import * as default_schema from '../public/schema.json'
 import { toNumber } from "./math"
-import Color from 'color'
 import { UISchema } from "@/app/api/schema/route"
 
 export async function get_terms(node, search) {

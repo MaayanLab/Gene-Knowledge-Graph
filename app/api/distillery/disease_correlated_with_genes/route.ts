@@ -17,15 +17,7 @@ export async function GET(req: NextRequest) {
             defaultAccessMode: neo4j.session.READ
         })
         try {
-            // const node_properties:{[key:string]: Array<string>} = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/search_properties`)).json()
             const {term="", field="label", limit=100} = InputSchema.parse(convert_query(req))
-            // const type = "Disease"
-            // if (node_properties[type] === undefined) {
-            //     return NextResponse.json({error: `Invalid type: ${type}`}, {status: 400})
-            // }
-            // if (node_properties[type].indexOf(field) === -1) {
-            //     return NextResponse.json({error: `Invalid field: ${field}`}, {status: 400})
-            // }
             let query = `MATCH p=(a:Disease)-[r1:\`gene associated with disease or phenotype\`]-(b:Gene)`
             if (term) {
                 query = query + ` WHERE a.${field} =~ $term`

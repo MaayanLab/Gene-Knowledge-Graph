@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 import { resolve_results, default_get_node_color_and_type } from "../knowledge_graph/helper";
 import { compute_colors } from "@/utils/helper";
 import { NextResponse } from "next/server";

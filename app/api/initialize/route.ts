@@ -1,10 +1,5 @@
-import neo4j from "neo4j-driver"
-import { neo4jDriver } from "@/utils/neo4j"
 import cache from "memory-cache";
-import fetch from "node-fetch";
-import { default_color } from "@/utils/colors";
 import { NextResponse } from "next/server";
-import { fetch_kg_schema } from "@/utils/initialize";
 import {initialize} from './helper'
 
 export interface Initialize_Type {
