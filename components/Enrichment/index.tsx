@@ -97,8 +97,8 @@ const Enrichment = async ({
         if (i.gene_link) return [...acc, ...i.match]
         else return acc
     }, [])    
+    const parsedParams: EnrichmentParams = query_parser.parseServerSide(searchParams.q)
     try {
-        const parsedParams: EnrichmentParams = query_parser.parseServerSide(searchParams.q)
         parsedParams.libraries = parsedParams.libraries.map(({name, library, limit, term_limit})=>({
             name: name || library,
             limit: limit || term_limit,
