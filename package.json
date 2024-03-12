@@ -7,7 +7,7 @@
     "build": "NODE_ENV=production next build",
     "start": "next start",
     "lint": "next lint",
-    "version": "npm run build && ts-node cli/version-compose.ts"
+    "version": "npm run build && ts-node --env-file=.env cli/version-compose.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
