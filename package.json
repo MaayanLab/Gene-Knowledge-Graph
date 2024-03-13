@@ -7,7 +7,7 @@
     "build": "NODE_ENV=production next build",
     "start": "next start",
     "lint": "next lint",
-    "version": "npm run build && ts-node --env-file=.env cli/version-compose.ts"
+    "version": "npm run build && ts-node -r dotenv/config cli/version-compose.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
@@ -26,6 +26,7 @@
     "cytoscape-avsdf": "^1.0.0",
     "cytoscape-fcose": "^2.1.0",
     "cytoscape-svg": "^0.4.0",
+    "dotenv": "^16.4.5",
     "downloadjs": "^1.4.7",
     "fs": "^0.0.1-security",
     "html-to-image": "^1.11.11",
@@ -54,7 +55,7 @@
     "@types/node": "^17.0.31",
     "eslint": "8.14.0",
     "eslint-config-next": "^14.1.0",
-    "typescript": "^4.6.4",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "typescript": "^4.6.4"
   }
 }
