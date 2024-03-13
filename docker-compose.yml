@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/${APP_NAME}:${VERSION}
+    image: maayanlab/cfde-gse:2.1.0
     x-kubernetes:
       imagePullPolicy: IfNotPresent
     ports:
@@ -37,14 +37,14 @@ services:
       - 7687:7687
       - 7474:7474
     volumes:
-      - ${APP_NAME}-neo4j:/data
+      - cfde-gse-neo4j:/data
 
 volumes:
-  ${APP_NAME}-neo4j:
+  cfde-gse-neo4j:
     x-kubernetes:
       size: 15Gi
       class: gp2
 
 x-kubernetes:
-  name: ${APP_NAME}
-  namespace: ${APP_NAME}
+  name: cfde-gse
+  namespace: cfde-gse
