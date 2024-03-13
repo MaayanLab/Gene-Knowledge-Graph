@@ -35,4 +35,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 # CFDE-KX
 
 ## Install
-helm install <app-name> maayanlab/docker-compose -f <(docker-compose config) -n <app-name>
+helm install <app-name> maayanlab/docker-compose -f <(docker-compose config) -n <app-name> --create-namespace 
+
+## UPGRADE
+helm upgrade cfde-gse maayanlab/docker-compose -f <(docker-compose config) -n cfde-gse 

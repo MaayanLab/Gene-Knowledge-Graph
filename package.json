@@ -7,6 +7,7 @@
     "build": "NODE_ENV=production next build",
     "start": "next start",
     "lint": "next lint",
+    "compose": "ts-node -r dotenv/config cli/version-compose.ts",
     "version": "npm run build && ts-node -r dotenv/config cli/version-compose.ts && docker-compose build kg",
     "postversion": "docker-compose push kg"
   },

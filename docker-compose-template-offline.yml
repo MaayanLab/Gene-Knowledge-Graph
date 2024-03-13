@@ -5,11 +5,11 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/cfde-gse:2.1.1
+    image: maayanlab/${APP_NAME}:${VERSION}
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
-        maayanlab.cloud/ingress: https://gse.cfde.cloud
+        maayanlab.cloud/ingress: ${NEXT_PUBLIC_HOST}
     ports:
       - 3000:3000
     environment:
@@ -28,6 +28,7 @@ services:
 
   neo4j:
     image: neo4j:5.17
+    command: ["bash", "-c", "while true; do echo 'Neo4j is not running. Pod is in offline maintenance mode. Remove neo4j.offlineMaintenanceModeEnabled setting and run `helm upgrade ...` to resume normal operation.'; sleep 60; done"]
     x-kubernetes:
       imagePullPolicy: IfNotPresent
     environment:
@@ -40,14 +41,14 @@ services:
       - 7687:7687
       - 7474:7474
     volumes:
-      - cfde-gse-neo4j:/data
+      - ${APP_NAME}-neo4j:/data
 
 volumes:
-  cfde-gse-neo4j:
+  ${APP_NAME}-neo4j:
     x-kubernetes:
       size: 15Gi
       class: gp2
 
 x-kubernetes:
-  name: cfde-gse
-  namespace: cfde-gse
+  name: ${APP_NAME}
+  namespace: ${APP_NAME}
