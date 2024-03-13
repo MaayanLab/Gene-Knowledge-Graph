@@ -26,9 +26,6 @@ import { mdiDna, mdiLinkVariant, mdiLinkVariantOff, mdiGraph, mdiTable, mdiPoll,
 import SendIcon from '@mui/icons-material/Send';
 import UndoIcon from '@mui/icons-material/Undo';
 
-import { toPng, toBlob, toSvg } from 'html-to-image';
-import download from 'downloadjs'
-import fileDownload from 'js-file-download';
 import {
     Menu,
     MenuItem, 
@@ -83,7 +80,7 @@ const InteractiveButtons = ({
     const [tooltip, setTooltip] = useQueryState('tooltip')
 	const [legend_size, setLegendSize] = useQueryState('legend_size')
     const [query, setQuery] = useQueryState('query', parseAsJson<EnrichmentParams>().withDefault({}))
-    
+    const [download_image, setDownloadImage] = useQueryState('download_image')
     const gene_links = query.gene_links || parsedParams.gene_links
     const [anchorEl, setAnchorEl] = useState<HTMLElement>(null)
     const [anchorElLayout, setAnchorElLayout] = useState<HTMLElement>(null)
@@ -261,26 +258,29 @@ const InteractiveButtons = ({
                                 <MenuItem key={'png'} onClick={()=> {
                                     handleCloseMenu(setAnchorEl)
                                     // fileDownload(cyref.current.png({output: "blob"}), "network.png")
-                                    toPng(document.getElementById("kg-network"))
-                                    .then(function (fileUrl) {
-                                        download(fileUrl, "network.png");
-                                    });
+                                    setDownloadImage('png')
+                                    // toPng(document.getElementById("kg-network"))
+                                    // .then(function (fileUrl) {
+                                    //     download(fileUrl, "network.png");
+                                    // });
                                 }}>PNG</MenuItem>
                                 <MenuItem key={'jpg'} onClick={()=> {
                                     handleCloseMenu(setAnchorEl)
                                     // fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
-                                    toBlob(document.getElementById("kg-network"))
-                                    .then(function (fileUrl) {
-                                        fileDownload(fileUrl, "network.jpg");
-                                    });
+                                    setDownloadImage('jpg')
+                                    // toBlob(document.getElementById("kg-network"))
+                                    // .then(function (fileUrl) {
+                                    //     fileDownload(fileUrl, "network.jpg");
+                                    // });
                                 }}>JPG</MenuItem>
                                 <MenuItem key={'svg'} onClick={()=> {
                                     handleCloseMenu(setAnchorEl)
                                     // fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
-                                    toSvg(document.getElementById("kg-network"))
-                                    .then(function (dataUrl) {
-                                        download(dataUrl, "network.svg")
-                                    });
+                                    setDownloadImage('svg')
+                                    // toSvg(document.getElementById("kg-network"))
+                                    // .then(function (dataUrl) {
+                                    //     download(dataUrl, "network.svg")
+                                    // });
                                 }}>SVG</MenuItem>
                             </Menu>
                         </>

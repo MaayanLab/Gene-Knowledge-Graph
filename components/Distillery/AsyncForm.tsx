@@ -1,9 +1,6 @@
 'use client'
 import React, {useState, useEffect} from "react";
-import dynamic from "next/dynamic";
 import { useRouter, usePathname } from "next/navigation";
-import { layouts } from "../misc/Cytoscape";
-import { useQueryState } from 'next-usequerystate'
 
 import { 
     Autocomplete,

@@ -1,10 +1,6 @@
 'use client'
 import { useRef, useState, useEffect } from 'react';
 // import dynamic from 'next/dynamic';
-// import cytoscape from 'cytoscape';
-
-import { CircularProgress } from '@mui/material';
-
 import { NetworkSchema } from '@/app/api/knowledge_graph/route';
 import CytoscapeComponent from 'react-cytoscapejs';
 import { TooltipCard } from '../client_side';
@@ -14,6 +10,8 @@ import { useQueryState, parseAsString } from 'next-usequerystate';
 import HubIcon from '@mui/icons-material/Hub';
 import { mdiFamilyTree,  mdiDotsCircle} from '@mdi/js';
 import Icon from '@mdi/react';
+import fileDownload from 'js-file-download';
+
 export const layouts = {
     "Force-directed": {
       name: 'cose',
@@ -38,7 +36,6 @@ export const layouts = {
     },
   }
 
-
 export default function Cytoscape ({
 	elements,
 	schema,
@@ -59,35 +56,30 @@ export default function Cytoscape ({
 	const [node, setNode] = useState(null)
     const [edge, setEdge] = useState(null)
     const [focused, setFocused] = useState(null)
-    // const searchParams = useSearchParams()
-	// const edge_labels = searchParams.get('edge_labels')
-	// const legend = searchParams.get('legend')
-	// const legend_size = parseInt(searchParams.get('legend_size') || '0')
-	// const layout = searchParams.get('layout') || 'Hierarchical Layout'
 	
 	const [edge_labels, setEdgeLabels] = useQueryState('edge_labels')
 	const [tooltip, setTooltip] = useQueryState('tooltip')
 	const [layout, setLayout] = useQueryState('layout', parseAsString.withDefault('Force-directed'))
 	const [legend, setLegend] = useQueryState('legend')
 	const [legend_size, setLegendSize] = useQueryState('legend_size')
+	const [download_image, setDownloadImage] = useQueryState('download_image')
 	const edgeStyle = edge_labels ? {label: 'data(label)'} : {}
-	
+	useEffect(()=>{
+		const cytoscape = require('cytoscape')
+		const svg = require('cytoscape-svg')
+		cytoscape.use(svg)
+	},[])
 
-	// useEffect(()=>{
-	// 	const useFunctions = async () => {
-	// 		if (window !== undefined) {
-	// 			// const cytoscape = require('cytoscape')
-	// 			// const fcose = require('cytoscape-fcose')
-	// 			// const avsdf = require('cytoscape-avsdf')
-	// 			// const svg = require('cytoscape-svg')
-	// 			// cytoscape.use(svg);
-	// 			// cytoscape.use(fcose);
-	// 			// cytoscape.use(avsdf);
-	// 			setReady(true)	
-	// 		}
-	// 	}
-    //     useFunctions()
-    // },[])
+	useEffect(()=>{
+		if (download_image === 'svg') {
+			fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
+		} else if (download_image === 'png') {
+			fileDownload(cyref.current.png({output: "blob"}), "network.png")
+		} else if (download_image === 'jpg') {
+			fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
+		}
+		setDownloadImage(null)
+	}, [download_image])
 
 	useEffect(()=>{
 		setId(id+1)
