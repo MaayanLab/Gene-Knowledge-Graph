@@ -1,13 +1,14 @@
 {
   "name": "cfde-knowledge-exchange",
-  "version": "2.0.16",
+  "version": "2.0.17",
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development next dev",
     "build": "NODE_ENV=production next build",
     "start": "next start",
     "lint": "next lint",
-    "version": "npm run build && ts-node -r dotenv/config cli/version-compose.ts"
+    "version": "npm run build && ts-node -r dotenv/config cli/version-compose.ts && docker-compose build kg",
+    "postversion": "docker-compose push kg"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
