@@ -62,11 +62,12 @@ const AsyncFormComponent = ({direction,
     const [selected, setSelected] = React.useState(null)
 
     useEffect(()=>{
+        console.log(f, initial_query, direction)
         if (f === undefined || f === '{}') {
             if (direction === 'Start') {
-            router_push(router, pathname, {
-                filter: JSON.stringify(initial_query)
-            })
+                router_push(router, pathname, {
+                    filter: JSON.stringify(initial_query)
+                })
             }
         } else {
             const type = direction === 'Start' ? start: end
