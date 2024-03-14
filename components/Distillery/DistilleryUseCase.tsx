@@ -51,6 +51,7 @@ async function DistilleryUseCase({
         const controller = new AbortController()
         try {
             const field = searchParams.field || "label"
+            const term = searchParams.term || default_term
             if (!fields) {
                 const current_node = schema.nodes.filter(i=>i.node == type)
                 if (current_node.length == 0) console.error("Invalid node")
@@ -66,10 +67,10 @@ async function DistilleryUseCase({
                 }
             })
             let elements = null
-            if (searchParams.term) {
+            if (term) {
                 const body = {
                     start: type,
-                    start_term: searchParams.term,
+                    start_term: term,
                     start_field: field,
                 }
                 if (relation.length) body["relation"] = relation

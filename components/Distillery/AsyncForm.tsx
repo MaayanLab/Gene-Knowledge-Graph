@@ -137,7 +137,7 @@ const AsyncForm = ({
         <Stack direction={"column"} spacing={1}>
             <Typography><b>Select {type}:</b></Typography>
             <Autocomplete
-                sx={{ width: 215 }}
+                // sx={{ width: 215 }}
                 value={term}
                 open={open}
                 onOpen={() => {
