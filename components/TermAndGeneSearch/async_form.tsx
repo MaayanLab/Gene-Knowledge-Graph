@@ -335,8 +335,9 @@ const AsyncFormComponent = ({direction,
                             checked={filter.end}
                             onChange={()=>{
                                 if (filter.end) {
-                                    const {filter, ...rest} = searchParams
-                                    const {relation, end, end_term, end_field, ...filt} = JSON.parse(filter)
+                                    // const {filter, ...rest} = searchParams
+                                    // c
+                                    const {relation, end, end_term, end_field, ...filt} = filter
                             
                                     const query = process_filter({
                                         ...rest,
@@ -344,7 +345,7 @@ const AsyncFormComponent = ({direction,
                                     })
                                     router_push(router, pathname, query)
                                 } else {
-                                    const {filter, ...rest} = searchParams
+                                    // const {filter, ...rest} = searchParams
                                     const {relation, ...f}: {
                                         start?: string,
                                         start_field?: string,
@@ -357,7 +358,7 @@ const AsyncFormComponent = ({direction,
                                         page?: number,
                                         filter?: FilterSchema,
                                         [key: string]: any
-                                    } = JSON.parse(filter)
+                                    } = filter
                                     const query = process_filter({
                                         ...rest,
                                         filter: {
