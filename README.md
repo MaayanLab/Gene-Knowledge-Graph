@@ -39,3 +39,5 @@ helm install <app-name> maayanlab/docker-compose -f <(docker-compose config) -n 
 
 ## UPGRADE
 helm upgrade cfde-gse maayanlab/docker-compose -f <(docker-compose config) -n cfde-gse 
+
+helm template cfde-gse maayanlab/docker-compose -f <(docker-compose config) -n cfde-gse 
