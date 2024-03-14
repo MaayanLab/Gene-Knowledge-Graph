@@ -80,7 +80,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
         edges,
         geneLinksRelations,
     } = await initialize_kg()
-    const filter: FilterSchema = searchParams.filter ? JSON.parse(searchParams.filter): {}
+    const filter: FilterSchema = searchParams.filter ? JSON.parse(searchParams.filter): props.initial_query
     const controller = new AbortController()
     try {
         if (filter.relation) {
@@ -126,7 +126,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                     genes.push(i.data.label)
                 }
             }
-        }  
+        }
         // if (!filter.relation || filter.relation.length === 0) {
         //     filter.relation = selected_edges
         // }

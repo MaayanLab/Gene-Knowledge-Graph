@@ -30,7 +30,8 @@ const AsyncFormComponent = ({direction,
 	const router = useRouter()
 	const {filter: f, ...rest} = searchParams
 	const pathname = usePathname()
-	const filter = JSON.parse(f || '{}')
+    let filter = JSON.parse(f || '{}')
+	if (Object.keys(filter).length === 0) filter = initial_query
     const {
         start,
         start_field='label',
@@ -62,8 +63,7 @@ const AsyncFormComponent = ({direction,
     const [selected, setSelected] = React.useState(null)
 
     useEffect(()=>{
-        console.log(f, initial_query, direction)
-        if (f === undefined || f === '{}') {
+        if (Object.keys(filter).length===0) {
             if (direction === 'Start') {
                 router_push(router, pathname, {
                     filter: JSON.stringify(initial_query)
@@ -71,9 +71,9 @@ const AsyncFormComponent = ({direction,
             }
         } else {
             const type = direction === 'Start' ? start: end
-            setType(type)
+            if (type) setType(type)
         }
-    }, [f])
+    }, [filter])
     
     const get_controller = () => {
         if (controller) controller.abort()
