@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/cfde-gse:2.2.2
+    image: maayanlab/cfde-gse:2.2.3
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
