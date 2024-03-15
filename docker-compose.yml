@@ -27,7 +27,7 @@ services:
       - NEXT_PUBLIC_TURL_URL
 
   neo4j:
-    image: neo4j:5.17
+    image: maayanlab/neo4j:1.0.4
     x-kubernetes:
       imagePullPolicy: IfNotPresent
     environment:
@@ -45,7 +45,7 @@ services:
 volumes:
   distillery-neo4j:
     x-kubernetes:
-      size: 15Gi
+      size: 25Gi
       class: gp2
 
 x-kubernetes:
