@@ -34,6 +34,7 @@ export interface UISchema {
     }>,
     header: {
         title: string,
+        header?: string,
         icon: {
             src: string,
             favicon: string,

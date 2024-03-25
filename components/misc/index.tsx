@@ -2,6 +2,7 @@ import { Logo } from "./logo";
 import Socials from "./social";
 import Github from "./github";
 import Link from "next/link";
+import Image from "next/image";
 import { Typography, 
     FormControl, 
     Select, 
@@ -10,6 +11,7 @@ import { Typography,
     Grid,
     Box,
     Avatar,
+    Button
  } from "@mui/material"
 import { NetworkSchema } from "@/app/api/knowledge_graph/route";
 export const Selector = ({entries, 
@@ -151,12 +153,25 @@ export const TextLink = ({text, href}: {text:string, href: string}) => (
     </Link>
 )
 
+export const Icon = ({src, alt, href, height, width}: {src: string, alt: string, href?: string, height: number, width: number}) => {
+  if (href === undefined) {
+    return <Image src={src} alt={alt} height={height} width={width}/>
+  } else {
+    return <Link href={href} target="_blank" rel="noopener noreferrer">
+      <Button>
+        <Image src={src} alt={alt} height={height} width={width}/>
+      </Button>
+    </Link>
+  }
+}
+
 const MiscComponent = ({component, props}) => {
     if (component === 'logo') return <Logo {...props}/>
     else if (component === 'github') return <Github {...props}/>
     // else if (component === 'social') return <Socials {...props}/>
     else if (component === 'text') return <Text {...props}/>
     else if (component === 'link') return <TextLink {...props}/>
+    else if (component === 'icon') return <Icon {...props}/>
     else return null
 }
 

@@ -6,9 +6,10 @@ import { CacheProvider } from '@emotion/react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { cfde_theme } from '@/themes/cfde';
-
+import { enrichr_kg_theme } from '@/themes/enrichr-kg';
 const themes = {
-    cfde_theme: cfde_theme
+    cfde_theme: cfde_theme,
+    enrichr_kg_theme: enrichr_kg_theme
 }
 
 // This implementation is from emotion-js

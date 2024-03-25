@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Typography } from "@mui/material"
 import { ElevatedIconButton } from "../Header/buttons"
-
+import { sanitize } from "../SanitizedHTML"
 export const Logo = ({src, alt, title, color="secondary", size}: {src: string, alt: string, title: string, color: "primary"| "secondary" | "inherit", size?: "small" | "large"}) => (
     <Link href={"/"} className='flex items-center space-x-3'>
         <div>
@@ -14,7 +14,7 @@ export const Logo = ({src, alt, title, color="secondary", size}: {src: string, a
 			</ElevatedIconButton>
         </div>
         <div>
-            <Typography variant={size==='large'?'cfde':'cfde_small'} color={color}>{title}</Typography>
+            <Typography variant={size==='large'?'cfde':'cfde_small'} color={color} dangerouslySetInnerHTML={sanitize(title)}></Typography>
         </div>
     </Link>
 )

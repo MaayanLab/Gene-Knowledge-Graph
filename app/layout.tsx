@@ -24,7 +24,7 @@ export async function generateMetadata(
   // optionally access and extend (rather than replace) parent metadata
  
   return {
-    title: header.title,
+    title: header.header || header.title,
     description: '',
     icons: {
       icon: header.icon.favicon
@@ -42,9 +42,9 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <ThemeRegistry options={{ key: 'mui' }} theme={schema.ui_theme || "cfde_theme"}>
-          <Grid container direction={"column"} justifyContent="space-between" sx={{minHeight: "100vh", marginTop: 2}}>
+          <Grid container direction={"column"} justifyContent="space-between" sx={{minHeight: "100vh"}}>
             <Grid item>
-              <Container maxWidth="lg" sx={{marginTop: 1}}>
+              <Container maxWidth="lg" sx={{backgroundColor: "#FFF"}}>
                 <Header schema={schema}/>
                 <Suspense><Subheader schema={schema}/></Suspense>
                 {children}

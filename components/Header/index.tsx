@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { UISchema } from '@/app/api/schema/route';
 import { Logo } from '../misc/logo';
-
+import Counter from '../Couter';
 
 export const Nav = ({tabs}:
 	{tabs: Array<{
@@ -35,6 +35,7 @@ export const Nav = ({tabs}:
 			<Grid item>
 				<Stack direction={"row"} alignItems={"center"} spacing={2}>
 					{tab_component.top}		
+					<Counter/>
 				</Stack>
 			</Grid>
 			{tab_component.bottom.length > 0 &&
@@ -51,7 +52,7 @@ export const Nav = ({tabs}:
 export default function Header ({schema}: {schema: UISchema}) {
 	const {title, icon, tabs} = schema.header
 	return  (
-		<AppBar position="static" sx={{color: "#000"}}>
+		<AppBar position="static" sx={{color: "#000", paddingTop: 3, paddingBottom: 3}}>
 			<Toolbar>
 				<Grid container justifyContent={"space-between"} alignItems={"center"} spacing={2}>
 					<Grid item>
