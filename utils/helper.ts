@@ -185,6 +185,7 @@ export const compute_colors = ({properties, aggr_scores, color}:{
         borderWidth: number,
         borderColor?: string,
         gradient_color?:string,
+        borderStyle?:string,
         color?: string
     } = {node_type: 0, borderWidth: 0}
     if (properties.pval > 0.05) {

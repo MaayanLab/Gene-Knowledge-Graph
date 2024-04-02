@@ -126,21 +126,6 @@ const Enrichment = async ({
             else console.log(`failed ${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
             console.log(`ShortID: ${shortId}`)
             console.log(`Enrichment ${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`)
-            console.log(JSON.stringify({
-                userListId,
-                libraries: libraries.map(({name, limit, library, term_limit})=>({
-                    library: library || name,
-                    term_limit: limit || term_limit
-                })),
-                min_lib,
-                gene_limit,
-                gene_degree,
-                term_degree,
-                expand,
-                remove,
-                augment_limit,
-                gene_links
-            }))
             const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`,
                 {
                     method: "POST",

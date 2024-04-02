@@ -4,7 +4,15 @@ import {initialize} from './helper'
 
 export interface Initialize_Type {
     aggr_scores?: {[key:string]: {max: number, min: number}},
-    colors?: {[key:string]: {color?: string, aggr_field?: string, field?: string, aggr_type?: string}},
+    colors?: {[key:string]: {
+        color?: string, 
+        aggr_field?: string, 
+        field?: string, 
+        aggr_type?: string,
+        edge_suffix?: string,
+        border_color?: string,
+        ring_label?: string,
+    }},
     edges?: Array<string>
 }
 

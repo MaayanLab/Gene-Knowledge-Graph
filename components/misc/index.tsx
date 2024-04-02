@@ -79,13 +79,14 @@ export const Legend = ({
     const color_sum = {}
     const relations = []
     for (const i of [...elements.nodes, ...elements.edges]) {
-      const {kind, color, borderColor, lineColor, relation, pval}: {
+      const {kind, color, borderColor, lineColor, relation, pval, ring_label}: {
         kind?:string,
         color?:string,
         borderColor?: string,
         lineColor?: string,
         relation?: string,
         pval?: number,
+        ring_label?: string,
       } = i.data
       if (pval && pval > 0.05) not_significant = true
       if (kind === "Relation" && lineColor !== "#e0e0e0" && relation_colors[relation]===undefined) {
@@ -110,6 +111,15 @@ export const Legend = ({
             <Grid item><Avatar sx={{background: color, width: sizes[legendSize], height: sizes[legendSize], borderColor, borderWidth: borders[legendSize]}}> </Avatar></Grid>
             <Grid item><Typography variant="subtitle1">{kind}</Typography></Grid>   
           </Grid></Grid> 
+      }
+      if (ring_label && !colors[ring_label] && borderColor && !not_significant) {
+        colors[ring_label] = <Grid item xs={12} key={ring_label}>
+        <Grid container alignItems={"center"} spacing={1} key={ring_label}>
+          <Grid item>
+            <Avatar style={{background: "#FFF", borderColor: borderColor, borderStyle: "solid", borderWidth: borders[legendSize], width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar>
+          </Grid>
+          <Grid item><Typography variant="subtitle1">{ring_label}</Typography></Grid>   
+        </Grid></Grid>   
       }
     }
     if (!search && not_significant) {

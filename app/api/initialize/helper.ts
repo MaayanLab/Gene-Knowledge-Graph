@@ -14,8 +14,16 @@ export const initialize = async () => {
 		const edges = []
 		for (const s of schema.edges) {	
 			for (const i of (s.match || [])) {
-				colors[i] = {
-					color: s.color || default_color,
+				
+				if (s.edge_suffix)  {
+					colors[i] = {
+						color: s.color || default_color,
+						edge_suffix: s.edge_suffix
+					}
+				} else {
+					colors[i] = {
+						color: s.color || default_color,
+					}
 				}
 				edges.push(i)
 			}
@@ -46,7 +54,7 @@ export const initialize = async () => {
 			if (s.color) {
 				colors[s.node] = {
 					color: s.color
-				}
+			}
 			} else {
 				colors[s.node] = {}
 			}
@@ -72,6 +80,13 @@ export const initialize = async () => {
 				colors[s.node].aggr_field = score_var
 				colors[s.node].aggr_type = order
 				colors[s.node].field = field
+			}
+			if (s.ring_label) {
+				colors[s.node].ring_label = s.ring_label
+			}
+			
+			if (s.border_color) {
+				colors[s.node].border_color = s.border_color
 			}
 		}
 		

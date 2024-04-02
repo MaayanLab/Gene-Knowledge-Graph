@@ -95,7 +95,7 @@ export const resolve_results = async ({
     query_params?: {[key:string]: any},
     terms?: Array<string>,
     fields?: Array<string>,
-    colors?: {[key: string]: {color?: string, field?: string, aggr_type?: string}},
+    colors?: {[key: string]: {color?: string, field?: string, aggr_type?: string, border_color?: string, ring_label?: string, edge_suffix?: string }},
     aggr_scores?: {[key:string]: {max: number, min: number}},
     get_node_color_and_type?: Function,
     get_edge_color?: Function,
@@ -154,6 +154,13 @@ export const resolve_results = async ({
                             ...colors_func(type), 
                             ...misc_props
                         })
+                        if (colors[type].border_color && !node_color.borderColor) {
+                            node_color.borderColor = colors[type].border_color
+                            node_color.borderWidth = 7
+                        }
+                        if (colors[type].ring_label) {
+                            node_color.ring_label = colors[type].ring_label
+                        }
                         nodes[node.identity] = {
                             data: {
                                 ...node_properties,
@@ -167,6 +174,7 @@ export const resolve_results = async ({
                     const relation_id = `${nodes[relation.start].data.label}_${nodes[relation.end].data.label}`
                     if (edges[relation_id] === undefined) {
                         const relation_type = relation.type
+                        console.log(`${relation_type} ${colors[relation_type].edge_suffix}`)
                         edges[relation_id] = {
                             data: {
                                 source: nodes[relation.start].data.id,
@@ -176,7 +184,7 @@ export const resolve_results = async ({
                                 ...properties[relation_type] || {},
                                 ...process_properties(relation.properties),
                                 ...(get_edge_color({relation, record, aggr_scores, ...colors[relation_type]})),
-                                relation: relation_type,
+                                relation: colors[relation_type].edge_suffix ? `${relation_type} ${colors[relation_type].edge_suffix}`:relation_type,
                                 directed: relation.properties.directed ? 'triangle': 'none'
                             }
                         }

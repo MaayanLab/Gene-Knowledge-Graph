@@ -15,6 +15,8 @@ export interface UISchema {
         search?: Array<string>,
         color?: string,
         order?: Array<string>
+        border_color?: string,
+        ring_label?: string,
     }>,
     edges: Array<{
         match: Array<string>,
@@ -23,6 +25,7 @@ export interface UISchema {
             multiple?: string,
             singular?: string
         },
+        edge_suffix?: string,
         display: Array<{
             label: string,
             text: string,
