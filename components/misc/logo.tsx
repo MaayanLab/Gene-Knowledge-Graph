@@ -8,7 +8,7 @@ export const Logo = ({src, alt, title, color="secondary", size}: {src: string, a
         <div>
 			<ElevatedIconButton
 				aria-label="menu"
-				sx={{width: size === 'large' ? 56: 35, height: size === 'large' ? 56: 35}}
+				sx={{width: size === 'large' ? 56: 35, height: size === 'large' ? 56: 35, backgroundColor: "#FFF"}}
 			>
 				<Image style={{marginLeft: -2, padding: 2,  objectFit: "contain"}} fill={true} alt={alt} src={src} />
 			</ElevatedIconButton>
