@@ -3,9 +3,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import { useRef, useEffect } from "react"
 export const router_push = (router: AppRouterInstance, pathname:string, query: {[key: string]: string|number|boolean }) => {
 	const newSearchParams = Object.entries(query).map(([k,v])=>`${k}=${v}`).join('&')
-  console.log(pathname + '?' + newSearchParams.toString())
   router.push(pathname + '?' + newSearchParams.toString())
-  console.log(newSearchParams)
 }
 
 export const usePrevious = (value) => {

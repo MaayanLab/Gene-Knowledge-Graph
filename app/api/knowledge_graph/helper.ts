@@ -174,7 +174,6 @@ export const resolve_results = async ({
                     const relation_id = `${nodes[relation.start].data.label}_${nodes[relation.end].data.label}`
                     if (edges[relation_id] === undefined) {
                         const relation_type = relation.type
-                        console.log(`${relation_type} ${colors[relation_type].edge_suffix}`)
                         edges[relation_id] = {
                             data: {
                                 source: nodes[relation.start].data.id,
