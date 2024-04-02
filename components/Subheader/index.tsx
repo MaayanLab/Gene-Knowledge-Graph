@@ -45,22 +45,29 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 	const subheader = schema.header.subheader
 	const searchParams = useSearchParams()
 	const [error, setError] = useState<{message: string, type:string}>(null)
+	const subpaths = (pathname.split("/")).slice(1)
 	if (typeof subheader === 'undefined') return null
 	else {
 		let subheader_props = null
 		let default_options = null
+		const subpaths = (pathname.split("/")).slice(1)
 		for (const tab of schema.header.tabs) {
 			if (pathname === tab.endpoint) subheader_props = tab.props.subheader
-			if (pathname.indexOf(tab.endpoint) > -1) {
+
+			if (tab.endpoint === `/${subpaths[0]}`) {
 				for (const page of tab.props.pages || []) {
 					if (page.endpoint === pathname) {
 						subheader_props = page.props.subheader
-						default_options = page.props.default_options
+						if (page.props.default_term) {
+							default_options = {term: page.props.default_term}
+						}
 						break
 					}
 				}
 				if (subheader_props === null) subheader_props = tab.props.subheader
-				if (default_options === null) default_options = tab.props.default_options
+				if (default_options === null) {
+					default_options = tab.props.initial_query
+				}
 			}
 		}
 		if (subheader_props === null) return null
@@ -88,8 +95,8 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 				{subheader.map(i=>{
 					const {url_field, query_field} = subheader_props || {}
 					const query_parser = parseAsJson<EnrichmentParams | FilterSchema>()
-					const query = query_parser.parse(searchParams.get(url_field)) || {}	
-					const selected = query[query_field] || default_options[query_field] || []
+					const query = query_parser.parse(searchParams.get(url_field)) || default_options	
+					const selected = query[query_field] || []
 					const active = contains(selected.map(({name})=>name), i.props[query_field])
 					const enabled = selected.length === 0
 					let style = {}
@@ -105,6 +112,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 									sx={{padding: 5, margin: 1, ...style}}
 									onClick={()=>{
 										// delete
+
 										if (contains(selected.map(({name})=>name), i.props[query_field])) {
 											const new_selected = []
 											for (const s of selected) {
