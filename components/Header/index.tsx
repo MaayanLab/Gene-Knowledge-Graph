@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { UISchema } from '@/app/api/schema/route';
 import { Logo } from '../misc/logo';
-import Counter from '../Couter';
+import Counter from '../Counter';
 
 export const Nav = ({tabs}:
 	{tabs: Array<{
