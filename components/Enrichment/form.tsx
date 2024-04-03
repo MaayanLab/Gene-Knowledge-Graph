@@ -234,7 +234,6 @@ const GeneSetForm = ({
     //         setDescription(input.description || '')
     //     }
     // }, [input.description])
-
     return (
         <FormGroup>
             <Snackbar open={error!==null}
@@ -316,33 +315,35 @@ const GeneSetForm = ({
                         </Grid>
                         <Grid item xs={fullWidth? 6: 12} sx={{textAlign: "left"}}>
                             <Stack direction={"row"} spacing={1} alignItems="center">
-                                <Button 
-                                    onClick={async ()=>{
-                                        // setSubmitted(true)
-                                        if (!(await same_prev_input())) {
-                                            if (input.genes.length > 0 && libraries.length > 0) {
-                                                addList()
-                                            }
-                                        } else {
-                                            const {search, augment, augment_limit, gene_links, ...rest} = combined_query
-                                            // setSubmitted(false)
-                                            router_push(router, pathname, {
-                                                q: JSON.stringify({
-                                                    ...rest,
-                                                    libraries: libraries,
-                                                    search: true
+                                <Tooltip title={input.genes.length === 0 ? "Input gene set": libraries.length === 0 ? "Select libraries": loading ? "Loading...": "Submit"}>
+                                    <Button 
+                                        onClick={async ()=>{
+                                            // setSubmitted(true)
+                                            if (!(await same_prev_input())) {
+                                                if (input.genes.length > 0 && libraries.length > 0) {
+                                                    addList()
+                                                }
+                                            } else {
+                                                const {search, augment, augment_limit, gene_links, ...rest} = combined_query
+                                                // setSubmitted(false)
+                                                router_push(router, pathname, {
+                                                    q: JSON.stringify({
+                                                        ...rest,
+                                                        libraries: libraries,
+                                                        search: true
+                                                    })
                                                 })
-                                            })
-                                        }
-                                    }}
-                                    disabled={loading || libraries.length === 0 || input.genes.length === 0}
-                                    size="large"
-                                    variant="contained"
-                                    sx={{
-                                        padding: "15px 30px"
-                                    }}
-                                    // disabled={input.genes.length === 0}
-                                >{loading ? "Searching...": "Submit"}</Button>
+                                            }
+                                        }}
+                                        disabled={loading || libraries.length === 0 || input.genes.length === 0}
+                                        size="large"
+                                        variant="contained"
+                                        sx={{
+                                            padding: "15px 30px"
+                                        }}
+                                        // disabled={input.genes.length === 0}
+                                    >{loading ? "Searching...": "Submit"}</Button>
+                                </Tooltip>
                                 {(verified.length > 0 && input.genes.length > 0) && <Tooltip title="Matched genes"><Button onClick={()=>setIsFocused(false)}><Typography color={'secondary'} variant='subtitle2'> {`${verified.length} matched genes`}</Typography></Button></Tooltip>}
                             </Stack>
                         </Grid>

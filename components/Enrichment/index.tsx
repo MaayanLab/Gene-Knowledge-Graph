@@ -99,7 +99,7 @@ const Enrichment = async ({
     }, [])    
     const parsedParams: EnrichmentParams = query_parser.parseServerSide(searchParams.q)
     try {
-        parsedParams.libraries = parsedParams.libraries.map(({name, library, limit, term_limit})=>({
+        parsedParams.libraries = (parsedParams.libraries || []).map(({name, library, limit, term_limit})=>({
             name: name || library,
             limit: limit || term_limit,
         }))

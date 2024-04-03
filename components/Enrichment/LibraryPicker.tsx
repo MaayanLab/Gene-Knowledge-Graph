@@ -25,12 +25,12 @@ import { useQueryState, parseAsJson } from "next-usequerystate"
 const LibraryPicker = ({
 	parsedParams,
 	libraries_list,
-	fullWidth
+	fullWidth,
 }: {
 	fullWidth: boolean,
     disableLibraryLimit?: boolean,
     libraries_list: Array<string>,
-    parsedParams: EnrichmentParams
+    parsedParams: EnrichmentParams,
 }) => {
 	const router = useRouter()
 	const pathname = usePathname()
@@ -43,7 +43,7 @@ const LibraryPicker = ({
 	};
 	const open = Boolean(anchorEl);
 	const id = open ? 'simple-popper' : undefined;
-	const libraries = query.libraries || parsedParams.libraries
+	let libraries = query.libraries || parsedParams.libraries
 	return (
 		<Grid container spacing={1}>
 			<Grid item xs={12} md={fullWidth ? 12:5}>
@@ -75,6 +75,7 @@ const LibraryPicker = ({
 					value={libraries.map(i=>i.name)}
 					renderInput={(params) => (
 						<TextField 
+							error={libraries.length === 0}
 							{...params} 
 							sx={{backgroundColor: "#FFF"}}
 							label="Select libraries" 
