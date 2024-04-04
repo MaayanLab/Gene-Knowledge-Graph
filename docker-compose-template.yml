@@ -27,7 +27,7 @@ services:
       - NEXT_PUBLIC_TURL_URL
 
   neo4j:
-    image: maayanlab/neo4j:1.0.4
+    image: neo4j:4.4
     x-kubernetes:
       imagePullPolicy: IfNotPresent
     environment:
