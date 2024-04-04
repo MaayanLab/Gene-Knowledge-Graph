@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/${APP_NAME}:${VERSION}
+    image: ${DOCKERHUB_NAME}/${APP_NAME}:${VERSION}
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
