@@ -5,7 +5,10 @@ import { Stack, Typography } from "@mui/material";
 
 const Github = ({code, issues}: {code: string, issues:string}) => (
     <Stack spacing={2}>
-        <Link href={code}>
+        <Link href={code}
+            target="_blank"
+            rel="noopener noreferrer"
+        >
             <div className='flex items-center space-x-1'>
                 <Icon path={mdiGithub} size={1} /> 
                 <Typography variant='footer' className='flex'>
@@ -13,7 +16,10 @@ const Github = ({code, issues}: {code: string, issues:string}) => (
                 </Typography>
             </div>
         </Link>
-        <Link href={issues}>
+        <Link href={issues}
+            target="_blank"
+            rel="noopener noreferrer"
+        >
             <div className='flex items-center space-x-1'>
                 <Icon path={mdiBugOutline} size={1} /> 
                 <Typography variant='footer' className='flex'>
