@@ -50,6 +50,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 	else {
 		let subheader_props = null
 		let default_options = null
+		let disableLibraryLimit = false
 		const subpaths = (pathname.split("/")).slice(1)
 		for (const tab of schema.header.tabs) {
 			if (pathname === tab.endpoint) subheader_props = tab.props.subheader
@@ -68,6 +69,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 				if (default_options === null) {
 					default_options = tab.props.initial_query
 				}
+				if (tab.props.disableLibraryLimit) disableLibraryLimit = true
 			}
 		}
 		if (subheader_props === null) return null
@@ -123,7 +125,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 												[url_field]: JSON.stringify(query)
 											})
 										} else { // add
-											if (selected.length >= 5) setError({message: `A maximum of only five ${query_field} can selected`, type: "fail"})
+											if (selected.length >= 5 && !disableLibraryLimit) setError({message: `A maximum of only five ${query_field} can selected`, type: "fail"})
 											else {
 												query[query_field] = [...selected, ...i.props[query_field].map((name:string)=>({name, limit: 5}))]
 												router_push(router, pathname, {

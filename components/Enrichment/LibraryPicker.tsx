@@ -26,6 +26,7 @@ const LibraryPicker = ({
 	parsedParams,
 	libraries_list,
 	fullWidth,
+	disableLibraryLimit
 }: {
 	fullWidth: boolean,
     disableLibraryLimit?: boolean,
@@ -84,7 +85,7 @@ const LibraryPicker = ({
 					)}
 					sx={{ width: '100%' }}
 					onChange={(e, libs)=>{
-						if (libs.length <= 5) {
+						if (libs.length <= 5 || disableLibraryLimit) {
 							const new_libraries = libs.map(name=>({name, limit: 5}))
 							if (fullWidth) {
 								setQuery({

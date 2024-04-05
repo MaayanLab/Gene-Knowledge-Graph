@@ -154,11 +154,11 @@ export const resolve_results = async ({
                             ...colors_func(type), 
                             ...misc_props
                         })
-                        if (colors[type].border_color && !node_color.borderColor && node_color.color !== highlight_color) {
+                        if (colors[type] && colors[type].border_color && !node_color.borderColor && node_color.color !== highlight_color) {
                             node_color.borderColor = colors[type].border_color
                             node_color.borderWidth = 7
                         }
-                        if (colors[type].ring_label && node_color.color !== highlight_color) {
+                        if (colors[type] && colors[type].ring_label && node_color.color !== highlight_color) {
                             node_color.ring_label = colors[type].ring_label
                         }
                         nodes[node.identity] = {
