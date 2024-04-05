@@ -11,13 +11,16 @@ import { useState } from "react";
 
 const styles = {
 	disabled: {
-		opacity: .7
+		opacity: .7,
+		height: 70
 	},
 	enabled: {
 		opacity: 1,
+		height: 70
 	},
 	active: {
 		opacity: 1,
+		height: 70,
 		background: "#e0e0e0",
 		"&:hover": {
 			background: "#9e9e9e",
@@ -111,7 +114,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 								<Button
 									disabled={!subheader_props}
 									className="flex items-center justify-center relative" 
-									sx={{padding: 5, margin: 1, ...style}}
+									sx={{padding: 1, ...style}}
 									onClick={()=>{
 										// delete
 
@@ -135,7 +138,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 										}	
 									}}
 								>
-									<Image  src={i.icon || ''} alt={i.label} fill={true} style={{objectFit: "contain"}}/>
+									<Image  src={i.icon || ''} alt={i.label} width={i.width} height={i.height}/>
 								</Button>
 							</Tooltip>
 						</Grid>
