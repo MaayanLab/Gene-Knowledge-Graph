@@ -184,6 +184,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                             neighborCount={props.neighborCount}
                             geneLinksRelations={geneLinksRelations}
                             elements={elements}
+                            initial_query={props.initial_query}
                         />
                         <Card sx={{borderRadius: "24px"}}>
                             <CardContent>

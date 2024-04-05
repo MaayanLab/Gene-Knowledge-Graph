@@ -71,7 +71,8 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
     neighborCount=100,
     genes = [],
     elements = {nodes: [], edges: []},
-    searchParams
+    searchParams,
+    initial_query
 }: {
     edges: Array<string>,
     geneLinksRelations: Array<string>,
@@ -90,10 +91,15 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
         legend_size?: string,
         layout?: string,
     },
+    initial_query?: {
+        start: string,
+        start_term: string,
+        start_field?: string,
+        [key: string]: string
+    },
 }) {
     const pathname = usePathname()
     const router = useRouter()
-
     const {
         filter:f,
         view,
@@ -162,7 +168,9 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                 onChange={(e, r)=>{
                                     if (end || (!end && r.length <= 5)) {
                                         const {filter: f, ...rest} = searchParams
-                                        const filter = JSON.parse(f || '{}')
+                                        let filter = JSON.parse(f || '{}')
+                                        if (Object.keys(filter).length === 0) filter = initial_query
+                                        console.log(filter)
                                         filter.relation = r.map((name:string)=>({name, limit: limit || 5}))
                                         const query = {
                                             ...rest,
