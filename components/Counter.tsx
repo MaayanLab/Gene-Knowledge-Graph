@@ -23,8 +23,8 @@ export const Counter = () => {
     }, [timer])
 
     return (
-        <Stack direction={"row"}>
-            <Typography variant="nav">Queries Submitted: <b>{count}</b></Typography>
+        <Stack direction={"row"} spacing={1}>
+            <Typography variant="nav">Queries Submitted: </Typography> <Typography><b>{count}</b></Typography>
         </Stack>
     )
 }
