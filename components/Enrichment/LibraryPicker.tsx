@@ -22,6 +22,14 @@ import { mdiClose, mdiCloseCircle, mdiMinusCircleOutline, mdiPlusCircleOutline }
 import Icon from "@mdi/react"
 import { EnrichmentParams } from "."
 import { useQueryState, parseAsJson } from "next-usequerystate"
+
+import Checkbox from '@mui/material/Checkbox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
 const LibraryPicker = ({
 	parsedParams,
 	libraries_list,
@@ -83,6 +91,17 @@ const LibraryPicker = ({
 							placeholder="Select libraries" 
 						/>
 					)}
+					renderOption={(props, option, { selected }) => (
+						<li {...props}>
+						  <Checkbox
+							icon={icon}
+							checkedIcon={checkedIcon}
+							style={{ marginRight: 8 }}
+							checked={selected}
+						  />
+						  {option}
+						</li>
+					  )}
 					sx={{ width: '100%' }}
 					onChange={(e, libs)=>{
 						if (libs.length <= 5 || disableLibraryLimit) {

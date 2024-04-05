@@ -49,13 +49,19 @@ import {mdiDna,
 } from '@mdi/js';
 import Icon from '@mdi/react';
 
-import { toPng, toBlob, toSvg } from 'html-to-image';
-import download from 'downloadjs'
 import { router_push } from '@/utils/client_side';
 import { NetworkSchema } from '@/app/api/knowledge_graph/route';
 import { FilterSchema, process_relation } from '@/utils/helper';
 import { process_tables } from '@/utils/helper';
 import { layouts } from '../misc/Cytoscape';  
+
+
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
   
   function Form({
     edges=[],
@@ -141,6 +147,17 @@ import { layouts } from '../misc/Cytoscape';
                                 renderInput={(params) => (
                                     <TextField {...params} label="Select Relation" placeholder="Select Relation" />
                                 )}
+                                renderOption={(props, option, { selected }) => (
+                                    <li {...props}>
+                                      <Checkbox
+                                        icon={icon}
+                                        checkedIcon={checkedIcon}
+                                        style={{ marginRight: 8 }}
+                                        checked={selected}
+                                      />
+                                      {option}
+                                    </li>
+                                  )}
                                 sx={{ width: '100%' }}
                                 onChange={(e, r)=>{
                                     if (end || (!end && r.length <= 5)) {
