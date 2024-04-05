@@ -33,7 +33,7 @@ export const cfde_theme = createTheme({
             fontWeight: 500,
         },
         h2: {
-            fontSize: 32,
+            fontSize: 28,
             fontWeight: 500,
             fontStyle: "normal",
         },
