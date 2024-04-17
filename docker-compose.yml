@@ -5,11 +5,11 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/cfde-gse:2.2.9
+    image: maayanlab/cfde-gse:2.2.10
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
-        maayanlab.cloud/ingress: http://localhost:3000
+        maayanlab.cloud/ingress: https://gse.cfde.cloud
     ports:
       - 3000:3000
     environment:
@@ -27,7 +27,7 @@ services:
       - NEXT_PUBLIC_TURL_URL
 
   neo4j:
-    image: maayanlab/neo4j:1.0.4
+    image: neo4j:4.4
     x-kubernetes:
       imagePullPolicy: IfNotPresent
     environment:
