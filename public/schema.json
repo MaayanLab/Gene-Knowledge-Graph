@@ -1,700 +1,1684 @@
 {
-	"nodes": [
-		{
-			"node": "Drug",
-			"pathname": "/",
-			"example": ["esmolol", "buspirone"],
-			"palette": {
-				"name": "oranges",
-				"main": "#ffb74d",
-				"contrastText": "#000"
-			},
-			"relation": ["SigCom LINCS Drug-to-Gene (downregulates)", "SigCom LINCS Drug-to-Gene (upregulates)"],
-			"display": [
-				{
-					"label": "Drug ID",
-					"text": "${id}",
-					"type": "link",
-					"href": "https://pubchem.ncbi.nlm.nih.gov/compound/${id.replace('CID:', '')}"
-				},
-				{
-					"label": "GDLPA",
-					"text": "${label}",
-					"type": "link",
-					"href": "https://cfde-gene-pages.cloud/drug/${label}?CF=false&PS=true"
-				}
-			],
-			"search": [
-				"label",
-				"id"
-			]
-		},
-		{
-			"node": "Gene",
-			"pathname": "/",
-			"example": ["LUM", "MAPK1"],
-			"relation": [
-				"BioGRID",
-				"SigCom LINCS Drug-to-Gene (downregulates)",
-				"SigCom LINCS Drug-to-Gene (upregulates)",
-				"ARCHS4 (negatively correlated)",
-				"ARCHS4 (positively correlated)",
-				"Metabolomics Workbench",
-				"GlyGen",
-				"HuBMAP"
-			],
-			"palette": {
-				"name": "greens",
-				"main": "#aed581",
-				"contrastText": "#000"
-			},
-			"display": [
-				{
-					"label": "Gene ID",
-					"text": "${id}",
-					"type": "link",
-					"href": "https://www.ncbi.nlm.nih.gov/gene/${id}"
-				},
-				{
-					"label": "ARCHS4",
-					"text": "${label}",
-					"type": "link",
-					"href": "https://maayanlab.cloud/archs4/gene/${label}"
-				},
-				{
-					"label": "GDLPA",
-					"text": "${label}",
-					"type": "link",
-					"href": "https://cfde-gene-pages.cloud/gene/${label}?CF=false&PS=true&Ag=true"
-				}
-			],
-			"search": [
-				"label",
-				"id"
-			]
-		},
-		{
-			"node": "Glycan",
-			"pathname": "/",
-			"example": ["G00912UN", "G22140GZ"],
-			"relation": [
-				"GlyGen"
-			],
-			"palette": {
-				"name": "purples",
-				"main": "#b39ddb",
-				"contrastText": "#000"
-			},
-			"display": [
-				{
-					"label": "Byonic",
-					"text": "${byonic}",
-					"type": "text"
-				},
-				{
-					"label": "Glycan Type",
-					"text": "${glycan_type}",
-					"type": "text"
-				},
-				{
-					"label": "mass",
-					"text": "${mass}",
-					"type": "text"
-				},
-				{
-					"label": "monosaccharides",
-					"field": "monosaccharides",
-					"type": "int"
-				},
-				{
-					"label": "Glygen page",
-					"href": "${uri}",
-					"text": "${id}",
-					"type": "link"
-				},
-				{
-					"label": "Glytoucan page",
-					"href": "${glytoucan_url}",
-					"text": "${id}",
-					"type": "link"
-				}
-			],
-			"search": [
-				"label",
-				"id",
-				"byonic",
-				"glycan_type"
-			]
-		},
-		{
-			"node": "Metabolite",
-			"pathname": "/",
-			"example": ["L-Glutamate", "Choline"],
-			"relation": [
-				"Metabolomics Workbench"
-			],
-			"palette": {
-				"name": "cyans",
-				"main": "#26c6da",
-				"contrastText": "#000"
-			},
-			"display": [
-				{
-					"label": "Metabolite ID",
-					"text": "${id}",
-					"type": "link",
-					"href": "https://www.genome.jp/entry/${id}"
-				},
-				{
-					"label": "Synonyms",
-					"text": "${synonyms.join(', ')}",
-					"type": "text"
-				}
-			],
-			"search": [
-				"label",
-				"id"
-			]
-		},
-		{
-			"node": "Cell or Tissue (HuBMAP)",
-			"pathname": "/",
-			"example": ["Brain", "CD4 T cell memory"],
-			"relation": [
-				"HuBMAP"
-			],
-			"palette": {
-				"name": "teals",
-				"main": "#4db6ac",
-				"contrastText": "#000"
-			},
-			"display": [
-				{
-					"label": "Ontology ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "Resource",
-					"text": "HuBMAP",
-					"type": "link",
-					"href": "https://hubmapconsortium.github.io/ccf-asct-reporter/"
-				}
-			],
-			"search": [
-				"label",
-				"id"
-			]
-		},
-		{
-			"node": "Tissue Group (GTEx)",
-			"pathname": "/",
-			"example": ["Liver_subj-age_30-39", "Pancreas_subj-age_50-59"],
-			"relation": [
-				"GTEx (up)",
-				"GTEx (down)"
-			],
-			"palette": {
-				"name": "pinks",
-				"main": "#f48fb1",
-				"contrastText": "#000"
-			},
-			"display": [
-				{
-					"label": "Tissue",
-					"text": "${tissue}",
-					"type": "text"
-				},
-				{
-					"label": "Ontology ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "Age group",
-					"text": "${age_group}",
-					"type": "text"
-				}
-			],
-			"search": [
-				"label",
-				"tissue",
-				"age_group"
-			]
-		}
-	],
-	"edges": [
-		{
-			"match": ["BioGRID"],
-			"selected": true,
-			"order": ["Confidence_Values", "DESC"],
-			"display": [
-				{
-					"label": "ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "Name",
-					"text": "${label}",
-					"type": "text"
-				},
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "Target Label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "Interaction Detection Method",
-					"text": "${Interaction_Detection_Method}",
-					"type": "text"
-				},
-				{
-					"label": "Pubmed",
-					"text": "${Publication_Identifiers}",
-					"type": "text"
-				},
-				{
-					"label": "Publication First Author",
-					"text": "${Publication_1st_Author}",
-					"type": "text"
-				},
-				{
-					"label": "Confidence Value",
-					"text": "${Confidence_Values}",
-					"type": "text"
-				},
-				{
-					"label": "Resource",
-					"text": "BioGRID",
-					"href": "https://thebiogrid.org/",
-					"type": "link"
-				}	
-			]
-		},
-		{
-			"match": ["ARCHS4 (negatively correlated)"],
-			"selected": true,
-			"palette": {
-				"main": "#f8bbd0"
-			},
-			"order": ["correlation_coefficient", "ASC"],
-			"display": [
-				{
-					"label": "ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "Target Label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "Correlation Coefficient",
-					"text": "${correlation_coefficient}",
-					"type": "number"
-				},
-				{
-					"label": "Resource",
-					"text": "ARCHS4",
-					"href": "https://maayanlab.cloud/archs4/",
-					"type": "link"
-				}	
-			]
-		},
-		{
-			"match": ["ARCHS4 (positively correlated)"],
-			"selected": true,
-			"palette": {
-				"main": "#4fc3f7"
-			},
-			"order": ["correlation_coefficient", "DESC"],
-			"display": [
-				{
-					"label": "ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "Target Label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "Correlation Coefficient",
-					"text": "${correlation_coefficient}",
-					"type": "number"
-				},
-				{
-					"label": "Resource",
-					"text": "ARCHS4",
-					"href": "https://maayanlab.cloud/archs4/",
-					"type": "link"
-				}		
-			]
-		},
-		{
-			"match": ["SigCom LINCS Drug-to-Gene (downregulates)"],
-			"selected": true,
-			"palette": {
-				"main": "#f8bbd0"
-			},
-			"order": ["mean_CD_coefficient", "ASC"],
-			"display": [
-				{
-					"label": "ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "Target Label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "Correlation Coefficient",
-					"text": "${mean_CD_coefficient}",
-					"type": "number"
-				},
-				{
-					"label": "Resource",
-					"text": "SigCom LINCS",
-					"href": "https://maayanlab.cloud/sigcom-lincs/",
-					"type": "link"
-				}	
-			]
-		},
-		{
-			"match": ["SigCom LINCS Drug-to-Gene (upregulates)"],
-			"selected": true,
-			"palette": {
-				"main": "#4fc3f7"
-			},
-			"order": ["mean_CD_coefficient", "DESC"],
-			"display": [
-				{
-					"label": "ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "Target Label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "Correlation Coefficient",
-					"text": "${mean_CD_coefficient}",
-					"type": "number"
-				},
-				{
-					"label": "Resource",
-					"text": "SigCom LINCS",
-					"href": "https://maayanlab.cloud/sigcom-lincs/",
-					"type": "link"
-				}	
-			]
-		},
-		{
-			"match": ["Metabolomics Workbench"],
-			"selected": true,
-			"display": [
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "Target Label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "Resource",
-					"text": "Metabolomics Workbench",
-					"href": "https://www.metabolomicsworkbench.org/",
-					"type": "link"
-				}	
-			]
-		},
-		{
-			"match": ["GlyGen"],
-			"selected": true,
-			"display": [
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "Target Label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "Resource",
-					"text": "GlyGen",
-					"href": "https://glygen.org",
-					"type": "link"
-				}	
-			]
-		},
-		{
-			"match": ["HuBMAP"],
-			"selected": true,
-			"display": [
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "Target Label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "Resource",
-					"text": "HuBMAP",
-					"href": "https://hubmapconsortium.github.io/ccf-asct-reporter/",
-					"type": "link"
-				}	
-			]
-		},
-		{
-			"match": ["GTEx (up)"],
-			"selected": false,
-			"palette": {
-				"main": "#4fc3f7"
-			},
-			"display": [
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "Target Label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "Resource",
-					"text": "GTEx",
-					"href": "https://gtexportal.org/home/",
-					"type": "link"
-				}	
-			]
-		},
-		{
-			"match": ["GTEx (down)"],
-			"selected": false,
-			"palette": {
-				"main": "#f8bbd0"
-			},
-			"display": [
-				{
-					"label": "Source Label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "Target Label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "Resource",
-					"text": "GTEx",
-					"href": "https://gtexportal.org/home/",
-					"type": "link"
-				}
-			]
-		}
-	],	
-	"header": {
-		"title": "Gene-Centric CFDE Knowledge Graph",
-		"icon": {
-			"favicon": "${PREFIX}/favicon.ico",
-			"src": "${PREFIX}/static/icons/CFDE-logo.png",
-			"alt": "CFDE logo",
-			"width": 100,
-			"height": 100
-		},
-		"tabs": [
-			{
-				"endpoint": "/",
-				"label": "Knowledge Graph",
-				"type": "page"
-			},
-			{
-				"endpoint": "/downloads",
-				"label": "Download Assets",
-				"type": "markdown",
-				"src": "https://s3.amazonaws.com/maayan-kg/ingestion/download.md"
-			}
-		],
-		"subheader": [
-			{
-				"label": "LINCS",
-				"icon": "${PREFIX}/static/resources/lincs.gif",
-				"height": 120,
-				"width": 120,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["LINCS (downregulates)", "LINCS (upregulates)"]
-				}
-			},
-			{
-				"label": "Metabolomics Workbench",
-				"icon": "${PREFIX}/static/resources/metabolomics.png",
-				"height": 100,
-				"width": 100,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["Metabolomics Workbench"]
-				}
-			},
-			{
-				"label": "GlyGen",
-				"icon": "${PREFIX}/static/resources/glygen.png",
-				"height": 100,
-				"width": 100,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["GlyGen"]
-				}
-			},
-			{
-				"label": "GTEx",
-				"icon": "${PREFIX}/static/resources/gtex.png",
-				"height": 80,
-				"width": 80,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["GTEx (up)", "GTEx (down)"]
-				}
-			},
-			{
-				"label": "IDG",
-				"icon": "${PREFIX}/static/resources/idg.png",
-				"height": 100,
-				"width": 100,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["IDG"]
-				}
-			},
-			{
-				"label": "HuBMAP",
-				"icon": "${PREFIX}/static/resources/hubmap.png",
-				"height": 100,
-				"width": 100,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["HuBMAP"]
-				}
-			},
-			{
-				"label": "ERCC",
-				"icon": "${PREFIX}/static/resources/exrna.png",
-				"height": 100,
-				"width": 100,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["ERCC"]
-				}
-			},
-			{
-				"label": "BioGRID",
-				"icon": "${PREFIX}/static/resources/biogrid.png",
-				"height": 80,
-				"width": 80,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["BioGRID"]
-				}
-			},
-			{
-				"label": "ARCHS4",
-				"icon": "${PREFIX}/static/resources/archs.png",
-				"height": 100,
-				"width": 100,
-				"onClick": {
-					"type": "function",
-					"name": "filter_relation"
-				},
-				"props": {
-					"selected": ["ARCHS4 (negatively correlated)", "ARCHS4 (positively correlated)"]
-				}
-			}
-		]
-	},
-	"footer": [
-		{
-			"type": "github",
-			"key": "github",
-			"code": "https://github.com/maayanLab/gene-knowledge-graph",
-			"issues": "https://github.com/MaayanLab/Gene-Knowledge-Graph/issues"
-		},
-		{
-			"type": "icon",
-			"key": "cfde_icon",
-			"src": "${PREFIX}/static/icons/CFDE-logo.png",
-			"alt": "CFDE",
-			"href": "https://www.nih-cfde.org/",
-			"height": 100,
-			"width": 100
-		}
-	]
+    "nodes": [
+        {
+            "node": "GTEx Tissues V8 2023",
+            "example": [
+                "Adipose - Subcutaneous Female 60-69 Up",
+                "Muscle - Skeletal Female 60-69 Up"
+            ],
+            "display": [
+                {
+                    "label": "id",
+                    "text": "${id}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "sex",
+                    "text": "${sex}",
+                    "type": "text"
+                },
+                {
+                    "label": "age",
+                    "text": "${age}",
+                    "type": "text"
+                },
+                {
+                    "label": "P-Value",
+                    "text": "${pval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Q-Value",
+                    "text": "${qval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Z-Score",
+                    "text": "${zscore}",
+                    "type": "number"
+                },
+                {
+                    "label": "Combined Score",
+                    "text": "${combined_score}",
+                    "type": "number"
+                }
+            ],
+            "search": [
+                "label"
+            ],
+            "color": "#ff79ff",
+            "border_color": "#C3E1E6",
+            "ring_label": "Human"
+        },
+        {
+            "node": "Gene",
+            "example": [
+                "COPB2",
+                "KCND3"
+            ],
+            "display": [
+                {
+                    "label": "id",
+                    "text": "${id}",
+                    "type": "text"
+                },
+                {
+                    "label": "Gene ID",
+                    "text": "${acc}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "uri",
+                    "text": "${uri}",
+                    "href": "${uri}",
+                    "type": "link"
+                }
+            ],
+            "search": [
+                "label",
+                "acc"
+            ],
+            "color": "#35d71c"
+        },
+        {
+            "node": "GlyGen Glycosylated Proteins 2022",
+            "example": [
+                "G00031MO",
+                "G00406II"
+            ],
+            "display": [
+                {
+                    "label": "id",
+                    "text": "${id}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "P-Value",
+                    "text": "${pval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Q-Value",
+                    "text": "${qval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Z-Score",
+                    "text": "${zscore}",
+                    "type": "number"
+                },
+                {
+                    "label": "Combined Score",
+                    "text": "${combined_score}",
+                    "type": "number"
+                }
+            ],
+            "search": [
+                "label"
+            ],
+            "color": "#00caff",
+            "border_color": "#C3E1E6",
+            "ring_label": "Human"
+        },
+        {
+            "node": "HuBMAP ASCTplusB augmented 2022",
+            "example": [
+                "Paneth Cell Of Epithelium Proper Of Small intestine - Small Intestine",
+                "Duodenal Goblet cell - Small Intestine"
+            ],
+            "display": [
+                {
+                    "label": "id",
+                    "text": "${id}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "cell_id",
+                    "text": "${cell_id}",
+                    "type": "text"
+                },
+                {
+                    "label": "cell_iri",
+                    "text": "${cell_iri}",
+                    "href": "${cell_iri}",
+                    "type": "link"
+                },
+                {
+                    "label": "organ_id",
+                    "text": "${organ_id}",
+                    "type": "text"
+                },
+                {
+                    "label": "organ_iri",
+                    "text": "${organ_iri}",
+                    "href": "${organ_iri}",
+                    "type": "link"
+                },
+                {
+                    "label": "P-Value",
+                    "text": "${pval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Q-Value",
+                    "text": "${qval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Z-Score",
+                    "text": "${zscore}",
+                    "type": "number"
+                },
+                {
+                    "label": "Combined Score",
+                    "text": "${combined_score}",
+                    "type": "number"
+                }
+            ],
+            "search": [
+                "label"
+            ],
+            "color": "#00f7ca",
+            "border_color": "#C3E1E6",
+            "ring_label": "Human"
+        },
+        {
+            "node": "IDG Drug Targets",
+            "example": [
+                "Levobupivacaine",
+                "(S)-nitrendipine"
+            ],
+            "display": [
+                {
+                    "label": "id",
+                    "text": "${id}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "IDG Drug Targets ID",
+                    "text": "${acc}",
+                    "type": "text"
+                },
+                {
+                    "label": "P-Value",
+                    "text": "${pval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Q-Value",
+                    "text": "${qval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Z-Score",
+                    "text": "${zscore}",
+                    "type": "number"
+                },
+                {
+                    "label": "Combined Score",
+                    "text": "${combined_score}",
+                    "type": "number"
+                }
+            ],
+            "search": [
+                "label",
+                "acc"
+            ],
+            "color": "#aeba8e",
+            "border_color": "#C3E1E6",
+            "ring_label": "Human"
+        },
+        {
+            "node": "KOMP2 Mouse Phenotypes 2022",
+            "example": [
+                "Increased Lean Body Mass (MP:0003960)",
+                "Decreased Erythrocyte Cell Number (MP:0002875)"
+            ],
+            "display": [
+                {
+                    "label": "id",
+                    "text": "${id}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "ontology_label",
+                    "text": "${ontology_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "KOMP2 Mouse Phenotypes 2022 ID",
+                    "text": "${acc}",
+                    "type": "text"
+                },
+                {
+                    "label": "uri",
+                    "text": "${uri}",
+                    "href": "${uri}",
+                    "type": "link"
+                },
+                {
+                    "label": "P-Value",
+                    "text": "${pval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Q-Value",
+                    "text": "${qval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Z-Score",
+                    "text": "${zscore}",
+                    "type": "number"
+                },
+                {
+                    "label": "Combined Score",
+                    "text": "${combined_score}",
+                    "type": "number"
+                }
+            ],
+            "search": [
+                "label",
+                "acc"
+            ],
+            "border_color": "#4d0011",
+            "ring_label": "Mouse",
+            "color": "#ffaeb6"
+        },
+        {
+            "node": "LINCS L1000 Chem Pert Consensus Sigs",
+            "example": [
+                "Afatinib",
+                "Erlotinib"
+            ],
+            "display": [
+                {
+                    "label": "id",
+                    "text": "${id}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "uri",
+                    "text": "${uri}",
+                    "href": "${uri}",
+                    "type": "link"
+                },
+                {
+                    "label": "LINCS L1000 Chem Pert Consensus Sigs ID",
+                    "text": "${acc}",
+                    "type": "text"
+                },
+                {
+                    "label": "P-Value",
+                    "text": "${pval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Q-Value",
+                    "text": "${qval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Z-Score",
+                    "text": "${zscore}",
+                    "type": "number"
+                },
+                {
+                    "label": "Combined Score",
+                    "text": "${combined_score}",
+                    "type": "number"
+                }
+            ],
+            "search": [
+                "label",
+                "acc"
+            ],
+            "color": "#e3d700",
+            "border_color": "#C3E1E6",
+            "ring_label": "Human"
+        },
+        {
+            "node": "LINCS L1000 CRISPR KO Consensus Sigs",
+            "example": [
+                "A1CF",
+                "A1BG"
+            ],
+            "display": [
+                {
+                    "label": "id",
+                    "text": "${id}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "uri",
+                    "text": "${uri}",
+                    "href": "${uri}",
+                    "type": "link"
+                },
+                {
+                    "label": "LINCS L1000 CRISPR KO Consensus Sigs ID",
+                    "text": "${acc}",
+                    "type": "text"
+                },
+                {
+                    "label": "P-Value",
+                    "text": "${pval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Q-Value",
+                    "text": "${qval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Z-Score",
+                    "text": "${zscore}",
+                    "type": "number"
+                },
+                {
+                    "label": "Combined Score",
+                    "text": "${combined_score}",
+                    "type": "number"
+                }
+            ],
+            "search": [
+                "label",
+                "acc"
+            ],
+            "color": "#dbf160",
+            "border_color": "#C3E1E6",
+            "ring_label": "Human"
+        },
+        {
+            "node": "Metabolomics Workbench Metabolites 2022",
+            "example": [
+                "(S)-Methylmalonate Semialdehyde",
+                "1,2-Diacyl-sn-glycerol"
+            ],
+            "display": [
+                {
+                    "label": "id",
+                    "text": "${id}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "kegg_id",
+                    "text": "${kegg_id}",
+                    "type": "text"
+                },
+                {
+                    "label": "refmet_name",
+                    "text": "${refmet_name}",
+                    "type": "text"
+                },
+                {
+                    "label": "P-Value",
+                    "text": "${pval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Q-Value",
+                    "text": "${qval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Z-Score",
+                    "text": "${zscore}",
+                    "type": "number"
+                },
+                {
+                    "label": "Combined Score",
+                    "text": "${combined_score}",
+                    "type": "number"
+                }
+            ],
+            "search": [
+                "label"
+            ],
+            "color": "#aed2d7",
+            "border_color": "#C3E1E6",
+            "ring_label": "Human"
+        },
+        {
+            "node": "MoTrPAC 2023",
+            "example": [
+                "T61-Colon Male 1W",
+                "T61-Colon Male 2W"
+            ],
+            "display": [
+                {
+                    "label": "id",
+                    "text": "${id}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "tissue",
+                    "text": "${tissue}",
+                    "type": "text"
+                },
+                {
+                    "label": "sex",
+                    "text": "${sex}",
+                    "type": "text"
+                },
+                {
+                    "label": "timepoint",
+                    "text": "${timepoint}",
+                    "type": "text"
+                },
+                {
+                    "label": "ontology_id",
+                    "text": "${ontology_id}",
+                    "type": "text"
+                },
+                {
+                    "label": "ontology_name",
+                    "text": "${ontology_name}",
+                    "type": "text"
+                },
+                {
+                    "label": "uri",
+                    "text": "${uri}",
+                    "href": "${uri}",
+                    "type": "link"
+                },
+                {
+                    "label": "P-Value",
+                    "text": "${pval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Q-Value",
+                    "text": "${qval}",
+                    "type": "number"
+                },
+                {
+                    "label": "Z-Score",
+                    "text": "${zscore}",
+                    "type": "number"
+                },
+                {
+                    "label": "Combined Score",
+                    "text": "${combined_score}",
+                    "type": "number"
+                }
+            ],
+            "search": [
+                "label"
+            ],
+            "border_color": "#006847",
+            "ring_label": "Rat",
+            "color": "#9eeb92"
+        }
+    ],
+    "edges": [
+        {
+            "match": [
+                "LINCS L1000 Chem Pert Down-regulated",
+                "LINCS L1000 CRISPR KO Down-regulated",
+                "GTEx Aging Signatures Down-regulated"
+            ],
+            "selected": true,
+            "color": "#ef9a9a",
+            "edge_suffix": "(Human)",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "source label",
+                    "text": "${source_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "target label",
+                    "text": "${target_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "resource",
+                    "text": "${resource}",
+                    "type": "text"
+                },
+                {
+                    "label": "link to resource",
+                    "text": "${link_to_resource}",
+                    "href": "${link_to_resource}",
+                    "type": "link"
+                },
+                {
+                    "label": "direction",
+                    "text": "${direction}",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "match": [
+                "MoTrPAC Down"
+            ],
+            "edge_suffix": "(Rat)",
+            "selected": true,
+            "color": "#470068",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "source label",
+                    "text": "${source_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "target label",
+                    "text": "${target_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "resource",
+                    "text": "${resource}",
+                    "type": "text"
+                },
+                {
+                    "label": "link to resource",
+                    "text": "${link_to_resource}",
+                    "href": "${link_to_resource}",
+                    "type": "link"
+                },
+                {
+                    "label": "direction",
+                    "text": "${direction}",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "match": [
+                "GTEx Aging Signatures Up-regulated",
+                "LINCS L1000 Chem Pert Up-regulated",
+                "LINCS L1000 CRISPR KO Up-regulated"
+            ],
+            "selected": true,
+            "color": "#90caf9",
+            "edge_suffix": "(Human)",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "source label",
+                    "text": "${source_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "target label",
+                    "text": "${target_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "resource",
+                    "text": "${resource}",
+                    "type": "text"
+                },
+                {
+                    "label": "link to resource",
+                    "text": "${link_to_resource}",
+                    "href": "${link_to_resource}",
+                    "type": "link"
+                },
+                {
+                    "label": "direction",
+                    "text": "${direction}",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "match": [
+                "MoTrPAC Up"
+            ],
+            "edge_suffix": "(Rat)",
+            "selected": true,
+            "color": "#684700",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "source label",
+                    "text": "${source_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "target label",
+                    "text": "${target_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "resource",
+                    "text": "${resource}",
+                    "type": "text"
+                },
+                {
+                    "label": "link to resource",
+                    "text": "${link_to_resource}",
+                    "href": "${link_to_resource}",
+                    "type": "link"
+                },
+                {
+                    "label": "direction",
+                    "text": "${direction}",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "match": [
+                "GTEx Tissues Up"
+            ],
+            "selected": true,
+            "color": "#90caf9",
+            "edge_suffix": "(Human)",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "source label",
+                    "text": "${source_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "target label",
+                    "text": "${target_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "resource",
+                    "text": "${resource}",
+                    "type": "text"
+                },
+                {
+                    "label": "link to resource",
+                    "text": "${link_to_resource}",
+                    "href": "${link_to_resource}",
+                    "type": "link"
+                }
+            ]
+        },
+        {
+            "match": [
+                "GlyGen Glycosylated Proteins"
+            ],
+            "selected": true,
+            "color": "#bdbdbd",
+            "edge_suffix": "(Human)",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "source label",
+                    "text": "${source_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "target label",
+                    "text": "${target_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "uniprotkb canonical ac",
+                    "text": "${uniprotkb_canonical_ac}",
+                    "type": "text"
+                },
+                {
+                    "label": "title",
+                    "text": "${title}",
+                    "type": "text"
+                },
+                {
+                    "label": "journal name",
+                    "text": "${journal_name}",
+                    "type": "text"
+                },
+                {
+                    "label": "publication date",
+                    "text": "${publication_date}",
+                    "type": "text"
+                },
+                {
+                    "label": "authors",
+                    "text": "${authors}",
+                    "type": "text"
+                },
+                {
+                    "label": "xref key",
+                    "text": "${xref_key}",
+                    "type": "text"
+                },
+                {
+                    "label": "xref id",
+                    "text": "${xref_id}",
+                    "type": "text"
+                },
+                {
+                    "label": "src xref key",
+                    "text": "${src_xref_key}",
+                    "type": "text"
+                },
+                {
+                    "label": "src xref id",
+                    "text": "${src_xref_id}",
+                    "type": "text"
+                },
+                {
+                    "label": "resource",
+                    "text": "${resource}",
+                    "type": "text"
+                },
+                {
+                    "label": "link to resource",
+                    "text": "${link_to_resource}",
+                    "href": "${link_to_resource}",
+                    "type": "link"
+                }
+            ]
+        },
+        {
+            "match": [
+                "HuBMAP ASCTplusB augmented",
+                "Metabolomics Workbench Metabolites"
+            ],
+            "selected": true,
+            "color": "#bdbdbd",
+            "edge_suffix": "(Human)",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "source label",
+                    "text": "${source_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "target label",
+                    "text": "${target_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "resource",
+                    "text": "${resource}",
+                    "type": "text"
+                },
+                {
+                    "label": "link to resource",
+                    "text": "${link_to_resource}",
+                    "href": "${link_to_resource}",
+                    "type": "link"
+                }
+            ]
+        },
+        {
+            "match": [
+                "KOMP2 Mouse Phenotype"
+            ],
+            "edge_suffix": "(Mouse)",
+            "selected": true,
+            "color": "#4d0011",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "source label",
+                    "text": "${source_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "target label",
+                    "text": "${target_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "resource",
+                    "text": "${resource}",
+                    "type": "text"
+                },
+                {
+                    "label": "link to resource",
+                    "text": "${link_to_resource}",
+                    "href": "${link_to_resource}",
+                    "type": "link"
+                }
+            ]
+        },
+        {
+            "match": [
+                "IDG Drug Targets"
+            ],
+            "selected": true,
+            "edge_suffix": "(Human)",
+            "color": "#bdbdbd",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "source label",
+                    "text": "${source_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "target label",
+                    "text": "${target_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "resource",
+                    "text": "${resource}",
+                    "type": "text"
+                },
+                {
+                    "label": "link to resource",
+                    "text": "${link_to_resource}",
+                    "href": "${link_to_resource}",
+                    "type": "link"
+                },
+                {
+                    "label": "ACT COMMENT",
+                    "text": "${ACT_COMMENT}",
+                    "type": "text"
+                },
+                {
+                    "label": "ACT SOURCE",
+                    "text": "${ACT_SOURCE}",
+                    "type": "text"
+                },
+                {
+                    "label": "MOA",
+                    "text": "${MOA}",
+                    "type": "text"
+                },
+                {
+                    "label": "MOA SOURCE",
+                    "text": "${MOA_SOURCE}",
+                    "type": "text"
+                },
+                {
+                    "label": "MOA SOURCE URL",
+                    "text": "${MOA_SOURCE_URL}",
+                    "type": "text"
+                },
+                {
+                    "label": "ACTION TYPE",
+                    "text": "${ACTION_TYPE}",
+                    "type": "text"
+                },
+                {
+                    "label": "TDL",
+                    "text": "${TDL}",
+                    "type": "text"
+                },
+                {
+                    "label": "ORGANISM",
+                    "text": "${ORGANISM}",
+                    "type": "text"
+                },
+                {
+                    "label": "ACT VALUE",
+                    "text": "${ACT_VALUE}",
+                    "type": "text"
+                },
+                {
+                    "label": "ACT TYPE",
+                    "text": "${ACT_TYPE}",
+                    "type": "text"
+                },
+                {
+                    "label": "RELATION",
+                    "text": "${RELATION}",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "match": [
+                "MoTrPAC Consensus"
+            ],
+            "selected": true,
+            "color": "#006847",
+            "edge_suffix": "(Rat)",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "source label",
+                    "text": "${source_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "target label",
+                    "text": "${target_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "resource",
+                    "text": "${resource}",
+                    "type": "text"
+                },
+                {
+                    "label": "link to resource",
+                    "text": "${link_to_resource}",
+                    "href": "${link_to_resource}",
+                    "type": "link"
+                },
+                {
+                    "label": "direction",
+                    "text": "${direction}",
+                    "type": "text"
+                }
+            ]
+        }
+    ],
+    "header": {
+        "title": "CFDE GSE",
+        "icon": {
+            "src": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/CFDE.png",
+            "favicon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/favicon.png",
+            "faviconTitle": "CFDE-GSE",
+            "alt": "CFDE logo",
+            "key": "CFDE_logo",
+            "width": 100,
+            "height": 100
+        },
+        "background": {
+            "backgroundColor": "#c3e1e6",
+            "contrastText": "#000"
+        },
+        "tabs": [
+            {
+                "endpoint": "/",
+                "label": "Enrichment Analysis",
+                "type": "page",
+                "component": "Enrichment",
+                "position": "bottom",
+                "props": {
+                    "init_function": "initialize_enrichment",
+                    "title": "Common Fund Data Ecosystem (CFDE) Gene Set Enrichment (GSE)",
+                    "description": "Enter a set of Entrez gene below to perform enrichment analysis using [Enrichr](https://maayanlab.cloud/Enrichr/).",
+                    "placeholder": "Enter newline separated gene sets",
+                    "disableHeader": true,
+                    "disableLibraryLimit": true,
+                    "example": {
+                        "gene_set": "Nsun3\nPolrmt\nNlrx1\nSfxn5\nZc3h12c\nSlc25a39\nArsg\nDefb29\nNdufb6\nZfand1\nTmem77\n5730403B10Rik\nRP23-195K8.6\nTlcd1\nPsmc6\nSlc30a6\nLOC100047292\nLrrc40\nOrc5l\nMpp7\nUnc119b\nPrkaca\nTcn2\nPsmc3ip\nPcmtd2\nAcaa1a\nLrrc1\n2810432D09Rik\nSephs2\nSac3d1\nTmlhe\nLOC623451\nTsr2\nPlekha7\nGys2\nArhgef12\nHibch\nLyrm2\nZbtb44\nEntpd5\nRab11fip2\nLipt1\nIntu\nAnxa13\nKlf12\nSat2\nGal3st2\nVamp8\nFkbpl\nAqp11\nTrap1\nPmpcb\nTm7sf3\nRbm39\nBri3\nKdr\nZfp748\nNap1l1\nDhrs1\nLrrc56\nWdr20a\nStxbp2\nKlf1\nUfc1\nCcdc16\n9230114K14Rik\nRwdd3\n2610528K11Rik\nAco1\nCables1\nLOC100047214\nYars2\nLypla1\nKalrn\nGyk\nZfp787\nZfp655\nRabepk\nZfp650\n4732466D17Rik\nExosc4\nWdr42a\nGphn\n2610528J11Rik\n1110003E01Rik\nMdh1\n1200014M14Rik\nAW209491\nMut\n1700123L14Rik\n2610036D13Rik\nCox15\nTmem30a\nNsmce4a\nTm2d2\nRhbdd3\nAtxn2\nNfs1\n3110001I20Rik\nBC038156\nLOC100047782\n2410012H22Rik\nRilp\nA230062G08Rik\nPttg1ip\nRab1\nAfap1l1\nLyrm5\n2310026E23Rik\nC330002I19Rik\nZfyve20\nPoli\nTomm70a\nSlc7a6os\nMat2b\n4932438A13Rik\nLrrc8a\nSmo\nNupl2\nTrpc2\nArsk\nD630023B12Rik\nMtfr1\n5730414N17Rik\nScp2\nZrsr1\nNol7\nC330018D20Rik\nIft122\nLOC100046168\nD730039F16Rik\nScyl1\n1700023B02Rik\n1700034H14Rik\nFbxo8\nPaip1\nTmem186\nAtpaf1\nLOC100046254\nLOC100047604\nCoq10a\nFn3k\nSipa1l1\nSlc25a16\nSlc25a40\nRps6ka5\nTrim37\nLrrc61\nAbhd3\nGbe1\nParp16\nHsd3b2\nEsm1\nDnajc18\nDolpp1\nLass2\nWdr34\nRfesd\nCacnb4\n2310042D19Rik\nSrr\nBpnt1\n6530415H11Rik\nClcc1\nTfb1m\n4632404H12Rik\nD4Bwg0951e\nMed14\nAdhfe1\nThtpa\nCat\nEll3\nAkr7a5\nMtmr14\nTimm44\nSf1\nIpp\nIah1\nTrim23\nWdr89\nGstz1\nCradd\n2510006D16Rik\nFbxl6\nLOC100044400\nZfp106\nCd55\n0610013E23Rik\nAfmid\nTmem86a\nAldh6a1\nDalrd3\nSmyd4\nNme7\nFars2\nTasp1\nCldn10\nA930005H10Rik\nSlc9a6\nAdk\nRbks\n2210016F16Rik\nVwce\n4732435N03Rik\nZfp11\nVldlr\n9630013D21Rik\n4933407N01Rik\nFahd1\nMipol1\n1810019D21Rik\n1810049H13Rik\nTfam\nPaics\n1110032A03Rik\nLOC100044139\nDnajc19\nBC016495\nA930041I02Rik\nRqcd1\nUsp34\nZcchc3\nH2afj\nPhf7\n4921508D12Rik\nKmo\nPrpf18\nMcat\nTxndc4\n4921530L18Rik\nVps13b\nScrn3\nTor1a\nAI316807\nAcbd4\nFah\nApool\nCol4a4\nLrrc19\nGnmt\nNr3c1\nSip1\nAscc1\nFech\nAbhd14a\nArhgap18\n2700046G09Rik\nYme1l1\nGk5\nGlo1\nSbk1\nCisd1\n2210011C24Rik\nNxt2\nNotum\nAnkrd42\nUbe2e1\nNdufv1\nSlc33a1\nCep68\nRps6kb1\nHyi\nAldh1a3\nMynn\n3110048L19Rik\nRdh14\nProz\nGorasp1\nLOC674449\nZfp775\n5430437P03Rik\nNpy\nAdh5\nSybl1\n4930432O21Rik\nNat9\nLOC100048387\nMettl8\nEny2\n2410018G20Rik\nPgm2\nFgfr4\nMobkl2b\nAtad3a\n4932432K03Rik\nDhtkd1\nUbox5\nA530050D06Rik\nZdhhc5\nMgat1\nNudt6\nTpmt\nWbscr18\nLOC100041586\nCdk5rap1\n4833426J09Rik\nMyo6\nCpt1a\nGadd45gip1\nTmbim4\n2010309E21Rik\nAsb9\n2610019F03Rik\n7530414M10Rik\nAtp6v1b2\n2310068J16Rik\nDdt\nKlhdc4\nHpn\nLifr\nOvol1\nNudt12\nCdan1\nFbxo9\nFbxl3\nHoxa7\nAldh8a1\n3110057O12Rik\nAbhd11\nPsmb1\nENSMUSG00000074286\nChpt1\nOxsm\n2310009A05Rik\n1700001L05Rik\nZfp148\n39509\nMrpl9\nTmem80\n9030420J04Rik\nNaglu\nPlscr2\nAgbl3\nPex1\nCno\nNeo1\nAsf1a\nTnfsf5ip1\nPkig\nAI931714\nD130020L05Rik\nCntd1\nClec2h\nZkscan1\n1810044D09Rik\nMettl7a\nSiae\nFbxo3\nFzd5\nTmem166\nTmed4\nGpr155\nRnf167\nSptlc1\nRiok2\nTgds\nPms1\nPitpnc1\nPcsk7\n4933403G14Rik\nEi24\nCrebl2\nTln1\nMrpl35\n2700038C09Rik\nUbie\nOsgepl1\n2410166I05Rik\nWdr24\nAp4s1\nLrrc44\nB3bp\nItfg1\nDmxl1\nC1d",
+                        "libraries": [
+                            {
+                                "name": "IDG_Drug_Targets_2022",
+                                "limit": 5
+                            },
+                            {
+                                "name": "LINCS_L1000_Chem_Pert_Consensus_Sigs",
+                                "limit": 5
+                            },
+                            {
+                                "name": "LINCS_L1000_CRISPR_KO_Consensus_Sigs",
+                                "limit": 5
+                            },
+                            {
+                                "name": "GTEx_Tissues_V8_2023",
+                                "limit": 5
+                            }
+                        ],
+                        "gene_degree": 3
+                    },
+                    "libraries": [
+                        {
+                            "name": "GTEx_Aging_Signatures_2021",
+                            "node": "GTEx Aging Signatures 2021",
+                            "regex": "(?<label>GTEx (?<tissue>.+) (?<control_age>[0-9]+-[0-9]+) vs (?<treatment_age>[0-9]+-[0-9]+)) (?<direction>.+)"
+                        },
+                        {
+                            "name": "GTEx_Tissues_V8_2023",
+                            "node": "GTEx Tissues V8 2023"
+                        },
+                        {
+                            "name": "GlyGen_Glycosylated_Proteins_2022",
+                            "node": "GlyGen Glycosylated Proteins 2022"
+                        },
+                        {
+                            "name": "HuBMAP_ASCTplusB_augmented_2022",
+                            "node": "HuBMAP ASCTplusB augmented 2022"
+                        },
+                        {
+                            "name": "IDG_Drug_Targets_2022",
+                            "node": "IDG Drug Targets"
+                        },
+                        {
+                            "name": "KOMP2_Mouse_Phenotypes_2022",
+                            "node": "KOMP2 Mouse Phenotypes 2022"
+                        },
+                        {
+                            "name": "LINCS_L1000_CRISPR_KO_Consensus_Sigs",
+                            "node": "LINCS L1000 CRISPR KO Consensus Sigs",
+                            "regex": "(?<label>.*) (?<direction>[A-Za-z]*)"
+                        },
+                        {
+                            "name": "LINCS_L1000_Chem_Pert_Consensus_Sigs",
+                            "node": "LINCS L1000 Chem Pert Consensus Sigs",
+                            "regex": "(?<label>.*) (?<direction>[A-Za-z]*)"
+                        },
+                        {
+                            "name": "Metabolomics_Workbench_Metabolites_2022",
+                            "node": "Metabolomics Workbench Metabolites 2022"
+                        },
+                        {
+                            "name": "MoTrPAC_2023",
+                            "node": "MoTrPAC 2023",
+                            "regex": "(?<label>.*) (?<direction>[A-Za-z]*)"
+                        }
+                    ],
+                    "sortLibraries": false,
+                    "default_options": {
+                        "min_lib": 1,
+                        "libraries": [
+                            {
+                                "name": "LINCS_L1000_Chem_Pert_Consensus_Sigs",
+                                "limit": 5
+                            },
+                            {
+                                "name": "HuBMAP_ASCTplusB_augmented_2022",
+                                "limit": 5
+                            }
+                        ]
+                    },
+                    "subheader": {
+                        "url_field": "q",
+                        "query_field": "libraries"
+                    }
+                }
+            },
+            {
+                "endpoint": "/ConnectionExplorer",
+                "label": "Connection Explorer",
+                "type": "page",
+                "component": "KnowledgeGraph",
+                "position": "bottom",
+                "props": {
+                    "title": "Connection Explorer: Find connections between CFDE genes and terms",
+                    "description": "Select a term or a gene entity to find other entities connected to it or explore connections between two entities.",
+                    "init_function": "initialize_kg",
+                    "initial_query": {
+                        "start": "Gene",
+                        "start_term": "ACE2",
+                        "start_field": "label"
+                    },
+                    "subheader": {
+                        "url_field": "filter",
+                        "query_field": "relation"
+                    }
+                }
+            },
+            {
+                "endpoint": "/downloads",
+                "label": "Download Assets",
+                "type": "page",
+                "component": "Download",
+                "position": "bottom",
+                "props": {
+                    "src": "https://minio.dev.maayanlab.cloud/cfde-gse/download.json"
+                }
+            },
+            {
+                "endpoint": "https://info.cfde.cloud/",
+                "label": "CFDE Information Portal",
+                "type": "link",
+                "component": "Link",
+                "position": "top"
+            },
+            {
+                "endpoint": "https://data.cfde.cloud/",
+                "label": "CFDE Data Portal",
+                "type": "link",
+                "component": "Link",
+                "position": "top"
+            },
+            {
+                "endpoint": "/about",
+                "label": "About",
+                "type": "markdown",
+                "component": "Markdown",
+                "position": "top",
+                "props": {
+                    "src": "https://minio.dev.maayanlab.cloud/cfde-gse/about.md"
+                }
+            }
+        ],
+        "subheader": [
+            {
+                "label": "GTEx",
+                "icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/GTEx.png",
+                "width": 80,
+                "height": 100,
+                "url": "https://gtexportal.org/home/",
+                "props": {
+                    "libraries": [
+                        "GTEx_Aging_Signatures_2021",
+                        "GTEx_Tissues_V8_2023"
+                    ],
+                    "relation": [
+                        "GTEx Aging Signatures Down-regulated",
+                        "GTEx Aging Signatures Up-regulated",
+                        "GTEx Tissues Up"
+                    ]
+                }
+            },
+            {
+                "label": "GlyGen",
+                "icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/glygen.png",
+                "width": 100,
+                "height": 100,
+                "url": "https://www.glygen.org/",
+                "props": {
+                    "libraries": [
+                        "GlyGen_Glycosylated_Proteins_2022"
+                    ],
+                    "relation": [
+                        "GlyGen Glycosylated Proteins"
+                    ]
+                }
+            },
+            {
+                "label": "HuBMAP",
+                "icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/HuBMAP.png",
+                "width": 100,
+                "height": 100,
+                "url": "https://hubmapconsortium.github.io/ccf-asct-reporter/",
+                "props": {
+                    "libraries": [
+                        "HuBMAP_ASCTplusB_augmented_2022"
+                    ],
+                    "relation": [
+                        "HuBMAP ASCTplusB augmented"
+                    ]
+                }
+            },
+            {
+                "label": "IDG",
+                "icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/IDG.png",
+                "width": 100,
+                "height": 100,
+                "url": "https://drugcentral.org/",
+                "props": {
+                    "libraries": [
+                        "IDG_Drug_Targets_2022"
+                    ],
+                    "relation": [
+                        "IDG Drug Targets"
+                    ]
+                }
+            },
+            {
+                "label": "KOMP2",
+                "icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/KOMP2.svg",
+                "width": 100,
+                "height": 100,
+                "url": "https://www.mousephenotype.org/",
+                "props": {
+                    "libraries": [
+                        "KOMP2_Mouse_Phenotypes_2022"
+                    ],
+                    "relation": [
+                        "KOMP2 Mouse Phenotype"
+                    ]
+                }
+            },
+            {
+                "label": "LINCS",
+                "icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/LINCS.gif",
+                "width": 150,
+                "height": 100,
+                "url": "https://maayanlab.cloud/sigcom-lincs/",
+                "props": {
+                    "libraries": [
+                        "LINCS_L1000_CRISPR_KO_Consensus_Sigs",
+                        "LINCS_L1000_Chem_Pert_Consensus_Sigs"                   ],
+                    "relation": [
+                        "LINCS L1000 CRISPR KO Down-regulated",
+                        "LINCS L1000 CRISPR KO Up-regulated",
+                        "LINCS L1000 Chem Pert Down-regulated",
+                        "LINCS L1000 Chem Pert Up-regulated"
+                    ]
+                }
+            },
+            {
+                "label": "Metabolomics Workbench",
+                "icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/MetabolomicsWorkbench.png",
+                "width": 100,
+                "height": 100,
+                "url": "https://www.metabolomicsworkbench.org/",
+                "props": {
+                    "libraries": [
+                        "Metabolomics_Workbench_Metabolites_2022"
+                    ],
+                    "relation": [
+                        "Metabolomics Workbench Metabolites"
+                    ]
+                }
+            },
+            {
+                "label": "MoTrPAC",
+                "icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/MoTrPAC.png",
+                "width": 140,
+                "height": 100,
+                "url": "https://motrpac.org/",
+                "props": {
+                    "libraries": [
+                        "MoTrPAC_2023"
+                    ],
+                    "relation": [
+                        "MoTrPAC Consensus",
+                        "MoTrPAC Down",
+                        "MoTrPAC Up"
+                    ]
+                }
+            }
+        ]
+    },
+    "footer": {
+        "style": {
+            "background": "#336699",
+            "color": "#FFF"
+        },
+        "layout": [
+            [
+                {
+                    "component": "logo",
+                    "props": {
+                        "src": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/favicon.png",
+                        "alt": "CFDE-GSE",
+                        "title": "CFDE GSE",
+                        "color": "inherit",
+                        "size": "small"
+                    }
+                },
+                {
+                    "component": "github",
+                    "props": {
+                        "code": "https://github.com/MaayanLab/CFDE-KG",
+                        "issues": "https://github.com/MaayanLab/CFDE-KG/issues"
+                    }
+                },
+                {
+                    "component": "social",
+                    "props": {
+                        "email": "mailto:contact@cfde.info",
+                        "twitter": "https://twitter.com/CFDEWorkbench",
+                        "youtube": "https://www.youtube.com/channel/UCWucYIvMygAgG5t0xEGEZgg"
+                        
+                    }
+                }
+            ],
+            [
+                {
+                    "component": "text",
+                    "props": {
+                        "text": "Consortium"
+                    }
+                },
+                {
+                    "component": "link",
+                    "props": {
+                        "text": "Information Portal",
+                        "href": "https://info.cfde.cloud/"
+                    }
+                },
+                {
+                    "component": "link",
+                    "props": {
+                        "text": "Data Portal",
+                        "href": "https://data.cfde.cloud/"
+                    }
+                }
+            ],
+            [
+                {
+                    "component": "text",
+                    "props": {
+                        "text": "GSKG"
+                    }
+                },
+                {
+                    "component": "link",
+                    "props": {
+                        "text": "Enrichment Analysis",
+                        "href": "/"
+                    }
+                },
+                {
+                    "component": "link",
+                    "props": {
+                        "text": "ConnectionExplorer",
+                        "href": "/ConnectionExplorer"
+                    }
+                }
+            ],
+            [
+                {
+                    "component": "text",
+                    "props": {
+                        "text": "Data Access"
+                    }
+                },
+                {
+                    "component": "link",
+                    "props": {
+                        "text": "Downloads",
+                        "href": "/downloads"
+                    }
+                },
+                {
+                    "component": "link",
+                    "props": {
+                        "text": "About",
+                        "href": "/about"
+                    }
+                }
+            ]
+        ]
+    },
+    "theme": {
+        "typography": {
+            "fontFamily": "\"Noto Sans Display\", sans-serif",
+            "button": {
+                "textTransform": "none"
+            },
+            "h4": {
+                "letterSpacing": "0.1em"
+            }
+        }
+    },
+    "ui": {
+        "background": "#336699"
+    },
+    "datasets": {
+        "GTEx": [
+            {
+                "base_name": "GTEx_Aging_Signatures_2021.nodes.csv",
+                "resource": "node_type",
+                "node_type": "GTEx Aging Signatures 2021",
+                "terms": 135,
+                "url": "https://s3.amazonaws.com/maayan-kg/cfde-kg/042123/GTEx_Aging_Signatures_2021.nodes.csv",
+                "size": "17.46KB"
+            },
+            {
+                "base_name": "GTEx_Tissues_V8_2023.nodes.csv",
+                "resource": "node_type",
+                "node_type": "GTEx Tissues V8 2023",
+                "terms": 511,
+                "url": "https://s3.amazonaws.com/maayan-kg/cfde-kg/042123/GTEx_Tissues_V8_2023.nodes.csv",
+                "size": "43.19KB"
+            }
+        ],
+        "Gene": [
+            {
+                "base_name": "Gene.nodes.csv",
+                "resource": "node_type",
+                "node_type": "Gene",
+                "terms": 23644,
+                "url": "https://s3.amazonaws.com/maayan-kg/cfde-kg/102523/Gene.nodes.csv",
+                "size": "2.15MB"
+            }
+        ],
+        "GlyGen": [
+            {
+                "base_name": "GlyGen_Glycosylated_Proteins_2022.nodes.csv",
+                "resource": "node_type",
+                "node_type": "GlyGen Glycosylated Proteins 2022",
+                "terms": 338,
+                "url": "https://s3.amazonaws.com/maayan-kg/cfde-kg/042123/GlyGen_Glycosylated_Proteins_2022.nodes.csv",
+                "size": "15.56KB"
+            }
+        ],
+        "HuBMAP": [
+            {
+                "base_name": "HuBMAP_ASCTplusB_augmented_2022.nodes.csv",
+                "resource": "node_type",
+                "node_type": "HuBMAP ASCTplusB augmented 2022",
+                "terms": 777,
+                "url": "https://s3.amazonaws.com/maayan-kg/cfde-kg/042123/HuBMAP_ASCTplusB_augmented_2022.nodes.csv",
+                "size": "128.97KB"
+            }
+        ],
+        "IDG": [
+            {
+                "base_name": "IDG_Drug_Targets.nodes.csv",
+                "resource": "node_type",
+                "node_type": "IDG Drug Targets",
+                "terms": 888,
+                "url": "https://s3.amazonaws.com/maayan-kg/cfde-kg/042123/IDG_Drug_Targets.nodes.csv",
+                "size": "47.95KB"
+            }
+        ],
+        "KOMP2": [
+            {
+                "base_name": "KOMP2_Mouse_Phenotypes_2022.nodes.csv",
+                "resource": "node_type",
+                "node_type": "KOMP2 Mouse Phenotypes 2022",
+                "terms": 529,
+                "url": "https://s3.amazonaws.com/maayan-kg/cfde-kg/042123/KOMP2_Mouse_Phenotypes_2022.nodes.csv",
+                "size": "107.15KB"
+            }
+        ],
+        "LINCS": [
+            {
+                "base_name": "LINCS_L1000_CRISPR_KO_Consensus_Sigs.nodes.csv",
+                "resource": "node_type",
+                "node_type": "LINCS L1000 CRISPR KO Consensus Sigs",
+                "terms": 5212,
+                "url": "https://s3.amazonaws.com/maayan-kg/cfde-kg/042123/LINCS_L1000_CRISPR_KO_Consensus_Sigs.nodes.csv",
+                "size": "575.28KB"
+            },
+            {
+                "base_name": "LINCS_L1000_Chem_Pert_Consensus_Sigs.nodes.csv",
+                "resource": "node_type",
+                "node_type": "LINCS L1000 Chem Pert Consensus Sigs",
+                "terms": 5425,
+                "url": "https://s3.amazonaws.com/maayan-kg/cfde-kg/042123/LINCS_L1000_Chem_Pert_Consensus_Sigs.nodes.csv",
+                "size": "594.23KB"
+            }
+        ],
+        "Metabolomics Workbench": [
+            {
+                "base_name": "Metabolomics_Workbench_Metabolites_2022.nodes.csv",
+                "resource": "node_type",
+                "node_type": "Metabolomics Workbench Metabolites 2022",
+                "terms": 233,
+                "url": "https://s3.amazonaws.com/maayan-kg/cfde-kg/042123/Metabolomics_Workbench_Metabolites_2022.nodes.csv",
+                "size": "18.02KB"
+            }
+        ],
+        "MoTrPAC": [
+            {
+                "base_name": "MoTrPAC_2023.nodes.csv",
+                "resource": "node_type",
+                "node_type": "MoTrPAC 2023",
+                "terms": 225,
+                "url": "https://s3.amazonaws.com/maayan-kg/cfde-kg/102523/MoTrPAC_2023.nodes.csv",
+                "size": "28.02KB"
+            }
+        ]
+    }
 }

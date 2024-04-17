@@ -20,7 +20,7 @@ export interface UISchema {
     }>,
     edges: Array<{
         match: Array<string>,
-        selected?: Boolean,
+        selected?: boolean,
         templates?: {
             multiple?: string,
             singular?: string
@@ -29,9 +29,10 @@ export interface UISchema {
         display: Array<{
             label: string,
             text: string,
-            type: string
+            type: string,
+            href?:string,
         }>,
-        gene_link: Boolean,
+        gene_link?: boolean,
         color?: string,
         order?: Array<string>
     }>,
@@ -51,7 +52,7 @@ export interface UISchema {
             label: string,
             type: string,
             component: string,
-            position?: 'top' | 'bottom',
+            position?: string,
             props?: {
                 subheader?: {
                     url_field: string,
@@ -68,7 +69,7 @@ export interface UISchema {
             props: {
                 [key: string]: any
             },
-            href: string
+            href?: string
         }>
     },
     ui_theme?: string,

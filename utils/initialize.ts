@@ -2,7 +2,7 @@ import neo4j from "neo4j-driver"
 import { neo4jDriver } from "./neo4j"
 import { toNumber } from "./math"
 import { UISchema } from "@/app/api/schema/route"
-
+import default_schema from "@/public/schema.json"
 export async function get_terms(node, search) {
   try {
     const session = neo4jDriver.session({
@@ -67,7 +67,7 @@ export async function get_terms(node, search) {
 }
 
 export const fetch_kg_schema = async () => {
-	let schema:UISchema 
+	let schema:UISchema = default_schema
 	if (process.env.NEXT_PUBLIC_SCHEMA) {
 		const r = await fetch(`${process.env.NEXT_PUBLIC_SCHEMA}`, { next: { revalidate: process.env.NODE_ENV === 'development'? 0: 3600 } })
 		if (!r.ok) {
