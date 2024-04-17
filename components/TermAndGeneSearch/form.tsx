@@ -296,7 +296,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                     <SaveIcon/>
                                 </IconButton>
                             </Tooltip>
-                            <>
+                            { (!view) && <>
                                 <Tooltip title={"Download graph as an image file"}>
                                     <IconButton color="secondary"  onClick={(e)=>handleClickMenu(e, setAnchorEl)}
                                         aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
@@ -341,8 +341,10 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                         setDownloadImage('svg')
                                     }}>SVG</MenuItem>
                                 </Menu>
+                                <Divider sx={{backgroundColor: "secondary.main", height: 20, borderRightWidth: 1}} orientation="vertical"/>
                             </>
-                            <Divider sx={{backgroundColor: "secondary.main", height: 20, borderRightWidth: 1}} orientation="vertical"/>
+                        }
+                            
                         </Stack>
                         
                     </Grid>
