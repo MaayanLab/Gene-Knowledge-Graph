@@ -1,5 +1,6 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+import * as ReactDOM from 'react-dom';
 import {
 	BarChart, Bar, Cell, XAxis, YAxis, LabelList, Tooltip, ResponsiveContainer, TooltipProps
 } from 'recharts';
@@ -10,6 +11,9 @@ import {
 import Color from 'color'
 import { precise } from '@/utils/math';
 import { Grid, Card, CardContent, Typography } from '@mui/material';
+import { useQueryState } from 'next-usequerystate';
+import download from 'downloadjs'
+import domtoimage from 'dom-to-image';
 
 
 const renderCustomizedLabel = (props) => {
@@ -72,19 +76,56 @@ export const EnrichmentBar = (props: {
 	const height = data.length === 10 ? maxHeight: maxHeight/10 * data.length
 	let yWidth = 0
 	const data_cells = []
-
+	const barRef = useRef(null);
+	const ref = useRef(null);
 	for (const index in data) {
 		const i = data[index]
 		if (yWidth < i.library.length) yWidth = i.library.length
 		data_cells.push(<Cell key={`${field}-${index}`} fill={i.color} />)
 	}
+	const [download_image, setDownloadImage] = useQueryState('download_image')
 
+	function exportChart() {
+
+		// A Recharts component is rendered as a div that contains namely an SVG
+		// which holds the chart. We can access this SVG by calling upon the first child/
+		let chartSVG = ReactDOM.findDOMNode(barRef.current).children[0];
+		let svgURL = new XMLSerializer().serializeToString(chartSVG);
+		let svgBlob = new Blob([svgURL], {type: "image/svg;"});
+		download(svgBlob, "bar_chart.svg");
+	}
+
+	useEffect(()=>{
+		const download_fnc = async () => {
+			// exportChart(download_image)
+			if (download_image === 'png') {
+				if (ref.current) {
+					const blob = await domtoimage.toBlob(ref.current)
+					download(blob, `bar_chart.png`);
+				}
+			} else if (download_image === 'jpg') {
+				if (ref.current) {
+					const dataUrl = await domtoimage.toJpeg(ref.current)
+					const link = document.createElement('a');
+					link.download = 'bar_chart.jpg';
+					link.href = dataUrl;
+					link.click();
+				}
+			} else if (download_image === 'svg') {
+				exportChart()
+			}
+			setDownloadImage(null)
+		}
+		download_fnc()
+		
+	}, [download_image])
 	return(
 		<Grid container>
-			<Grid item xs={12}>
+			<Grid item xs={12} ref={ref}>
 				<ResponsiveContainer 
 						height={height}
 						width={'100%'}
+						id="plot"
 				>
 					<BarChart
 						layout="vertical"
@@ -92,6 +133,7 @@ export const EnrichmentBar = (props: {
 						height={height}
 						width={width}
 						data={data}// Save the ref of the chart
+						ref={barRef}
 					>
 						<Tooltip content={<BarTooltip/>} />
 						<Bar dataKey="value" fill={color} barSize={barSize}>
