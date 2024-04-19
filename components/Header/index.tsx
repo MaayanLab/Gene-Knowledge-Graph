@@ -35,9 +35,6 @@ export const Nav = ({tabs}:
 			<Grid item>
 				<Stack direction={"row"} alignItems={"center"} spacing={2}>
 					{tab_component.top}
-					<Link href={'/api-doc'}>
-						<Typography variant="nav">API</Typography>
-					</Link>		
 				</Stack>
 			</Grid>
 			{tab_component.bottom.length > 0 &&

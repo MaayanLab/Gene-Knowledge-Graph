@@ -5,9 +5,12 @@ import Markdown from '@/components/MarkdownComponent'
 import DistilleryUseCase from '@/components/Distillery/DistilleryUseCase'
 import Enrichment from '@/components/Enrichment'
 import Download from '@/components/Download'
+import APIDoc from '@/components/APIDoc'
 import { Suspense } from 'react'
 import { CircularProgress } from '@mui/material'
-const AsyncComponent = async ({component, searchParams, props, endpoint,}: {component: string, endpoint: string, searchParams: {[key:string]: any}, props: {[key:string]: any}}) => {
+const AsyncComponent = async ({component, searchParams, props, endpoint,}: 
+	{component: string, endpoint: string, searchParams: {[key:string]: any}, 
+	props: {[key:string]: any}}) => {
 	if (component === "KnowledgeGraph") return await TermAndGeneSearch({props, searchParams})
 	else if (component === "DistilleryLanding") return await DistilleryLanding({...props})
 	else if (component === "SanitizedHTML") return await SanitizedHTML({...props})
@@ -15,6 +18,7 @@ const AsyncComponent = async ({component, searchParams, props, endpoint,}: {comp
 	else if (component === "DistilleryUseCase") return await DistilleryUseCase({searchParams, ...props})
 	else if (component === "Enrichment") return await Enrichment({endpoint, searchParams, ...props})
 	else if (component === "Download") return await Download({...props})
+	else if (component === "APIDoc") return await APIDoc()
 	else return null
 }
 
