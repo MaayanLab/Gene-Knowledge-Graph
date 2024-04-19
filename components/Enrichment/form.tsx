@@ -274,7 +274,7 @@ const GeneSetForm = ({
                             <div tabIndex={0}>
                                 {!isFocused ? 
                                     <Card sx={{height: 235, overflowY: "auto", boxShadow: "none", border: "1px solid black"}} onClick={() => setIsFocused(true)}>
-                                        {input.genes.length === 0 && <Typography variant="subtitle2" align='left' sx={{paddingLeft: 12, paddingTop: 15, fontSize: 13.75, color: "#bdbdbd"}}>Paste a set of valid Entrez gene symbols (e.g. STAT3) on each row in the text-box</Typography> }
+                                        {input.genes.length === 0 && <Typography variant="subtitle2" align='left' sx={{paddingLeft: 1, paddingTop: 2, fontSize: 13.75, color: "#bdbdbd"}}>Paste a set of valid Entrez gene symbols (e.g. STAT3) on each row in the text-box</Typography> }
                                         <CardContent>
                                             {input.genes.map(i=>{
                                                 if (verified.indexOf(i.toUpperCase()) > -1) return <Typography key={i} color="secondary" align='left' sx={{fontSize: 14}}>{i}</Typography>
@@ -300,12 +300,12 @@ const GeneSetForm = ({
                                             })
                                         }}
                                         InputProps={{
-                                            style: {
-                                            fontSize: 14,
+                                            sx: {
+                                                fontSize: 14,
                                             },
                                         }}
                                         inputProps={{
-                                            style: {
+                                            sx: {
                                                 paddingRight: 0
                                             }
                                         }}
