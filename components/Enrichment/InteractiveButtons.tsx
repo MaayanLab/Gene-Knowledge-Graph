@@ -119,7 +119,7 @@ const InteractiveButtons = ({
                                 // router_push(router, pathname, query)
                                 setView(null)
                             }}
-                            sx={{marginLeft: 5, borderRadius: 5, background: (view === "network" || !view) ? "#e0e0e0": "none"}}
+                            sx={{borderRadius: 5, background: (view === "network" || !view) ? "#e0e0e0": "none"}}
                         >
                             <Icon path={mdiGraph} size={0.8} />
                         </IconButton>
@@ -132,7 +132,7 @@ const InteractiveButtons = ({
                                 // router_push(router, pathname, query)
                                 setView('table')
                             }}
-                            sx={{marginLeft: 5, borderRadius: 5, background: (view === "table") ? "#e0e0e0": "none"}}
+                            sx={{borderRadius: 5, background: (view === "table") ? "#e0e0e0": "none"}}
                         >
                             <Icon path={mdiTable} size={0.8} />
                         </IconButton>
@@ -145,7 +145,7 @@ const InteractiveButtons = ({
                                 // router_push(router, pathname, query)
                                 setView('bar')
                             }}
-                            sx={{marginLeft: 5, borderRadius: 5, background: view === "bar" ? "#e0e0e0": "none"}}
+                            sx={{borderRadius: 5, background: view === "bar" ? "#e0e0e0": "none"}}
                         >
                             <Icon path={mdiPoll} rotate={90} size={0.8} />
                         </IconButton>
@@ -159,7 +159,7 @@ const InteractiveButtons = ({
                                     onClick={()=>{
                                         if (elements) process_tables(elements)
                                     }}
-                                    sx={{marginLeft: 5, borderRadius: 5}}
+                                    sx={{borderRadius: 5}}
                                 >
                                     <SaveIcon/>
                                 </IconButton>
@@ -373,7 +373,7 @@ const InteractiveButtons = ({
                                         setGeneLinksOpen(false)
                                         setAugmentOpen(!augmentOpen)
                                     }}
-                                    sx={{marginLeft: 5, borderRadius: 5, background: augmentOpen ? "#e0e0e0": "none"}}
+                                    sx={{borderRadius: 5, background: augmentOpen ? "#e0e0e0": "none"}}
                                 >
                                     <Icon path={mdiDna} size={0.8} />
                                 </IconButton>
