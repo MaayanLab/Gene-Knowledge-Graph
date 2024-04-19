@@ -16,7 +16,7 @@ export const Nav = ({tabs}:
 	label: string,
 	type: string,
 	component: string,
-	position?:  'top' | 'bottom',
+	position?:  string,
 	props?: {
 		[key: string]: any
 	}
@@ -35,16 +35,18 @@ export const Nav = ({tabs}:
 			<Grid item>
 				<Stack direction={"row"} alignItems={"center"} spacing={2}>
 					{tab_component.top}		
-					<Counter/>
 				</Stack>
 			</Grid>
 			{tab_component.bottom.length > 0 &&
-				<Grid item xs={12}>
+				<Grid item>
 					<Stack direction={"row"} alignItems={"center"} spacing={2}>
 						{tab_component.bottom}		
 					</Stack>
 				</Grid>
 			}
+			<Grid item>		
+				<Counter/>
+			</Grid>
 		</>
 	)
 }
