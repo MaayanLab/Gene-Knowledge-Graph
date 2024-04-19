@@ -440,6 +440,95 @@ const input_query_schema = z.object({
     augment_limit: z.optional(z.number()),
 })
 
+/**
+ * @swagger
+ * /api/knowledge_graph:
+ *   get:
+ *     description: Performs single or two term search
+ *     tags:
+ *       - term search
+ *     parameters:
+ *       - name: filter
+ *         in: query
+ *         required: true
+ *         content:
+ *            application/json:
+ *              schema: 			
+ *                type: object
+ *                required:
+ *                  - start
+ *                  - start_term
+ *                properties:
+ *                  start:
+ *                    type: string
+ *                  start_field:
+ *                    type: string
+ *                    default: label
+ *                  start_term:
+ *                    type: string
+ *                  end:
+ *                    type: string
+ *                  end_field:
+ *                    type: string
+ *                  end_term:
+ *                    type: string
+ *                  relation:
+ *                    type: array
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        name:
+ *                          type: string
+ *                        limit:
+ *                          type: integer
+ *                          default: 5
+ *                        end:
+ *                          type: string
+ *                  path_length:
+ *                    type: integer
+ *                    default: 1
+ *                  remove:
+ *                    type: array
+ *                    items:
+ *                      type: string
+ *                  expand:
+ *                    type: array
+ *                    items:
+ *                      type: string
+ *                  gene_links:
+ *                    type: array
+ *                    items:
+ *                      type: string
+ *                  augment:
+ *                    type: boolean
+ *                    default: false
+ *                  augment_limit:
+ *                    type: integer
+ *                    default: 5
+ *     responses:
+ *       200:
+ *         description: Subnetwork
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 nodes:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       data:
+ *                         type: object
+ *                 edges:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       data:
+ *                         type: object
+ */
+
 export async function GET(req: NextRequest) {
     const schema = await fetch_kg_schema()
     try {

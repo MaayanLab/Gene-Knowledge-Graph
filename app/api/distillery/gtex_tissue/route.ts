@@ -10,6 +10,30 @@ const InputSchema = z.object({
     field: z.string().optional(),
     limit: z.number().optional()
 })
+
+/**
+ * @swagger
+ * /api/distillery/gtex_tissue:
+ *   get:
+ *     description: Return a list of gtex tissue
+ *     tags:
+ *       - distillery apps
+ *     parameters:
+ *       - name: term
+ *         in: query
+ *       - name: field
+ *         in: query
+ *       - name: limit
+ *         type: integer
+ *         in: query
+ *     responses:
+ *       200:
+ *         description: GTEx tissue
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ */
 export async function GET(req: NextRequest) {
     try {
         const session = neo4jDriver.session({

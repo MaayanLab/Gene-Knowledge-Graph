@@ -88,6 +88,15 @@ export interface UISchema {
     }
 }
 
+/**
+ * @swagger
+ * /api/schema:
+ *   get:
+ *     description: Returns the schema
+ *     responses:
+ *       200:
+ *         description: UI Schema
+ */
 export async function GET() {
     const cached = cache.get("schema")
     if (cached) {

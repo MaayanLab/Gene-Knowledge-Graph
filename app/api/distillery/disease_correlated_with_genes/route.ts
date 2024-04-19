@@ -11,6 +11,30 @@ const InputSchema = z.object({
     field: z.string().optional(),
     limit: z.number().optional()
 })
+
+/**
+ * @swagger
+ * /api/distillery/disease_correlated_with_genes:
+ *   get:
+ *     description: Returns a list of diseases that are correlated with genes
+ *     tags:
+ *       - distillery apps
+ *     parameters:
+ *       - name: term
+ *         in: query
+ *       - name: field
+ *         in: query
+ *       - name: limit
+ *         type: integer
+ *         in: query
+ *     responses:
+ *       200:
+ *         description: Diseases
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ */
 export async function GET(req: NextRequest) {
     try {
         const session = neo4jDriver.session({

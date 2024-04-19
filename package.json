@@ -40,6 +40,7 @@
     "memory-cache": "^0.2.0",
     "neo4j-driver": "^4.4.5",
     "next": "^14.1.0",
+    "next-swagger-doc": "^0.4.0",
     "next-usequerystate": "^1.16.1",
     "nextjs-google-analytics": "^2.2.2",
     "react": "^18.2.0",
@@ -50,6 +51,7 @@
     "recharts-to-png": "^2.3.1",
     "sanitize-html": "^2.11.0",
     "sharp": "^0.33.2",
+    "swagger-ui-react": "^5.15.2",
     "tailwindcss": "^3.4.1",
     "zod": "^3.22.4",
     "zod_utilz": "^0.7.3"

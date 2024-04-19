@@ -11,6 +11,29 @@ const InputSchema = z.object({
     limit: z.number().optional()
 })
 // This function returns a gene list based on a search term
+/**
+ * @swagger
+ * /api/distillery/mw_diseases:
+ *   get:
+ *     description: Full text search of neo4j nodes for matching terms
+ *     tags:
+ *       - distillery apps
+ *     parameters:
+ *       - name: term
+ *         in: query
+ *       - name: field
+ *         in: query
+ *       - name: limit
+ *         type: integer
+ *         in: query
+ *     responses:
+ *       200:
+ *         description: MW Diseases
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ */
 export async function GET(req:NextRequest) {
     try {
         const session = neo4jDriver.session({

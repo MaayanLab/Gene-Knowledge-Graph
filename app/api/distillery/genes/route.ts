@@ -10,6 +10,30 @@ const gene_query = z.object({
     term: z.string().optional(),
     field: z.string().optional(),
 })
+
+/**
+ * @swagger
+ * /api/distillery/genes:
+ *   get:
+ *     description: Returns drug processing enzyme genes
+ *     tags:
+ *       - distillery apps
+ *     parameters:
+ *       - name: enzyme
+ *         in: query
+ *         type: boolean
+ *       - name: field
+ *         in: query
+ *       - name: term
+ *         in: query
+ *     responses:
+ *       200:
+ *         description: Drug processing enzymes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ */
 export async function GET(req: NextRequest) {
     const { enzyme=true, term="", field="label" } = gene_query.parse(convert_query(req))
     try {

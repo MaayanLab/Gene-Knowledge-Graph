@@ -32,6 +32,56 @@ const InputSchema = z.object({
     start_field: z.string().optional()
 })
 
+/**
+ * @swagger
+ * /api/distillery/disease2exrna:
+ *   get:
+ *     description: Performs single or two term search
+ *     tags:
+ *       - distillery apps
+ *     parameters:
+ *       - name: filter
+ *         in: query
+ *         required: true
+ *         content:
+ *            application/json:
+ *              schema: 			
+ *                type: object
+ *                required:
+ *                  - start
+ *                  - start_term
+ *                properties:
+ *                  start_field:
+ *                    type: string
+ *                  start_term:
+ *                    type: string
+ *                  limit:
+ *                    type: integer
+ *                    default: 5
+ *     responses:
+ *       200:
+ *         description: Subnetwork
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 nodes:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       data:
+ *                         type: object
+ *                 edges:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       data:
+ *                         type: object
+ */
+
 export async function GET(req: NextRequest) {
     try {
         const filter = req.nextUrl.searchParams.get("filter")

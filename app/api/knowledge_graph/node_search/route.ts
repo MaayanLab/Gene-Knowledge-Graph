@@ -15,6 +15,34 @@ const query_schema = z.object({
     filter: z.optional(zu.stringToJSON())
 })
 // This function returns a gene list based on a search term
+/**
+ * @swagger
+ * /api/knowledge_graph/node_search:
+ *   get:
+ *     description: Full text search of neo4j nodes for matching terms
+ *     tags:
+ *       - term search
+ *     parameters:
+ *       - name: type
+ *         in: query
+ *         required: true
+ *       - name: field
+ *         in: query
+ *       - name: term
+ *         in: query
+ *       - name: limit
+ *         type: integer
+ *         in: query
+ *       - name: filter
+ *         in: query
+ *         content:
+ *            application/json:
+ *              schema: 			
+ *                type: object
+ *     responses:
+ *       200:
+ *         description: UI Schema
+ */
 export async function GET(req: NextRequest) {
     try {
         const node_properties = await (await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/search_properties`)).json()
