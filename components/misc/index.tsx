@@ -100,7 +100,7 @@ export const Legend = ({
         color_sum[kind] = color
         colors[kind] = <Grid item xs={12} key={kind}>
           <Grid container alignItems={"center"} spacing={1}>
-            <Grid item><Avatar style={{background: color, width: sizes[legendSize], height: sizes[legendSize], borderColor, borderStyle: borderColor ? "solid": "none", borderWidth: borders[legendSize]}}> </Avatar></Grid>
+            <Grid item><Avatar sx={{background: color, width: sizes[legendSize], height: sizes[legendSize], borderColor, borderStyle: borderColor ? "solid": "none", borderWidth: borders[legendSize]}}> </Avatar></Grid>
             <Grid item><Typography variant="subtitle1">{kind}</Typography></Grid>   
           </Grid></Grid> 
       }
@@ -116,7 +116,7 @@ export const Legend = ({
         colors[ring_label] = <Grid item xs={12} key={ring_label}>
         <Grid container alignItems={"center"} spacing={1} key={ring_label}>
           <Grid item>
-            <Avatar style={{background: "#FFF", borderColor: borderColor, borderStyle: "solid", borderWidth: borders[legendSize], width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar>
+            <Avatar sx={{background: "#FFF", borderColor: borderColor, borderStyle: "solid", borderWidth: borders[legendSize], width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar>
           </Grid>
           <Grid item><Typography variant="subtitle1">{ring_label}</Typography></Grid>   
         </Grid></Grid>   
@@ -126,7 +126,7 @@ export const Legend = ({
       colors["Not significant"] = <Grid item xs={12} key={"significant"}>
       <Grid container alignItems={"center"} spacing={1} key="significant">
         <Grid item>
-          <Avatar style={{background: "#FFF", borderColor: "#757575", borderStyle: "solid", borderWidth: borders[legendSize], width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar>
+          <Avatar sx={{background: "#FFF", borderColor: "#757575", borderStyle: "solid", borderWidth: borders[legendSize], width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar>
         </Grid>
         <Grid item><Typography variant="subtitle1">{`Not significant (pval > 0.05)`}</Typography></Grid>   
       </Grid></Grid>   
@@ -139,7 +139,7 @@ export const Legend = ({
         left: 25,
         pointerEvents: "none"
       }}>
-          <Grid container alignItems={"center"} spacing={legendSize > 1 ? 1: 0} style={{maxHeight: 700, overflow: "hidden"}}>
+          <Grid container alignItems={"center"} spacing={legendSize > 1 ? 1: 0} sx={{maxHeight: 700, overflow: "hidden"}}>
             <Grid item xs={12}>
               <Typography variant="h6">
                 <b>Legend</b>

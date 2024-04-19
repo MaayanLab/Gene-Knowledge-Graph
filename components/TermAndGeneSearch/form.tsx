@@ -158,7 +158,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                       <Checkbox
                                         icon={icon}
                                         checkedIcon={checkedIcon}
-                                        style={{ marginRight: 8 }}
+                                        sx={{ marginRight: 8 }}
                                         checked={selected}
                                       />
                                       {option}
@@ -192,7 +192,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                     <Tooltip title={`${value.name}`} key={value.name} placement="top">
                                         <Chip label={value.name}
                                             color="primary"
-                                            style={{padding: 0, borderRadius: "8px"}}
+                                            sx={{padding: 0, borderRadius: "8px"}}
                                             onDelete={()=>{
                                                 const {filter: f, ...rest} = searchParams
                                                 const filter = JSON.parse(f || '{}')
@@ -255,7 +255,6 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                         if (!fullscreen) query['fullscreen'] = 'true'
                                         router_push(router, pathname, query)
                                     }}
-                                    sx={{marginLeft: 5}}
                                 >
                                     {fullscreen ? <FullscreenExitIcon/>: <FullscreenIcon/>}
                                 </IconButton>
@@ -267,7 +266,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                         const {view, ...query} = searchParams
                                         router_push(router, pathname, query)
                                     }}
-                                    style={{marginLeft: 5, borderRadius: 5, background: (!view) ? "#e0e0e0": "none"}}
+                                    sx={{marginLeft: 5, borderRadius: 5, background: (!view) ? "#e0e0e0": "none"}}
                                 >
                                     <Icon path={mdiGraph} size={0.8} />
                                 </IconButton>
@@ -280,7 +279,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                         query['view'] = 'table'
                                         router_push(router, pathname, query)
                                     }}
-                                    style={{marginLeft: 5, borderRadius: 5, background: view === "table" ? "#e0e0e0": "none"}}
+                                    sx={{marginLeft: 5, borderRadius: 5, background: view === "table" ? "#e0e0e0": "none"}}
                                 >
                                     <Icon path={mdiTable} size={0.8} />
                                 </IconButton>
@@ -291,7 +290,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                     onClick={()=>{
                                         process_tables(elements)
                                     }}
-                                    style={{marginLeft: 5, borderRadius: 5}}
+                                    sx={{marginLeft: 5, borderRadius: 5}}
                                 >
                                     <SaveIcon/>
                                 </IconButton>
@@ -358,7 +357,6 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                             else setTooltip('true')
                                             
                                         }}
-                                        style={{marginLeft: 5}}
                                     >
                                         {tooltip ? <Icon path={mdiTooltipRemove} size={0.8} />: <Icon path={mdiTooltip} size={0.8} />}
                                     </IconButton>
@@ -371,7 +369,6 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                         aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
                                         aria-haspopup="true"
                                         aria-expanded={anchorEl!==null ? 'true' : undefined}
-                                        style={{marginLeft: 5}}
                                     >
                                         <FlipCameraAndroidIcon/>
                                     </IconButton>
@@ -412,7 +409,6 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                             // router_push(router, pathname, query)
                                             
                                         }}
-                                        style={{marginLeft: 5}}
                                     >
                                         {edge_labels ? <VisibilityOffIcon/>: <VisibilityIcon/>}
                                     </IconButton>
@@ -426,7 +422,6 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                                 setGeneLinksOpen(!geneLinksOpen)
                                                 setAugmentOpen(false)
                                             }}
-                                            style={{marginLeft: 5}}
                                         >
                                             <Icon path={filter.gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
                                         </IconButton>
@@ -442,7 +437,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                                 setGeneLinksOpen(false)
                                                 setAugmentOpen(!augmentOpen)
                                             }}
-                                            style={{marginLeft: 5, borderRadius: 5, background: augmentOpen ? "#e0e0e0": "none"}}
+                                            sx={{marginLeft: 5, borderRadius: 5, background: augmentOpen ? "#e0e0e0": "none"}}
                                         >
                                             <Icon path={mdiDna} size={0.8} />
                                         </IconButton>
@@ -465,7 +460,6 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                             // if (!legend) query['legend'] = 'true'
                                             // router_push(router, pathname, query)
                                         }}
-                                        style={{marginLeft: 5}}
                                     >
                                         {!legend ? <LabelIcon />: <LabelOffIcon />}
                                     </IconButton>
@@ -481,7 +475,6 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                                 // query['legend_size'] = `${(parseInt(legend_size) +1)%5}`
                                                 // router_push(router, pathname, query)
                                             }}
-                                            style={{marginLeft: 5}}
                                         >
                                             {parseInt(legend_size) < 4 ? <ZoomInIcon/>: <ZoomOutIcon/>}
                                         </IconButton>
@@ -491,7 +484,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                             {(geneLinksOpen) &&
                                 <Grid item xs={12}>
                                     <Stack direction="row" alignItems="center" justifyContent={"flex-end"}>
-                                        <Typography variant='subtitle2' style={{marginRight: 5}}>Select relationships:</Typography>
+                                        <Typography variant='subtitle2' sx={{marginRight: 5}}>Select relationships:</Typography>
                                         {geneLinksRelations.map(i=>(
                                             <FormControlLabel key={i} control={<Checkbox checked={geneLinks.indexOf(i)>-1} onChange={()=>{
                                                 if (geneLinks.indexOf(i)===-1) setGeneLinks([...geneLinks, i])
@@ -544,7 +537,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                             max={50}
                                             valueLabelDisplay='auto'
                                             aria-labelledby="augment-limit-slider"
-                                            style={{width: 100}}
+                                            sx={{width: 100}}
                                         />
                                         <Typography variant='subtitle2'>{augmentLimit}</Typography>
                                         <Tooltip title="Augment genes">

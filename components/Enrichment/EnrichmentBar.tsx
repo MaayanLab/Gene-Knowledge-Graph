@@ -38,7 +38,7 @@ const renderCustomizedLabel = (props) => {
 	if (active) {
 		const {enrichr_label, pval, qval, zscore, combined_score} = payload[0].payload
 		return(
-			<Card style={{opacity:"0.8", textAlign: "left"}}>
+			<Card sx={{opacity:"0.8", textAlign: "left"}}>
 				<CardContent>
 					<Typography variant="subtitle2"><b>{enrichr_label}</b></Typography>
 					<Typography variant="subtitle2"><b>p-value:</b> {precise(pval)}</Typography>

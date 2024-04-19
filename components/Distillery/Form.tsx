@@ -119,7 +119,6 @@ import { layouts } from '../misc/Cytoscape';
 								if (!fullscreen) query['fullscreen'] = 'true'
 								router_push(router, pathname, query)
 							}}
-							sx={{marginLeft: 5}}
 						>
 							{fullscreen ? <FullscreenExitIcon/>: <FullscreenIcon/>}
 						</IconButton>
@@ -131,7 +130,7 @@ import { layouts } from '../misc/Cytoscape';
 								const {view, ...query} = searchParams
 								router_push(router, pathname, query)
 							}}
-							style={{marginLeft: 5, borderRadius: 5, background: (!view) ? "#e0e0e0": "none"}}
+							sx={{marginLeft: 5, borderRadius: 5, background: (!view) ? "#e0e0e0": "none"}}
 						>
 							<Icon path={mdiGraph} size={0.8} />
 						</IconButton>
@@ -144,7 +143,7 @@ import { layouts } from '../misc/Cytoscape';
 								query['view'] = 'table'
 								router_push(router, pathname, query)
 							}}
-							style={{marginLeft: 5, borderRadius: 5, background: view === "table" ? "#e0e0e0": "none"}}
+							sx={{marginLeft: 5, borderRadius: 5, background: view === "table" ? "#e0e0e0": "none"}}
 						>
 							<Icon path={mdiTable} size={0.8} />
 						</IconButton>
@@ -155,7 +154,7 @@ import { layouts } from '../misc/Cytoscape';
 							onClick={()=>{
 								process_tables(elements)
 							}}
-							style={{marginLeft: 5, borderRadius: 5}}
+							sx={{marginLeft: 5, borderRadius: 5}}
 						>
 							<SaveIcon/>
 						</IconButton>
@@ -220,7 +219,6 @@ import { layouts } from '../misc/Cytoscape';
 									else setTooltip('true')
 									
 								}}
-								style={{marginLeft: 5}}
 							>
 								{tooltip ? <Icon path={mdiTooltipRemove} size={0.8} />: <Icon path={mdiTooltip} size={0.8} />}
 							</IconButton>
@@ -233,7 +231,6 @@ import { layouts } from '../misc/Cytoscape';
 								aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
 								aria-haspopup="true"
 								aria-expanded={anchorEl!==null ? 'true' : undefined}
-								style={{marginLeft: 5}}
 							>
 								<FlipCameraAndroidIcon/>
 							</IconButton>
@@ -274,7 +271,6 @@ import { layouts } from '../misc/Cytoscape';
 									// router_push(router, pathname, query)
 									
 								}}
-								style={{marginLeft: 5}}
 							>
 								{edge_labels ? <VisibilityOffIcon/>: <VisibilityIcon/>}
 							</IconButton>
@@ -296,7 +292,6 @@ import { layouts } from '../misc/Cytoscape';
 									// if (!legend) query['legend'] = 'true'
 									// router_push(router, pathname, query)
 								}}
-								style={{marginLeft: 5}}
 							>
 								{!legend ? <LabelIcon />: <LabelOffIcon />}
 							</IconButton>
@@ -309,7 +304,6 @@ import { layouts } from '../misc/Cytoscape';
 									onClick={()=>{
 										setLegendSize(`${(parseInt(legend_size) +1)%5}`)
 									}}
-									style={{marginLeft: 5}}
 								>
 									{parseInt(legend_size) < 4 ? <ZoomInIcon/>: <ZoomOutIcon/>}
 								</IconButton>

@@ -125,7 +125,7 @@ export const Summarizer = ({elements, schema, augmented}) => {
 			<Box sx={style}>
 				<Typography variant="h5">{augmented ? "Free text summary of the augmented subnetwork": "Free text summary of the subnetwork"}</Typography>
 				{summary === "null" ? <CircularProgress/>: 
-					<Box style={{padding: 10, border: "1px solid", marginTop: 10, height: 400, overflow: "auto"}}>
+					<Box sx={{padding: 10, border: "1px solid", marginTop: 10, height: 400, overflow: "auto"}}>
 						<Typography variant="subtitle1">{summary}</Typography>
 					</Box>
 				}

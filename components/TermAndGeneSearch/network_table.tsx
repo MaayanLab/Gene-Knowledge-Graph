@@ -149,9 +149,9 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 		const {data={}, header=[], columnVisibilityModel} = processedData[tab] || {}
 		const columns: GridColDef[] = header.filter(i=>i.count === undefined || i.count > 0)
 		return (
-			<Card style={{marginBottom: 10}} ref={tableRef}>
+			<Card sx={{marginBottom: 10}} ref={tableRef}>
 				<CardContent>
-					<Grid container justifyContent={"center"} style={{paddingBottom: 10}}>
+					<Grid container justifyContent={"center"} sx={{paddingBottom: 10}}>
 						<Grid item xs={12}>
 							<Tabs
 								value={tab}

@@ -119,7 +119,7 @@ const InteractiveButtons = ({
                                 // router_push(router, pathname, query)
                                 setView(null)
                             }}
-                            style={{marginLeft: 5, borderRadius: 5, background: (view === "network" || !view) ? "#e0e0e0": "none"}}
+                            sx={{marginLeft: 5, borderRadius: 5, background: (view === "network" || !view) ? "#e0e0e0": "none"}}
                         >
                             <Icon path={mdiGraph} size={0.8} />
                         </IconButton>
@@ -132,7 +132,7 @@ const InteractiveButtons = ({
                                 // router_push(router, pathname, query)
                                 setView('table')
                             }}
-                            style={{marginLeft: 5, borderRadius: 5, background: (view === "table") ? "#e0e0e0": "none"}}
+                            sx={{marginLeft: 5, borderRadius: 5, background: (view === "table") ? "#e0e0e0": "none"}}
                         >
                             <Icon path={mdiTable} size={0.8} />
                         </IconButton>
@@ -145,7 +145,7 @@ const InteractiveButtons = ({
                                 // router_push(router, pathname, query)
                                 setView('bar')
                             }}
-                            style={{marginLeft: 5, borderRadius: 5, background: view === "bar" ? "#e0e0e0": "none"}}
+                            sx={{marginLeft: 5, borderRadius: 5, background: view === "bar" ? "#e0e0e0": "none"}}
                         >
                             <Icon path={mdiPoll} rotate={90} size={0.8} />
                         </IconButton>
@@ -159,7 +159,7 @@ const InteractiveButtons = ({
                                     onClick={()=>{
                                         if (elements) process_tables(elements)
                                     }}
-                                    style={{marginLeft: 5, borderRadius: 5}}
+                                    sx={{marginLeft: 5, borderRadius: 5}}
                                 >
                                     <SaveIcon/>
                                 </IconButton>
@@ -171,7 +171,6 @@ const InteractiveButtons = ({
                                         if (tooltip) setTooltip(null)
                                         else setTooltip('true')
                                     }}
-                                    style={{marginLeft: 5}}
                                 >
                                     <Icon path={tooltip? mdiTooltipRemove: mdiTooltip} size={0.8} />
                                 </IconButton>
@@ -183,7 +182,6 @@ const InteractiveButtons = ({
                                         const {userListId, ...rest} = searchParams
                                         router_push(router, pathname, {})
                                     }}
-                                    style={{marginLeft: 5}}
                                 >
                                     <HighlightOffIcon/>
                                 </IconButton>
@@ -194,7 +192,6 @@ const InteractiveButtons = ({
                                     aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
                                     aria-haspopup="true"
                                     aria-expanded={anchorEl!==null ? 'true' : undefined}
-                                    style={{marginLeft: 5}}
                                 >
                                     <FlipCameraAndroidIcon/>
                                 </IconButton>
@@ -229,7 +226,6 @@ const InteractiveButtons = ({
                                         // router_push(router, pathname, query)
                                         
                                     }}
-                                    style={{marginLeft: 5}}
                                 >
                                     {edge_labels ? <VisibilityOffIcon/>: <VisibilityIcon/>}
                                 </IconButton>
@@ -330,7 +326,7 @@ const InteractiveButtons = ({
                             <Grid item xs={11}>
                                 <TextField size='small'
                                     value={short_url ? short_url: window.location.toString()}
-                                    style={{width: "100%"}}
+                                    sx={{width: "100%"}}
                                 />
                             </Grid>
                             <Grid item xs={1}>
@@ -354,7 +350,6 @@ const InteractiveButtons = ({
                                     q: JSON.stringify(query)
                                 })
                             }}
-                            style={{marginLeft: 5}}
                         >
                             {parsedParams.fullscreen ? <FullscreenExitIcon/>: <FullscreenIcon/>}
                         </IconButton>
@@ -367,7 +362,6 @@ const InteractiveButtons = ({
                                         setGeneLinksOpen(!geneLinksOpen)
                                         setAugmentOpen(false)
                                     }}
-                                    style={{marginLeft: 5}}
                                 >
                                     <Icon path={gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
                                 </IconButton>
@@ -379,7 +373,7 @@ const InteractiveButtons = ({
                                         setGeneLinksOpen(false)
                                         setAugmentOpen(!augmentOpen)
                                     }}
-                                    style={{marginLeft: 5, borderRadius: 5, background: augmentOpen ? "#e0e0e0": "none"}}
+                                    sx={{marginLeft: 5, borderRadius: 5, background: augmentOpen ? "#e0e0e0": "none"}}
                                 >
                                     <Icon path={mdiDna} size={0.8} />
                                 </IconButton>
@@ -405,7 +399,6 @@ const InteractiveButtons = ({
                                     // if (!legend) query['legend'] = 'true'
                                     // router_push(router, pathname, query)
                                 }}
-                                style={{marginLeft: 5}}
                             >
                                 {!legend ? <LabelIcon />: <LabelOffIcon />}
                             </IconButton>
@@ -416,7 +409,6 @@ const InteractiveButtons = ({
                                     onClick={()=>{
                                         setLegendSize(`${(parseInt(legend_size) +1)%5}`)
                                     }}
-                                    style={{marginLeft: 5}}
                                 >
                                     {parseInt(legend_size) < 4 ? <ZoomInIcon/>: <ZoomOutIcon/>}
                                 </IconButton>
@@ -429,7 +421,7 @@ const InteractiveButtons = ({
         {(elements && geneLinksOpen) &&
             <Grid item xs={12}>
                 <Stack direction="row" alignItems="center" justifyContent={"flex-end"}>
-                    <Typography variant='subtitle2' style={{marginRight: 5}}>Select relationships:</Typography>
+                    <Typography variant='subtitle2' sx={{marginRight: 5}}>Select relationships:</Typography>
                     {geneLinksRelations.map(i=>(
                             <FormControlLabel key={i} control={<Checkbox checked={geneLinks.indexOf(i)>-1} onChange={()=>{
                             if (geneLinks.indexOf(i)===-1) setGeneLinks([...geneLinks, i])
@@ -481,7 +473,7 @@ const InteractiveButtons = ({
                         max={50}
                         valueLabelDisplay='auto'
                         aria-labelledby="augment-limit-slider"
-                        style={{width: 100}}
+                        sx={{width: 100}}
                     />
                     <Typography variant='subtitle2'>{augmentLimit}</Typography>
                     <Tooltip title="Augment genes">

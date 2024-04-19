@@ -137,7 +137,7 @@ const AsyncForm = ({
         <Stack direction={"column"} spacing={1}>
             <Typography><b>Select {type}:</b></Typography>
             <Autocomplete
-                // sx={{ width: 215 }}
+                sx={{ width: '100%' }}
                 value={term}
                 open={open}
                 onOpen={() => {
@@ -167,10 +167,9 @@ const AsyncForm = ({
                                 setTerm(e.target.value)
                             }
                         }}
-                        style={{
+                        sx={{
                             height: 50,
                             borderRadius: 5,
-                            padding: 3
                         }}
                         InputProps={{
                             ...params.InputProps,

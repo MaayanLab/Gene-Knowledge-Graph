@@ -248,11 +248,11 @@ const AsyncFormComponent = ({direction,
 							)
                         }
                     }}
-                    style={{ width: '100%'}}
+                    sx={{ width: '100%'}}
                     renderInput={(params) => (
                     <TextField {...params} 
                         value={inputTerm}
-                        style={{
+                        sx={{
                             width: '100%',
                             height: 50,
                             borderRadius: 5,
@@ -319,7 +319,7 @@ const AsyncFormComponent = ({direction,
                                 }}
                                 // shallow
                             >
-                            <Button style={{padding: 0}}><Typography variant="body2" color="secondary">{e}</Typography></Button>
+                            <Button sx={{padding: 0}}><Typography variant="body2" color="secondary">{e}</Typography></Button>
                         </Link> 
                     )
                     })}

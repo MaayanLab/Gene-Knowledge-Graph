@@ -273,14 +273,14 @@ const GeneSetForm = ({
                         <Grid item xs={12}>
                             <div tabIndex={0}>
                                 {!isFocused ? 
-                                    <Card style={{height: 235, overflowY: "auto", boxShadow: "none", border: "1px solid black"}} onClick={() => setIsFocused(true)}>
-                                        {input.genes.length === 0 && <Typography variant="subtitle2" align='left' style={{paddingLeft: 12, paddingTop: 15, fontSize: 13.75, color: "#bdbdbd"}}>Paste a set of valid Entrez gene symbols (e.g. STAT3) on each row in the text-box</Typography> }
+                                    <Card sx={{height: 235, overflowY: "auto", boxShadow: "none", border: "1px solid black"}} onClick={() => setIsFocused(true)}>
+                                        {input.genes.length === 0 && <Typography variant="subtitle2" align='left' sx={{paddingLeft: 12, paddingTop: 15, fontSize: 13.75, color: "#bdbdbd"}}>Paste a set of valid Entrez gene symbols (e.g. STAT3) on each row in the text-box</Typography> }
                                         <CardContent>
                                             {input.genes.map(i=>{
-                                                if (verified.indexOf(i.toUpperCase()) > -1) return <Typography key={i} color="secondary" align='left' style={{fontSize: 14}}>{i}</Typography>
+                                                if (verified.indexOf(i.toUpperCase()) > -1) return <Typography key={i} color="secondary" align='left' sx={{fontSize: 14}}>{i}</Typography>
                                                 else {
                                                     if (i === '') return null
-                                                    else return <Stack direction='row' key={i} spacing={1} alignItems={"center"} justifyContent="flex-start"><Typography align='left' color={verified.length > 0 ? 'error': 'default'} style={{fontSize: 14}}>{i}</Typography><ErrorIcon color="error" style={{width: 15}}/></Stack>
+                                                    else return <Stack direction='row' key={i} spacing={1} alignItems={"center"} justifyContent="flex-start"><Typography align='left' color={verified.length > 0 ? 'error': 'default'} sx={{fontSize: 14}}>{i}</Typography><ErrorIcon color="error" sx={{width: 15}}/></Stack>
                                                 }
                                             })}
                                         </CardContent>
@@ -358,7 +358,7 @@ const GeneSetForm = ({
                                 ><Typography color={'secondary'} variant='subtitle2'>Try an example</Typography></Button>
                             </Grid>
                         }
-                        <Grid item style={{ flexGrow: 1, marginTop: 10 }}>
+                        <Grid item sx={{ flexGrow: 1, marginTop: 10 }}>
                             <TextField
                                 variant='outlined'
                                 value={input.description}
@@ -388,9 +388,9 @@ const GeneSetForm = ({
                     { showForm &&
                     <>
                         <Grid item xs={12}>
-                            <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
+                            <Grid container alignItems={"stretch"} spacing={2} sx={{marginBottom: 5}}>
                                 <Grid item><Typography variant='subtitle2'>Minimum libraries per gene</Typography></Grid>
-                                <Grid item style={{ flexGrow: 1 }}>
+                                <Grid item sx={{ flexGrow: 1 }}>
                                     <Tooltip title={`Filter out genes that are not in multiple libraries.`}>
                                         <Slider 
                                             value={min_lib || 1}
@@ -405,7 +405,7 @@ const GeneSetForm = ({
                                                 //     min_lib: nv
                                                 // })
                                             }}
-                                            style={{width: "100%"}}
+                                            sx={{width: "100%"}}
                                             min={1}
                                             max={libraries_list.length}
                                             marks
@@ -421,9 +421,9 @@ const GeneSetForm = ({
                             </Grid>
                         </Grid>
                         <Grid item xs={12}>
-                            <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
+                            <Grid container alignItems={"stretch"} spacing={2} sx={{marginBottom: 5}}>
                                 <Grid item><Typography variant='subtitle2'>Minimum links per gene</Typography></Grid>
-                                <Grid item style={{ flexGrow: 1 }}>
+                                <Grid item sx={{ flexGrow: 1 }}>
                                     <Tooltip title={`Filter out genes with fewer connections`}>
                                         <Slider 
                                             value={gene_degree || 1}
@@ -438,7 +438,7 @@ const GeneSetForm = ({
                                                     gene_degree: nv
                                                 })
                                             }}
-                                            style={{width: "100%"}}
+                                            sx={{width: "100%"}}
                                             min={1}
                                             max={libraries.reduce((acc, i)=>(acc+i.limit), 0) || 5}
                                             marks
@@ -454,9 +454,9 @@ const GeneSetForm = ({
                             </Grid>
                         </Grid>
                         <Grid item xs={12}>
-                            <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
+                            <Grid container alignItems={"stretch"} spacing={2} sx={{marginBottom: 5}}>
                                 <Grid item><Typography variant='subtitle2'>Minimum links per term</Typography></Grid>
-                                <Grid item style={{ flexGrow: 1 }}>
+                                <Grid item sx={{ flexGrow: 1 }}>
                                     <Tooltip title={`Filter out terms with fewer connections`}>
                                         <Slider 
                                             value={term_degree || 1}
@@ -471,7 +471,7 @@ const GeneSetForm = ({
                                                     term_degree: nv
                                                 })
                                             }}
-                                            style={{width: "100%"}}
+                                            sx={{width: "100%"}}
                                             min={1}
                                             max={20}
                                             marks
@@ -487,9 +487,9 @@ const GeneSetForm = ({
                             </Grid>
                         </Grid>
                         <Grid item xs={12}>
-                            <Grid container alignItems={"stretch"} spacing={2} style={{marginBottom: 5}}>
+                            <Grid container alignItems={"stretch"} spacing={2} sx={{marginBottom: 5}}>
                                 <Grid item><Typography variant='subtitle2'>Subgraph size limit</Typography></Grid>
-                                <Grid item style={{ flexGrow: 1 }}>
+                                <Grid item sx={{ flexGrow: 1 }}>
                                     <Tooltip title={`How many genes should the knowledge graph return? (Prioritized by gene connectivity)`}>
                                         <Slider 
                                             value={combined_query.gene_limit || verified.length || input.genes.length || 100}
@@ -504,7 +504,7 @@ const GeneSetForm = ({
                                                     gene_limit: nv
                                                 })
                                             }}
-                                            style={{width: "100%"}}
+                                            sx={{width: "100%"}}
                                             min={1}
                                             max={verified.length || input.genes.length || 100}
                                             valueLabelDisplay='auto'

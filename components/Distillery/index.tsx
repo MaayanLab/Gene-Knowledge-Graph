@@ -53,19 +53,6 @@ export default function DistilleryLanding({
                                 <div className="flex flex-row justify-center">
                                     <Image src={page.props.icon} alt={page.props.title} height={page.props.height || 100} width={page.props.width || 100}/>
                                 </div>
-                                // <div className="flex flex-row justify-center"
-                                //     style={{
-                                //     background: "linear-gradient(diagonal, #336699, #006666)",
-                                //     overflow: "hidden",  
-                                //     // height: "100%",
-                                //     minHeight: 70,
-                                //     position: "relative",
-                                //     zIndex: 2
-                                //     }}
-                                // >
-                                //     <Image src={page.props.icon} alt={page.props.title} fill={true} style={{objectFit: "contain"}}/>
-                                //     {/* <Image src={e.image} alt={e.title} width={400} height={300}/> */}
-                                // </div>
                             }
                         <CardContent>
                             

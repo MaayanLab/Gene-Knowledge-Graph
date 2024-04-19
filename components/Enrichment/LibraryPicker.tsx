@@ -96,7 +96,7 @@ const LibraryPicker = ({
 						  <Checkbox
 							icon={icon}
 							checkedIcon={checkedIcon}
-							style={{ marginRight: 8 }}
+							sx={{ marginRight: 8 }}
 							checked={selected}
 						  />
 						  {option}
@@ -136,7 +136,7 @@ const LibraryPicker = ({
                                         <Chip label={`${name}: ${limit}`}
 											onClick={handleClick}
                                             color="primary"
-                                            style={{padding: 0, borderRadius: "8px"}}
+                                            sx={{padding: 0, borderRadius: "8px"}}
                                             onDelete={()=>{
 												const new_libraries = libraries.filter(l=>l.name !== name)
 												if (new_libraries.length === 0) setError({message: "Please select at least one library", type: "fail"})
@@ -189,7 +189,7 @@ const LibraryPicker = ({
 															})
 														}
 													}}
-													style={{width: "100%"}}
+													sx={{width: "100%"}}
 													valueLabelDisplay='auto'
 													min={1}
 													max={50}
