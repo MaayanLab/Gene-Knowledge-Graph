@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useRef } from 'react'
-import * as ReactDOM from 'react-dom';
 import {
 	BarChart, Bar, Cell, XAxis, YAxis, LabelList, Tooltip, ResponsiveContainer, TooltipProps
 } from 'recharts';
@@ -85,15 +84,17 @@ export const EnrichmentBar = (props: {
 	}
 	const [download_image, setDownloadImage] = useQueryState('download_image')
 
-	function exportChart() {
+	// function exportChart() {
 
-		// A Recharts component is rendered as a div that contains namely an SVG
-		// which holds the chart. We can access this SVG by calling upon the first child/
-		let chartSVG = ReactDOM.findDOMNode(barRef.current).children[0];
-		let svgURL = new XMLSerializer().serializeToString(chartSVG);
-		let svgBlob = new Blob([svgURL], {type: "image/svg;"});
-		download(svgBlob, "bar_chart.svg");
-	}
+	// 	// A Recharts component is rendered as a div that contains namely an SVG
+	// 	// which holds the chart. We can access this SVG by calling upon the first child/
+	// 	let chartSVG = ReactDOM.findDOMNode(barRef.current).children[0];
+	// 	console.log(chartSVG)
+	// 	console.log(barRef.current.select)
+	// 	let svgURL = new XMLSerializer().serializeToString(barRef.current);
+	// 	let svgBlob = new Blob([svgURL], {type: "image/svg;"});
+	// 	download(svgBlob, "bar_chart.svg");
+	// }
 
 	useEffect(()=>{
 		const download_fnc = async () => {
@@ -112,7 +113,11 @@ export const EnrichmentBar = (props: {
 					link.click();
 				}
 			} else if (download_image === 'svg') {
-				exportChart()
+				const dataUrl = await domtoimage.toSvg(ref.current)
+				const link = document.createElement('a');
+				link.download = 'bar_chart.jpg';
+				link.href = dataUrl;
+				link.click();
 			}
 			setDownloadImage(null)
 		}
