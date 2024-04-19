@@ -358,7 +358,7 @@ const GeneSetForm = ({
                                 ><Typography color={'secondary'} variant='subtitle2'>Try an example</Typography></Button>
                             </Grid>
                         }
-                        <Grid item sx={{ flexGrow: 1, marginTop: 10 }}>
+                        <Grid item sx={{ flexGrow: 1, marginTop: 3 }}>
                             <TextField
                                 variant='outlined'
                                 value={input.description}
@@ -388,7 +388,7 @@ const GeneSetForm = ({
                     { showForm &&
                     <>
                         <Grid item xs={12}>
-                            <Grid container alignItems={"stretch"} spacing={2} sx={{marginBottom: 5}}>
+                            <Grid container alignItems={"stretch"} spacing={2}>
                                 <Grid item><Typography variant='subtitle2'>Minimum libraries per gene</Typography></Grid>
                                 <Grid item sx={{ flexGrow: 1 }}>
                                     <Tooltip title={`Filter out genes that are not in multiple libraries.`}>
@@ -413,7 +413,7 @@ const GeneSetForm = ({
                                             aria-labelledby="gene-slider" />
                                         </Tooltip>
                                 </Grid>
-                                <Grid item xs={1}>
+                                <Grid item>
                                     <Typography variant='subtitle2'>
                                         {min_lib || 1}
                                     </Typography>
@@ -421,7 +421,7 @@ const GeneSetForm = ({
                             </Grid>
                         </Grid>
                         <Grid item xs={12}>
-                            <Grid container alignItems={"stretch"} spacing={2} sx={{marginBottom: 5}}>
+                            <Grid container alignItems={"stretch"} spacing={2}>
                                 <Grid item><Typography variant='subtitle2'>Minimum links per gene</Typography></Grid>
                                 <Grid item sx={{ flexGrow: 1 }}>
                                     <Tooltip title={`Filter out genes with fewer connections`}>
@@ -454,7 +454,7 @@ const GeneSetForm = ({
                             </Grid>
                         </Grid>
                         <Grid item xs={12}>
-                            <Grid container alignItems={"stretch"} spacing={2} sx={{marginBottom: 5}}>
+                            <Grid container alignItems={"stretch"} spacing={2}>
                                 <Grid item><Typography variant='subtitle2'>Minimum links per term</Typography></Grid>
                                 <Grid item sx={{ flexGrow: 1 }}>
                                     <Tooltip title={`Filter out terms with fewer connections`}>
@@ -487,7 +487,7 @@ const GeneSetForm = ({
                             </Grid>
                         </Grid>
                         <Grid item xs={12}>
-                            <Grid container alignItems={"stretch"} spacing={2} sx={{marginBottom: 5}}>
+                            <Grid container alignItems={"stretch"} spacing={2}>
                                 <Grid item><Typography variant='subtitle2'>Subgraph size limit</Typography></Grid>
                                 <Grid item sx={{ flexGrow: 1 }}>
                                     <Tooltip title={`How many genes should the knowledge graph return? (Prioritized by gene connectivity)`}>
