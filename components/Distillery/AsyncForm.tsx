@@ -86,7 +86,7 @@ const AsyncForm = ({
             const query = {
                 field,
             }
-            query["type"] = type
+            if (options_endpoint === '/api/knowledge_graph/node_search') query["type"] = type
             if (filter) query["filter"]=JSON.stringify(filter)
             if (term) query["term"] = term
             if (limit) query["limit"] = limit
@@ -156,7 +156,7 @@ const AsyncForm = ({
                     }
                     else {
                         setTerm(value)
-                        router_push(router, pathname, {...query, term: value})
+                        router_push(router, pathname, {...query, term: value, type: options[value].type})
                     }
                 }}
                 renderInput={(params) => (

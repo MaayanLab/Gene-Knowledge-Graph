@@ -40,7 +40,8 @@ async function DistilleryUseCase({
             field?: string,
             limit?: string,
             fullscreen?:'true',
-            view?:string
+            view?:string,
+            type?: string,
         }
     }) {
         const {
@@ -53,8 +54,9 @@ async function DistilleryUseCase({
             const field = searchParams.field || "label"
             const term = searchParams.term || default_term
             const limit = searchParams.limit || 5
+            const node_type = searchParams.type || type
             if (!fields) {
-                const current_node = schema.nodes.filter(i=>i.node == type)
+                const current_node = schema.nodes.filter(i=>i.node == node_type)
                 if (current_node.length == 0) console.error("Invalid node")
                 else {
                     fields = current_node[0].search
@@ -70,7 +72,7 @@ async function DistilleryUseCase({
             let elements = null
             if (term) {
                 const body = {
-                    start: type,
+                    start: node_type,
                     start_term: term,
                     start_field: field,
                     limit
@@ -102,7 +104,7 @@ async function DistilleryUseCase({
                                     default_term={default_term}
                                     checkbox_filter={checkbox_filter}
                                     filter_text={filter_text}
-                                    type={type}
+                                    type={node_type}
                                     fields={fields}
                                     options_endpoint={options_endpoint}
                                     searchParams={searchParams}

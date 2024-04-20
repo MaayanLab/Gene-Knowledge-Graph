@@ -11882,6 +11882,30 @@
 								},
 								"filter_text": "Enzyme"
 							}
+						},
+						{
+							"endpoint": "/use_cases/disease2exrna",
+							"label": "Frontotemporal Dementia Use Case",
+							"type": "page",
+							"component": "DistilleryUseCase",
+							"props": {
+								"init_function": "initialize_kg",
+								"title": "Frontotemporal Dementia Use Case",
+								"icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/disease2exrna.png",
+								"description": "For genes that are correlated with frontotemporal dementia, identify extracellular RNAs (exRNAs) that may be detected in human biofluids and thus serve as non-invasive disease biomarkers.",
+								"endpoint": "/api/distillery/disease2exrna",
+								"type": "Disease or Syndrome",
+								"options_endpoint": "/api/distillery/exrnadisease",
+								"fields": [
+									"DOID",
+									"id",
+									"label",
+									"MONDO",
+									"ORPHANET",
+									"HP"
+								],
+								"default_term": "Frontotemporal dementia"
+							}
 						}
 					]
 				}
