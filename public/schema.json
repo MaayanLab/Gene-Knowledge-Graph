@@ -11925,7 +11925,10 @@
 				"label": "API",
 				"type": "page",
 				"component": "APIDoc",
-				"position": "top"
+				"position": "top",
+                "props": {
+                    "spec": "https://minio.dev.maayanlab.cloud/datadistillery-kg/specs.json"
+                }
 			},
 			{
 				"endpoint": "/about",

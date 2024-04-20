@@ -18,7 +18,7 @@ const AsyncComponent = async ({component, searchParams, props, endpoint,}:
 	else if (component === "DistilleryUseCase") return await DistilleryUseCase({searchParams, ...props})
 	else if (component === "Enrichment") return await Enrichment({endpoint, searchParams, ...props})
 	else if (component === "Download") return await Download({...props})
-	else if (component === "APIDoc") return await APIDoc()
+	else if (component === "APIDoc") return await APIDoc({...props})
 	else return null
 }
 
