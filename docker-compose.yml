@@ -5,11 +5,11 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/cfde-gse:2.2.10
+    image: maayanlab/distillery:2.2.11
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
-        maayanlab.cloud/ingress: https://gse.cfde.cloud
+        maayanlab.cloud/ingress: https://dd-kg-ui.cfde.cloud
     ports:
       - 3000:3000
     environment:
@@ -40,14 +40,14 @@ services:
       - 7687:7687
       - 7474:7474
     volumes:
-      - cfde-gse-neo4j:/data
+      - distillery-neo4j:/data
 
 volumes:
-  cfde-gse-neo4j:
+  distillery-neo4j:
     x-kubernetes:
       size: 25Gi
       class: gp2
 
 x-kubernetes:
-  name: cfde-gse
-  namespace: cfde-gse
+  name: distillery
+  namespace: distillery
