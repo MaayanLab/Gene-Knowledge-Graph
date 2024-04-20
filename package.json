@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "NODE_ENV=development next dev",
     "build": "NODE_ENV=production next build",
-    "start": "next start",
+    "start": "node .next/standalone/server.js",
     "lint": "next lint",
     "compose": "ts-node -r dotenv/config cli/version-compose.ts",
     "version": "ts-node -r dotenv/config cli/version-compose.ts && docker-compose build kg",
