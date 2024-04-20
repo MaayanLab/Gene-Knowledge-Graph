@@ -80,8 +80,13 @@ const TermAndGeneSearch = async ({searchParams, props}: {
         edges,
         geneLinksRelations,
     } = await initialize_kg()
-    const filter: FilterSchema = searchParams.filter ? JSON.parse(searchParams.filter): props.initial_query
+    const f = JSON.parse(searchParams.filter || '{}')
+    if (typeof f.start === 'undefined') f.start = props.initial_query.start
+    if (typeof f.start_field === 'undefined') f.start_field = 'label'
+    if (typeof f.start_term === 'undefined') f.start_term = props.initial_query.start_term
+    const filter: FilterSchema = f
     const controller = new AbortController()
+    console.log(filter, 'filter')
     try {
         if (filter.relation) {
             filter.relation = process_relation(filter.relation)

@@ -5,7 +5,6 @@ import type { NextRequest } from "next/server";
 import { z } from 'zod';
 import { convert_query } from "@/utils/helper";
 
-// This function returns a gene list based on a search term
 const InputSchema = z.object({
     term: z.string().optional(),
     field: z.string().optional(),
@@ -14,9 +13,9 @@ const InputSchema = z.object({
 
 /**
  * @swagger
- * /api/distillery/disease_correlated_with_genes:
+ * /api/distillery/exrnadisease:
  *   get:
- *     description: Returns a list of diseases that are correlated with genes
+ *     description: Return a list of disease linked to genes
  *     tags:
  *       - distillery apps
  *     parameters:
@@ -29,7 +28,7 @@ const InputSchema = z.object({
  *         in: query
  *     responses:
  *       200:
- *         description: Diseases
+ *         description: GTEx tissue
  *         content:
  *           application/json:
  *             schema:
@@ -42,12 +41,19 @@ export async function GET(req: NextRequest) {
         })
         try {
             const {term="", field="label", limit=100} = InputSchema.parse(convert_query(req))
-            let query = `MATCH p=(a:Disease)-[r1:\`gene associated with disease or phenotype\`]-(b:Gene)`
-            if (term) {
-                query = query + ` WHERE a.${field} =~ $term`
+            const types = ["Disease", "Disease or Syndrome", "Congenital Abnormality"]
+            
+            const queries = []
+            for (const type of types) {
+                let q = `MATCH (a:\`${type}\`)-[r]-(b:Gene)`
+                if (term) {
+                    q = q + ` WHERE a.${field} =~ $term`
 
+                }
+                q = q + "  RETURN DISTINCT(a) LIMIT TOINTEGER($limit)"
+                queries.push(q)
             }
-            query = query + "  RETURN a LIMIT TOINTEGER($limit)"
+            const query = queries.join(" UNION ")
             const results = await session.readTransaction(txc => txc.run(query, {limit, term: `(?i).*${term}.*`}))
             const records = {}
             for (const record of results.records) {
@@ -55,16 +61,14 @@ export async function GET(req: NextRequest) {
                 const value = a.properties[field]
                 if (value) records[value] = a.properties
             }
-            return NextResponse.json(records, {status: 200})
-            return
+            return NextResponse.json(records, {status: 200})    
         } catch (error) {
-            console.log(error)
-            return NextResponse.json(error, {status: 400})
+            return NextResponse.json(error, {status: 400})    
         } finally {
             session.close()
         }
     } catch (error) {
-        return NextResponse.json(error, {status: 500})
+        return NextResponse.json(error, {status: 400})    
     }
      
 }

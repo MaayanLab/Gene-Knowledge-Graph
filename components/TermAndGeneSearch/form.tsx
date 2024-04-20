@@ -225,8 +225,13 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                     valueLabelDisplay='auto'
                                     onChange={(e, nv)=>{
                                         const {filter: f, ...rest} = searchParams
-                                        const filter = JSON.parse(f || '{}')
-                                        filter.limit = nv
+                                        const filter = {
+                                            start: initial_query.start,
+                                            start_field: initial_query.start_field,
+                                            start_term: initial_query.start_term,
+                                            ...JSON.parse(f || '{}'),
+                                            limit: nv
+                                        }
                                         if (filter.relation) filter.relation = relation.map(({name, limit})=>({name, limit: nv}))
                                         const query = {
                                             ...rest,

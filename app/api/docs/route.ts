@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 
 
 export async function GET() {
-	const spec = await getApiDocs()
-    return NextResponse.json(spec, {status: 200})
+	const specs = await getApiDocs()
+	console.log(specs)
+    return NextResponse.json(specs, {status: 200})
 }

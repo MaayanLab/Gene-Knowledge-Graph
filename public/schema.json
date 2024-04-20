@@ -11772,7 +11772,7 @@
 								"description": "For a given set of genes that are highly expressed in a specific disease, identify extracellular RNAs (exRNAs) that may be detected in human biofluids and thus serve as non-invasive disease biomarkers.",
 								"endpoint": "/api/distillery/disease2exrna",
 								"type": "Disease",
-								"options_endpoint": "/api/distillery/diseases_correlated_with_genes",
+								"options_endpoint": "/api/distillery/exrnadisease",
 								"fields": [
 									"DOID",
 									"id",
@@ -11781,7 +11781,7 @@
 									"ORPHANET",
 									"HP"
 								],
-								"default_term": "spinocerebellar ataxia 47"
+								"default_term": "leukodystrophy"
 							}
 						}
 					]

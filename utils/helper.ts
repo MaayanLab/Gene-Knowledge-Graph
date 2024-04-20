@@ -114,10 +114,19 @@ export const process_properties = (properties) => {
 	return props
 }
 
+const convert_int = (v) => {
+    try {
+        if (isNaN(v)) return v
+        else return parseInt(v)
+    } catch (error) {
+        return v
+    }
+}
+
 export const convert_query = (req: NextRequest) => {
     const input_query = {}
     for (const [k,v] of req.nextUrl.searchParams.entries()) {
-        input_query[k] = v
+        input_query[k] = convert_int(v)
     }
     return input_query
 }

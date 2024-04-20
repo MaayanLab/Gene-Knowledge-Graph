@@ -171,7 +171,7 @@ export const resolve_results = async ({
                 }
                 const relations = record.get('r')
                 for (const relation of relations) {
-                    const relation_id = `${nodes[relation.start].data.label}_${nodes[relation.end].data.label}`
+                    const relation_id = `${nodes[relation.start].data.id}_${nodes[relation.end].data.id}`
                     if (edges[relation_id] === undefined) {
                         const relation_type = relation.type
                         edges[relation_id] = {
@@ -195,6 +195,7 @@ export const resolve_results = async ({
                 edges: Object.values(edges)
             }
         } catch (error) {
+            console.log(error)
             throw error
         }
 	}

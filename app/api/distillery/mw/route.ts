@@ -98,7 +98,10 @@ const InputSchema = z.object({
 export async function GET(req: NextRequest) {
     const filter = req.nextUrl.searchParams.get("filter")
     if (!filter) return NextResponse.json({error: "No filter inputted"}, {status: 400})
-    const { start_term, limit=10, start_field="label" } = InputSchema.parse(JSON.parse(filter))
+    const f = JSON.parse(filter)
+    if (f.limit && !isNaN(f.limit) && typeof f.limit === 'string') f.limit = parseInt(f.limit)
+    
+    const { start_term, limit=10, start_field="label" } = InputSchema.parse(f)
         
     const {aggr_scores, colors} = await initialize()
     // const nodes = schema.nodes.map(i=>i.node)

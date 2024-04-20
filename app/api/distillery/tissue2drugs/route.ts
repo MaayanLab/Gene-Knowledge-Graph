@@ -100,7 +100,9 @@ export async function GET(req: NextRequest) {
     try {
         const filter = req.nextUrl.searchParams.get("filter")
         if (!filter) return NextResponse.json({error: "No filter inputted"}, {status: 400})
-        const { start, start_term, limit=10, relation=['bioactivity', 'positively regulates', 'negatively regulates'], start_field="label" } = InputSchema.parse(JSON.parse(filter))
+        const f = JSON.parse(filter)
+        if (f.limit && !isNaN(f.limit) && typeof f.limit === 'string') f.limit = parseInt(f.limit)
+        const { start, start_term, limit=10, relation=['bioactivity', 'positively regulates', 'negatively regulates'], start_field="label" } = InputSchema.parse(f)
         
         const {aggr_scores, colors} = await initialize()
         

@@ -532,6 +532,10 @@ const input_query_schema = z.object({
 export async function GET(req: NextRequest) {
     const schema = await fetch_kg_schema()
     try {
+		const f = JSON.parse(req.nextUrl.searchParams.get("filter"))
+		
+        if (f.limit && !isNaN(f.limit) && typeof f.limit === 'string') f.limit = parseInt(f.limit)
+        
         const { start,
                 start_field="label",
                 start_term,
@@ -545,7 +549,7 @@ export async function GET(req: NextRequest) {
                 expand = [],
                 gene_links,
                 augment,
-                augment_limit } = input_query_schema.parse(JSON.parse(req.nextUrl.searchParams.get("filter")))
+                augment_limit } = input_query_schema.parse(f)
         const {aggr_scores, colors, edges} = await initialize()
         const nodes = schema.nodes.map(i=>i.node)
         if (nodes.indexOf(start) < 0) return NextResponse.json({error: "Invalid start node"}, {status: 400})

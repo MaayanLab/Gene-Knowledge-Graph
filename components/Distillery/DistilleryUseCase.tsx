@@ -52,6 +52,7 @@ async function DistilleryUseCase({
         try {
             const field = searchParams.field || "label"
             const term = searchParams.term || default_term
+            const limit = searchParams.limit || 5
             if (!fields) {
                 const current_node = schema.nodes.filter(i=>i.node == type)
                 if (current_node.length == 0) console.error("Invalid node")
@@ -72,6 +73,7 @@ async function DistilleryUseCase({
                     start: type,
                     start_term: term,
                     start_field: field,
+                    limit
                 }
                 if (relation.length) body["relation"] = relation
                 const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}${endpoint}?filter=${JSON.stringify(body)}`,
