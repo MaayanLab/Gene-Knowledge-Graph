@@ -11762,12 +11762,12 @@
 						},
 						{
 							"endpoint": "/dd_apps/disease2exrna",
-							"label": "Disease2ExRNA",
+							"label": "Liquid Biopsy of Condition",
 							"type": "page",
 							"component": "DistilleryUseCase",
 							"props": {
 								"init_function": "initialize_kg",
-								"title": "Disease2ExRNA",
+								"title": "Liquid Biopsy of Condition",
 								"icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/disease2exrna.png",
 								"description": "For a given set of genes that are highly expressed in a specific disease, identify extracellular RNAs (exRNAs) that may be detected in human biofluids and thus serve as non-invasive disease biomarkers.",
 								"endpoint": "/api/distillery/disease2exrna",
@@ -11782,6 +11782,27 @@
 									"HP"
 								],
 								"default_term": "leukodystrophy"
+							}
+						},
+						{
+							"endpoint": "/dd_apps/drug2exrna",
+							"label": "Liquid Biopsy of Drug Response",
+							"type": "page",
+							"component": "DistilleryUseCase",
+							"props": {
+								"init_function": "initialize_kg",
+								"title": "Liquid Biopsy of Drug Response",
+								"icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/disease2exrna.png",
+								"description": "For a given drug term, return (1) up-regulated genes, (2) loci expressed in exRNA that overlap RBP binding regions, (3) the RBP that overlaps the locus, and (4) the biofluid(s) where locus was expressed in exRNA.",
+								"endpoint": "/api/distillery/drug2exrna",
+								"type": "Drug",
+								"options_endpoint": "/api/distillery/exrnadrug",
+								"fields": [
+									"PUBCHEM",
+									"id",
+									"label"
+								],
+								"default_term": "STK-674938"
 							}
 						}
 					]
@@ -11905,6 +11926,27 @@
 									"HP"
 								],
 								"default_term": "Frontotemporal dementia"
+							}
+						},
+						{
+							"endpoint": "/use_cases/drug2exrna",
+							"label": "Liquid Biopsy of Dexamethasone Response",
+							"type": "page",
+							"component": "DistilleryUseCase",
+							"props": {
+								"init_function": "initialize_kg",
+								"title": "Liquid Biopsy of Dexamethasone Response",
+								"icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/disease2exrna.png",
+								"description": "Find genes that are up-regulated by dexamethasone, (2) loci expressed in exRNA that overlap RBP binding regions, (3) the RBP that overlaps the locus, and (4) the biofluid(s) where locus was expressed in exRNA.",
+								"endpoint": "/api/distillery/drug2exrna",
+								"type": "Drug",
+								"options_endpoint": "/api/distillery/exrnadrug",
+								"fields": [
+									"PUBCHEM",
+									"id",
+									"label"
+								],
+								"default_term": "dexamethasone"
 							}
 						}
 					]
