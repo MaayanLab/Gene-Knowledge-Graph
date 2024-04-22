@@ -7,7 +7,7 @@ import { UISchema } from "@/app/api/schema/route";
 import NetworkTable from "./NetworkTable";
 import { Typography, CircularProgress } from "@mui/material";
 import dynamic from "next/dynamic";
-import Cytoscape from "../misc/Cytoscape";
+import Cytoscape from "../Cytoscape";
 
 const TermViz = ({elements, schema, tooltip_templates_edges, tooltip_templates_nodes}:
 	{

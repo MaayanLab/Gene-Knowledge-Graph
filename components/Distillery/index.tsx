@@ -41,7 +41,7 @@ export default function DistilleryLanding({
                                 {page.props.title[0]}
                             </Avatar>}
                             action={
-                                <Link href={page.endpoint}>
+                                <Link href={page.endpoint + "?edge_labels=true"}>
                                     <IconButton aria-label="settings">
                                         <ExitToAppIcon />
                                     </IconButton>

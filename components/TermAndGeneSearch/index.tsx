@@ -7,7 +7,7 @@ import AsyncFormComponent from "./async_form"
 import Form from "./form"
 import NetworkTable from "./network_table"
 import { fetch_kg_schema } from "@/utils/initialize"
-const Cytoscape = dynamic(()=>import('../misc/Cytoscape'),
+const Cytoscape = dynamic(()=>import('../Cytoscape'),
     {
         ssr: false,
         loading: ()=><CircularProgress/>

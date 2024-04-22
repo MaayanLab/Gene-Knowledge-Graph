@@ -2,7 +2,7 @@
 import { useRouter, usePathname, useSearchParams} from 'next/navigation';
 import { parseAsJson, useQueryState } from 'next-usequerystate';
 import React, {useState } from 'react';
-import { layouts } from '../misc/Cytoscape';
+import { layouts } from '../Cytoscape';
 import Tooltip from '@mui/material/Tooltip';
 import ShareIcon from '@mui/icons-material/Share';
 

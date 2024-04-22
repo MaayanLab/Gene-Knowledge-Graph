@@ -42,7 +42,7 @@ import Icon from '@mdi/react';
 import { router_push } from '@/utils/client_side';
 import { NetworkSchema } from '@/app/api/knowledge_graph/route';
 import { process_tables } from '@/utils/helper';
-import { layouts } from '../misc/Cytoscape';  
+import { layouts } from '../Cytoscape';  
   function Form({
     elements = {nodes: [], edges: []},
     searchParams

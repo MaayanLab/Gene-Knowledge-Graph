@@ -6,7 +6,7 @@ import { Grid, Typography, CircularProgress, Stack, Card, CardContent } from '@m
 import AsyncForm from "./AsyncForm";
 import Form from "./Form";
 import NetworkTable from "../TermAndGeneSearch/network_table";
-const Cytoscape = dynamic(()=>import('../misc/Cytoscape'),
+const Cytoscape = dynamic(()=>import('../Cytoscape'),
     {
         ssr: false,
         loading: ()=><CircularProgress/>

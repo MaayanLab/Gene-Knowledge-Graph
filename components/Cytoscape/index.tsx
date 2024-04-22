@@ -3,8 +3,8 @@ import { useRef, useState, useEffect } from 'react';
 // import dynamic from 'next/dynamic';
 import { NetworkSchema } from '@/app/api/knowledge_graph/route';
 import CytoscapeComponent from 'react-cytoscapejs';
-import { TooltipCard } from '../client_side';
-import { Legend } from '..';
+import { TooltipCard } from '../misc/client_side';
+import { Legend } from '../misc';
 import { UISchema } from '@/app/api/schema/route';
 import { useQueryState, parseAsString } from 'next-usequerystate';
 import HubIcon from '@mui/icons-material/Hub';
@@ -41,7 +41,7 @@ export default function Cytoscape ({
 	schema,
 	tooltip_templates_edges,
 	tooltip_templates_nodes,
-	search
+	search,
 }: {
 	elements: null | NetworkSchema, 
 	search?:boolean,
