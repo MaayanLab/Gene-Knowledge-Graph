@@ -11792,7 +11792,7 @@
 							"props": {
 								"init_function": "initialize_kg",
 								"title": "Liquid Biopsy of Drug Response",
-								"icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/disease2exrna.png",
+								"icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/drug2exrna.png",
 								"description": "For a given drug term, return (1) up-regulated genes, (2) loci expressed in exRNA that overlap RBP binding regions, (3) the RBP that overlaps the locus, and (4) the biofluid(s) where locus was expressed in exRNA.",
 								"endpoint": "/api/distillery/drug2exrna",
 								"type": "Drug",
@@ -11912,7 +11912,7 @@
 							"props": {
 								"init_function": "initialize_kg",
 								"title": "Frontotemporal Dementia Use Case",
-								"icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/disease2exrna.png",
+								"icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/dementiabiopsy.png",
 								"description": "For genes that are correlated with frontotemporal dementia, identify extracellular RNAs (exRNAs) that may be detected in human biofluids and thus serve as non-invasive disease biomarkers.",
 								"endpoint": "/api/distillery/disease2exrna",
 								"type": "Disease or Syndrome",
@@ -11936,7 +11936,7 @@
 							"props": {
 								"init_function": "initialize_kg",
 								"title": "Liquid Biopsy of Dexamethasone Response",
-								"icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/disease2exrna.png",
+								"icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/dexamethasonebiopsy.png",
 								"description": "Find genes that are up-regulated by dexamethasone, (2) loci expressed in exRNA that overlap RBP binding regions, (3) the RBP that overlaps the locus, and (4) the biofluid(s) where locus was expressed in exRNA.",
 								"endpoint": "/api/distillery/drug2exrna",
 								"type": "Drug",
