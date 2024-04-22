@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/distillery:2.2.14
+    image: maayanlab/distillery:2.2.15
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:

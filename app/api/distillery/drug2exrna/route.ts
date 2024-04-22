@@ -16,9 +16,18 @@ async function process_query({
         colors?: {[key: string]: {color?: string, field?: string, aggr_type?: string}},
         field: string,
     }) {
-    const query = `MATCH p=(a:Drug {label: $term})-[r1: \`positively regulates\`]-(b: Gene)-[r2: overlaps]-(c: \`ENCODE RBS 150 NO OVERLAP\`)-[r3: \`correlated in\`]-(d: \`Body Substance\`)-[r4: \`predicted in\`]-(e)-[:\`molecularly interacts with\`]-(f)
-                    RETURN p, nodes(p) as n, relationships(p) as r
-                    LIMIT TOINTEGER($limit)`
+
+    const query = `MATCH q=(a:Drug {label: $term})-[r1: \`positively regulates\`]-(b: Gene)
+            WITH q, a, r1, b
+            ORDER BY r1.evidence DESC 
+            CALL {
+                WITH q, a, r1, b
+                MATCH p=(a)-[r1]-(b)-[r2: overlaps]-(c: \`ENCODE RBS 150 NO OVERLAP\`)-[r3: \`correlated in\`]-(d: \`Body Substance\`)-[r4: \`predicted in\`]-(e)-[:\`molecularly interacts with\`]-(f)
+                RETURN p, nodes(p) as n, relationships(p) as r LIMIT 1
+            }
+            RETURN p, nodes(p) as n, relationships(p) as r
+            LIMIT 10
+    `
     const query_params = { term, limit }
     return resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field]})
 }
