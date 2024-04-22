@@ -34,7 +34,7 @@ const InputSchema = z.object({
  * @swagger
  * /api/distillery/disease2exrna:
  *   get:
- *     description: Performs single or two term search
+ *     description: Performs liquid biopsy of condition
  *     tags:
  *       - distillery apps
  *     parameters:

@@ -45,7 +45,7 @@ const InputSchema = z.object({
  * @swagger
  * /api/distillery/tissue2drugs:
  *   get:
- *     description: Performs single or two term search
+ *     description: Performs tissue2drugs use case
  *     tags:
  *       - distillery apps
  *     parameters:

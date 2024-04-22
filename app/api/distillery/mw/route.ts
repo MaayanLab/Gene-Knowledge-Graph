@@ -51,7 +51,7 @@ const InputSchema = z.object({
  * @swagger
  * /api/distillery/mw:
  *   get:
- *     description: Performs single or two term search
+ *     description: Resolves MW usecase
  *     tags:
  *       - distillery apps
  *     parameters:
