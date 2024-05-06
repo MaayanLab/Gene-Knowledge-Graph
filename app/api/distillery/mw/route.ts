@@ -58,7 +58,6 @@ async function process_query({
     }
     RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)
     `
-    console.log(query)
     const query_params = { term, limit }
     return resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field]})
 }

@@ -41,7 +41,6 @@ async function process_query({
         queries.push(q)
     }
     const query = queries.join(" UNION ")
-    console.log(query, term, limit)
     const query_params = { term, limit }
     return resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field]})
 }

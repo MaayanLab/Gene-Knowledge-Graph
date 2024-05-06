@@ -35,8 +35,6 @@ export const getApiDocs = async () => {
 		security: [],
 	},
 	});
-console.log(tags)
-console.log(spec)
 const new_path = {}
 for (const [k,v] of Object.entries(spec['paths'])) {
 	const new_sub_path = {}
@@ -55,6 +53,5 @@ for (const [k,v] of Object.entries(spec['paths'])) {
 	if (Object.keys(new_sub_path).length > 0) new_path[k] = new_sub_path
 }
 spec['paths'] = new_path
-console.log(spec)
 return spec;
 };
