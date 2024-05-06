@@ -42,18 +42,7 @@ export async function GET(req: NextRequest) {
         try {
             const {term="", field="label", limit=100} = InputSchema.parse(convert_query(req))
             const types = ["Tissue", "Body Part, Organ, or Organ Component", "Body Location or Region"]
-            
-            const queries = []
-            for (const type of types) {
-                let q = `MATCH (a:\`${type}\`)-[r:expresses]-(b:Gene)`
-                if (term) {
-                    q = q + ` WHERE a.${field} =~ $term`
-
-                }
-                q = q + "  RETURN DISTINCT(a) LIMIT TOINTEGER($limit)"
-                queries.push(q)
-            }
-            const query = queries.join(" UNION ")
+            const query = `MATCH (a:Anatomy)-[r:expressed_in]-(b:Gene) WHERE a.${field} =~ $term RETURN DISTINCT(a) LIMIT TOINTEGER($limit)`
             const results = await session.readTransaction(txc => txc.run(query, {limit, term: `(?i).*${term}.*`}))
             const records = {}
             for (const record of results.records) {

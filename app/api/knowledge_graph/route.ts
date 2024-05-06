@@ -351,6 +351,7 @@ const resolve_one_term = async ({
 		}
 	}
     const query_params = { term, limit, ...vars }
+	console.log(query)
 	// const results = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
 	if (!augment) {
 		return await resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field]})
@@ -535,7 +536,7 @@ export async function GET(req: NextRequest) {
 		const f = JSON.parse(req.nextUrl.searchParams.get("filter"))
 		
         if (f.limit && !isNaN(f.limit) && typeof f.limit === 'string') f.limit = parseInt(f.limit)
-        
+        console.log(f)
         const { start,
                 start_field="label",
                 start_term,

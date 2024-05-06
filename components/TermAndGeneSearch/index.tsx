@@ -86,7 +86,6 @@ const TermAndGeneSearch = async ({searchParams, props}: {
     if (typeof f.start_term === 'undefined') f.start_term = props.initial_query.start_term
     const filter: FilterSchema = f
     const controller = new AbortController()
-    console.log(filter, 'filter')
     try {
         if (filter.relation) {
             filter.relation = process_relation(filter.relation)
@@ -112,6 +111,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
         const selected_edges = []
         const genes = []
         if (Object.keys(filter).length > 0) {
+            console.log(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph?filter=${JSON.stringify(filter)}`)
             const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph?filter=${JSON.stringify(filter)}`,
             {
                 method: 'GET',

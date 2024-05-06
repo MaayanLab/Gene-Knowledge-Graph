@@ -43,17 +43,12 @@ export async function GET(req: NextRequest) {
             const {term="", field="label", limit=100} = InputSchema.parse(convert_query(req))
             const types = ["Disease", "Disease or Syndrome", "Congenital Abnormality"]
             
-            const queries = []
-            for (const type of types) {
-                let q = `MATCH (a:\`${type}\`)-[r]-(b:Gene)`
-                if (term) {
-                    q = q + ` WHERE a.${field} =~ $term`
+            let query = `MATCH (a:\`Disease or Phenotype\`)-[r]-(b:Gene)`
+            if (term) {
+                query = query + ` WHERE a.${field} =~ $term`
 
-                }
-                q = q + "  RETURN DISTINCT(a) LIMIT TOINTEGER($limit)"
-                queries.push(q)
             }
-            const query = queries.join(" UNION ")
+            query = query + "  RETURN DISTINCT(a) LIMIT TOINTEGER($limit)"
             const results = await session.readTransaction(txc => txc.run(query, {limit, term: `(?i).*${term}.*`}))
             const records = {}
             for (const record of results.records) {

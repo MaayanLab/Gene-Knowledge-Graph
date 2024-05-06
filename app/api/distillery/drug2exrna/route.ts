@@ -17,12 +17,12 @@ async function process_query({
         field: string,
     }) {
 
-    const query = `MATCH q=(a:Drug {label: $term})-[r1: \`positively regulates\`]-(b: Gene)
+    const query = `MATCH q=(a:Compound {label: $term})-[r1: \`positively_regulates\`]-(b: Gene)
             WITH q, a, r1, b
             ORDER BY r1.evidence DESC 
             CALL {
                 WITH q, a, r1, b
-                MATCH p=(a)-[r1]-(b)-[r2: overlaps]-(c: \`ENCODE RBS 150 NO OVERLAP\`)-[r3: \`correlated in\`]-(d: \`Body Substance\`)-[r4: \`predicted in\`]-(e)-[:\`molecularly interacts with\`]-(f)
+                MATCH p=(a)-[r1]-(b)-[r2: overlaps]-(c: \`exRNA Loci\`)-[r3: \`correlated_in\`]-(d:Biofluid)-[r4:predicted_in]-(e)-[r5:molecularly_interacts_with]-(f)
                 RETURN p, nodes(p) as n, relationships(p) as r LIMIT 1
             }
             RETURN p, nodes(p) as n, relationships(p) as r

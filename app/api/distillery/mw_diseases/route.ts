@@ -44,13 +44,11 @@ export async function GET(req:NextRequest) {
             
             const type = "Disease"
             
-            let query = `MATCH (a:Disease)-[r]-(b)`
+            let query = `MATCH (a:\`Disease or Phenotype\`)-[r]-(b:Metabolite)`
             // if (enzyme && enzyme.toLowerCase() === 'true') query = `MATCH (a:Gene ${filter})`
             if (term) {
-                query = query + ` WHERE a.${field} =~ $term AND r.SAB = "MW"`
+                query = query + ` WHERE a.${field} =~ $term`
 
-            } else {
-                query = query + ` WHERE r.SAB = "MW"`
             }
             query = query + "  RETURN a LIMIT TOINTEGER($limit)"
             const results = await session.readTransaction(txc => txc.run(query, {limit, term: `(?i).*${term}.*`}))

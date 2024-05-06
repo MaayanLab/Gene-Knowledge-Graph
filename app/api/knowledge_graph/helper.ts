@@ -178,6 +178,8 @@ export const resolve_results = async ({
                             data: {
                                 source: nodes[relation.start].data.id,
                                 target: nodes[relation.end].data.id,
+                                source_label: nodes[relation.start].data.label,
+                                target_label: nodes[relation.end].data.label,
                                 kind: "Relation",
                                 label: relation_type,
                                 ...properties[relation_type] || {},

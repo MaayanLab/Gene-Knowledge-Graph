@@ -21,15 +21,27 @@ async function process_query({
     }) {
     const queries = []
     for (const rel of relation) {
-        const q = `
-                MATCH p=(t:\`${type}\` {label: $term})-[rel:expresses]-(g:Gene)-[r1:\`${rel}\`]-(a:Drug)
+        let q
+        if (rel === 'bioactivity') {
+            q = `
+                MATCH p=(t:\`${type}\` {label: $term})-[rel:expressed_in]-(g:Gene)-[r:is_protein]-(pr:Protein)-[r1:\`${rel}\`]-(a:Compound)
                 RETURN p, nodes(p) as n, relationships(p) as r
-                ORDER BY rel.evidence DESC, r1.evidence ${colors[rel].aggr_type} 
+                ORDER BY rel.evidence_class DESC, r1.evidence ${colors[rel].aggr_type || 'DESC'} 
                 LIMIT TOINTEGER($limit)
             `
-            queries.push(q)
+        } else {
+            q = `
+                MATCH p=(t:\`${type}\` {label: $term})-[rel:expressed_in]-(g:Gene)-[r1:\`${rel}\`]-(a:Compound)
+                RETURN p, nodes(p) as n, relationships(p) as r
+                ORDER BY rel.evidence_class DESC, r1.evidence ${colors[rel].aggr_type || 'DESC'} 
+                LIMIT TOINTEGER($limit)
+            `
+        }
+        
+        queries.push(q)
     }
     const query = queries.join(" UNION ")
+    console.log(query, term, limit)
     const query_params = { term, limit }
     return resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field]})
 }
@@ -102,7 +114,7 @@ export async function GET(req: NextRequest) {
         if (!filter) return NextResponse.json({error: "No filter inputted"}, {status: 400})
         const f = JSON.parse(filter)
         if (f.limit && !isNaN(f.limit) && typeof f.limit === 'string') f.limit = parseInt(f.limit)
-        const { start, start_term, limit=10, relation=['bioactivity', 'positively regulates', 'negatively regulates'], start_field="label" } = InputSchema.parse(f)
+        const { start, start_term, limit=10, relation=['bioactivity', 'positively_regulates', 'negatively_regulates'], start_field="label" } = InputSchema.parse(f)
         
         const {aggr_scores, colors} = await initialize()
         

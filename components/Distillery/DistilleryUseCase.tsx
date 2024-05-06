@@ -78,6 +78,7 @@ async function DistilleryUseCase({
                     limit
                 }
                 if (relation.length) body["relation"] = relation
+                console.log(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}${endpoint}?filter=${JSON.stringify(body)}`)
                 const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}${endpoint}?filter=${JSON.stringify(body)}`,
                     {
                     method: 'GET',

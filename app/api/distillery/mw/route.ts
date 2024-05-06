@@ -15,27 +15,50 @@ async function process_query({
         colors?: {[key: string]: {color?: string, field?: string, aggr_type?: string}},
         field: string
     }) {
-    const query = `
-        MATCH p=(a:Disease {${field}: $term})-[r1:\`correlated with condition\`]-(b)-[r2:\`bioactivity\`]-(c:Gene)
-        RETURN p, NODES(p) as n, RELATIONSHIPS(p) as r
-        ORDER BY r1.evidence DESC, r2.evidence DESC
-        LIMIT TOINTEGER($limit)
-        UNION
-        MATCH p=(a:Disease {${field}: $term})-[r1:\`correlated with condition\`]-(b)-[r2:\`bioactivity\`]-(c:Gene)-[r3:\`expresses\`]-(d:Tissue)
-        RETURN p, NODES(p) as n, RELATIONSHIPS(p) as r
-        ORDER BY r1.evidence DESC, r2.evidence DESC, r3.evidence DESC
-        LIMIT TOINTEGER($limit)
-        UNION
-        MATCH p=(a:Disease {${field}: $term})-[r1:\`correlated with condition\`]-(b:Drug)-[r2:\`causally influences\`]-(c:Gene)-[r3:\`bioactivity\`]-(d:Drug)
-        RETURN p, NODES(p) as n, RELATIONSHIPS(p) as r
-        ORDER BY r1.evidence DESC, r2.evidence DESC, r3.evidence DESC
-        LIMIT TOINTEGER($limit)
-        UNION
-        MATCH p=(a:Disease {${field}: $term})-[r1:\`correlated with condition\`]-(b:Drug)-[r2:\`causally influences\`]-(c:Gene)-[r3:\`expresses\`]-(d:Tissue)
-        RETURN p, NODES(p) as n, RELATIONSHIPS(p) as r
-        ORDER BY r1.evidence DESC, r2.evidence DESC, r3.evidence DESC
-        LIMIT TOINTEGER($limit)
+    // const query = `
+    //     MATCH p=(a:\`Disease or Phenotype\` {${field}: $term})-[r1]-(b:Metabolite)-[r2:\`bioactivity\`]-(c:Protein)-[r3:is_protein]-(g:Gene)
+    //     RETURN p, NODES(p) as n, RELATIONSHIPS(p) as r
+    //     ORDER BY r1.evidence DESC, r2.evidence DESC
+    //     LIMIT TOINTEGER($limit)
+    //     UNION
+    //     MATCH p=(a:\`Disease or Phenotype\` {${field}: $term})-[r1]-(b:Metabolite)-[r2:\`bioactivity\`]-(c:Protein)-[r3:is_protein]-(g:Gene)-[r4:\`expresses\`]-(d:Anatomy)
+    //     RETURN p, NODES(p) as n, RELATIONSHIPS(p) as r
+    //     ORDER BY r1.evidence DESC, r2.evidence DESC, r3.evidence DESC
+    //     LIMIT TOINTEGER($limit)
+    //     UNION
+    //     MATCH p=(a:\`Disease or Phenotype\` {${field}: $term})-[r1]-(b:Metabolite)-[r2:\`causally influences\`]-(c:Gene)-[r3:\`bioactivity\`]-(d:Drug)
+    //     RETURN p, NODES(p) as n, RELATIONSHIPS(p) as r
+    //     ORDER BY r1.evidence DESC, r2.evidence DESC, r3.evidence DESC
+    //     LIMIT TOINTEGER($limit)
+    //     UNION
+    //     MATCH p=(a:\`Disease or Phenotype\` {${field}: $term})-[r1]-(b:Metabolite)-[r2:\`causally influences\`]-(c:Gene)-[r3:\`expresses\`]-(d:Tissue)
+    //     RETURN p, NODES(p) as n, RELATIONSHIPS(p) as r
+    //     ORDER BY r1.evidence DESC, r2.evidence DESC, r3.evidence DESC
+    //     LIMIT TOINTEGER($limit)
+    // `
+    const query = `MATCH p1=(d:\`Disease or Phenotype\` {label: $term})-[r1: indication]-(a: Compound)
+    WITH p1, a LIMIT TOINTEGER($limit)
+    CALL {
+        WITH p1, a
+        MATCH q=(a)-[:bioactivity]-(b:Protein)-[:is_protein]-(g:Gene)
+        OPTIONAL MATCH q2=(g)-[r:expressed_in]-(a:Anatomy)
+        WITH apoc.path.combine(p1,q) as comb, q2
+        ORDER BY r.evidence_class DESC
+        RETURN apoc.path.combine(comb, q2) as p
+    }
+    RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)
+    UNION
+    MATCH p1=(d:\`Disease or Phenotype\` {label: $term})-[r2:correlated_with_condition]-(m:Metabolite)
+    WITH p1, m LIMIT 5
+    CALL {
+        WITH p1, m
+        MATCH q=(m)-[:bioactivity]-(b:Protein)-[:is_protein]-(g:Gene)-[r:expressed_in]-(a:Anatomy)
+        RETURN apoc.path.combine(p1,q) as p, b 
+        ORDER BY r.evidence_class DESC
+    }
+    RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)
     `
+    console.log(query)
     const query_params = { term, limit }
     return resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field]})
 }
