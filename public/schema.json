@@ -2368,7 +2368,6 @@
                                 "options_endpoint": "/api/knowledge_graph/node_search",
                                 "fields": [
                                     "ENTREZ",
-                                    "UNIPROTKB",
                                     "label",
                                     "HGNC"
                                 ],
@@ -2510,7 +2509,6 @@
                                 "options_endpoint": "/api/knowledge_graph/node_search",
                                 "fields": [
                                     "ENTREZ",
-                                    "UNIPROTKB",
                                     "label",
                                     "HGNC"
                                 ],
@@ -2596,7 +2594,7 @@
                 "component": "Download",
                 "position": "bottom",
                 "props": {
-                    "src": "https://minio.dev.maayanlab.cloud/datadistillery-kg/download_detailed.json"
+                    "src": "https://minio.dev.maayanlab.cloud/datadistillery-kg/neo5/downloads.json"
                 }
             },
             {
