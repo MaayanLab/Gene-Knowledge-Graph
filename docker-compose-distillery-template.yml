@@ -13,7 +13,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      - NEXT_PUBLIC_NEO4J_URL=bolt://neo4j:7687
+      - NEXT_PUBLIC_NEO4J_URL=bolt://neo4j-v5:7687
       - NEXT_PUBLIC_ENRICHR_URL=https://maayanlab.cloud/Enrichr
       - NEXT_PUBLIC_GENESHOT_URL=https://maayanlab.cloud/geneshot
       - NEXT_PUBLIC_NEO4J_USER
