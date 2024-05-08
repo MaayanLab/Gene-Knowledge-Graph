@@ -12,8 +12,11 @@ with open('../.env') as o:
 			if key in env:
 				env[key] = val
 
-print(env)		
-filename = '../docker-compose-template-offline.yml' if env['OFFLINE'] else '../docker-compose-template.yml'
+print(env)	
+if env['APP_NAME'] == 'distillery':
+	filename = '../docker-compose-template-distillery-offline.yml' if env['OFFLINE'] else '../docker-compose-template-distillery.yml'
+else:	
+	filename = '../docker-compose-template-offline.yml' if env['OFFLINE'] else '../docker-compose-template.yml'
 with open(filename) as o:
 	compose = o.read()
 	compose = compose.replace('${APP_NAME}', env['APP_NAME'])
