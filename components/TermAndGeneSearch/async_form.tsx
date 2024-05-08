@@ -94,10 +94,12 @@ const AsyncFormComponent = ({direction,
                 // if (filter) query.filter=JSON.stringify(filter)
                 if (inputTerm) query.term = inputTerm
                 const query_str = Object.entries(query).map(([k,v])=>(`${k}=${v}`)).join("&")
-                const options = await (await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/node_search${query_str ? "?" + query_str : ""}`, {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/node_search${query_str ? "?" + query_str : ""}`, {
                     method: 'GET',
                     signal: controller.signal
-                })).json()
+                })
+                let options:{[key:string]: {[key:string]: string|number}} = {}
+                if (res.ok) options = await (res).json()
                 if (inputTerm) setSelected(options[inputTerm])
                 // else if (direction === 'Start') {
                 //     router_push(router, pathname, {
