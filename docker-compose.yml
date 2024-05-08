@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/distillery:2.2.16
+    image: maayanlab/distillery:2.3.0
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
@@ -13,7 +13,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      - NEXT_PUBLIC_NEO4J_URL=bolt://neo4j:7687
+      - NEXT_PUBLIC_NEO4J_URL=bolt://neo4j-v5:7687
       - NEXT_PUBLIC_ENRICHR_URL=https://maayanlab.cloud/Enrichr
       - NEXT_PUBLIC_GENESHOT_URL=https://maayanlab.cloud/geneshot
       - NEXT_PUBLIC_NEO4J_USER
@@ -47,7 +47,7 @@ services:
     x-kubernetes:
       imagePullPolicy: IfNotPresent
     environment:
-      - NEO4J_PLUGINS=["apoc", "n10s"]
+      - NEO4J_PLUGINS= ["apoc", "n10s"]
       - NEO4J_AUTH=${NEXT_PUBLIC_NEO4J_USER}/${NEXT_PUBLIC_NEO4J_PASSWORD}
       - NEO4J_dbms_memory_heap_max__size=8G
       - NEO4J_dbms_memory_heap_initial__size=2G
