@@ -17,7 +17,7 @@ async function process_query({
         field: string,
         type: string,
     }) {
-    const query = `MATCH q=(a:\`Disease or Phenotype\` {label: $term})-[r1]-(b:Gene)
+    const query = `MATCH q=(a:\`Disease or Phenotype\` {${field}: $term})-[r1]-(b:Gene)
                     WITH q, a, r1, b
                     ORDER BY r1.evidence DESC 
                     CALL {

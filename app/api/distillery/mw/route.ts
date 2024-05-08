@@ -36,7 +36,7 @@ async function process_query({
     //     ORDER BY r1.evidence DESC, r2.evidence DESC, r3.evidence DESC
     //     LIMIT TOINTEGER($limit)
     // `
-    const query = `MATCH p1=(d:\`Disease or Phenotype\` {label: $term})-[r1: indication]-(a: Compound)
+    const query = `MATCH p1=(d:\`Disease or Phenotype\` {${field}: $term})-[r1: indication]-(a: Compound)
     WITH p1, a LIMIT TOINTEGER($limit)
     CALL {
         WITH p1, a
@@ -48,7 +48,7 @@ async function process_query({
     }
     RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)
     UNION
-    MATCH p1=(d:\`Disease or Phenotype\` {label: $term})-[r2:correlated_with_condition]-(m:Metabolite)
+    MATCH p1=(d:\`Disease or Phenotype\` {${field}: $term})-[r2:correlated_with_condition]-(m:Metabolite)
     WITH p1, m LIMIT 5
     CALL {
         WITH p1, m

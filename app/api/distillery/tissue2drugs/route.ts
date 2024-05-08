@@ -24,14 +24,14 @@ async function process_query({
         let q
         if (rel === 'bioactivity') {
             q = `
-                MATCH p=(t:\`${type}\` {label: $term})-[rel:expressed_in]-(g:Gene)-[r:is_protein]-(pr:Protein)-[r1:\`${rel}\`]-(a:Compound)
+                MATCH p=(t:\`${type}\` {${field}: $term})-[rel:expressed_in]-(g:Gene)-[r:is_protein]-(pr:Protein)-[r1:\`${rel}\`]-(a:Compound)
                 RETURN p, nodes(p) as n, relationships(p) as r
                 ORDER BY rel.evidence_class DESC, r1.evidence ${colors[rel].aggr_type || 'DESC'} 
                 LIMIT TOINTEGER($limit)
             `
         } else {
             q = `
-                MATCH p=(t:\`${type}\` {label: $term})-[rel:expressed_in]-(g:Gene)-[r1:\`${rel}\`]-(a:Compound)
+                MATCH p=(t:\`${type}\` {${field}: $term})-[rel:expressed_in]-(g:Gene)-[r1:\`${rel}\`]-(a:Compound)
                 RETURN p, nodes(p) as n, relationships(p) as r
                 ORDER BY rel.evidence_class DESC, r1.evidence ${colors[rel].aggr_type || 'DESC'} 
                 LIMIT TOINTEGER($limit)
@@ -40,7 +40,9 @@ async function process_query({
         
         queries.push(q)
     }
+    
     const query = queries.join(" UNION ")
+    console.log(query)
     const query_params = { term, limit }
     return resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field]})
 }
