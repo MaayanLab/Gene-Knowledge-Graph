@@ -48,13 +48,14 @@ async function process_query({
     }
     RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)
     UNION
-    MATCH p1=(d:\`Disease or Phenotype\` {${field}: $term})-[r2:correlated_with_condition]-(m:Metabolite)
-    WITH p1, m LIMIT 5
+    MATCH p1=(d:\`Disease or Phenotype\` {${field}: $term})-[r2:correlated_with_condition]-(m:Metabolite)-[:bioactivity]-(b:Protein)-[:is_protein]-(g:Gene)
+    WITH p1, g LIMIT TOINTEGER($limit)
     CALL {
-        WITH p1, m
-        MATCH q=(m)-[:bioactivity]-(b:Protein)-[:is_protein]-(g:Gene)-[r:expressed_in]-(a:Anatomy)
-        RETURN apoc.path.combine(p1,q) as p, b 
+        WITH p1, g
+        MATCH q=(g)-[r:expressed_in]-(a:Anatomy)
+        RETURN apoc.path.combine(p1,q) as p
         ORDER BY r.evidence_class DESC
+        LIMIT 5
     }
     RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)
     `
