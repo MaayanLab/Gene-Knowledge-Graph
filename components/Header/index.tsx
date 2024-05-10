@@ -9,7 +9,7 @@ import {
 import { UISchema } from '@/app/api/schema/route';
 import { Logo } from '../misc/logo';
 import Counter from '../Counter';
-
+import { TextNav } from './TextNav';
 export const Nav = ({tabs}:
 	{tabs: Array<{
 	endpoint: string,
@@ -26,7 +26,7 @@ export const Nav = ({tabs}:
 		const position = tab.position || 'top'
 		tab_component[position].push(
 			<Link href={tab.endpoint} key={tab.label}>
-				<Typography variant="nav">{tab.label}</Typography>
+				<TextNav path={tab.endpoint} title={tab.label}/>
 			</Link>
 		)
 	}
