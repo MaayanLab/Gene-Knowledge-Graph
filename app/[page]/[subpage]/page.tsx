@@ -44,7 +44,7 @@ export default async function Page({params, searchParams}: {
       <Grid item>
         <Container maxWidth={searchParams.fullscreen ?"xl": "lg"} sx={{backgroundColor: "#FFF"}}>
           {!searchParams.fullscreen && <Header schema={schema}/>}
-          <Suspense><Subheader schema={schema}/></Suspense>
+          {!searchParams.fullscreen &&<Suspense><Subheader schema={schema}/></Suspense>}
           <main className="mt-8 mb-8">
             <Grid container spacing={2}>
               <Grid item xs={12}>
