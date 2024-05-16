@@ -42,18 +42,7 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <ThemeRegistry options={{ key: 'mui' }} theme={schema.ui_theme || "cfde_theme"}>
-          <Grid container direction={"column"} justifyContent="space-between" sx={{minHeight: "100vh"}}>
-            <Grid item>
-              <Container maxWidth="lg" sx={{backgroundColor: "#FFF"}}>
-                <Header schema={schema}/>
-                <Suspense><Subheader schema={schema}/></Suspense>
-                {children}
-              </Container>
-            </Grid>
-            <Grid item>
-              <Footer {...schema.footer}/>
-            </Grid>
-          </Grid>
+          {children}
         </ThemeRegistry>
       </body>
     </html>

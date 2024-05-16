@@ -113,7 +113,6 @@ import { layouts } from '../Cytoscape';
 					<Tooltip title={fullscreen ? "Exit full screen": "Full screen"}>
 						<IconButton color="secondary"
 							onClick={()=>{
-
 								const {fullscreen, ...rest} = searchParams
 								const query = {...rest}
 								if (!fullscreen) query['fullscreen'] = 'true'

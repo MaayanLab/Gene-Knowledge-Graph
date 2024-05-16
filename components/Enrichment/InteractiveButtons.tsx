@@ -60,6 +60,7 @@ const InteractiveButtons = ({
         libraries_list,
         parsedParams,
         short_url,
+        fullscreen
     }: {
         short_url?: string,
         libraries_list?:Array<string>,
@@ -70,6 +71,7 @@ const InteractiveButtons = ({
         elements: NetworkSchema,
         children: ReactElement,
         parsedParams: EnrichmentParams,
+        fullscreen?: 'true'
     }) => {
     const router = useRouter()
     const pathname = usePathname()
@@ -341,17 +343,22 @@ const InteractiveButtons = ({
                             </Grid>
                         </Grid>
                     </Modal>
-                    <Tooltip title={parsedParams.fullscreen ? "Exit full screen": "Full screen"}>
+                    <Tooltip title={fullscreen ? "Exit full screen": "Full screen"}>
                         <IconButton
                             onClick={()=>{
-                                const {fullscreen, ...query} = parsedParams
-                                if (!fullscreen) query['fullscreen'] = true
-                                router_push(router, pathname, {
-                                    q: JSON.stringify(query)
-                                })
+                                if (!fullscreen) {
+                                    router_push(router, pathname, {
+                                        q: JSON.stringify(parsedParams),
+                                        fullscreen: 'true'
+                                    })
+                                } else {
+                                    router_push(router, pathname, {
+                                        q: JSON.stringify(parsedParams),
+                                    })
+                                }
                             }}
                         >
-                            {parsedParams.fullscreen ? <FullscreenExitIcon/>: <FullscreenIcon/>}
+                            {fullscreen ? <FullscreenExitIcon/>: <FullscreenIcon/>}
                         </IconButton>
                     </Tooltip>
                     {(!view || view === "network") &&

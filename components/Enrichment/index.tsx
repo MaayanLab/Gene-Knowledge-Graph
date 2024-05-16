@@ -35,7 +35,6 @@ export interface EnrichmentParams {
     search?: boolean,
     expand?: Array<string>,
     remove?: Array<string>,
-    fullscreen?: boolean
 }
 
 
@@ -68,7 +67,9 @@ const Enrichment = async ({
     title?: string,
     description?: string,
     searchParams: {
-        q?:string
+        q?:string,
+        fullscreen?: 'true'
+
     },
     endpoint: string
 
@@ -203,6 +204,7 @@ const Enrichment = async ({
                                 shortId={shortId}
                                 parsedParams={parsedParams}
                                 // searchParams={parsedParams}
+                                fullscreen={searchParams.fullscreen}
                                 gene_count={genes.length}
                                 elements={elements}
                                 short_url={short_url}
