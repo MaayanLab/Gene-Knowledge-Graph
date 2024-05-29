@@ -265,6 +265,8 @@ export interface FilterSchema {
     gene_links?: Array<string>,
     augment?: boolean,
     augment_limit?: number,
+    remove?: Array<string>,
+    expand?: Array<string>,
 }
 
 export const process_relation = (r:Array<string | {name?: string, limit?: string}>|string, limit?:number) => {

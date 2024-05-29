@@ -64,9 +64,10 @@ const resolve_two_terms = async ({
         remove?: Array<string>,
         gene_links?: Array<string>,
 })=> {
-	let query = `MATCH q=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\` {${end_field}: $end_term}))
+	let query = `MATCH p=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\` {${end_field}: $end_term}))
 		USING INDEX a:\`${start}\`(${start_field})
 		USING INDEX b:\`${end}\`(${end_field})
+		WHERE all(rel in relationships(p) WHERE rel.predicted IS NULL)
 	`		
 	if (relation) {
 		const rels = []
@@ -79,31 +80,37 @@ const resolve_two_terms = async ({
 	const vars = {}
 	if ((remove || []).length) {
 		query = query + `
-			WHERE NOT a.id in ${JSON.stringify(remove)}
+			AND NOT a.id in ${JSON.stringify(remove)}
 			AND NOT b.id in ${JSON.stringify(remove)}
 		`
 	} 
 	const gl = []
+	query = query + `RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
 	if (gene_links) {
+		query = `CALL {
+			${query}
+		}
+		WITH p as q
+		`
 		for (const i of gene_links) {
 			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
 			gl.push(`\`${i}\``)
 		}
-		query = query + `CALL {
+		query = query + ` 
+		CALL {
+			WITH q
+			RETURN q as p, nodes(q) as n, relationships(q) as r
+			UNION
 			WITH q
 			MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)
 			WHERE c in NODES(q) and d in NODES(q)
-			RETURN p, nodes(p) as n, relationships(p) as r
-			UNION
-			WITH q
-			RETURN q as p, nodes(q) as n, relationships(q) as r
+			RETURN p, nodes(p) as n, relationships(p) as r			
 		}
-		RETURN p, n, r
-		LIMIT TOINTEGER($limit) `
+		RETURN p, n, r `
 	}
-	else {
-		query = query + `RETURN q as p, nodes(q) as n, relationships(q) as r LIMIT TOINTEGER($limit)`
-	}
+	// else {
+	// 	query = query + `RETURN q as p, nodes(q) as n, relationships(q) as r LIMIT TOINTEGER($limit)`
+	// }
 	// remove has precedence on expand
 	const expand = (e || []).filter(i=>(remove || []).indexOf(i) === -1)
 
@@ -153,7 +160,7 @@ const resolve_term_and_end_type = async (
             gene_links?: Array<string>,
     })=> {
 	
-	let query = `MATCH q=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\`))
+	let query = `MATCH p=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\`))
 		USING INDEX a:\`${start}\`(${start_field})
 	`
 	  if (relation) {
@@ -183,26 +190,32 @@ const resolve_term_and_end_type = async (
 		}
 	}
 	const gl = []
+	query = query + `RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
 	if (gene_links) {
+		query = `CALL {
+			${query}
+		}
+			WITH p as q
+		`
 		for (const i of gene_links) {
 			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
 			gl.push(`\`${i}\``)
 		}
-		query = query + `CALL {
-			WITH q
-			MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)
-			WHERE c in NODES(q) and d in NODES(q)
-			RETURN p, nodes(p) as n, relationships(p) as r
-			UNION
-			WITH q
-			RETURN q as p, nodes(q) as n, relationships(q) as r
-		}
-		RETURN p, n, r
-		LIMIT TOINTEGER($limit) `
+		query = query + `
+			CALL {
+				WITH q
+				RETURN q as p, nodes(q) as n, relationships(q) as r
+				UNION
+				WITH q
+				MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)
+				WHERE c in NODES(q) and d in NODES(q)
+				RETURN p, nodes(p) as n, relationships(p) as r			
+			}
+			RETURN p, n, r `
 	}
-	else {
-		query = query + `RETURN q as p, nodes(q) as n, relationships(q) as r LIMIT TOINTEGER($limit)`
-	}
+	// else {
+	// 	query = query + `RETURN q as p, nodes(q) as n, relationships(q) as r LIMIT TOINTEGER($limit)`
+	// }
 	// remove has precedence on expand
 	const expand = (e || []).filter(i=>(remove || []).indexOf(i) === -1)
 
@@ -257,11 +270,13 @@ const resolve_one_term = async ({
         augment_limit?: number
     }) => {
 	const rels = []
+	const valid_relations = []
 	const vars = {}
 	if (relation) {
 		for (const r of relation) {
 			if (edges.indexOf(r.name) === -1) throw {message: `Invalid relationship ${r.name}`}
 			else {
+				valid_relations.push(r.name)
 				const color_order = colors[r.name]
 				let q = `
 					MATCH p=(st:\`${start}\` { ${field}: $term })-[r1:\`${r.name}\`*${path_length}]-(en${r.end? ": " + r.end :""})
@@ -287,10 +302,12 @@ const resolve_one_term = async ({
 			}
 		}
 	}
-	let query = `MATCH p=(st:\`${start}\` { ${field}: $term })-[${rels.length ? ':' : ''}${rels.join("|")}*${path_length}]-(en) USING INDEX st:\`${start}\`(${field})`
+	let query = `MATCH p=(st:\`${start}\` { ${field}: $term })-[*${path_length}]-(en) USING INDEX st:\`${start}\`(${field})
+		WHERE all(rel in relationships(p) WHERE rel.predicted IS NULL)
+	`
 	if ((remove || []).length) {
 		query= query + `
-			WHERE NOT st.id in ${JSON.stringify(remove)}
+			AND NOT st.id in ${JSON.stringify(remove)}
 			AND NOT en.id in ${JSON.stringify(remove)}
 		`
 	}
@@ -305,27 +322,25 @@ const resolve_one_term = async ({
 			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
 			gl.push(`\`${i}\``)
 		}
-		query = `
-			CALL {
-				${query}
-			}
+		query = `CALL {
+			${query}
+		}
 			WITH p as q, st
 		`
 		if (start === "Gene") {
 			query = query + `CALL {
-				WITH q, st
-				MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)
-				WHERE c in NODES(q)
-				RETURN p, nodes(p) as n, relationships(p) as r
-				UNION
 				WITH q
 				RETURN q as p, nodes(q) as n, relationships(q) as r
+				UNION
+				WITH q, st
+				MATCH p=(st)-[:${gl.join("|")}]->(d:Gene)
+				RETURN p, nodes(p) as n, relationships(p) as r				
 			}
 			RETURN p, n, r`
 		} else {
 			query = query + `CALL {
 				WITH q, st
-				MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)-[${rels.length ? ":" + rels.join("|"): ""}]-(st)
+				MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)-[${valid_relations.length ? ":" + valid_relations.join("|"): ""}]-(st)
 				WHERE c in NODES(q)
 				RETURN p, nodes(p) as n, relationships(p) as r
 				UNION

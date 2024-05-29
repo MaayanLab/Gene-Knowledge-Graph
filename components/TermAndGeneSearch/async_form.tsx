@@ -173,7 +173,7 @@ const AsyncFormComponent = ({direction,
                                         ...start_filter,
                                         end: type,
                                         end_field: field,
-                                        end_term: nodes[type].example[0]
+                                        // end_term: nodes[type].example[0]
                                     })
                                 }
                             )
@@ -334,7 +334,7 @@ const AsyncFormComponent = ({direction,
                         <Typography variant="caption">End Node</Typography>
                         <Switch 
                             color="secondary" 
-                            checked={filter.end}
+                            checked={filter.end !== undefined}
                             onChange={()=>{
                                 if (filter.end) {
                                     // const {filter, ...rest} = searchParams
@@ -366,7 +366,7 @@ const AsyncFormComponent = ({direction,
                                         filter: {
                                             ...f,
                                             end: nodes['Gene'] !== undefined ? 'Gene': Object.keys(nodes)[0],
-                                            end_field: 'label'
+                                            end_field: 'label',
                                         }
                                     })
                                     router_push(router, pathname, query)

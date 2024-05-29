@@ -107,89 +107,92 @@ export default function Cytoscape ({
 					}}
 					stylesheet={[
 						{
-						selector: 'node',
-						style: {
-							'background-color': 'data(color)',
-							'border-color': 'data(borderColor)',
-							'border-width': 'data(borderWidth)',
-							'label': 'data(label)',
-							"text-valign": "center",
-							"text-halign": "center",
-							'width': `mapData(node_type, 0, 1, 70, 150)`,
-							'height': `mapData(node_type, 0, 1, 70, 150)`,
-						}
+							selector: 'node',
+							style: {
+								'background-color': 'data(color)',
+								'border-color': 'data(borderColor)',
+								'border-width': 'data(borderWidth)',
+								'label': 'data(label)',
+								"text-valign": "center",
+								"text-halign": "center",
+								'width': `mapData(node_type, 0, 1, 70, 150)`,
+								'height': `mapData(node_type, 0, 1, 70, 150)`,
+							}
 						},
 						{
-						selector: 'edge',
-						style: {
-							'curve-style': 'straight',
-							// 'opacity': '0.5',
-							'line-color': 'data(lineColor)',
-							'width': '3',
-							// 'label': 'data(label)',
-							"text-rotation": "autorotate",
-							"text-margin-x": 0,
-							"text-margin-y": 0,
-							'font-size': '12px',
-							// 'target-arrow-shape': `data(directed)`,
-							'target-endpoint': 'outside-to-node',
-							'source-endpoint': 'outside-to-node',
-							'target-arrow-color': 'data(lineColor)',
-							...edgeStyle
-						}
+							selector: 'edge',
+							style: {
+								'curve-style': 'straight',
+								// 'opacity': '0.5',
+								'line-color': 'data(lineColor)',
+								'width': '3',
+								// 'label': 'data(label)',
+								"text-rotation": "autorotate",
+								"text-margin-x": 0,
+								"text-margin-y": 0,
+								'font-size': '12px',
+								// 'target-arrow-shape': `data(directed)`,
+								'target-endpoint': 'outside-to-node',
+								'source-endpoint': 'outside-to-node',
+								'target-arrow-color': 'data(lineColor)',
+								'line-style': ( ele )=>{
+									return(ele.data('predicted') ? "dotted": "solid")
+								},
+								...edgeStyle
+							}
 						},
 						{
-						selector: 'node.highlight',
-						style: {
-							'border-color': 'gray',
-							'border-width': '2px',
-							'font-weight': 'bold',
-							'font-size': '18px',
-							'width': `mapData(node_type, 0, 1, 90, 170)`,
-							'height': `mapData(node_type, 0, 1, 90, 170)`,
-						}
+							selector: 'node.highlight',
+							style: {
+								'border-color': 'gray',
+								'border-width': '2px',
+								'font-weight': 'bold',
+								'font-size': '18px',
+								'width': `mapData(node_type, 0, 1, 90, 170)`,
+								'height': `mapData(node_type, 0, 1, 90, 170)`,
+							}
 						},
 						{
-						selector: 'node.focused',
-						style: {
-							'border-color': 'gray',
-							'border-width': '2px',
-							'font-weight': 'bold',
-							'font-size': '18px',
-							'width': `mapData(node_type, 0, 1, 90, 170)`,
-							'height': `mapData(node_type, 0, 1, 90, 170)`,
-						}
+							selector: 'node.focused',
+							style: {
+								'border-color': 'gray',
+								'border-width': '2px',
+								'font-weight': 'bold',
+								'font-size': '18px',
+								'width': `mapData(node_type, 0, 1, 90, 170)`,
+								'height': `mapData(node_type, 0, 1, 90, 170)`,
+							}
 						},
 						{
-						selector: 'edge.focusedColored',
-						style: {
-							'line-color': '#F8333C',
-							'width': '6'
-						}
+							selector: 'edge.focusedColored',
+							style: {
+								'line-color': '#F8333C',
+								'width': '6'
+							}
 						},
 						{
-						selector: 'node.semitransp',
-						style:{ 'opacity': 0.5 }
+							selector: 'node.semitransp',
+							style:{ 'opacity': 0.5 }
+							},
+						{
+							selector: 'node.focusedSemitransp',
+							style:{ 'opacity': 0.5 }
+							},
+						{
+							selector: 'edge.colored',
+							style: {
+								// 'line-color': '#F8333C',
+								// 'target-arrow-color': '#F8333C',
+								'width': '6'
+							}
 						},
 						{
-						selector: 'node.focusedSemitransp',
-						style:{ 'opacity': 0.5 }
+							selector: 'edge.semitransp',
+							style:{ 'opacity': 0.5 }
 						},
 						{
-						selector: 'edge.colored',
-						style: {
-							'line-color': '#F8333C',
-							'target-arrow-color': '#F8333C',
-							'width': '6'
-						}
-						},
-						{
-						selector: 'edge.semitransp',
-						style:{ 'opacity': 0.5 }
-						},
-						{
-						selector: 'edge.focusedSemitransp',
-						style:{ 'opacity': 0.5 }
+							selector: 'edge.focusedSemitransp',
+							style:{ 'opacity': 0.5 }
 						}
 					]}
 					elements={[...elements.nodes, ...elements.edges]}
@@ -225,7 +228,7 @@ export default function Cytoscape ({
 								sel.removeClass('focused').outgoers().removeClass('focusedColored')
 								sel.incomers().removeClass('focusedColored')
 								setFocused(null)
-							}, 3000)
+							}, 5000)
 						}
 						})
 
@@ -293,6 +296,19 @@ export default function Cytoscape ({
 							}}
 						/>
                     }
+					{(tooltip && focused) && <TooltipCard 
+						node={focused}
+						schema={schema}
+						tooltip_templates={tooltip_templates_nodes}
+						setFocused={setFocused}
+						expand={false}
+						reset={()=>{
+							setEdge(null)
+							setNode(null)
+							setFocused(null)
+						}}
+						/>
+					}
                     {(focused === null && tooltip && edge) && 
 						<TooltipCard 
 							node={edge}

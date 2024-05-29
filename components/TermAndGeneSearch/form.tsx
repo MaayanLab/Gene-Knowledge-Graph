@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQueryState } from 'next-usequerystate'
 import { usePathname, useRouter } from 'next/navigation';
 import fileDownload from 'js-file-download'
@@ -128,9 +128,12 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
     const [augmentOpen, setAugmentOpen] = useState<boolean>(false)
     const [augmentLimit, setAugmentLimit] = useState<number>(10)
     const [geneLinksOpen, setGeneLinksOpen] = useState<boolean>(false)
-    const [geneLinks, setGeneLinks] = useState<Array<string>>(gene_links || [])
+    const [geneLinks, setGeneLinks] = useState<Array<string>>([])
 
-    
+    useEffect(()=>{
+        if (gene_links) setGeneLinks(gene_links)
+        else setGeneLinks([])
+    }, [f])
     const handleClickMenu = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>, setter:Function) => {
 		setter(e.currentTarget);
 	  };
@@ -421,7 +424,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                             </Grid>  
                             { (gene_link_button) &&
                                 <Grid item>
-                                    <Tooltip title={"Gene-gene connections"}>
+                                    <Tooltip title={"Predicted Links"}>
                                         <IconButton color="secondary"
                                             onClick={()=>{
                                                 setGeneLinksOpen(!geneLinksOpen)
@@ -502,7 +505,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                                 onClick={()=>{
 
                                                     const {filter: f, ...query} = searchParams
-                                                    const filter = JSON.parse(f || '{}')
+                                                    const filter = {...initial_query, ...JSON.parse(f || '{}')}
                                                     if (geneLinks.length) filter.gene_links = geneLinks
                                                     query['filter'] = JSON.stringify(filter)
                                                     router_push(router, pathname, query)
@@ -517,7 +520,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
                                                     const {filter: f, ...query} = searchParams
                                                     const {gene_links, ...filter} = JSON.parse(f)
-                                                    query['filter'] = filter
+                                                    query['filter'] = JSON.stringify(filter)
                                                     router_push(router, pathname, query)
                                                     setGeneLinks([])
                                                     setGeneLinksOpen(false)

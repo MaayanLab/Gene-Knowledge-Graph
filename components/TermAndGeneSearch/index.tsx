@@ -37,7 +37,7 @@ export const initialize_kg = async () => {
                     default_relations.push(e)
                 }
             } else if (geneLinksRelations.indexOf(e) === -1) {
-                geneLinksRelations.push(i.match)
+                for (const j of i.match) geneLinksRelations.push(j)
             }
         }
     }
