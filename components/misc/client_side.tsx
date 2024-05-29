@@ -18,6 +18,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import HubIcon from '@mui/icons-material/Hub';
 import AllOutIcon from '@mui/icons-material/AllOut';
+import { FilterSchema } from "@/utils/helper"
 export const TooltipCard = ({node, 
 	tooltip_templates, 
 	setFocused, 
@@ -43,6 +44,8 @@ export const TooltipCard = ({node,
 }) => {
     const pathname = usePathname()
     const searchParams = useSearchParams()
+    const f = searchParams.get('filter')
+    const filter:FilterSchema = JSON.parse(f || '{}')
     const router = useRouter()
     const elements = []
     const field = node.kind === "Relation" ? node.label : node.kind.replace("Co-expressed Gene", "Gene")
@@ -109,15 +112,12 @@ export const TooltipCard = ({node,
           searchParams.forEach((value, key) => {
 						queryParams[key] = value;
 					});
-					const {page, remove: r, ...rest} = queryParams
-					const remove = r !== undefined ? JSON.parse(r) : []
-					const query = {
-                        ...rest,
-                        remove: JSON.stringify([...remove, node.id])
-                      }
-					router_push(router, pathname, query)
-                  }}
-                ><DeleteIcon/></IconButton>
+					const f = JSON.stringify({
+                        ...filter,
+                        remove: [...(filter.remove || []), node.id]
+                      })
+					router_push(router, pathname, {...queryParams, filter: f})
+          }}><DeleteIcon/></IconButton>
               </Tooltip>}
               { expand && <Tooltip title="Expand Node">
                 <IconButton
@@ -142,11 +142,11 @@ export const TooltipCard = ({node,
                   onClick={()=>{
                     setFocused(null)
 					const pathname = (schema.header.tabs.filter(i=>i.component === 'KnowledgeGraph')[0] || {}).endpoint || '/'
-					const query = {
+					const filter = JSON.stringify({
                         start: node.kind,
                         start_term: node.label
-                      }
-					router_push(router, pathname, query)
+                      })
+					router_push(router, pathname, {filter})
                   }}
                 ><HubIcon sx={{transform: "scaleX(-1)"}}/></IconButton>
               </Tooltip>
