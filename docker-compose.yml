@@ -7,6 +7,8 @@ services:
     platform: linux/amd64
     image: maayanlab/distillery:2.3.5
     x-kubernetes:
+      strategy:
+        type: Recreate
       imagePullPolicy: IfNotPresent
       annotations:
         maayanlab.cloud/ingress: https://dd-kg-ui.cfde.cloud
