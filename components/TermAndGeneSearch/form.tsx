@@ -131,9 +131,8 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
     const [geneLinks, setGeneLinks] = useState<Array<string>>([])
 
     useEffect(()=>{
-        if (gene_links) setGeneLinks(gene_links)
-        else setGeneLinks([])
-    }, [f])
+        if (gene_links)setGeneLinks(gene_links)
+    }, [searchParams.filter])
     const handleClickMenu = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>, setter:Function) => {
 		setter(e.currentTarget);
 	  };
@@ -504,10 +503,10 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                                 disabled={geneLinks.length === 0}
                                                 onClick={()=>{
 
-                                                    const {q: f, ...query} = searchParams
+                                                    const {filter: f, ...query} = searchParams
                                                     const filter = {...initial_query, ...JSON.parse(f || '{}')}
                                                     if (geneLinks.length) filter.gene_links = geneLinks
-                                                    query['q'] = JSON.stringify(filter)
+                                                    query['filter'] = JSON.stringify(filter)
                                                     router_push(router, pathname, query)
                                                 }}
                                             >
@@ -518,9 +517,9 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                             <IconButton color="secondary"  disabled={!gene_links}
                                                 onClick={()=>{
 
-                                                    const {q: f, ...query} = searchParams
+                                                    const {filter: f, ...query} = searchParams
                                                     const {gene_links, ...filter} = JSON.parse(f)
-                                                    query['q'] = JSON.stringify(filter)
+                                                    query['filter'] = filter
                                                     router_push(router, pathname, query)
                                                     setGeneLinks([])
                                                     setGeneLinksOpen(false)
@@ -554,7 +553,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                                 onClick={()=>{
 
                                                     const {filter: f, ...query} = searchParams
-                                                    const filter = JSON.parse(f || '{}')
+                                                    const filter = {...initial_query, ...JSON.parse(f || '{}')}
                                                     filter.augment = true
                                                     filter.augment_limit = augmentLimit || 10
                                                     

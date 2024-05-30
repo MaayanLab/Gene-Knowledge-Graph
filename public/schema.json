@@ -3457,7 +3457,11 @@
 			  "start": "Gene",
 			  "start_term": "APOE",
 			  "start_field": "label",
-			  "relation": "WikiPathways,Tabula Muris Association,KEGG Pathway"
+			  "relation": [
+				{"name": "WikiPathways", "limit": 5},
+				{"name": "Tabula Muris Association", "limit": 5},
+				{"name": "KEGG Pathway", "limit": 5}
+			  ]
 			},
 			"subheader": {
 				"url_field": "filter",

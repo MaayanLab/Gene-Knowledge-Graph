@@ -426,7 +426,7 @@ const resolve_one_term = async ({
 		}
 		return {
 			nodes: [...initial_results.nodes, ...augmented_results.nodes],
-			edges: [...initial_results.edges, augmented_edges]
+			edges: [...initial_results.edges, ...augmented_edges]
 		}
 		// return [...initial_results, ...augmented_results, ...augmented_edges]
 
