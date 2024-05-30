@@ -93,7 +93,7 @@ const AsyncForm = ({
             setTerm(term)
             const query_str = Object.entries(query).map(([k,v])=>(`${k}=${v}`)).join("&")
             
-            const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}${options_endpoint}${query_str ? "?" + query_str : ""}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}${options_endpoint}${query_str ? "?" + query_str : ""}`, {
                 method: 'GET',
                 signal: controller.signal
             })

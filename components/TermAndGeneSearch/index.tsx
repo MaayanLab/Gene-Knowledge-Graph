@@ -111,8 +111,8 @@ const TermAndGeneSearch = async ({searchParams, props}: {
         const selected_edges = []
         const genes = []
         if (Object.keys(filter).length > 0) {
-            console.log(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph?filter=${JSON.stringify(filter)}`)
-            const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph?filter=${JSON.stringify(filter)}`,
+            console.log(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/knowledge_graph?filter=${JSON.stringify(filter)}`)
+            const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/knowledge_graph?filter=${JSON.stringify(filter)}`,
             {
                 method: 'GET',
                 signal: controller.signal,

@@ -243,7 +243,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({error: "library is empty"}, {status: 400})
         }
         const results = await enrichment({userListId, libraries, gene_limit, term_degree, min_lib, gene_degree, remove, expand, gene_links, expand_limit, augment_limit})
-        fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
+        fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/counter/update`)
         return NextResponse.json(results, {status: 200})
     } catch (error) {
         console.error(error)

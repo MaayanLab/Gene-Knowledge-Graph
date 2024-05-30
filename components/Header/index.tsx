@@ -10,17 +10,19 @@ import { UISchema } from '@/app/api/schema/route';
 import { Logo } from '../misc/logo';
 import Counter from '../Counter';
 import { TextNav } from './TextNav';
-export const Nav = ({tabs}:
-	{tabs: Array<{
-	endpoint: string,
-	label: string,
-	type: string,
-	component: string,
-	position?:  string,
-	props?: {
-		[key: string]: any
-	}
-}>}) => {
+export const Nav = ({tabs, ui_theme}:
+	{
+		ui_theme?: string,
+		tabs: Array<{
+			endpoint: string,
+			label: string,
+			type: string,
+			component: string,
+			position?:  string,
+			props?: {
+				[key: string]: any
+			}
+		}>}) => {
 	const tab_component = {top: [], bottom:[]}
 	for (const tab of tabs) {
 		const position = tab.position || 'top'
@@ -35,6 +37,9 @@ export const Nav = ({tabs}:
 			<Grid item>
 				<Stack direction={"row"} alignItems={"center"} spacing={2}>
 					{tab_component.top}
+					{tab_component.bottom.length === 0 && 
+						<Counter ui_theme={ui_theme}/>
+					}
 				</Stack>
 			</Grid>
 			{tab_component.bottom.length > 0 &&
@@ -44,9 +49,11 @@ export const Nav = ({tabs}:
 					</Stack>
 				</Grid>
 			}
-			<Grid item>		
-				<Counter/>
-			</Grid>
+			{tab_component.bottom.length > 0 &&
+				<Grid item>		
+					<Counter ui_theme={ui_theme}/>
+				</Grid>
+			}
 		</>
 	)
 }
@@ -54,13 +61,13 @@ export const Nav = ({tabs}:
 export default function Header ({schema}: {schema: UISchema}) {
 	const {title, icon, tabs} = schema.header
 	return  (
-		<AppBar position="static" sx={{color: "#000", paddingTop: 3, paddingBottom: 3}}>
+		<AppBar position="static" sx={{color: "#000", paddingTop: 3, paddingBottom: 3, mb: 2}}>
 			<Toolbar>
 				<Grid container justifyContent={"space-between"} alignItems={"center"} spacing={2}>
 					<Grid item>
 						<Logo alt={icon.alt} src={icon.favicon} title={title} size='large' color="secondary"/>
 					</Grid>
-					<Nav tabs={tabs}/>
+					<Nav tabs={tabs} ui_theme={schema.ui_theme}/>
 				</Grid>
 			</Toolbar>
 		</AppBar>

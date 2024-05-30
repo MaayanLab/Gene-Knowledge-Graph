@@ -29,12 +29,12 @@ export default async function Home({searchParams}: {
     }
   }
   return (
-    <Grid container direction={"column"} justifyContent="space-between" sx={{minHeight: "100vh"}}>
+    <Grid container direction={"column"} justifyContent="space-between" sx={{minHeight: "100vh", backgroundColor: (!schema.ui_theme || schema.ui_theme === 'cfde_theme') ? '#FFF': 'tertiary.main'}}>
       <Grid item>
-        <Container maxWidth={searchParams.fullscreen ?"xl": "lg"} sx={{backgroundColor: "#FFF"}}>
+        <Container maxWidth={searchParams.fullscreen ?"xl": "lg"} sx={{backgroundColor: "#FFF"}} style={{paddingLeft: 0, paddingRight: 0}}>
           {!searchParams.fullscreen && <Header schema={schema}/>}
           {!searchParams.fullscreen &&<Suspense><Subheader schema={schema}/></Suspense>}
-          <main className="mt-8 mb-8">
+          <main className="mt-8 pb-8 pl-10 pr-10">
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Suspense>

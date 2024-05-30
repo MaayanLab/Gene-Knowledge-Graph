@@ -23,7 +23,6 @@
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/typography": "^0.5.10",
     "@types/react-cytoscapejs": "^1.2.5",
-    "color": "^4.2.3",
     "cytoscape": "^3.21.0",
     "cytoscape-avsdf": "^1.0.0",
     "cytoscape-fcose": "^2.1.0",

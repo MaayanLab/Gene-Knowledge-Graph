@@ -1,7 +1,7 @@
 'use client'
 import { useRouter, usePathname, useSearchParams} from 'next/navigation';
 import { parseAsJson, useQueryState } from 'next-usequerystate';
-import React, {useState } from 'react';
+import React, {useState, useEffect } from 'react';
 import { layouts } from '../Cytoscape';
 import Tooltip from '@mui/material/Tooltip';
 import ShareIcon from '@mui/icons-material/Share';
@@ -90,7 +90,12 @@ const InteractiveButtons = ({
     const [augmentOpen, setAugmentOpen] = useState<boolean>(false)
     const [openShare, setOpenShare] = useState<boolean>(false)
     const [augmentLimit, setAugmentLimit] = useState<number>(parsedParams.augment_limit||10)
-    const [geneLinks, setGeneLinks] = useState<Array<string>>(gene_links)
+    const [geneLinks, setGeneLinks] = useState<Array<string>>([])
+
+    useEffect(()=>{
+        if (gene_links) setGeneLinks(gene_links)
+        else setGeneLinks([])
+    }, [parsedParams.gene_links])
     
 
     const handleClickMenu = (e:any, setter:Function) => {
@@ -430,34 +435,32 @@ const InteractiveButtons = ({
                 <Stack direction="row" alignItems="center" justifyContent={"flex-end"}>
                     <Typography variant='subtitle2' sx={{marginRight: 5}}>Select relationships:</Typography>
                     {geneLinksRelations.map(i=>(
-                            <FormControlLabel key={i} control={<Checkbox checked={geneLinks.indexOf(i)>-1} onChange={()=>{
+                        <FormControlLabel key={i} control={<Checkbox checked={geneLinks.indexOf(i)>-1} onChange={()=>{
                             if (geneLinks.indexOf(i)===-1) setGeneLinks([...geneLinks, i])
                             else setGeneLinks(geneLinks.filter(l=>l!==i))
-                            }}/>} label={<Typography variant='subtitle2'>{i}</Typography>} />
+                        }}/>} label={<Typography variant='subtitle2'>{i}</Typography>} />
                     ))}
                     <Tooltip title="Show gene links">
-                        <IconButton
+                        <IconButton color="secondary" 
+                            disabled={geneLinks.length === 0}
                             onClick={()=>{
-                                const {gene_links, ...q} = {...parsedParams, ...query}
-                                router_push(router, pathname, {
-                                    q: JSON.stringify({
-                                        ...q,
-                                        gene_links: JSON.stringify(geneLinks)
-                                    })
-                                })
-                                setGeneLinksOpen(false)
+                                const filter = {...parsedParams}
+                                if (geneLinks.length) filter.gene_links = geneLinks
+                                const query = {q: JSON.stringify(filter)}
+                                router_push(router, pathname, query)
                             }}
                         >
                             <SendIcon/>
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Reset network">
-                        <IconButton disabled={!gene_links}
+                        <IconButton color="secondary"  disabled={!gene_links}
                             onClick={()=>{
-                                const {gene_links, ...q} = {...parsedParams, ...query}
-                                router_push(router, pathname, {
-                                    q: JSON.stringify(q)
-                                })
+
+                                const {gene_links, ...filter} = parsedParams
+                                const query = {q: JSON.stringify(filter)}
+                                router_push(router, pathname, query)
+                                setGeneLinks([])
                                 setGeneLinksOpen(false)
                             }}
                         >
@@ -465,7 +468,7 @@ const InteractiveButtons = ({
                         </IconButton>
                     </Tooltip>
                 </Stack>
-            </Grid>   
+            </Grid>
         }
         {(elements && augmentOpen) && 
             <Grid item xs={12}>

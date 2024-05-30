@@ -577,16 +577,16 @@ export async function GET(req: NextRequest) {
                     if (start && end && start_term && end_term) {
                         if(augment)  return NextResponse.json({error: "You can only augment on single search"}, {status: 400})
                         const results = await resolve_two_terms({edges, start, start_field, start_term, end, end_field, end_term, relation, limit, path_length, aggr_scores, colors, remove: remove ?  remove: [], expand: expand ? expand : [], gene_links})
-                        fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
+                        fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/counter/update`)
                         return NextResponse.json(results, {status: 200})
                     } else if (start && end && start_term ) {
                         if(augment)  return NextResponse.json({error: "You can only augment on single search"}, {status: 400})
                         const results = await resolve_term_and_end_type({edges, start_term, start_field, start, end, relation, limit, path_length, aggr_scores, colors, remove, expand: expand, gene_links})
-                        fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
+                        fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/counter/update`)
                         return NextResponse.json(results, {status: 200})
                     } else if (start) {
                         const results = await resolve_one_term({edges, start, field: start_field, term: start_term, relation, limit, path_length, aggr_scores, colors, remove, expand, gene_links, augment, augment_limit })
-                        fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/counter/update`)
+                        fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/counter/update`)
                         return NextResponse.json(results, {status: 200})
                     } else {
                         return NextResponse.json({error: "Invalid Input"}, {status: 400})

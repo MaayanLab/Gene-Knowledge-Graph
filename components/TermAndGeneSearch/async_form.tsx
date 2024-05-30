@@ -94,7 +94,7 @@ const AsyncFormComponent = ({direction,
                 // if (filter) query.filter=JSON.stringify(filter)
                 if (inputTerm) query.term = inputTerm
                 const query_str = Object.entries(query).map(([k,v])=>(`${k}=${v}`)).join("&")
-                const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/knowledge_graph/node_search${query_str ? "?" + query_str : ""}`, {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/knowledge_graph/node_search${query_str ? "?" + query_str : ""}`, {
                     method: 'GET',
                     signal: controller.signal
                 })

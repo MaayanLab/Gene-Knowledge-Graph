@@ -153,7 +153,7 @@ const GeneSetForm = ({
             setLoading(true)
             const controller = get_controller()
             const verified:Array<string> = await (
-                await fetch(`${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment/terms_and_genes`, {
+                await fetch(`${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/enrichment/terms_and_genes`, {
                     method: 'POST',
                     body: JSON.stringify({
                         input

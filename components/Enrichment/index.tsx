@@ -126,8 +126,8 @@ const Enrichment = async ({
             if (request.ok) shortId = (await (request.json())).link_id
             else console.log(`failed ${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
             console.log(`ShortID: ${shortId}`)
-            console.log(`Enrichment ${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`)
-            const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`,
+            console.log(`Enrichment ${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`)
+            const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`,
                 {
                     method: "POST",
                     body: JSON.stringify({
@@ -147,7 +147,7 @@ const Enrichment = async ({
                     }),
                 })
             if (!res.ok) {
-                console.log(`failed connecting to ${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`)
+                console.log(`failed connecting to ${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/enrichment${parsedParams.augment===true ? '/augment': ''}`)
                 console.log(await res.text())
             }
             else{
@@ -160,7 +160,7 @@ const Enrichment = async ({
             }
         }
         const payload = {
-            'url': `${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}${endpoint}?q=${searchParams.q}`,
+            'url': `${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}${endpoint}?q=${searchParams.q}`,
             'apikey': process.env.NEXT_PUBLIC_TURL  
         }
         console.log("Getting short url")

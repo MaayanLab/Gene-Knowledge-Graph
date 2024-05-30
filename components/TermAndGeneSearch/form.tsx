@@ -504,10 +504,10 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                                 disabled={geneLinks.length === 0}
                                                 onClick={()=>{
 
-                                                    const {filter: f, ...query} = searchParams
+                                                    const {q: f, ...query} = searchParams
                                                     const filter = {...initial_query, ...JSON.parse(f || '{}')}
                                                     if (geneLinks.length) filter.gene_links = geneLinks
-                                                    query['filter'] = JSON.stringify(filter)
+                                                    query['q'] = JSON.stringify(filter)
                                                     router_push(router, pathname, query)
                                                 }}
                                             >
@@ -518,9 +518,9 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                             <IconButton color="secondary"  disabled={!gene_links}
                                                 onClick={()=>{
 
-                                                    const {filter: f, ...query} = searchParams
+                                                    const {q: f, ...query} = searchParams
                                                     const {gene_links, ...filter} = JSON.parse(f)
-                                                    query['filter'] = JSON.stringify(filter)
+                                                    query['q'] = JSON.stringify(filter)
                                                     router_push(router, pathname, query)
                                                     setGeneLinks([])
                                                     setGeneLinksOpen(false)
