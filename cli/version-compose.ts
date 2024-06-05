@@ -2,14 +2,13 @@ import fs from 'fs'
 import path from 'path'
 
 let filename = 'docker-compose-template.yml'
-if (process.env.APP_NAME === 'distillery') {
-	filename = 'docker-compose-distillery-template.yml'
+if (process.env.NEO4J_VERSION === '5') {
+	filename = 'docker-compose-v5-template.yml'
 }
 if (process.env.OFFLINE === 'true') {
-	console.log("Using offline config")
 	filename = 'docker-compose-template-offline.yml'
-	if (process.env.APP_NAME === 'distillery') {
-		filename = 'docker-compose-template-distillery-offline.yml'
+	if (process.env.NEO4J_VERSION === '5') {
+		filename = 'docker-compose-template-v5-offline.yml'
 	}
 }
 let compose = fs.readFileSync(path.join(__dirname, '..', filename), { encoding: 'utf-8' })
