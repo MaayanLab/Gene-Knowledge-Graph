@@ -423,7 +423,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                             </Grid>  
                             { (gene_link_button) &&
                                 <Grid item>
-                                    <Tooltip title={"Predicted Links"}>
+                                    <Tooltip title={"Additional Links"}>
                                         <IconButton color="secondary"
                                             onClick={()=>{
                                                 setGeneLinksOpen(!geneLinksOpen)
