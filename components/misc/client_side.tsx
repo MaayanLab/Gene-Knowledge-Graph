@@ -57,6 +57,7 @@ export const TooltipCard = ({node,
           elements.push(
             <Typography key={i.label} variant="subtitle2">
               <b>{i.label}</b> <Button size='small' 
+                color="secondary"
                   sx={{padding: 0}} 
                   href={href}
                                   target="_blank"

@@ -3473,13 +3473,13 @@
 		  }
 		},
 		{
-		  "endpoint": "/downloads",
-		  "label": "Download Assets",
-		  "type": "markdown",
-		  "component": "Markdown",
-		  "props": {
-			"src": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/assets/download.md"
-		  }
+			"endpoint": "/downloads",
+			"label": "Download Assets",
+			"type": "page",
+			"component": "Download",
+			"props": {
+			  "src": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/assets/downloads.json"
+			}
 		},
 		{
 		  "endpoint": "/tutorial",

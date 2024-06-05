@@ -120,7 +120,11 @@ const Enrichment = async ({
         let elements:NetworkSchema = null
         let shortId = ''
         let genes = []
+        let input_desc
         if (userListId !==undefined && libraries.length > 0) {
+            console.log("Getting description...")
+            const desc_request = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/view?userListId=${userListId}`)
+            if (desc_request.ok) input_desc = (await (desc_request.json())).description
             console.log("Getting shortID...")
             console.log(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
             const request = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/share?userListId=${userListId}`)
@@ -224,6 +228,9 @@ const Enrichment = async ({
                             </InteractiveButtons>
                             <Card sx={{borderRadius: "24px", minHeight: 450, width: "100%"}}>
                                 <CardContent>
+                                    {input_desc && 
+                                        <Typography variant='h5' sx={{textAlign: "center"}}><b>{input_desc}</b></Typography>
+                                    }
                                     <TermViz
                                         elements={elements} 
                                         schema={schema}

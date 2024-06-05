@@ -89,7 +89,7 @@ import { layouts } from '../Cytoscape';
 					<Tooltip title={'Set limit per relationship:'}>
 						<Slider 
 							value={parseInt(limit) || 5}
-							color="primary"
+							color="secondary"
 							valueLabelDisplay='auto'
 							onChange={(e, nv)=>{
 								const query = {

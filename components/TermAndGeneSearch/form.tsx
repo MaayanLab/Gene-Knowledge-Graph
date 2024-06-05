@@ -222,7 +222,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                             <Tooltip title={!end ? 'Set limit per relationship:': 'Limit number of paths:'}>
                                 <Slider 
                                     value={limit ? limit: !end ? relation.length === 1? ((elements || {}).edges || []).length: 5: 25}
-                                    color="primary"
+                                    color="secondary"
                                     valueLabelDisplay='auto'
                                     onChange={(e, nv)=>{
                                         const {filter: f, ...rest} = searchParams
@@ -543,6 +543,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                             max={50}
                                             valueLabelDisplay='auto'
                                             aria-labelledby="augment-limit-slider"
+                                            color="secondary"
                                             sx={{width: 100}}
                                         />
                                         <Typography variant='subtitle2'>{augmentLimit}</Typography>

@@ -483,6 +483,7 @@ const InteractiveButtons = ({
                         max={50}
                         valueLabelDisplay='auto'
                         aria-labelledby="augment-limit-slider"
+                        color="secondary"
                         sx={{width: 100}}
                     />
                     <Typography variant='subtitle2'>{augmentLimit}</Typography>

@@ -165,6 +165,7 @@ const LibraryPicker = ({
 											<Stack direction={"row"} spacing={1} alignItems={"center"}>
 												<Icon path={mdiMinusCircleOutline} size={0.8} />
 												<Slider 
+													color="secondary"
 													value={limit}
 													onChange={(e, nv)=>{
 														const new_libraries = []

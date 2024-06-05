@@ -393,6 +393,7 @@ const GeneSetForm = ({
                                 <Grid item sx={{ flexGrow: 1 }}>
                                     <Tooltip title={`Filter out genes that are not in multiple libraries.`}>
                                         <Slider 
+                                            color="secondary"
                                             value={min_lib || 1}
                                                 onChange={(e, nv:number)=>{
                                                 // const {search, augment, augment_limit, gene_links, ...rest} = combined_query
@@ -427,6 +428,7 @@ const GeneSetForm = ({
                                     <Tooltip title={`Filter out genes with fewer connections`}>
                                         <Slider 
                                             value={gene_degree || 1}
+                                            color="secondary"
                                             onChange={(e, nv:number)=>{
                                                 // const {search, augment, augment_limit, gene_links, ...rest} = searchParams
                                                 // router_push(router, pathname, {
@@ -459,6 +461,7 @@ const GeneSetForm = ({
                                 <Grid item sx={{ flexGrow: 1 }}>
                                     <Tooltip title={`Filter out terms with fewer connections`}>
                                         <Slider 
+                                            color="secondary"
                                             value={term_degree || 1}
                                             onChange={(e, nv:number)=>{
                                                 // const {search, augment, augment_limit, gene_links, ...rest} = searchParams
@@ -492,6 +495,7 @@ const GeneSetForm = ({
                                 <Grid item sx={{ flexGrow: 1 }}>
                                     <Tooltip title={`How many genes should the knowledge graph return? (Prioritized by gene connectivity)`}>
                                         <Slider 
+                                            color="secondary"
                                             value={combined_query.gene_limit || verified.length || input.genes.length || 100}
                                             onChange={(e, nv:number)=>{
                                                 // const {search, augment, augment_limit, gene_links, ...rest} = searchParams
