@@ -276,7 +276,7 @@ const resolve_one_term = async ({
 		for (const r of relation) {
 			if (edges.indexOf(r.name) === -1) throw {message: `Invalid relationship ${r.name}`}
 			else {
-				valid_relations.push(r.name)
+				valid_relations.push(`\`${r.name}\``)
 				const color_order = colors[r.name]
 				let q = `
 					MATCH p=(st:\`${start}\` { ${field}: $term })-[r1:\`${r.name}\`*${path_length}]-(en${r.end? ": " + r.end :""})
