@@ -182,7 +182,7 @@ const Enrichment = async ({
                     <Typography variant={"subtitle1"}>Enter a set of Entrez gene below to perform enrichment analysis.</Typography>
                 </Grid>
                 <Grid item xs={12} md={elements===null?12:3}>
-                    <Card elevation={0} sx={{borderRadius: "8px", backgroundColor: "tertiary.light"}}>
+                    <Card elevation={0} sx={{borderRadius: "8px", backgroundColor: (!schema.ui_theme || schema.ui_theme === 'cfde_theme') ? "tertiary.light": "#FFF"}}>
                         <CardContent>
                             <GeneSetForm 
                                 libraries_list={libraries_list.map(l=>l.name)}
