@@ -3425,6 +3425,7 @@
 			"default_options": {
 			  "term_limit": 5,
 			  "min_lib": 1,
+			  "gene_degree": 3, 
 			  "libraries": [
 				{
 				  "name": "GO_Biological_Process_2021",
