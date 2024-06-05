@@ -21,7 +21,6 @@ export const Counter = ({ui_theme}: {ui_theme?: string}) => {
         if (timer === 0) query_counter(0)
         else query_counter()
     }, [timer])
-    console.log(count)
     return (
         <Stack direction={"row"} spacing={1}>
             <Typography variant="nav">Queries Submitted: </Typography> 
