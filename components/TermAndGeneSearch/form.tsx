@@ -172,7 +172,6 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                         const {filter: f, ...rest} = searchParams
                                         let filter = JSON.parse(f || '{}')
                                         if (Object.keys(filter).length === 0) filter = initial_query
-                                        console.log(filter)
                                         filter.relation = r.map((name:string)=>({name, limit: limit || 5}))
                                         const query = {
                                             ...rest,

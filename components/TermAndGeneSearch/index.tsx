@@ -120,7 +120,6 @@ const TermAndGeneSearch = async ({searchParams, props}: {
         
         
             for (const i of (elements || {}).edges || []) {
-                console.log(i.data.relation)
                 if (i.data.relation && selected_edges.indexOf(i.data.label) === -1) {
                     selected_edges.push({name: i.data.label})
                 }
