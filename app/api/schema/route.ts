@@ -84,7 +84,8 @@ export interface UISchema {
                     [key:string]: string|number
                 }
             }
-        >>
+        >>,
+        footer_text?: string
     }
 }
 
