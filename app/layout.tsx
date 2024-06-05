@@ -1,12 +1,7 @@
 import { Metadata, ResolvingMetadata } from 'next'
 import ThemeRegistry from './ThemeRegistry'
-import Header from '@/components/Header'
-import Subheader from '@/components/Subheader'
-import Footer from '@/components/Footer'
-import { Container, Grid } from '@mui/material'
 import './global.css'
 import { fetch_kg_schema } from '@/utils/initialize'
-import { Suspense } from 'react'
 
  
 export async function generateMetadata(

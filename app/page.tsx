@@ -6,6 +6,7 @@ import { Suspense } from "react"
 import Header from '@/components/Header'
 import Subheader from '@/components/Subheader'
 import Footer from '@/components/Footer'
+import QueryTranslator from '@/components/QueryTranslator'
 
 export default async function Home({searchParams}: {
     searchParams: {
@@ -38,7 +39,9 @@ export default async function Home({searchParams}: {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Suspense>
-                  <Component searchParams={searchParams} {...root_tab}/>
+                  <QueryTranslator>
+                    <Component searchParams={searchParams} {...root_tab}/>
+                  </QueryTranslator>
                 </Suspense>
               </Grid>
             </Grid>
