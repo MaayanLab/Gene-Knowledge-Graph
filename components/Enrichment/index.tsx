@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Link from 'next/link';
 import {
     Grid,
     Stack,
@@ -64,6 +64,7 @@ const Enrichment = async ({
     libraries?: Array<{name: string, node: string, regex?: string}>,
     sortLibraries?: boolean,
     disableLibraryLimit?: boolean,
+    disableHeader?: boolean,
     title?: string,
     description?: string,
     searchParams: {
@@ -176,13 +177,23 @@ const Enrichment = async ({
         else console.log("failed turl")
         console.log("Got url")
         return (
-            <Grid container spacing={1}>
+            <Grid container spacing={1} alignItems={"flex-start"}>
                 <Grid item xs={12}>
                     <Typography variant={"h2"}>{props.title || 'Enrichment Analysis'}</Typography>
-                    <Typography variant={"subtitle1"}>Enter a set of Entrez gene below to perform enrichment analysis.</Typography>
+                    { props.disableHeader ? <Typography variant={"subtitle1"}>Enter a set of Entrez gene below to perform enrichment analysis.</Typography>:
+                        <Typography variant="subtitle1" sx={{marginBottom: 3}}>Submit your gene set for enrichment analysis with &nbsp;
+                            <Link href={shortId ? `https://maayanlab.cloud/Enrichr/enrich?dataset=${shortId}` : "https://maayanlab.cloud/Enrichr/"} 
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{color: "black", textDecoration: "none"}}
+                            >
+                                <span style={{fontSize: 20, fontWeight: 500, letterSpacing: '0.1em'}}>En</span><span style={{color: 'red', fontSize: 20, fontWeight: 500, letterSpacing: '0.1em'}}>rich</span><span style={{fontSize: 20, fontWeight: 500, letterSpacing: '0.1em'}}>r</span>
+                            </Link>
+                        </Typography>
+                    }
                 </Grid>
                 <Grid item xs={12} md={elements===null?12:3}>
-                    <Card elevation={0} sx={{borderRadius: "8px", backgroundColor: (!schema.ui_theme || schema.ui_theme === 'cfde_theme') ? "tertiary.light": "#FFF"}}>
+                    <Card elevation={(!schema.ui_theme || schema.ui_theme === 'cfde_theme' || elements === null) ? 0: 1} sx={{borderRadius: "8px", backgroundColor: (!schema.ui_theme || schema.ui_theme === 'cfde_theme') ? "tertiary.light": "#FFF"}}>
                         <CardContent>
                             <GeneSetForm 
                                 libraries_list={libraries_list.map(l=>l.name)}
@@ -196,7 +207,7 @@ const Enrichment = async ({
                 </Grid>
                 { elements!==null && 
                     <Grid item xs={12} md={9}>
-                        <Stack direction={"column"} spacing={1}>
+                        <Stack direction={"column"} alignItems={"flex-start"} spacing={1}>
                             <InteractiveButtons 
                                 libraries_list={libraries_list.map(l=>l.name)}
                                 disableLibraryLimit={props.disableLibraryLimit}
@@ -211,7 +222,7 @@ const Enrichment = async ({
                             >
                                 <Summarizer elements={elements} schema={schema} augmented={parsedParams.augment}/>
                             </InteractiveButtons>
-                            <Card sx={{borderRadius: "24px", minHeight: 450}}>
+                            <Card sx={{borderRadius: "24px", minHeight: 450, width: "100%"}}>
                                 <CardContent>
                                     <TermViz
                                         elements={elements} 
