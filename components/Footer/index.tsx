@@ -1,9 +1,9 @@
 import { Container, Paper, Grid, Stack, Divider, Typography } from '@mui/material'
-
+import parse from 'html-react-parser';
 import MiscComponent from '../misc';
 
 
-export default function Footer({style, layout}: {
+export default function Footer({style, layout, footer_text}: {
     style?: {
         [key: string]: string | number
     },
@@ -14,7 +14,8 @@ export default function Footer({style, layout}: {
                 [key:string]: string|number
             }
         }
-    >>
+    >>,
+    footer_text?: string
 }) {
     return (
         <Paper sx={{background: "#336699", color: "#FFF", padding: 2, paddingTop: 5, borderRadius: 0, ...style}}>
@@ -46,6 +47,11 @@ export default function Footer({style, layout}: {
                             {/* <Typography variant="caption">©CFDE Workbench {new Date().getFullYear()}</Typography> */}
                         </Stack>
                     </Grid>
+                    {footer_text &&
+                        <Grid item xs={10} style={{marginTop: 30}}>
+                            <Typography variant="caption">{parse(footer_text)}</Typography>
+                        </Grid>
+                    }
                 </Grid>
             </Container>
         </Paper>
