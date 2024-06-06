@@ -3487,7 +3487,7 @@
 		  "type": "markdown",
 		  "component": "Markdown",
 		  "props": {
-			"src": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/assets/AboutPage.md"
+			"src": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/assets/060624/AboutPage.md"
 		  }
 		}
 	  ],
