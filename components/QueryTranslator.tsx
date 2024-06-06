@@ -130,10 +130,10 @@ export default function QueryTranslator ({children}: {children: React.ReactNode}
 	if (loading) {
 		return (
 			<Box sx={{height: '90vh'}}>
-			<CircularProgress />
+				<CircularProgress />
 			</Box>
 		)
 	} else {
-		return children	
+		return <>{children}</>
 	}
 }
