@@ -197,7 +197,7 @@ const Enrichment = async ({
                     }
                 </Grid>
                 <Grid item xs={12} md={elements===null?12:3}>
-                    <Card elevation={(!schema.ui_theme || schema.ui_theme === 'cfde_theme' || elements === null) ? 0: 1} sx={{borderRadius: "8px", backgroundColor: (!schema.ui_theme || schema.ui_theme === 'cfde_theme') ? "tertiary.light": "#FFF"}}>
+                    <Card elevation={0} sx={{borderRadius: "8px", backgroundColor: (!schema.ui_theme || schema.ui_theme === 'cfde_theme' || elements !== null) ? "tertiary.light": "#FFF"}}>
                         <CardContent>
                             <GeneSetForm 
                                 libraries_list={libraries_list.map(l=>l.name)}
