@@ -35,6 +35,7 @@ export interface EnrichmentParams {
     search?: boolean,
     expand?: Array<string>,
     remove?: Array<string>,
+    additional_link_tags?: Array<string>,
 }
 
 
@@ -72,7 +73,8 @@ const Enrichment = async ({
         fullscreen?: 'true'
 
     },
-    endpoint: string
+    endpoint: string,
+    additional_link_relation_tags?: Array<string>
 
 }) => {
     const query_parser = parseAsJson<EnrichmentParams>().withDefault(props.default_options)
@@ -95,10 +97,11 @@ const Enrichment = async ({
         tooltip_templates_edges[i] = e.display
         }
     }
-    const geneLinksRelations = schema.edges.reduce((acc, i)=>{
-        if (i.gene_link) return [...acc, ...i.match]
+    const hiddenLinksRelations = schema.edges.reduce((acc, i)=>{
+        if (i.hidden) return [...acc, ...i.match]
         else return acc
-    }, [])    
+    }, [])
+    
     const parsedParams: EnrichmentParams = query_parser.parseServerSide(searchParams.q)
     try {
         parsedParams.libraries = (parsedParams.libraries || []).map(({name, library, limit, term_limit})=>({
@@ -215,7 +218,7 @@ const Enrichment = async ({
                             <InteractiveButtons 
                                 libraries_list={libraries_list.map(l=>l.name)}
                                 disableLibraryLimit={props.disableLibraryLimit}
-                                geneLinksRelations={geneLinksRelations}
+                                hiddenLinksRelations={hiddenLinksRelations}
                                 shortId={shortId}
                                 parsedParams={parsedParams}
                                 // searchParams={parsedParams}
@@ -223,6 +226,7 @@ const Enrichment = async ({
                                 gene_count={genes.length}
                                 elements={elements}
                                 short_url={short_url}
+                                additional_link_relation_tags={props.additional_link_relation_tags}
                             >
                                 <Summarizer elements={elements} schema={schema} augmented={parsedParams.augment}/>
                             </InteractiveButtons>

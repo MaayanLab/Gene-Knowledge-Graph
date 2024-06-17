@@ -92,7 +92,7 @@ export const Legend = ({
       if (kind === "Relation" && lineColor !== "#e0e0e0" && relation_colors[relation]===undefined) {
         relation_colors[relation] = <Grid item xs={12} key={kind}>
           <Grid container alignItems={"center"} spacing={1}>
-            <Grid item><hr style={{color: lineColor, height: lineHeight[legendSize], backgroundColor: lineColor, width: lineWidth[legendSize], borderStyle: i.data.predicted ? 'dotted': 'solid'}}/></Grid>
+            <Grid item><hr style={{color: lineColor, height: lineHeight[legendSize], backgroundColor: lineColor, width: lineWidth[legendSize], borderStyle: i.data.hidden ? 'dotted': 'solid'}}/></Grid>
             <Grid item><Typography variant="subtitle1">{relation}</Typography></Grid>   
           </Grid></Grid>
       }

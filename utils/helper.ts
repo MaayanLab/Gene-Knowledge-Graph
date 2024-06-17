@@ -267,6 +267,7 @@ export interface FilterSchema {
     augment_limit?: number,
     remove?: Array<string>,
     expand?: Array<string>,
+    additional_link_tags?: Array<string>
 }
 
 export const process_relation = (r:Array<string | {name?: string, limit?: string}>|string, limit?:number) => {

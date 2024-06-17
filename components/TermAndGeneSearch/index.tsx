@@ -21,7 +21,7 @@ export const initialize_kg = async () => {
   	const tooltip_templates_edges = {}
     const edges = []
     const default_relations = []
-    const geneLinksRelations = []
+    const hiddenLinksRelations = []
 	for (const i of schema.nodes) {
 		tooltip_templates_nodes[i.node] = i.display
 		const {node} = i
@@ -37,8 +37,8 @@ export const initialize_kg = async () => {
                 if (i.selected && default_relations.indexOf(e) === -1) {
                     default_relations.push(e)
                 }
-            } else if (geneLinksRelations.indexOf(e) === -1) {
-                for (const j of i.match) geneLinksRelations.push(j)
+            } else if (hiddenLinksRelations.indexOf(e) === -1) {
+                for (const j of i.match) hiddenLinksRelations.push(j)
             }
         }
     }
@@ -48,7 +48,7 @@ export const initialize_kg = async () => {
         tooltip_templates_nodes,
         tooltip_templates_edges,
         edges,
-        geneLinksRelations,
+        hiddenLinksRelations,
         default_relations,
     }
 }
@@ -69,7 +69,8 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                 [key: string]: string
             },
             coexpression_prediction?: boolean,
-            gene_link_button?: boolean,
+            additional_link_button?: boolean,
+            additional_link_relation_tags?: Array<string>,
             neighborCount?: number,
         }
 }) => {
@@ -79,7 +80,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
         tooltip_templates_nodes,
         tooltip_templates_edges,
         edges,
-        geneLinksRelations,
+        hiddenLinksRelations,
     } = await initialize_kg()
     const query_parser = parseAsJson<FilterSchema>().withDefault(props.initial_query)
     const filter: FilterSchema = query_parser.parseServerSide(searchParams.filter)
@@ -183,9 +184,10 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                             edges={edges}
                             genes={genes}
                             coexpression_prediction={props.coexpression_prediction}
-                            gene_link_button={props.gene_link_button}
+                            additional_link_button={props.additional_link_button}
+                            additional_link_relation_tags={props.additional_link_relation_tags}
                             neighborCount={props.neighborCount}
-                            geneLinksRelations={geneLinksRelations}
+                            hiddenLinksRelations={hiddenLinksRelations}
                             elements={elements}
                             initial_query={props.initial_query}
                         />

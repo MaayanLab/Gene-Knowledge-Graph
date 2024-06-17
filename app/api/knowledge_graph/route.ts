@@ -47,7 +47,9 @@ const resolve_two_terms = async ({
     colors, 
     expand: e, 
     remove, 
-    gene_links}: {
+    gene_links,
+	additional_link_tags
+}: {
         edges: Array<string>,
         start: string,
         start_field: string,
@@ -63,11 +65,12 @@ const resolve_two_terms = async ({
         expand?: Array<string>,
         remove?: Array<string>,
         gene_links?: Array<string>,
+		additional_link_tags?: Array<string>,
 })=> {
 	let query = `MATCH p=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\` {${end_field}: $end_term}))
 		USING INDEX a:\`${start}\`(${start_field})
 		USING INDEX b:\`${end}\`(${end_field})
-		WHERE all(rel in relationships(p) WHERE rel.predicted IS NULL)
+		WHERE all(rel in relationships(p) WHERE rel.hidden IS NULL)
 	`		
 	if (relation) {
 		const rels = []
@@ -96,17 +99,39 @@ const resolve_two_terms = async ({
 			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
 			gl.push(`\`${i}\``)
 		}
-		query = query + ` 
-		CALL {
-			WITH q
-			RETURN q as p, nodes(q) as n, relationships(q) as r
-			UNION
-			WITH q
-			MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)
-			WHERE c in NODES(q) and d in NODES(q)
-			RETURN p, nodes(p) as n, relationships(p) as r			
+		if (gl.length > 0) {
+			query = query + `
+				CALL {
+					WITH q
+					RETURN q as p, nodes(q) as n, relationships(q) as r
+					UNION
+					WITH q
+					MATCH p=(c:Gene)-[r:${gl.join("|")}]-(d:Gene)
+					WHERE c in NODES(q) and d in NODES(q)
+					${additional_link_tags.length > 0 ?
+						`AND r.hidden_tag IN ${JSON.stringify(additional_link_tags)}`:
+						""
+					}
+					RETURN p, nodes(p) as n, relationships(p) as r			
+				}
+				RETURN p, n, r `
+		} else if (additional_link_tags.length > 0){
+			query = query + `
+				CALL {
+					WITH q
+					RETURN q as p, nodes(q) as n, relationships(q) as r
+					UNION
+					WITH q
+					MATCH p=(c:Gene)-[r]-(d:Gene)
+					WHERE c in NODES(q) and d in NODES(q)
+					${additional_link_tags.length > 0 ?
+						`AND r.hidden_tag IN ${JSON.stringify(additional_link_tags)}`:
+						""
+					}
+					RETURN p, nodes(p) as n, relationships(p) as r			
+				}
+				RETURN p, n, r `
 		}
-		RETURN p, n, r `
 	}
 	// else {
 	// 	query = query + `RETURN q as p, nodes(q) as n, relationships(q) as r LIMIT TOINTEGER($limit)`
@@ -144,7 +169,9 @@ const resolve_term_and_end_type = async (
         colors, 
         expand: e, 
         remove, 
-        gene_links}: {
+        gene_links,
+		additional_link_tags
+	}: {
             edges: Array<string>,
             start: string,
             start_field: string,
@@ -158,6 +185,7 @@ const resolve_term_and_end_type = async (
             expand?: Array<string>,
             remove?: Array<string>,
             gene_links?: Array<string>,
+			additional_link_tags?: Array<string>,
     })=> {
 	
 	let query = `MATCH p=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\`))
@@ -191,7 +219,7 @@ const resolve_term_and_end_type = async (
 	}
 	const gl = []
 	query = query + `RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
-	if (gene_links) {
+	if (gene_links.length > 0 || additional_link_tags.length > 0) {
 		query = `CALL {
 			${query}
 		}
@@ -201,17 +229,40 @@ const resolve_term_and_end_type = async (
 			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
 			gl.push(`\`${i}\``)
 		}
-		query = query + `
-			CALL {
-				WITH q
-				RETURN q as p, nodes(q) as n, relationships(q) as r
-				UNION
-				WITH q
-				MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)
-				WHERE c in NODES(q) and d in NODES(q)
-				RETURN p, nodes(p) as n, relationships(p) as r			
-			}
-			RETURN p, n, r `
+		if (gl.length > 0) {
+			query = query + `
+				CALL {
+					WITH q
+					RETURN q as p, nodes(q) as n, relationships(q) as r
+					UNION
+					WITH q
+					MATCH p=(c:Gene)-[r:${gl.join("|")}]-(d:Gene)
+					WHERE c in NODES(q) and d in NODES(q)
+					${additional_link_tags.length > 0 ?
+						`AND r.hidden_tag IN ${JSON.stringify(additional_link_tags)}`:
+						""
+					}
+					RETURN p, nodes(p) as n, relationships(p) as r			
+				}
+				RETURN p, n, r `
+		} else if (additional_link_tags.length > 0){
+			query = query + `
+				CALL {
+					WITH q
+					RETURN q as p, nodes(q) as n, relationships(q) as r
+					UNION
+					WITH q
+					MATCH p=(c:Gene)-[r]-(d:Gene)
+					WHERE c in NODES(q) and d in NODES(q)
+					${additional_link_tags.length > 0 ?
+						`AND r.hidden_tag IN ${JSON.stringify(additional_link_tags)}`:
+						""
+					}
+					RETURN p, nodes(p) as n, relationships(p) as r			
+				}
+				RETURN p, n, r `
+		}
+		
 	}
 	// else {
 	// 	query = query + `RETURN q as p, nodes(q) as n, relationships(q) as r LIMIT TOINTEGER($limit)`
@@ -235,6 +286,7 @@ const resolve_term_and_end_type = async (
 	// if (score_fields.length) query = query + `, ${score_fields.join(", ")}`
 	// query = `${query} RETURN * ORDER BY rand() LIMIT ${limit}`
     const query_params = { start_term, limit, ...vars }
+	console.log(query)
 	return resolve_results({query, query_params, terms: [start_term],  aggr_scores, colors, fields:[start_field]})
 }
 
@@ -251,7 +303,8 @@ const resolve_one_term = async ({
     colors, 
     expand: e, 
     remove, 
-    gene_links, 
+    gene_links,
+	additional_link_tags, 
     augment, 
     augment_limit=10}: {
         edges: Array<string>,
@@ -266,6 +319,7 @@ const resolve_one_term = async ({
         expand?: Array<string>,
         remove?: Array<string>,
         gene_links?: Array<string>,
+		additional_link_tags?: Array<string>,
         augment?: Boolean,
         augment_limit?: number
     }) => {
@@ -303,7 +357,7 @@ const resolve_one_term = async ({
 		}
 	}
 	let query = `MATCH p=(st:\`${start}\` { ${field}: $term })-[*${path_length}]-(en) USING INDEX st:\`${start}\`(${field})
-		WHERE all(rel in relationships(p) WHERE rel.predicted IS NULL)
+		WHERE all(rel in relationships(p) WHERE rel.hidden IS NULL)
 	`
 	if ((remove || []).length) {
 		query= query + `
@@ -317,7 +371,7 @@ const resolve_one_term = async ({
 		query = rels.join("\nUNION\n")
 	}
 	const gl = []
-	if (gene_links) {
+	if (gene_links.length > 0 || additional_link_tags.length > 0) {
 		for (const i of gene_links) {
 			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
 			gl.push(`\`${i}\``)
@@ -327,25 +381,47 @@ const resolve_one_term = async ({
 		}
 			WITH p as q, st
 		`
-		if (start === "Gene") {
+		if (gene_links.length === 0 && additional_link_tags.length > 0) {
 			query = query + `CALL {
+				WITH q, st
+					MATCH p=(c:Gene)-[r]-(d:Gene)-[${valid_relations.length ? ":" + valid_relations.join("|"): ""}]-(st)
+					WHERE r.hidden_tag IN ${JSON.stringify(additional_link_tags)}
+					AND c in NODES(q)
+					RETURN p, nodes(p) as n, relationships(p) as r
+				UNION
 				WITH q
-				RETURN q as p, nodes(q) as n, relationships(q) as r
+					RETURN q as p, nodes(q) as n, relationships(q) as r
 				UNION
 				WITH q, st
-				MATCH p=(st)-[:${gl.join("|")}]->(d:Gene)
-				RETURN p, nodes(p) as n, relationships(p) as r				
+					MATCH p=(st)-[r]->(d:Gene)
+					WHERE r.hidden_tag IN ${JSON.stringify(additional_link_tags)}
+					RETURN p, nodes(p) as n, relationships(p) as r				
 			}
 			RETURN p, n, r`
-		} else {
+
+		} else if (gene_links.length > 0) {
 			query = query + `CALL {
 				WITH q, st
-				MATCH p=(c:Gene)-[:${gl.join("|")}]-(d:Gene)-[${valid_relations.length ? ":" + valid_relations.join("|"): ""}]-(st)
-				WHERE c in NODES(q)
-				RETURN p, nodes(p) as n, relationships(p) as r
+					MATCH p=(c:Gene)-[r:${gl.join("|")}]-(d:Gene)-[${valid_relations.length ? "r1:" + valid_relations.join("|"): "r1"}]-(st)
+					WHERE c in NODES(q)
+					${additional_link_tags.length > 0 ?
+						`AND r.hidden_tag IN ${JSON.stringify(additional_link_tags)}
+						AND r1.hidden_tag IN ${JSON.stringify(additional_link_tags)}
+						`:
+						""
+					}
+					RETURN p, nodes(p) as n, relationships(p) as r
 				UNION
-				WITH q
-				RETURN q as p, nodes(q) as n, relationships(q) as r
+					WITH q
+					RETURN q as p, nodes(q) as n, relationships(q) as r
+				UNION
+					WITH q, st
+					MATCH p=(st)-[r:${gl.join("|")}]->(d:Gene)
+					${additional_link_tags.length > 0 ?
+						`WHERE r.hidden_tag IN ${JSON.stringify(additional_link_tags)}`:
+						""
+					}
+					RETURN p, nodes(p) as n, relationships(p) as r				
 			}
 			RETURN p, n, r`
 		}
@@ -368,6 +444,7 @@ const resolve_one_term = async ({
     const query_params = { term, limit, ...vars }
 	// const results = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
 	if (!augment) {
+		console.log(query)
 		return await resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field]})
 	} else {
 		const initial_results = await resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field]})
@@ -388,12 +465,28 @@ const resolve_one_term = async ({
 		}
 		const { augmented_genes } = await augment_gene_set({gene_list, augment_limit})
 		let q
-		if (gene_links) {
-			q = `
-				MATCH p=(a: Gene)-[:${gl.join("|")}]-(b: Gene)
-				WHERE a.label IN ${JSON.stringify(augmented_genes)} AND b.label IN ${JSON.stringify(augmented_genes)}
-				RETURN p, nodes(p) as n, relationships(p) as r
-			`
+		if (gene_links.length > 0 || additional_link_tags.length > 0) {
+			if (gene_links.length > 0){
+				q = `
+					MATCH p=(a: Gene)-[r:${gl.join("|")}]-(b: Gene)
+					WHERE a.label IN ${JSON.stringify(augmented_genes)} AND b.label IN ${JSON.stringify(augmented_genes)}
+					${additional_link_tags.length > 0 ?
+						`AND r.hidden_tag IN ${JSON.stringify(additional_link_tags)}`:
+						""
+					}
+					RETURN p, nodes(p) as n, relationships(p) as r
+				`
+			} else if (additional_link_tags.length > 0) {
+				q = `
+					MATCH p=(a: Gene)-[r]-(b: Gene)
+					WHERE a.label IN ${JSON.stringify(augmented_genes)} AND b.label IN ${JSON.stringify(augmented_genes)}
+					${additional_link_tags.length > 0 ?
+						`AND r.hidden_tag IN ${JSON.stringify(additional_link_tags)}`:
+						""
+					}
+					RETURN p, nodes(p) as n, relationships(p) as r
+				`
+			}
 		} else {
 			q = `
 				MATCH p=(a: Gene)
@@ -453,6 +546,7 @@ const input_query_schema = z.object({
     gene_links: z.optional(z.array(z.string())),
     augment: z.optional(z.boolean()),
     augment_limit: z.optional(z.number()),
+	additional_link_tags: z.optional(z.array(z.string())),
 })
 
 /**
@@ -561,9 +655,11 @@ export async function GET(req: NextRequest) {
                 path_length,
                 remove = [],
                 expand = [],
-                gene_links,
+                gene_links = [],
                 augment,
-                augment_limit } = input_query_schema.parse(f)
+                augment_limit,
+				additional_link_tags = []
+			 } = input_query_schema.parse(f)
         const {aggr_scores, colors, edges} = await initialize()
         const nodes = schema.nodes.map(i=>i.node)
         if (nodes.indexOf(start) < 0) return NextResponse.json({error: "Invalid start node"}, {status: 400})
@@ -576,16 +672,16 @@ export async function GET(req: NextRequest) {
                 try {
                     if (start && end && start_term && end_term) {
                         if(augment)  return NextResponse.json({error: "You can only augment on single search"}, {status: 400})
-                        const results = await resolve_two_terms({edges, start, start_field, start_term, end, end_field, end_term, relation, limit, path_length, aggr_scores, colors, remove: remove ?  remove: [], expand: expand ? expand : [], gene_links})
+                        const results = await resolve_two_terms({edges, start, start_field, start_term, end, end_field, end_term, relation, limit, path_length, aggr_scores, colors, remove: remove ?  remove: [], expand: expand ? expand : [], gene_links, additional_link_tags})
                         fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/counter/update`)
                         return NextResponse.json(results, {status: 200})
                     } else if (start && end && start_term ) {
                         if(augment)  return NextResponse.json({error: "You can only augment on single search"}, {status: 400})
-                        const results = await resolve_term_and_end_type({edges, start_term, start_field, start, end, relation, limit, path_length, aggr_scores, colors, remove, expand: expand, gene_links})
+                        const results = await resolve_term_and_end_type({edges, start_term, start_field, start, end, relation, limit, path_length, aggr_scores, colors, remove, expand: expand, gene_links, additional_link_tags})
                         fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/counter/update`)
                         return NextResponse.json(results, {status: 200})
                     } else if (start) {
-                        const results = await resolve_one_term({edges, start, field: start_field, term: start_term, relation, limit, path_length, aggr_scores, colors, remove, expand, gene_links, augment, augment_limit })
+                        const results = await resolve_one_term({edges, start, field: start_field, term: start_term, relation, limit, path_length, aggr_scores, colors, remove, expand, gene_links, additional_link_tags, augment, augment_limit })
                         fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/counter/update`)
                         return NextResponse.json(results, {status: 200})
                     } else {

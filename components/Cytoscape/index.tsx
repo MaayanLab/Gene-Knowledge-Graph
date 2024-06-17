@@ -136,7 +136,7 @@ export default function Cytoscape ({
 								'source-endpoint': 'outside-to-node',
 								'target-arrow-color': 'data(lineColor)',
 								'line-style': ( ele )=>{
-									return(ele.data('predicted') ? "dotted": "solid")
+									return(ele.data('hidden') ? "dotted": "solid")
 								},
 								...edgeStyle
 							}

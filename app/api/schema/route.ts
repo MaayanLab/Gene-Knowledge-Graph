@@ -32,7 +32,7 @@ export interface UISchema {
             type: string,
             href?:string,
         }>,
-        gene_link?: boolean,
+        hidden?: boolean,
         color?: string,
         order?: Array<string>
     }>,

@@ -50,7 +50,7 @@ import { ReactElement } from 'react-markdown/lib/react-markdown';
 import LibraryPicker from './LibraryPicker';
 import { EnrichmentParams } from '.';
 const InteractiveButtons = ({
-        geneLinksRelations=[], 
+        hiddenLinksRelations=[], 
         shortId,
         // searchParams,
         gene_count=0,
@@ -60,18 +60,22 @@ const InteractiveButtons = ({
         libraries_list,
         parsedParams,
         short_url,
-        fullscreen
+        fullscreen,
+        additional_link_button,
+        additional_link_relation_tags
     }: {
         short_url?: string,
         libraries_list?:Array<string>,
         disableLibraryLimit?:boolean,
-        geneLinksRelations?:Array<string>,
+        hiddenLinksRelations?:Array<string>,
         shortId?: string,
         gene_count?: number,
         elements: NetworkSchema,
         children: ReactElement,
         parsedParams: EnrichmentParams,
-        fullscreen?: 'true'
+        fullscreen?: 'true',
+        additional_link_button?: boolean,
+        additional_link_relation_tags?: Array<string>
     }) => {
     const router = useRouter()
     const pathname = usePathname()
@@ -91,6 +95,7 @@ const InteractiveButtons = ({
     const [openShare, setOpenShare] = useState<boolean>(false)
     const [augmentLimit, setAugmentLimit] = useState<number>(parsedParams.augment_limit||10)
     const [geneLinks, setGeneLinks] = useState<Array<string>>([])
+    const [additionalLinkTags, setAdditionalLinkTags] = useState<Array<string>>([])
 
     useEffect(()=>{
         if (gene_links) setGeneLinks(gene_links)
@@ -368,16 +373,18 @@ const InteractiveButtons = ({
                     </Tooltip>
                     {(!view || view === "network") &&
                         <>
-                            <Tooltip title={"Gene-gene connections"}>
-                                <IconButton 
-                                    onClick={()=>{
-                                        setGeneLinksOpen(!geneLinksOpen)
-                                        setAugmentOpen(false)
-                                    }}
-                                >
-                                    <Icon path={gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
-                                </IconButton>
-                            </Tooltip>
+                            {additional_link_button && 
+                                <Tooltip title={"Additional Links"}>
+                                    <IconButton 
+                                        onClick={()=>{
+                                            setGeneLinksOpen(!geneLinksOpen)
+                                            setAugmentOpen(false)
+                                        }}
+                                    >
+                                        <Icon path={gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
+                                    </IconButton>
+                                </Tooltip>
+                            }
                             <Tooltip title={parsedParams.augment ? "Reset network": "Augment network using co-expressed genes"}>
                                 <IconButton
                                     disabled={!parsedParams.augment && gene_count > 100}
@@ -434,7 +441,13 @@ const InteractiveButtons = ({
             <Grid item xs={12}>
                 <Stack direction="row" alignItems="center" justifyContent={"flex-end"}>
                     <Typography variant='subtitle2' sx={{marginRight: 5}}>Select relationships:</Typography>
-                    {geneLinksRelations.map(i=>(
+                    { additional_link_relation_tags ? additional_link_relation_tags.map(i=>(
+                        <FormControlLabel key={i} control={<Checkbox checked={geneLinks.indexOf(i)>-1} onChange={()=>{
+                            if (additionalLinkTags.indexOf(i)===-1) setAdditionalLinkTags([...geneLinks, i])
+                            else setAdditionalLinkTags(additionalLinkTags.filter(l=>l!==i))
+                        }}/>} label={<Typography variant='subtitle2'>{i}</Typography>} />
+                    )):
+                    hiddenLinksRelations.map(i=>(
                         <FormControlLabel key={i} control={<Checkbox checked={geneLinks.indexOf(i)>-1} onChange={()=>{
                             if (geneLinks.indexOf(i)===-1) setGeneLinks([...geneLinks, i])
                             else setGeneLinks(geneLinks.filter(l=>l!==i))
@@ -445,6 +458,7 @@ const InteractiveButtons = ({
                             disabled={geneLinks.length === 0}
                             onClick={()=>{
                                 const filter = {...parsedParams}
+                                if (additionalLinkTags.length) filter.additional_link_tags = additionalLinkTags
                                 if (geneLinks.length) filter.gene_links = geneLinks
                                 const query = {q: JSON.stringify(filter)}
                                 router_push(router, pathname, query)
@@ -457,10 +471,11 @@ const InteractiveButtons = ({
                         <IconButton color="secondary"  disabled={!gene_links}
                             onClick={()=>{
 
-                                const {gene_links, ...filter} = parsedParams
+                                const {gene_links, additional_link_tags, ...filter} = parsedParams
                                 const query = {q: JSON.stringify(filter)}
                                 router_push(router, pathname, query)
                                 setGeneLinks([])
+                                setAdditionalLinkTags([])
                                 setGeneLinksOpen(false)
                             }}
                         >

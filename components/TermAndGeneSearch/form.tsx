@@ -65,9 +65,10 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
   
   function Form({
     edges=[],
-    geneLinksRelations,
+    hiddenLinksRelations,
     coexpression_prediction,
-    gene_link_button,
+    additional_link_button,
+    additional_link_relation_tags,
     neighborCount=100,
     genes = [],
     elements = {nodes: [], edges: []},
@@ -75,11 +76,12 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
     initial_query
 }: {
     edges: Array<string>,
-    geneLinksRelations: Array<string>,
+    hiddenLinksRelations: Array<string>,
     coexpression_prediction: boolean,
-    gene_link_button: boolean,
+    additional_link_button: boolean,
     neighborCount: number,
     genes: Array<{string}>,
+    additional_link_relation_tags?: Array<string>,
     elements: null | NetworkSchema,
     searchParams: {
         filter?: string,
@@ -113,6 +115,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
         limit=5,
         gene_links,
         augment,
+        additional_link_tags,
     } = filter
     const [edge_labels, setEdgeLabels] = useQueryState('edge_labels')
     const [tooltip, setTooltip] = useQueryState('tooltip')
@@ -129,9 +132,11 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
     const [augmentLimit, setAugmentLimit] = useState<number>(10)
     const [geneLinksOpen, setGeneLinksOpen] = useState<boolean>(false)
     const [geneLinks, setGeneLinks] = useState<Array<string>>([])
+    const [additionalLinkTags, setAdditionalLinkTags] = useState<Array<string>>([])
 
     useEffect(()=>{
-        if (gene_links)setGeneLinks(gene_links)
+        if (gene_links) setGeneLinks(gene_links)
+        if (additional_link_tags) setAdditionalLinkTags(additional_link_tags)
     }, [searchParams.filter])
     const handleClickMenu = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>, setter:Function) => {
 		setter(e.currentTarget);
@@ -420,7 +425,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                     </IconButton>
                                 </Tooltip>
                             </Grid>  
-                            { (gene_link_button) &&
+                            { (additional_link_button) &&
                                 <Grid item>
                                     <Tooltip title={"Additional Links"}>
                                         <IconButton color="secondary"
@@ -489,7 +494,63 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                             }
                             {(geneLinksOpen) &&
                                 <Grid item xs={12}>
-                                    <Stack direction="row" alignItems="center" justifyContent={"flex-end"}>
+                                    <Grid container justifyContent={'flex-start'}>
+                                        <Grid item xs={12}>
+                                            <Typography variant='subtitle2' sx={{marginRight: 5}}>Select relationships:</Typography>
+                                        </Grid>
+                                        {additional_link_relation_tags.length > 0 ?
+                                            additional_link_relation_tags.map(i=>(
+                                                <Grid item key={i} className='flex justify-end'>
+                                                    <FormControlLabel control={<Checkbox checked={additionalLinkTags.indexOf(i)>-1} onChange={()=>{
+                                                        if (additionalLinkTags.indexOf(i)===-1) setAdditionalLinkTags([...additionalLinkTags, i])
+                                                        else setAdditionalLinkTags(additionalLinkTags.filter(l=>l!==i))
+                                                    }}/>} label={<Typography variant='subtitle2'>{i}</Typography>} />
+                                                </Grid>
+                                            )):
+                                            hiddenLinksRelations.map(i=>(
+                                                <Grid item xs={12} key={i} className='flex justify-end'>
+                                                    <FormControlLabel control={<Checkbox checked={geneLinks.indexOf(i)>-1} onChange={()=>{
+                                                        if (geneLinks.indexOf(i)===-1) setGeneLinks([...geneLinks, i])
+                                                        else setGeneLinks(geneLinks.filter(l=>l!==i))
+                                                    }}/>} label={<Typography variant='subtitle2'>{i}</Typography>} />
+                                                </Grid>
+                                            ))
+                                        }
+                                        <Grid item xs={12} className='flex'>
+                                            <Tooltip title="Show gene links">
+                                                <IconButton color="secondary" 
+                                                    disabled={geneLinks.length ===  0 && additionalLinkTags.length === 0}
+                                                    onClick={()=>{
+
+                                                        const {filter: f, ...query} = searchParams
+                                                        const filter = {...initial_query, ...JSON.parse(f || '{}')}
+                                                        if (geneLinks.length) filter.gene_links = geneLinks
+                                                        if (additionalLinkTags.length) filter.additional_link_tags = additionalLinkTags
+                                                        query['filter'] = JSON.stringify(filter)
+                                                        router_push(router, pathname, query)
+                                                    }}
+                                                >
+                                                    <SendIcon/>
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Reset network">
+                                                <IconButton color="secondary"  disabled={!gene_links && !additional_link_tags}
+                                                    onClick={()=>{
+
+                                                        const {filter: f, ...query} = searchParams
+                                                        const {gene_links, additional_link_tags, ...filter} = JSON.parse(f)
+                                                        query['filter'] = JSON.stringify(filter)
+                                                        router_push(router, pathname, query)
+                                                        setGeneLinks([])
+                                                        setGeneLinksOpen(false)
+                                                    }}
+                                                >
+                                                    <UndoIcon/>
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Grid>
+                                    </Grid>
+                                    {/* <Stack direction="row" alignItems="center" justifyContent={"flex-end"}>
                                         <Typography variant='subtitle2' sx={{marginRight: 5}}>Select relationships:</Typography>
                                         {geneLinksRelations.map(i=>(
                                             <FormControlLabel key={i} control={<Checkbox checked={geneLinks.indexOf(i)>-1} onChange={()=>{
@@ -527,7 +588,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                                 <UndoIcon/>
                                             </IconButton>
                                         </Tooltip>
-                                    </Stack>
+                                    </Stack> */}
                                 </Grid>
                             }
                             {(augmentOpen) && 
