@@ -9,6 +9,6 @@ export  function TextNav({title, path}: {title: string, path: string}) {
 		sx = {textDecoration: "underline", textDecorationThickness: 2}
 	}
 	return(
-		<Typography variant="nav" sx={sx}><b>{title}</b></Typography>
+		<Typography variant="nav" sx={sx}>{title}</Typography>
 	)
 }

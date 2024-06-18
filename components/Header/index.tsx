@@ -4,15 +4,23 @@ import {
 	Typography, 
 	Stack, 
 	AppBar, 
-	Toolbar
+	Toolbar,
+	Divider
 } from "@mui/material";
 import { UISchema } from '@/app/api/schema/route';
 import { Logo } from '../misc/logo';
 import Counter from '../Counter';
 import { TextNav } from './TextNav';
-export const Nav = ({tabs, ui_theme}:
+export const Nav = ({tabs, ui_theme, divider, title, icon}:
 	{
 		ui_theme?: string,
+		divider?: boolean,
+		title: string,
+		icon: {
+			favicon: string,
+			alt: string,
+			avatar?: boolean
+		},
 		tabs: Array<{
 			endpoint: string,
 			label: string,
@@ -31,15 +39,24 @@ export const Nav = ({tabs, ui_theme}:
 				<TextNav path={tab.endpoint} title={tab.label}/>
 			</Link>
 		)
+		if (divider) tab_component[position].push(<Divider orientation='vertical' flexItem sx={{borderColor: "#000"}}/>)
+	}
+	if (divider) {
+		for (const position of Object.keys(tab_component)) {
+			tab_component[position].pop()
+		}
 	}
 	return (
-		<>
+		<Grid container justifyContent={"space-between"} alignItems={"center"}>
+			<Grid item sx={{ flexGrow: 1 }}>
+				<Logo alt={icon.alt} src={icon.favicon} title={title} avatar={icon.avatar} size='large' color="secondary"/>
+			</Grid>
 			<Grid item>
 				<Stack direction={"row"} alignItems={"center"} spacing={2}>
 					{tab_component.top}
-					{tab_component.bottom.length === 0 && 
+					{/* {tab_component.bottom.length === 0 && 
 						<Counter ui_theme={ui_theme}/>
-					}
+					} */}
 				</Stack>
 			</Grid>
 			{tab_component.bottom.length > 0 &&
@@ -49,26 +66,24 @@ export const Nav = ({tabs, ui_theme}:
 					</Stack>
 				</Grid>
 			}
-			{tab_component.bottom.length > 0 &&
+			{tab_component.bottom.length > 0 ?
 				<Grid item>		
+					<Counter ui_theme={ui_theme}/>
+				</Grid>:
+				<Grid item xs={12} className='flex justify-end'>		
 					<Counter ui_theme={ui_theme}/>
 				</Grid>
 			}
-		</>
+		</Grid>
 	)
 }
 
 export default function Header ({schema}: {schema: UISchema}) {
-	const {title, icon, tabs} = schema.header
+	const {title, icon, tabs, divider} = schema.header
 	return  (
 		<AppBar position="static" sx={{color: "#000", paddingTop: 3, paddingBottom: 3, mb: 2}}>
 			<Toolbar>
-				<Grid container justifyContent={"space-between"} alignItems={"center"} spacing={2}>
-					<Grid item>
-						<Logo alt={icon.alt} src={icon.favicon} title={title} size='large' color="secondary"/>
-					</Grid>
-					<Nav tabs={tabs} ui_theme={schema.ui_theme}/>
-				</Grid>
+				<Nav tabs={tabs} divider={divider} ui_theme={schema.ui_theme} title={title} icon={icon}/>
 			</Toolbar>
 		</AppBar>
 	)
