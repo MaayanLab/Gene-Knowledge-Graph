@@ -18,6 +18,7 @@ const TermViz = ({elements, schema, tooltip_templates_edges, tooltip_templates_n
 	}) => {
 	const [view, setView] = useQueryState('view')
 	const entries:{[key:string]: {library: string, value: number, color:string, pval: number, [key: string]: number | string | boolean}} = {}
+	const columns:{[key:string]: boolean} = {}
 	for (const dt of [...elements.nodes, ...elements.edges]) {
 		const {label, id: i, kind, color, gradient_color, ...properties} = dt.data
 		if (dt.data.pval !== undefined) {
@@ -32,27 +33,22 @@ const TermViz = ({elements, schema, tooltip_templates_edges, tooltip_templates_n
 					library,
 					logpval
 				} = properties
-				if (typeof library === "string" && 
-					typeof pval === 'number' && 
-					typeof qval === 'number' && 
-					typeof zscore === 'number' && 
-					typeof combined_score === 'number' &&
-					typeof logpval === 'number'
-				){
-					entries[id] = {
-						id,
-						label,
-						enrichr_label,
-						...properties,
-						library: library,
-						pval: parseFloat(`${precise(pval)}`),
-						qval: precise(qval),
-						zscore: precise(zscore),
-						combined_score: precise(combined_score),
-						value: logpval || 10000,
-						color: `${color}`,
-						gradient_color
-					}
+				entries[id] = {
+					id,
+					label,
+					enrichr_label,
+					...properties,
+					library: `${library}`,
+					pval: typeof pval === 'number' ? parseFloat(`${precise(pval)}`): undefined,
+					qval: typeof qval === 'number' ? precise(qval): undefined,
+					zscore: typeof zscore === 'number' ? precise(zscore): undefined,
+					combined_score: typeof combined_score === 'number' ? precise(combined_score): undefined,
+					value: typeof logpval === 'number'?  logpval : 10000,
+					color: `${color}`,
+					gradient_color
+				}
+				for (const [k,v] of Object.entries(entries[id])) {
+					if (v !== undefined) columns[k] = true
 				}
 			}
 			
@@ -71,7 +67,7 @@ const TermViz = ({elements, schema, tooltip_templates_edges, tooltip_templates_n
 			/> 
 		) 
 		else if (view === "table") return (
-			<NetworkTable sorted_entries={sorted_entries}/>
+			<NetworkTable sorted_entries={sorted_entries} columns={columns}/>
 		) 
 		else if (view === "bar") return(
 			<EnrichmentBar data={sorted_entries}
