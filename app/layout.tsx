@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   // optionally access and extend (rather than replace) parent metadata
  
   return {
-    title: header.header || header.title,
+    title: header.icon.faviconTitle || header.title,
     description: '',
     icons: {
       icon: header.icon.favicon
