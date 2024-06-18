@@ -20,7 +20,7 @@ export default function Footer({style, layout, footer_text}: {
     return (
         <Paper sx={{background: "#336699", color: "#FFF", padding: 2, paddingTop: 5, borderRadius: 0, ...style}}>
             <Container maxWidth="lg">
-                <Grid container justifyContent={"space-around"}>
+                <Grid container justifyContent={"space-around"} alignItems={"center"}>
                     {layout.map((part, index)=>{
                         const items = []
                         for (const ind in part ) {
