@@ -83,7 +83,7 @@ export interface UISchema {
             {
                 component: string,
                 props?: {
-                    [key:string]: string|number
+                    [key:string]: string|number|boolean
                 }
             }
         >>,
