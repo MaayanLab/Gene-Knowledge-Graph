@@ -148,7 +148,7 @@ const enrichment = async ({
             query_list.push(query_part)
             if (gene_links && gene_links.length > 0) {
                 const geneLinksRelations = schema.edges.reduce((acc, i)=>{
-                    if (i.gene_link) return [...acc, ...i.match]
+                    if (i.hidden) return [...acc, ...i.match]
                     else return acc
                 }, [])
                 for (const i of geneLinksRelations) {
@@ -174,7 +174,7 @@ const enrichment = async ({
         }
         if (gene_links && gene_links.length > 0) {
             const geneLinksRelations = schema.edges.reduce((acc, i)=>{
-                if (i.gene_link) return [...acc, ...i.match]
+                if (i.hidden) return [...acc, ...i.match]
                 else return acc
             }, [])
             for (const i of geneLinksRelations) {
