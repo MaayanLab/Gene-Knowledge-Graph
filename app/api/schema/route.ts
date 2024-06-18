@@ -39,13 +39,15 @@ export interface UISchema {
     header: {
         title: string,
         header?: string,
+        divider?: boolean,
         icon: {
             src: string,
             favicon: string,
-            faviconTitle: string,
+            faviconTitle?: string,
             alt: string,
             width: number,
             height: number,
+            avatar?: boolean
         },
         tabs: Array<{
             endpoint: string,
