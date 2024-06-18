@@ -12,6 +12,7 @@ export const enrichr_query = async ({
 }) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/enrich?userListId=${userListId}&backgroundType=${library}`)
     if (res.ok !== true) {
+        console.log(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/enrich?userListId=${userListId}&backgroundType=${library}`)
         throw new Error(`Error communicating with Enrichr`)
     }
     const regex = {}
