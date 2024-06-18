@@ -54,12 +54,12 @@ export function CustomToolbar() {
   }
 
 
-const NetworkTable = ({sorted_entries}:{sorted_entries:Array<{[key:string]:any}>}) => (
+const NetworkTable = ({sorted_entries, columns}:{sorted_entries:Array<{[key:string]:any}>, columns: {[key:string]: boolean}}) => (
 	<DataGrid
 		components={{ Toolbar: CustomToolbar }}
 		sortingOrder={['desc', 'asc']}
 		rows={sorted_entries}
-		columns={header}
+		columns={header.filter(i=>columns[i.field])}
 		autoPageSize
 		disableColumnMenu
 		autoHeight
