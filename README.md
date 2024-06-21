@@ -35,10 +35,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 # CFDE-KX
 
 ## Install
-helm install cfde-gse maayanlab/docker-compose -f <(docker-compose config) -n cfde-gse --create-namespace 
+helm install lncrnalyzr maayanlab/docker-compose -f <(docker-compose config) -n lncrnalyzr --create-namespace 
 
 ## UPGRADE
-helm upgrade cfde-gse maayanlab/docker-compose -f <(docker-compose config) -n cfde-gse 
+helm upgrade lncrnalyzr maayanlab/docker-compose -f <(docker-compose config) -n lncrnalyzr 
 
 helm template cfde-gse maayanlab/docker-compose -f <(docker-compose config) -n cfde-gse 
 
