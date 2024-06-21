@@ -40,10 +40,10 @@ const renderCustomizedLabel = (props) => {
 			<Card sx={{opacity:"0.8", textAlign: "left"}}>
 				<CardContent>
 					<Typography variant="subtitle2"><b>{enrichr_label}</b></Typography>
-					<Typography variant="subtitle2"><b>p-value:</b> {precise(pval)}</Typography>
-					<Typography variant="subtitle2"><b>q-value:</b> {precise(qval)}</Typography>
-					<Typography variant="subtitle2"><b>z-score:</b> {precise(zscore)}</Typography>
-					<Typography variant="subtitle2"><b>combined score:</b> {precise(combined_score)}</Typography>
+					{ pval && <Typography variant="subtitle2"><b>p-value:</b> {precise(pval)}</Typography>}
+					{ qval && <Typography variant="subtitle2"><b>q-value:</b> {precise(qval)}</Typography>}
+					{ zscore && <Typography variant="subtitle2"><b>z-score:</b> {precise(zscore)}</Typography>}
+					{ combined_score && <Typography variant="subtitle2"><b>combined score:</b> {precise(combined_score)}</Typography>}
 				</CardContent>
 			</Card>
 		)
