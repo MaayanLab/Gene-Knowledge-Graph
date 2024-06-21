@@ -1580,7 +1580,7 @@
 				}
 			],
 			"match": [
-				"KOMP"
+				"KOMP2"
 			],
 			"selected": true,
 			"templates": {
@@ -2389,7 +2389,7 @@
 				"endpoint": "/libraries",
 				"label": "Libraries",
 				"props": {
-					"src": "https://raw.githubusercontent.com/20LM22/KnowledgeGraphDemo/main/Library.md"
+					"src": "https://minio.dev.maayanlab.cloud/lncrnalyzr/assets/libraries.md"
 				},
 				"type": "markdown"
 			},
@@ -2398,7 +2398,7 @@
 				"endpoint": "/help",
 				"label": "Help",
 				"props": {
-					"src": "https://raw.githubusercontent.com/20LM22/KnowledgeGraphDemo/main/Help.md"
+					"src": "https://minio.dev.maayanlab.cloud/lncrnalyzr/assets/help.md"
 				},
 				"type": "markdown"
 			}
