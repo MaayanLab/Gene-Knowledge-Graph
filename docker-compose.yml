@@ -5,15 +5,15 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/enrichr-kg:2.3.6.1
+    image: maayanlab/lncrnalyzr:2.3.8
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
-        maayanlab.cloud/ingress: https://enrichr-kg-dev.maayanlab.cloud
+        maayanlab.cloud/ingress: https://lncrnalyzr.maayanlab.cloud
     ports:
       - 3000:3000
     environment:
-      - NEXT_PUBLIC_NEO4J_URL=bolt://neo4j:7687
+      - NEXT_PUBLIC_NEO4J_URL=bolt://neo4j-v5:7687
       - NEXT_PUBLIC_ENRICHR_URL=https://maayanlab.cloud/Enrichr
       - NEXT_PUBLIC_GENESHOT_URL=https://maayanlab.cloud/geneshot
       - NEXT_PUBLIC_NEO4J_USER
@@ -26,12 +26,12 @@ services:
       - NEXT_PUBLIC_TURL
       - NEXT_PUBLIC_TURL_URL
 
-  neo4j:
-    image: neo4j:4.4
+  neo4j-v5:
+    image: neo4j:5.19
     x-kubernetes:
       imagePullPolicy: IfNotPresent
     environment:
-      - NEO4JLABS_PLUGINS='["apoc", "n10s"]'
+      - NEO4J_PLUGINS=["apoc", "n10s"]
       - NEO4J_AUTH=${NEXT_PUBLIC_NEO4J_USER}/${NEXT_PUBLIC_NEO4J_PASSWORD}
       - NEO4J_dbms_memory_heap_max__size=8G
       - NEO4J_dbms_memory_heap_initial__size=2G
@@ -40,14 +40,30 @@ services:
       - 7687:7687
       - 7474:7474
     volumes:
-      - enrichr-kg-neo4j:/data
-
+      -  lncrnalyzr-neo4j-v5:/data
+  
+  enrichment:
+    image: maayanlab/independent_enrichment:0.0.9
+    ports:
+      - 5000:80
+    x-kubernetes:
+      imagePullPolicy: IfNotPresent
+      annotations:
+        maayanlab.cloud/ingress: https://lncrnalyzr.maayanlab.cloud/enrichment
+    environment:
+      - PREFIX
+      - LIBRARY_DOMAIN
+      
 volumes:
-  enrichr-kg-neo4j:
+  lncrnalyzr-neo4j:
+    x-kubernetes:
+      size: 25Gi
+      class: gp2
+  lncrnalyzr-neo4j-v5:
     x-kubernetes:
       size: 25Gi
       class: gp2
 
 x-kubernetes:
-  name: enrichr-kg
-  namespace: enrichr-kg
+  name: lncrnalyzr
+  namespace: lncrnalyzr

@@ -11,7 +11,7 @@ export default function Footer({style, layout, footer_text}: {
         {
             component: string,
             props?: {
-                [key:string]: string|number
+                [key:string]: string|number|boolean
             }
         }
     >>,
