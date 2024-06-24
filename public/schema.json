@@ -2195,7 +2195,54 @@
         },
         {
             "match": [
-                "ARCHS4_coexpressed_genes",
+                "ARCHS4_coexpressed_genes"
+            ],
+            "color": "#e0b321",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "SAB",
+                    "text": "${SAB}",
+                    "type": "text"
+                },
+                {
+                    "label": "evidence_class",
+                    "text": "${evidence_class}",
+                    "type": "text"
+                },
+                {
+                    "label": "hidden",
+                    "text": "${hidden}",
+                    "type": "text"
+                },
+                {
+                    "label": "hidden_tag",
+                    "text": "${hidden_tag}",
+                    "type": "text"
+                }
+            ],
+            "hidden": true,
+            "order": [
+                "evidence",
+                "DESC"
+            ]
+        },
+        {
+            "match": [
                 "ARCHS4_coexpressed_genes_LINCS_Up",
                 "ARCHS4_coexpressed_genes_LINCS_Down",
                 "ARCHS4_coexpressed_genes_MW",
