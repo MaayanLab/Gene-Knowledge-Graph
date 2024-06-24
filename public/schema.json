@@ -1,3347 +1,2877 @@
 {
-	"edges": [
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"ARCHS4"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The transcription factor ${term} is co-expressed with ${genes}.",
-				"singular": "The transcription factor ${term} is co-expressed with ${gene}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"CCLE"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The gene products ${genes} are up-regulated in ${term}",
-				"singular": "The gene product ${gene} is up-regulated in ${term}"
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"ChEA3"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The ${genes} are target of the transcription factor ${term}.",
-				"singular": "The ${gene} is a target of the transcription factor ${term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"Descartes"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "${term} has the following biomarkers ${genes}.",
-				"singular": "${gene} is a biomarker of ${term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"DisGeNET"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The disease ${term} is associated with the following genes: ${genes}.",
-				"singular": "The disease ${term} is associated with the gene ${gene}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				},
-				{
-					"label": "direction",
-					"text": "${direction}",
-					"type": "text"
-				}
-			],
-			"match": [
-				"FANTOM"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "Knocking down the lncRNA ${term} regulates the expression of ${genes}.",
-				"singular": "Knocking down the lncRNA ${term} regulates the expression of ${gene}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"GOBP"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "${genes} belong to the biological process ${term}.",
-				"singular": "${gene} belongs to the biological process ${term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"GWAS"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "${term} is associated with ${genes} based on GWAS.",
-				"singular": "${term} is associated with ${gene} based on GWAS."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"HuBMAP ASCTplusB"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "${genes} are biomarkers of ${term}.",
-				"singular": "${gene} is a biomarker of ${term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"Human Gene Atlas"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The genes ${genes} are up-regulated in ${term} cells.",
-				"singular": "The gene ${gene} is up-regulated in ${term} cells."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"Human Phenotype Ontology"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The phenotype ${term} is associated with the genes ${genes}.",
-				"singular": "The phenotype ${term} is associated with the gene ${gene}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"Jensen Lab DISEASES"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The disease ${term} is associated with the genes ${genes}.",
-				"singular": "The disease ${term} is associated with the gene ${gene}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"KEGG"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The gene products ${genes} are members of the KEGG pathway ${term}.",
-				"singular": "The gene product ${gene} is a member of the KEGG pathway ${term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				},
-				{
-					"label": "direction",
-					"text": "${direction}",
-					"type": "text"
-				}
-			],
-			"match": [
-				"LINCS Chem Pert Consensus Sigs"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The small molecule ${term} regulates the expression of ${genes}.",
-				"singular": "The small molecule ${term} regulates the expression of ${gene}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				},
-				{
-					"label": "direction",
-					"text": "${direction}",
-					"type": "text"
-				}
-			],
-			"match": [
-				"LINCS CRISPR KO Consensus Sigs"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "Knockout of the gene ${term} regulates the genes ${genes}.",
-				"singular": "Knockout of the gene ${term} regulates the expression of ${gene}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"MGI"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The phenotype ${term} was observed in ${genes} KO mice.",
-				"singular": "The phenotype ${term} was observed in ${gene} KO mice."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"Pfam"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The gene products ${genes} have the structural domain ${term}.",
-				"singular": "The gene product ${gene} has the structural domain ${term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"PFOCR"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "${genes} are associated with the pathway diagram in ${term}",
-				"singular": "${gene} is associated with the pathway diagram in ${term}"
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"Achilles Decrease"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "Knockdown of ${genes} decreases the fitness of the cell line ${term}.",
-				"singular": "Knockdown of ${gene} decreases the fitness of the cell line ${term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"Achilles Increase"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "Knockdown of ${genes} increases the fitness of the cell line ${term}.",
-				"singular": "Knockdown of ${gene} increases the fitness of the cell line ${term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				},
-				{
-					"label": "direction",
-					"text": "${direction}",
-					"type": "text"
-				}
-			],
-			"match": [
-				"Proteomics Drug Atlas 2023"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The drug ${term} regulates the expression of ${genes}.",
-				"singular": "The drug ${term} regulates the expression of ${gene}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"Reactome 2022"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The genes ${genes} are members of the Reactome pathway ${term}.",
-				"singular": "The gene ${gene} is a member of the Reactome pathway ${term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"Tabula Muris"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "${term} has the following biomarkers ${genes}.",
-				"singular": "${gene} is a biomarker for {term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"Tabula Sapiens"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "${term} has the following biomarkers ${genes}.",
-				"singular": "${term} has the following biomarker ${gene}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"The Kinase Library"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The kinase ${term} phosphorylates ${genes}.",
-				"singular": "The kinase ${term} phosphorylates ${gene}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"TRRUST"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The transcription factor ${term} regulates the genes ${genes}.",
-				"singular": "The transcription factor ${term} regulates the gene ${gene}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"WikiPathway 2021 Human"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The genes ${genes} are members of the WikiPathway ${term}.",
-				"singular": "The gene ${gene} is a member of the WikiPathway ${term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"GlyGen"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The genes ${genes} are members of the GlyGen ${term}.",
-				"singular": "The gene ${gene} is a member of the GlyGen ${term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"GTEx Aging"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The genes ${genes} are members of the GTEx Aging ${term}.",
-				"singular": "The gene ${gene} is a member of the GTEx Aging ${term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"GTEx Tissues"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The genes ${genes} are members of the GTEx Tissues ${term}.",
-				"singular": "The gene ${gene} is a member of the GTEx Tissues ${term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"IDG"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The genes ${genes} are members of the IDG ${term}.",
-				"singular": "The gene ${gene} is a member of the IDG ${term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				}
-			],
-			"match": [
-				"KOMP2"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The genes ${genes} are members of the KOMP ${term}.",
-				"singular": "The gene ${gene} is a member of the KOMP ${term}."
-			}
-		},
-		{
-			"color": "#808080",
-			"display": [
-				{
-					"label": "source",
-					"text": "${source}",
-					"type": "text"
-				},
-				{
-					"label": "relation",
-					"text": "${relation}",
-					"type": "text"
-				},
-				{
-					"label": "target",
-					"text": "${target}",
-					"type": "text"
-				},
-				{
-					"label": "source label",
-					"text": "${source_label}",
-					"type": "text"
-				},
-				{
-					"label": "target label",
-					"text": "${target_label}",
-					"type": "text"
-				},
-				{
-					"label": "resource",
-					"text": "${resource}",
-					"type": "link"
-				},
-				{
-					"href": "${link_to_resource}",
-					"label": "link to resource",
-					"text": "${link_to_resource}",
-					"type": "link"
-				},
-				{
-					"label": "direction",
-					"text": "${direction}",
-					"type": "text"
-				}
-			],
-			"match": [
-				"Metabolomics"
-			],
-			"selected": true,
-			"templates": {
-				"multiple": "The genes ${genes} are members of the Metabolomics ${term}.",
-				"singular": "The gene ${gene} is a member of the Metabolomics ${term}."
-			}
-		}
-	],
-	"footer": {
-		"style": {
-            "background": "#8e8dde",
-            "color": "#fff"
+    "nodes": [
+        {
+            "node": "Glytoucan",
+            "example": [
+                "543.22",
+                "2296.82"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "GLYTOUCAN",
+                    "text": "${GLYTOUCAN}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "GLYTOUCAN"
+            ]
         },
-		"layout": [
-			[
-				{
+        {
+            "node": "Glycoprotein",
+            "example": [
+                "GLYCOPROTEIN:Q9UKS6-1-1 CUI",
+                "GLYCOPROTEIN:P43251-1-33 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "GLYCOPROTEIN",
+                    "text": "${GLYCOPROTEIN}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "GLYCOPROTEIN",
+                "type"
+            ]
+        },
+        {
+            "node": "Isoform",
+            "example": [
+                "UNIPROTKB.ISOFORM:Q6NUT3-1 CUI",
+                "UNIPROTKB.ISOFORM:P21661-1 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "UNIPROTKB.ISOFORM",
+                    "text": "${UNIPROTKB.ISOFORM}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "UNIPROTKB.ISOFORM"
+            ]
+        },
+        {
+            "node": "Protein",
+            "example": [
+                "Casein kinase I isoform delta ",
+                "Regulator of G-protein signaling 4 "
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "UNIPROTKB",
+                    "text": "${UNIPROTKB}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "PR",
+                    "text": "${PR}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "UNIPROTKB",
+                "type",
+                "PR"
+            ]
+        },
+        {
+            "node": "4DN File",
+            "example": [
+                "Micro-C on HFFc6 cells.HFFc6.Dekker",
+                "in situ Hi-C on HFFc6 cells.HFFc6.protocol variations.Dekker"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "4DNF",
+                    "text": "${4DNF}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "4DNF",
+                "type"
+            ]
+        },
+        {
+            "node": "Gene",
+            "example": [
+                "STAT3",
+                "MAPK1"
+            ],
+            "display": [
+                {
+                    "label": "ORDO",
+                    "text": "${ORDO}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "NCI",
+                    "text": "${NCI}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "ENTREZ",
+                    "text": "${ENTREZ}",
+                    "type": "text"
+                },
+                {
+                    "label": "ENSEMBL",
+                    "text": "${ENSEMBL}",
+                    "type": "text"
+                },
+                {
+                    "label": "HGNC",
+                    "text": "${HGNC}",
+                    "type": "text"
+                },
+                {
+                    "label": "OMIM",
+                    "text": "${OMIM}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "ORDO",
+                "type",
+                "NCI",
+                "label",
+                "ENTREZ",
+                "ENSEMBL",
+                "HGNC",
+                "OMIM"
+            ]
+        },
+        {
+            "node": "MOTRPAC",
+            "example": [
+                "MOTRPAC:ENSRNOG00000011775-liver-female CUI",
+                "MOTRPAC:ENSRNOG00000003953-liver-female CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "MOTRPAC",
+                    "text": "${MOTRPAC}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "MOTRPAC"
+            ]
+        },
+        {
+            "node": "Anatomy",
+            "example": [
+                "fibroblast derived cell line",
+                "Heart"
+            ],
+            "display": [
+                {
+                    "label": "PSY",
+                    "text": "${PSY}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "NCI",
+                    "text": "${NCI}",
+                    "type": "text"
+                },
+                {
+                    "label": "UBERON",
+                    "text": "${UBERON}",
+                    "type": "text"
+                },
+                {
+                    "label": "FMA",
+                    "text": "${FMA}",
+                    "type": "text"
+                },
+                {
+                    "label": "CHV",
+                    "text": "${CHV}",
+                    "type": "text"
+                },
+                {
+                    "label": "ICF-CY",
+                    "text": "${ICF-CY}",
+                    "type": "text"
+                },
+                {
+                    "label": "ICF",
+                    "text": "${ICF}",
+                    "type": "text"
+                },
+                {
+                    "label": "CSP",
+                    "text": "${CSP}",
+                    "type": "text"
+                },
+                {
+                    "label": "LCH_NW",
+                    "text": "${LCH_NW}",
+                    "type": "text"
+                },
+                {
+                    "label": "EFO",
+                    "text": "${EFO}",
+                    "type": "text"
+                },
+                {
+                    "label": "LNC",
+                    "text": "${LNC}",
+                    "type": "text"
+                },
+                {
+                    "label": "CARO",
+                    "text": "${CARO}",
+                    "type": "text"
+                },
+                {
+                    "label": "PAX.PAXRAT",
+                    "text": "${PAX.PAXRAT}",
+                    "type": "text"
+                },
+                {
+                    "label": "PAX.PAXSPN",
+                    "text": "${PAX.PAXSPN}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "HL7V2.5",
+                    "text": "${HL7V2.5}",
+                    "type": "text"
+                },
+                {
+                    "label": "UWDA",
+                    "text": "${UWDA}",
+                    "type": "text"
+                },
+                {
+                    "label": "MSH",
+                    "text": "${MSH}",
+                    "type": "text"
+                },
+                {
+                    "label": "AZ",
+                    "text": "${AZ}",
+                    "type": "text"
+                },
+                {
+                    "label": "CL",
+                    "text": "${CL}",
+                    "type": "text"
+                },
+                {
+                    "label": "OMIM",
+                    "text": "${OMIM}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "PSY",
+                "type",
+                "NCI",
+                "UBERON",
+                "FMA",
+                "CHV",
+                "ICF-CY",
+                "ICF",
+                "CSP",
+                "LCH_NW",
+                "EFO",
+                "LNC",
+                "CARO",
+                "PAX.PAXRAT",
+                "PAX.PAXSPN",
+                "label",
+                "HL7V2.5",
+                "UWDA",
+                "MSH",
+                "AZ",
+                "CL",
+                "OMIM"
+            ]
+        },
+        {
+            "node": "GlyGen Location",
+            "example": [
+                "label:523",
+                "label:546"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "GLYGEN.LOCATION",
+                    "text": "${GLYGEN.LOCATION}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "GLYGEN.LOCATION"
+            ]
+        },
+        {
+            "node": "SO",
+            "example": [
+                "region",
+                "sequence_feature"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "SO",
+                    "text": "${SO}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "SO",
+                "type"
+            ]
+        },
+        {
+            "node": "ILX",
+            "example": [
+                "parcellation label",
+                "Glutamate receptor"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "ILX",
+                    "text": "${ILX}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "ILX.TR",
+                    "text": "${ILX.TR}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "ILX",
+                "type",
+                "ILX.TR"
+            ]
+        },
+        {
+            "node": "Amino Acid",
+            "example": [
+                "AMINO.ACID:Trp CUI",
+                "AMINO.ACID:Cys CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "AMINO.ACID",
+                    "text": "${AMINO.ACID}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "AMINO.ACID"
+            ]
+        },
+        {
+            "node": "Compound",
+            "example": [
+                "dexamethasone",
+                "imatinib"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "CHEBI",
+                    "text": "${CHEBI}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "PUBCHEM",
+                    "text": "${PUBCHEM}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "CHEBI",
+                "type",
+                "PUBCHEM"
+            ]
+        },
+        {
+            "node": "Enzyme",
+            "example": [
+                "CES1",
+                "MAOB"
+            ],
+            "display": [
+                {
+                    "label": "ORDO",
+                    "text": "${ORDO}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "NCI",
+                    "text": "${NCI}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "ENTREZ",
+                    "text": "${ENTREZ}",
+                    "type": "text"
+                },
+                {
+                    "label": "ENSEMBL",
+                    "text": "${ENSEMBL}",
+                    "type": "text"
+                },
+                {
+                    "label": "HGNC",
+                    "text": "${HGNC}",
+                    "type": "text"
+                },
+                {
+                    "label": "OMIM",
+                    "text": "${OMIM}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "ORDO",
+                "type",
+                "NCI",
+                "label",
+                "ENTREZ",
+                "ENSEMBL",
+                "HGNC",
+                "OMIM"
+            ]
+        },
+        {
+            "node": "HSCLO",
+            "example": [
+                "HSCLO:chr20.35838001-35839000 CUI",
+                "HSCLO:chr1.93258001-93259000 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "HSCLO",
+                    "text": "${HSCLO}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "HSCLO",
+                "type"
+            ]
+        },
+        {
+            "node": "Metabolite",
+            "example": [
+                "trans-Zeatin",
+                "urea"
+            ],
+            "display": [
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "PUBMED",
+                    "text": "${PUBMED}",
+                    "type": "text"
+                },
+                {
+                    "label": "PUBCHEM",
+                    "text": "${PUBCHEM}",
+                    "type": "text"
+                },
+                {
+                    "label": "HMDB",
+                    "text": "${HMDB}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "type",
+                "label",
+                "PUBMED",
+                "PUBCHEM",
+                "HMDB"
+            ]
+        },
+        {
+            "node": "Glycoprotein Citation",
+            "example": [
+                "GLYGEN.CITATION:12901863 CUI",
+                "GLYGEN.CITATION:8435067 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "GLYGEN.CITATION",
+                    "text": "${GLYGEN.CITATION}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "GLYGEN.CITATION",
+                "type"
+            ]
+        },
+        {
+            "node": "PATO",
+            "example": [
+                "biological sex",
+                "morphology"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "PATO",
+                    "text": "${PATO}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "PATO",
+                "type"
+            ]
+        },
+        {
+            "node": "MSIGDB",
+            "example": [
+                "MAGRANGEAS_MULTIPLE_MYELOMA_IGG_VS_IGA_UP",
+                "REACTOME_INCRETIN_SYNTHESIS_SECRETION_AND_INACTIVATION"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "MSIGDB",
+                    "text": "${MSIGDB}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "MSIGDB"
+            ]
+        },
+        {
+            "node": "EXPBINS",
+            "example": [
+                "EXPBINS:23.0.24.0 CUI",
+                "EXPBINS:86.0.87.0 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "EXPBINS",
+                    "text": "${EXPBINS}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "EXPBINS"
+            ]
+        },
+        {
+            "node": "RBP Binding Loci",
+            "example": [
+                "chr8.140544292.140544349.minus.b38.SF3B4",
+                "chr5.177594204.177594285.plus.b38.SND1"
+            ],
+            "display": [
+                {
+                    "label": "ENCODE.RBS.K562",
+                    "text": "${ENCODE.RBS.K562}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "ENCODE.RBS.HEPG2",
+                    "text": "${ENCODE.RBS.HEPG2}",
+                    "type": "text"
+                },
+                {
+                    "label": "ENCODE.RBS.HEPG2.K562",
+                    "text": "${ENCODE.RBS.HEPG2.K562}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "ENCODE.RBS.K562",
+                "type",
+                "label",
+                "ENCODE.RBS.HEPG2",
+                "ENCODE.RBS.HEPG2.K562"
+            ]
+        },
+        {
+            "node": "NIFSTD",
+            "example": [
+                "Multimeric ion channel",
+                "Multimeric Voltage-gated ion channel"
+            ],
+            "display": [
+                {
+                    "label": "NIFSTD",
+                    "text": "${NIFSTD}",
+                    "type": "text"
+                },
+                {
+                    "label": "NIFSTD.NLX.ORG",
+                    "text": "${NIFSTD.NLX.ORG}",
+                    "type": "text"
+                },
+                {
+                    "label": "NIFSTD.NLX",
+                    "text": "${NIFSTD.NLX}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "NIFSTD.NIFEXT",
+                    "text": "${NIFSTD.NIFEXT}",
+                    "type": "text"
+                },
+                {
+                    "label": "NIFSTD.NLX.MOL",
+                    "text": "${NIFSTD.NLX.MOL}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "NIFSTD",
+                "NIFSTD.NLX.ORG",
+                "NIFSTD.NLX",
+                "type",
+                "label",
+                "NIFSTD.NIFEXT",
+                "NIFSTD.NLX.MOL"
+            ]
+        },
+        {
+            "node": "GTEXPVALUEBIN",
+            "example": [
+                "PVALUEBINS:1e-10.1e-09 CUI",
+                "PVALUEBINS:0.02.0.03 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "PVALUEBINS",
+                    "text": "${PVALUEBINS}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "PVALUEBINS"
+            ]
+        },
+        {
+            "node": "GlyGen Residue",
+            "example": [
+                "n-glycan_b-d-galp_28",
+                "n-glycan_a-d-neupngc_48"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "GLYGEN.RESIDUE",
+                    "text": "${GLYGEN.RESIDUE}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "GLYGEN.RESIDUE"
+            ]
+        },
+        {
+            "node": "Disease or Phenotype",
+            "example": [
+                "Cerebral Small Vessel Diseases",
+                "Enlarged kidney"
+            ],
+            "display": [
+                {
+                    "label": "DOID",
+                    "text": "${DOID}",
+                    "type": "text"
+                },
+                {
+                    "label": "ORDO",
+                    "text": "${ORDO}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "ICPC2ICD10ENG",
+                    "text": "${ICPC2ICD10ENG}",
+                    "type": "text"
+                },
+                {
+                    "label": "ICD10CM",
+                    "text": "${ICD10CM}",
+                    "type": "text"
+                },
+                {
+                    "label": "NCI",
+                    "text": "${NCI}",
+                    "type": "text"
+                },
+                {
+                    "label": "CHV",
+                    "text": "${CHV}",
+                    "type": "text"
+                },
+                {
+                    "label": "MONDO",
+                    "text": "${MONDO}",
+                    "type": "text"
+                },
+                {
+                    "label": "EFO",
+                    "text": "${EFO}",
+                    "type": "text"
+                },
+                {
+                    "label": "LNC",
+                    "text": "${LNC}",
+                    "type": "text"
+                },
+                {
+                    "label": "MEDGEN",
+                    "text": "${MEDGEN}",
+                    "type": "text"
+                },
+                {
+                    "label": "MDR",
+                    "text": "${MDR}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "MEDCIN",
+                    "text": "${MEDCIN}",
+                    "type": "text"
+                },
+                {
+                    "label": "MSH",
+                    "text": "${MSH}",
+                    "type": "text"
+                },
+                {
+                    "label": "HP",
+                    "text": "${HP}",
+                    "type": "text"
+                },
+                {
+                    "label": "OMIM",
+                    "text": "${OMIM}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "DOID",
+                "ORDO",
+                "type",
+                "ICPC2ICD10ENG",
+                "ICD10CM",
+                "NCI",
+                "CHV",
+                "MONDO",
+                "EFO",
+                "LNC",
+                "MEDGEN",
+                "MDR",
+                "label",
+                "MEDCIN",
+                "MSH",
+                "HP",
+                "OMIM"
+            ]
+        },
+        {
+            "node": "exRNA Loci",
+            "example": [
+                "chrX.111700360.111700399.plus.b38.EXOSC5",
+                "chr9.34107465.34107515.minus.b38.YBX3"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "ENCODE.RBS.150.NO.OVERLAP",
+                    "text": "${ENCODE.RBS.150.NO.OVERLAP}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "ENCODE.RBS.150.NO.OVERLAP",
+                "type"
+            ]
+        },
+        {
+            "node": "4DN QVal Bin",
+            "example": [
+                "4DNQ:1e-9.1e-8 CUI",
+                "4DNQ:1e-29.1e-28 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "4DNQ",
+                    "text": "${4DNQ}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "4DNQ"
+            ]
+        },
+        {
+            "node": "Biofluid",
+            "example": [
+                "Plasma",
+                "Cerebrospinal Fluid"
+            ],
+            "display": [
+                {
+                    "label": "PSY",
+                    "text": "${PSY}",
+                    "type": "text"
+                },
+                {
+                    "label": "MSH",
+                    "text": "${MSH}",
+                    "type": "text"
+                },
+                {
+                    "label": "LCH_NW",
+                    "text": "${LCH_NW}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "NCI",
+                    "text": "${NCI}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "UBERON",
+                    "text": "${UBERON}",
+                    "type": "text"
+                },
+                {
+                    "label": "FMA",
+                    "text": "${FMA}",
+                    "type": "text"
+                },
+                {
+                    "label": "CHV",
+                    "text": "${CHV}",
+                    "type": "text"
+                },
+                {
+                    "label": "UWDA",
+                    "text": "${UWDA}",
+                    "type": "text"
+                },
+                {
+                    "label": "CSP",
+                    "text": "${CSP}",
+                    "type": "text"
+                },
+                {
+                    "label": "LNC",
+                    "text": "${LNC}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "PSY",
+                "MSH",
+                "LCH_NW",
+                "type",
+                "NCI",
+                "label",
+                "UBERON",
+                "FMA",
+                "CHV",
+                "UWDA",
+                "CSP",
+                "LNC"
+            ]
+        },
+        {
+            "node": "GO",
+            "example": [
+                "cellular_component",
+                "non-membrane-bounded organelle"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "GO",
+                    "text": "${GO}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "GO"
+            ]
+        },
+        {
+            "node": "Glycan Motif",
+            "example": [
+                "Asialo-GM1",
+                "Type 1 LN3"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "GLYCAN.MOTIF",
+                    "text": "${GLYCAN.MOTIF}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "GLYCAN.MOTIF",
+                "type"
+            ]
+        },
+        {
+            "node": "Assay",
+            "example": [
+                "Micro-C XL",
+                "in situ HiC"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "OBI",
+                    "text": "${OBI}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "EFO",
+                    "text": "${EFO}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "OBI",
+                "type",
+                "EFO"
+            ]
+        },
+        {
+            "node": "Regulatory Element Activity",
+            "example": [
+                "EH38E3872573_testis",
+                "EH38E1502199_prostate_gland"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "ENCODE.CCRE.ACTIVITY",
+                    "text": "${ENCODE.CCRE.ACTIVITY}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "ENCODE.CCRE.ACTIVITY"
+            ]
+        },
+        {
+            "node": "Glycoprotein Evidence",
+            "example": [
+                "GLYCOPROTEIN.EVIDENCE:GLYCOPROTEIN.EVIDENCE00001991 CUI",
+                "GLYCOPROTEIN.EVIDENCE:GLYCOPROTEIN.EVIDENCE00000307 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "GLYCOPROTEIN.EVIDENCE",
+                    "text": "${GLYCOPROTEIN.EVIDENCE}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "GLYCOPROTEIN.EVIDENCE"
+            ]
+        },
+        {
+            "node": "Taxon",
+            "example": [
+                "Artiodactyla",
+                "Felis catus"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "OBI",
+                    "text": "${OBI}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "NCBI",
+                    "text": "${NCBI}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "OBI",
+                "type",
+                "NCBI"
+            ]
+        },
+        {
+            "node": "ENCODE CCRE Data Matrix",
+            "example": [
+                "ENCODE.CCRE.CTCF:LOW.ZSCORE CUI",
+                "ENCODE.CCRE.H3K27AC:HIGH.ZSCORE CUI"
+            ],
+            "display": [
+                {
+                    "label": "ENCODE.CCRE.CTCF",
+                    "text": "${ENCODE.CCRE.CTCF}",
+                    "type": "text"
+                },
+                {
+                    "label": "ENCODE.CCRE.H3K4ME3",
+                    "text": "${ENCODE.CCRE.H3K4ME3}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "ENCODE.CCRE.H3K27AC",
+                    "text": "${ENCODE.CCRE.H3K27AC}",
+                    "type": "text"
+                },
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "ENCODE.CCRE.CTCF",
+                "ENCODE.CCRE.H3K4ME3",
+                "type",
+                "ENCODE.CCRE.H3K27AC",
+                "label"
+            ]
+        },
+        {
+            "node": "Glycosyltransferase Reaction",
+            "example": [
+                "GLYCOSYLTRANSFERASE.REACTION:RXN00000072 CUI",
+                "GLYCOSYLTRANSFERASE.REACTION:RXN00000131 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "GLYCOSYLTRANSFERASE.REACTION",
+                    "text": "${GLYCOSYLTRANSFERASE.REACTION}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "GLYCOSYLTRANSFERASE.REACTION"
+            ]
+        },
+        {
+            "node": "Glycosylation",
+            "example": [
+                "GLYGEN.GLYCOSYLATION:RXN00000164 CUI",
+                "GLYGEN.GLYCOSYLATION:RXN00000155 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "GLYGEN.GLYCOSYLATION",
+                    "text": "${GLYGEN.GLYCOSYLATION}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "GLYGEN.GLYCOSYLATION"
+            ]
+        },
+        {
+            "node": "KFPT",
+            "example": [
+                "KFPT:PT-4CC1RQ2X CUI",
+                "KFPT:PT-07FJF09T CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "KFPT",
+                    "text": "${KFPT}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "KFPT",
+                "type"
+            ]
+        },
+        {
+            "node": "GTEXEQTL",
+            "example": [
+                "GTEXEQTL:eQTL.chr8.42546062.T.C.b38.Heart.Left.Ventricle CUI",
+                "GTEXEQTL:eQTL.chr1.93348442.G.A.b38.Kidney.Cortex CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "GTEXEQTL",
+                    "text": "${GTEXEQTL}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "GTEXEQTL"
+            ]
+        },
+        {
+            "node": "KFGENEBIN",
+            "example": [
+                "KFGENEBIN:TMEM115-variant-count CUI",
+                "KFGENEBIN:SCLT1-variant-count CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "KFGENEBIN",
+                    "text": "${KFGENEBIN}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "KFGENEBIN"
+            ]
+        },
+        {
+            "node": "GP ID2PRO",
+            "example": [
+                "GP.ID2PRO:P70699-1-9 CUI",
+                "GP.ID2PRO:Q7Z5M8-1-1 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "GP.ID2PRO",
+                    "text": "${GP.ID2PRO}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "GP.ID2PRO",
+                "type"
+            ]
+        },
+        {
+            "node": "GlyGen src",
+            "example": [
+                "GLYGEN.SRC:G56903ZB-SRC00004113 CUI",
+                "GLYGEN.SRC:G07194UG-SRC00022048 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "GLYGEN.SRC",
+                    "text": "${GLYGEN.SRC}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "GLYGEN.SRC"
+            ]
+        },
+        {
+            "node": "GlyGen Glycosequence",
+            "example": [
+                "GLYGEN.GLYCOSEQUENCE:G14043TF-GLYCOSEQ00157502 CUI",
+                "GLYGEN.GLYCOSEQUENCE:G17667YX-GLYCOSEQ00052873 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "GLYGEN.GLYCOSEQUENCE",
+                    "text": "${GLYGEN.GLYCOSEQUENCE}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "GLYGEN.GLYCOSEQUENCE"
+            ]
+        },
+        {
+            "node": "KFCOHORT",
+            "example": [
+                "Kids First: Congenital Diaphragmatic Hernia",
+                "Kids First: Craniofacial Microsomia"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "KFCOHORT",
+                    "text": "${KFCOHORT}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "KFCOHORT"
+            ]
+        },
+        {
+            "node": "Sex",
+            "example": [
+                "female",
+                "male"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "PATO",
+                    "text": "${PATO}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "PATO",
+                "type"
+            ]
+        },
+        {
+            "node": "CLINGEN ALLELE REGISTRY",
+            "example": [
+                "chr3.122444175.T.C.b38",
+                "chr6.136820748.T.TC.b38"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "CLINGEN.ALLELE.REGISTRY",
+                    "text": "${CLINGEN.ALLELE.REGISTRY}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "CLINGEN.ALLELE.REGISTRY"
+            ]
+        },
+        {
+            "node": "4DN Loop",
+            "example": [
+                "4DNL:4DNFI3RMWQ85.chr5.160500000-160510000.chr5.160780000-160790000 CUI",
+                "4DNL:4DNFI49A9Z1K.chr11.109420000-109430000.chr11.109690000-109700000 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "4DNL",
+                    "text": "${4DNL}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "4DNL"
+            ]
+        },
+        {
+            "node": "ENCODE CCRE",
+            "example": [
+                "ENCODE.CCRE:EH38E2998527 CUI",
+                "ENCODE.CCRE:EH38E1578950 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "ENCODE.CCRE",
+                    "text": "${ENCODE.CCRE}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "ENCODE.CCRE"
+            ]
+        },
+        {
+            "node": "GTEXEXP",
+            "example": [
+                "GTEXEXP:ENSG00000163257-10-Brain-Amygdala CUI",
+                "GTEXEXP:ENSG00000172382-9-Vagina CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "GTEXEXP",
+                    "text": "${GTEXEXP}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "GTEXEXP"
+            ]
+        },
+        {
+            "node": "4DN Dataset",
+            "example": [
+                "in situ Hi-C on HCT116 cells (containing AID-tagged WAPL) untreated.HCT116",
+                "in situ Dnase Hi-C on RUES2 cells differentiated to cardiomyocytes.RUES2_Stem cells"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "4DND",
+                    "text": "${4DND}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "4DND"
+            ]
+        },
+        {
+            "node": "Glycosylation Site",
+            "example": [
+                "GLYCOSYLATION.SITE:SITE00016061 CUI",
+                "GLYCOSYLATION.SITE:SITE00042312 CUI"
+            ],
+            "display": [
+                {
+                    "label": "label",
+                    "text": "${label}",
+                    "type": "text"
+                },
+                {
+                    "label": "type",
+                    "text": "${type}",
+                    "type": "text"
+                },
+                {
+                    "label": "GLYCOSYLATION.SITE",
+                    "text": "${GLYCOSYLATION.SITE}",
+                    "type": "text"
+                }
+            ],
+            "search": [
+                "label",
+                "type",
+                "GLYCOSYLATION.SITE"
+            ]
+        }
+    ],
+    "edges": [
+        {
+            "match": [
+                "indication",
+                "has_enzyme_protein",
+                "is_from_source",
+                "has_glycosequence",
+                "attached_by",
+                "synthesized_by",
+                "has_motif",
+                "has_canonical_residue",
+                "has_parent",
+                "belongs_to_cohort",
+                "has_phenotype",
+                "gene_has_variants",
+                "located_in",
+                "p_value",
+                "associated_with",
+                "sex",
+                "part_of",
+                "regulates",
+                "isa",
+                "has_assay_type",
+                "dataset_involves_cell_type",
+                "dataset_has_file",
+                "file_has_loop",
+                "loop_us_start",
+                "loop_us_end",
+                "loop_ds_start",
+                "loop_ds_end",
+                "loop_has_qvalue_bin",
+                "produces",
+                "causally_influences",
+                "correlated_with_condition",
+                "has_expression",
+                "molecularly_interacts_with",
+                "is_subsequence_of",
+                "correlated_in",
+                "not_correlated_in",
+                "overlaps",
+                "is_part_of",
+                "contributes_to_morphology_of",
+                "delineates",
+                "isdelineatedby",
+                "has_role",
+                "has_marker_gene_in_heart",
+                "has_marker_gene_in_kidney",
+                "has_marker_gene_in_liver",
+                "has_isoform",
+                "has_evidence",
+                "sequence",
+                "citation",
+                "has_pro_entry",
+                "glycosylated_at",
+                "location",
+                "has_saccharide",
+                "has_amino_acid"
+            ],
+            "color": "#bdbdbd",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "SAB",
+                    "text": "${SAB}",
+                    "type": "text"
+                },
+                {
+                    "label": "dcc",
+                    "text": "${dcc}",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "match": [
+                "associated_with",
+                "gene_associated_with_disease_or_phenotype",
+                "targets_expression_of_gene",
+                "chr_band_contains_gene",
+                "pathway_associated_with_gene",
+                "has_marker_gene",
+                "has_signature_gene"
+            ],
+            "color": "#bdbdbd",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "SAB",
+                    "text": "${SAB}",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "match": [
+                "bioactivity",
+                "in_similarity_relationship_with",
+                "expressed_in"
+            ],
+            "color": "#bdbdbd",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "SAB",
+                    "text": "${SAB}",
+                    "type": "text"
+                },
+                {
+                    "label": "evidence_class",
+                    "text": "${evidence_class}",
+                    "type": "text"
+                },
+                {
+                    "label": "dcc",
+                    "text": "${dcc}",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "match": [
+                "negatively_regulates"
+            ],
+            "color": "#1FE0E0",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "SAB",
+                    "text": "${SAB}",
+                    "type": "text"
+                },
+                {
+                    "label": "dcc",
+                    "text": "${dcc}",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "match": [
+                "positively_regulates"
+            ],
+            "color": "#E01F1F",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "SAB",
+                    "text": "${SAB}",
+                    "type": "text"
+                },
+                {
+                    "label": "dcc",
+                    "text": "${dcc}",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "match": [
+                "positively_regulates"
+            ],
+            "color": "#E01F1F",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "SAB",
+                    "text": "${SAB}",
+                    "type": "text"
+                },
+                {
+                    "label": "evidence_class",
+                    "text": "${evidence_class}",
+                    "type": "text"
+                },
+                {
+                    "label": "dcc",
+                    "text": "${dcc}",
+                    "type": "text"
+                }
+            ],
+            "order": [
+                "evidence",
+                "DESC"
+            ]
+        },
+        {
+            "match": [
+                "negatively_regulates"
+            ],
+            "color": "#1FE0E0",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "SAB",
+                    "text": "${SAB}",
+                    "type": "text"
+                },
+                {
+                    "label": "evidence_class",
+                    "text": "${evidence_class}",
+                    "type": "text"
+                },
+                {
+                    "label": "dcc",
+                    "text": "${dcc}",
+                    "type": "text"
+                }
+            ],
+            "order": [
+                "evidence_class",
+                "ASC"
+            ]
+        },
+        {
+            "match": [
+                "ARCHS4_coexpressed_genes"
+            ],
+            "color": "#e0b321",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "SAB",
+                    "text": "${SAB}",
+                    "type": "text"
+                },
+                {
+                    "label": "evidence_class",
+                    "text": "${evidence_class}",
+                    "type": "text"
+                },
+                {
+                    "label": "hidden",
+                    "text": "${hidden}",
+                    "type": "text"
+                },
+                {
+                    "label": "hidden_tag",
+                    "text": "${hidden_tag}",
+                    "type": "text"
+                }
+            ],
+            "hidden": true,
+            "order": [
+                "evidence",
+                "DESC"
+            ]
+        },
+        {
+            "match": [
+                "ARCHS4_coexpressed_genes_LINCS_Up",
+                "ARCHS4_coexpressed_genes_LINCS_Down",
+                "ARCHS4_coexpressed_genes_MW",
+                "ARCHS4_coexpressed_genes_IDG",
+                "ARCHS4_coexpressed_genes_HuBMAP",
+                "ARCHS4_coexpressed_genes_Glygen"
+            ],
+            "color": "#214ee0",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "SAB",
+                    "text": "${SAB}",
+                    "type": "text"
+                },
+                {
+                    "label": "evidence_class",
+                    "text": "${evidence_class}",
+                    "type": "text"
+                },
+                {
+                    "label": "hidden",
+                    "text": "${hidden}",
+                    "type": "text"
+                },
+                {
+                    "label": "hidden_tag",
+                    "text": "${hidden_tag}",
+                    "type": "text"
+                }
+            ],
+            "hidden": true,
+            "order": [
+                "evidence",
+                "DESC"
+            ]
+        },
+        {
+            "match": [
+                "predicted_in"
+            ],
+            "color": "#1fe01f",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "SAB",
+                    "text": "${SAB}",
+                    "type": "text"
+                },
+                {
+                    "label": "dcc",
+                    "text": "${dcc}",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "match": [
+                "not_predicted_in"
+            ],
+            "color": "#e01fe0",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "SAB",
+                    "text": "${SAB}",
+                    "type": "text"
+                },
+                {
+                    "label": "dcc",
+                    "text": "${dcc}",
+                    "type": "text"
+                }
+            ]
+        },
+        {
+            "match": [
+                "is_protein"
+            ],
+            "color": "#bdbdbd",
+            "display": [
+                {
+                    "label": "source",
+                    "text": "${source}",
+                    "type": "text"
+                },
+                {
+                    "label": "target",
+                    "text": "${target}",
+                    "type": "text"
+                },
+                {
+                    "label": "relation",
+                    "text": "${relation}",
+                    "type": "text"
+                },
+                {
+                    "label": "sab",
+                    "text": "${sab}",
+                    "type": "text"
+                }
+            ]
+        }
+    ],
+    "header": {
+        "title": "Data Distillery KG",
+        "icon": {
+            "src": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/CFDE.png",
+            "favicon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/favicon.png",
+            "faviconTitle": "Data Distillery KG",
+            "alt": "Data Distillery",
+            "key": "data_distillery_logo",
+            "width": 100,
+            "height": 100
+        },
+        "tabs": [
+            {
+                "endpoint": "/",
+                "label": "Connection Explorer",
+                "type": "page",
+                "component": "KnowledgeGraph",
+                "position": "bottom",
+                "props": {
+                    "init_function": "initialize_kg",
+                    "title": "ConnectionExplorer: Find connections between CFDE DD KG entities",
+                    "description": "Select a CFDE DD KG entity to find other entities connected to it or explore connections between two CFDE DD KG entities.",
+                    "initial_query": {
+                        "start": "Gene",
+                        "start_term": "MAOB",
+                        "start_field": "label"
+                    },
+                    "additional_link_button": true,
+                    "additional_link_relation_tags": [
+                        "gene-gene coexpression",
+                        "predicted term-gene association via coexpression"
+                    ]
+                }
+            },
+            {
+                "endpoint": "/dd_apps",
+                "label": "Apps",
+                "type": "group",
+                "component": "DistilleryLanding",
+                "position": "bottom",
+                "props": {
+                    "title": "Data Distillery Apps",
+                    "description": "Explore Data Distillery data with these apps",
+                    "pages": [
+                        {
+                            "endpoint": "/dd_apps/tissue2drugs",
+                            "label": "Tissue2Drugs",
+                            "type": "page",
+                            "component": "DistilleryUseCase",
+                            "props": {
+                                "init_function": "initialize_kg",
+                                "title": "Tissue2Drugs",
+                                "description": "Find all genes that are highly expressed in a GTEx tissue and may be perturbed by a specific compound based on data from the LINCS L1000 dataset, and are known drug targets based on data curated by IDG.",
+                                "endpoint": "/api/distillery/tissue2drugs",
+                                "type": "Anatomy",
+                                "options_endpoint": "/api/distillery/gtex_tissue",
+                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/tissues2drugs.png",
+                                "fields": [
+                                    "UBERON",
+                                    "id",
+                                    "label"
+                                ],
+                                "default_term": "Subcutaneous Fat"
+                            }
+                        },
+                        {
+                            "endpoint": "/dd_apps/mw2diseases",
+                            "label": "MW2Disease",
+                            "type": "page",
+                            "component": "DistilleryUseCase",
+                            "props": {
+                                "init_function": "initialize_kg",
+                                "title": "MW2Disease",
+                                "description": "For a specific disease in Metabolomics Workbench, find all IDG and GTEx assertions that may be related to the disease in a specific tissue type.",
+                                "endpoint": "/api/distillery/mw",
+                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/MW2Disease.png",
+                                "type": "Disease or Phenotype",
+                                "options_endpoint": "/api/distillery/mw_diseases",
+                                "fields": [
+                                    "DOID",
+                                    "id",
+                                    "label",
+                                    "MONDO",
+                                    "ORPHANET",
+                                    "HP"
+                                ],
+                                "default_term": "Hypertensive disease"
+                            }
+                        },
+                        {
+                            "endpoint": "/dd_apps/enzymeminer",
+                            "label": "EnzymeMiner",
+                            "type": "page",
+                            "component": "DistilleryUseCase",
+                            "props": {
+                                "init_function": "initialize_kg",
+                                "relations": [
+                                    {
+                                        "name": "positively_regulates",
+                                        "end": "Compound"
+                                    },
+                                    {
+                                        "name": "negatively_regulates",
+                                        "end": "Compound"
+                                    },
+                                    {
+                                        "name": "expressed_in"
+                                    }
+                                ],
+                                "title": "EnzymeMiner",
+                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/EnzymeMiner.png",
+                                "description": "Select a drug processing enzyme to view drugs that up or down regulate it from LINCS as well as tissues where it is highly expressed based on data from GTEx.",
+                                "endpoint": "/api/knowledge_graph",
+                                "type": "Enzyme",
+                                "options_endpoint": "/api/knowledge_graph/node_search",
+                                "fields": [
+                                    "ENTREZ",
+                                    "UNIPROTKB",
+                                    "label",
+                                    "HGNC"
+                                ],
+                                "default_term": "MAOB",
+                                "filter_text": "Enzyme"
+                            }
+                        },
+                        {
+                            "endpoint": "/dd_apps/disease2exrna",
+                            "label": "Liquid Biopsy of Condition",
+                            "type": "page",
+                            "component": "DistilleryUseCase",
+                            "props": {
+                                "init_function": "initialize_kg",
+                                "title": "Liquid Biopsy of Condition",
+                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/disease2exrna.png",
+                                "description": "For a given set of genes that are highly expressed in a specific disease, identify extracellular RNAs (exRNAs) that may be detected in human biofluids and thus serve as non-invasive disease biomarkers.",
+                                "endpoint": "/api/distillery/disease2exrna",
+                                "type": "Disease or Phenotype",
+                                "options_endpoint": "/api/distillery/exrnadisease",
+                                "fields": [
+                                    "DOID",
+                                    "id",
+                                    "label",
+                                    "MONDO",
+                                    "ORPHANET",
+                                    "HP"
+                                ],
+                                "default_term": "leukodystrophy"
+                            }
+                        },
+                        {
+                            "endpoint": "/dd_apps/drug2exrna",
+                            "label": "Liquid Biopsy of Drug Response",
+                            "type": "page",
+                            "component": "DistilleryUseCase",
+                            "props": {
+                                "init_function": "initialize_kg",
+                                "title": "Liquid Biopsy of Drug Response",
+                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/drug2exrna.png",
+                                "description": "For a given drug term, return (1) up-regulated genes, (2) loci expressed in exRNA that overlap RBP binding regions, (3) the RBP that overlaps the locus, and (4) the biofluid(s) where locus was expressed in exRNA.",
+                                "endpoint": "/api/distillery/drug2exrna",
+                                "type": "Compound",
+                                "options_endpoint": "/api/distillery/exrnadrug",
+                                "fields": [
+                                    "PUBCHEM",
+                                    "id",
+                                    "label"
+                                ],
+                                "default_term": "STK-674938"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "endpoint": "/use_cases",
+                "label": "Use Cases",
+                "type": "group",
+                "component": "DistilleryLanding",
+                "position": "bottom",
+                "props": {
+                    "title": "Data Distillery Use Case",
+                    "description": "Explore use cases that use distilled data from Common Fund Programs",
+                    "pages": [
+                        {
+                            "endpoint": "/use_cases/tissue2drugs",
+                            "label": "Breast Epithelium Use Case",
+                            "type": "page",
+                            "component": "DistilleryUseCase",
+                            "props": {
+                                "init_function": "initialize_kg",
+                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/use-case1.png",
+                                "title": "Breast Epitheliumn Use Case",
+                                "description": "Find the genes that are highly expressed in breast epithelium as well as drugs that target these genes.",
+                                "endpoint": "/api/distillery/tissue2drugs",
+                                "type": "Anatomy",
+                                "options_endpoint": "/api/distillery/gtex_tissue",
+                                "fields": [
+                                    "UBERON",
+                                    "id",
+                                    "label"
+                                ],
+                                "default_term": "breast epithelium"
+                            }
+                        },
+                        {
+                            "endpoint": "/use_cases/mw_diseases",
+                            "label": "Mild Cognitive Impairment Use Case",
+                            "type": "page",
+                            "component": "DistilleryUseCase",
+                            "props": {
+                                "init_function": "initialize_kg",
+                                "title": "Mild Cognitive Impairment Use Case",
+                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/use-case2.png",
+                                "width": 130,
+                                "height": 130,
+                                "description": "Find all IDG and GTEx assertions that may be related to mild cognitive impairment and any tissue type.",
+                                "endpoint": "/api/distillery/mw",
+                                "type": "Disease or Phenotype",
+                                "options_endpoint": "/api/distillery/mw_diseases",
+                                "fields": [
+                                    "DOID",
+                                    "id",
+                                    "label",
+                                    "MONDO",
+                                    "ORPHANET",
+                                    "HP"
+                                ],
+                                "default_term": "mild cognitive impairment"
+                            }
+                        },
+                        {
+                            "endpoint": "/use_cases/enzyminer",
+                            "label": "CES1 Use Case",
+                            "type": "page",
+                            "component": "DistilleryUseCase",
+                            "props": {
+                                "init_function": "initialize_kg",
+                                "relations": [
+                                    {
+                                        "name": "positively_regulates",
+                                        "end": "Compound"
+                                    },
+                                    {
+                                        "name": "negatively_regulates",
+                                        "end": "Compound"
+                                    },
+                                    {
+                                        "name": "expressed_in",
+                                        "end": "Anatomy"
+                                    }
+                                ],
+                                "title": "CES1 Use Case",
+                                "description": "Display drugs that up or down regulate the gene CES1 from LINCS as well as tissues where it is highly expressed based on assertions from GTEx.",
+                                "endpoint": "/api/knowledge_graph",
+                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/use-case3.png",
+                                "type": "Enzyme",
+                                "options_endpoint": "/api/knowledge_graph/node_search",
+                                "fields": [
+                                    "ENTREZ",
+                                    "UNIPROTKB",
+                                    "label",
+                                    "HGNC"
+                                ],
+                                "default_term": "CES1"
+                            }
+                        },
+                        {
+                            "endpoint": "/use_cases/disease2exrna",
+                            "label": "Frontotemporal Dementia Use Case",
+                            "type": "page",
+                            "component": "DistilleryUseCase",
+                            "props": {
+                                "init_function": "initialize_kg",
+                                "title": "Frontotemporal Dementia Use Case",
+                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/dementiabiopsy.png",
+                                "description": "For genes that are correlated with frontotemporal dementia, identify extracellular RNAs (exRNAs) that may be detected in human biofluids and thus serve as non-invasive disease biomarkers.",
+                                "endpoint": "/api/distillery/disease2exrna",
+                                "type": "Disease or Phenotype",
+                                "options_endpoint": "/api/distillery/exrnadisease",
+                                "fields": [
+                                    "DOID",
+                                    "id",
+                                    "label",
+                                    "MONDO",
+                                    "ORPHANET",
+                                    "HP"
+                                ],
+                                "default_term": "Frontotemporal dementia"
+                            }
+                        },
+                        {
+                            "endpoint": "/use_cases/drug2exrna",
+                            "label": "Liquid Biopsy of Dexamethasone Response",
+                            "type": "page",
+                            "component": "DistilleryUseCase",
+                            "props": {
+                                "init_function": "initialize_kg",
+                                "title": "Liquid Biopsy of Dexamethasone Response",
+                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/dexamethasonebiopsy.png",
+                                "description": "Find genes that are up-regulated by dexamethasone, (2) loci expressed in exRNA that overlap RBP binding regions, (3) the RBP that overlaps the locus, and (4) the biofluid(s) where locus was expressed in exRNA.",
+                                "endpoint": "/api/distillery/drug2exrna",
+                                "type": "Compound",
+                                "options_endpoint": "/api/distillery/exrnadrug",
+                                "fields": [
+                                    "PUBCHEM",
+                                    "id",
+                                    "label"
+                                ],
+                                "default_term": "dexamethasone"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "endpoint": "https://info.cfde.cloud/",
+                "label": "CFDE Information Portal",
+                "type": "link",
+                "component": "Link",
+                "position": "top"
+            },
+            {
+                "endpoint": "https://data.cfde.cloud/",
+                "label": "CFDE Data Portal",
+                "type": "link",
+                "component": "Link",
+                "position": "top"
+            },
+            {
+                "endpoint": "/dictionary",
+                "label": "Data Dictionary",
+                "type": "html",
+                "component": "SanitizedHTML",
+                "position": "bottom",
+                "props": {
+                    "src": "https://minio.dev.maayanlab.cloud/datadistillery-kg/Dictionary/DataDistilleryDataDictionary0228.html"
+                }
+            },
+            {
+                "endpoint": "/downloads",
+                "label": "Downloads",
+                "type": "page",
+                "component": "Download",
+                "position": "bottom",
+                "props": {
+                    "src": "https://minio.dev.maayanlab.cloud/datadistillery-kg/download_detailed.json"
+                }
+            },
+            {
+                "endpoint": "/api-doc",
+                "label": "API",
+                "type": "page",
+                "component": "APIDoc",
+                "position": "top",
+                "props": {
+                    "spec": "https://minio.dev.maayanlab.cloud/datadistillery-kg/specs.json"
+                }
+            },
+            {
+                "endpoint": "/about",
+                "label": "About",
+                "type": "markdown",
+                "component": "Markdown",
+                "position": "top",
+                "props": {
+                    "src": "https://minio.dev.maayanlab.cloud/datadistillery-kg/about.md"
+                }
+            }
+        ]
+    },
+    "footer": {
+        "style": {
+            "background": "#336699",
+            "color": "#FFF"
+        },
+        "layout": [
+            [
+                {
                     "component": "logo",
                     "props": {
-                        "src":  "https://raw.githubusercontent.com/20LM22/KnowledgeGraphDemo/main/logo-new2.png",
-                        "alt": "lncrnalyr",
-                        "title": "lncRNAlyzr",
+                        "src": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/favicon.png",
+                        "alt": "DDKG",
+                        "title": "Data Distillery KG",
                         "color": "inherit",
-                        "size": "small",
-                        "avatar": false
+                        "size": "small"
                     }
                 },
-				{
+                {
                     "component": "github",
                     "props": {
-                        "code": "https://github.com/MaayanLab/enrichr-kg",
-                        "issues": "https://github.com/MaayanLab/enrichr-kg-issues/issues/new"
+                        "code": "https://github.com/MaayanLab/datadistillery-kg",
+                        "issues": "https://github.com/MaayanLab/data-distillery-issues/issues"
+                    }
+                },
+                {
+                    "component": "social",
+                    "props": {
+                        "email": "mailto:contact@cfde.info",
+                        "twitter": "https://twitter.com/CFDEWorkbench",
+                        "youtube": "https://www.youtube.com/channel/UCWucYIvMygAgG5t0xEGEZgg"
                     }
                 }
-			],
-			[
-				{
-					"component": "icon",
-					"props": {
-						"type": "icon",
-						"key": "lab_icon",
-						"src": "https://minio.dev.maayanlab.cloud/enrichr-kg/maayanlab.png",
-						"alt": "MaayanLab",
-						"href": "https://labs.icahn.mssm.edu/maayanlab/",
-						"height": 60,
-						"width": 150
-					}
-				  }
-			],
-			[
-				{
-					"component": "icon",
-					"props": {
-						"type": "icon",
-						"key": "center_icon",
-						"src": "https://minio.dev.maayanlab.cloud/enrichr-kg/bioinformatics.png",
-						"alt": "COB",
-						"href": "https://icahn.mssm.edu/research/bioinformatics",
-						"height": 60,
-						"width": 150
-					}
-				  }
-			],
-			[
-				{
-					"component": "icon",
-					"props": {
-						"alt": "license",
-						"height": 45,
-						"href": "https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en",
-						"key": "license_icon",
-						"src": "https://minio.dev.maayanlab.cloud/lncrnalyzr/cc-by-nc-sa.webp",
-						"type": "icon",
-						"width": 128
-					}
-				  }
-			]
-		]
-	},
-	"header": {
-		"divider": true,
-		"icon": {
-			"alt": "lncAnalyzr logo",
-			"favicon": "https://raw.githubusercontent.com/20LM22/KnowledgeGraphDemo/main/logo-new2.png",
-            "faviconTitle": "lncRNAlyzr",
-			"height": 50,
-			"key": "lncanalyzr_logo",
-			"src": "https://raw.githubusercontent.com/20LM22/KnowledgeGraphDemo/main/logo-new2.png",
-			"width": 50,
-            "avatar": false
-		},
-		"subheader": [
-			{
-				"height": 100,
-				"icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/LINCS.gif",
-				"label": "LINCS",
-				"props": {
-					"libraries": [
-						"LINCS_L1000_Chem_Pert_Consensus_Sigs_lncRNA",
-						"LINCS_L1000_CRISPR_KO_Consensus_Sigs_lncRNA"
-					],
-					"relation": [
-						"LINCS Chem Pert Consensus Sigs",
-						"LINCS CRISPR KO Consensus Sigs"
-					]
-				},
-				"width": 140
-			},
-			{
-				"height": 100,
-				"icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/GTEx.png",
-				"label": "GTEx",
-				"props": {
-					"libraries": [
-						"GTEx_Aging_Signatures_2021_lncRNA",
-						"GTEx_Tissues_V8_2023_lncRNA"
-					],
-					"relation": [
-						"GTEx Aging",
-						"GTEx Tissues"
-					]
-				},
-				"width": 80
-			},
-			{
-				"height": 100,
-				"icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/MetabolomicsWorkbench.png",
-				"label": "Metabolomics Workbench",
-				"props": {
-					"libraries": [
-						"Metabolomics_Workbench_Metabolites_2022_lncRNA"
-					],
-					"relation": [
-						"Metabolomics"
-					]
-				},
-				"width": 100
-			},
-			{
-				"height": 100,
-				"icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/IDG.png",
-				"label": "IDG",
-				"props": {
-					"libraries": [
-						"IDG_Drug_Targets_2022_lncRNA"
-					],
-					"relation": [
-						"IDG"
-					]
-				},
-				"width": 100
-			},
-			{
-				"height": 100,
-				"icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/glygen.png",
-				"label": "GlyGen",
-				"props": {
-					"libraries": [
-						"GlyGen_Glycosylated_Proteins_2022_lncRNA"
-					],
-					"relation": [
-						"GlyGen"
-					]
-				},
-				"width": 100
-			},
-			{
-				"height": 100,
-				"icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/KOMP2.svg",
-				"label": "KOMP2",
-				"props": {
-					"libraries": [
-						"KOMP2_Mouse_Phenotypes_2022_lncRNA"
-					],
-					"relation": [
-						"KOMP2"
-					]
-				},
-				"width": 100
-			},
-			{
-				"height": 100,
-				"href": "https://hubmapconsortium.github.io/ccf-asct-reporter/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/HuBMAP.png",
-				"label": "HuBMAP",
-				"props": {
-					"libraries": [
-						"HuBMAP_ASCTplusB_augmented_2022_lncRNA"
-					],
-					"relation": [
-						"HuBMAP ASCTplusB"
-					]
-				},
-				"width": 100
-			},
-			{
-				"height": 100,
-				"href": "https://depmap.org/portal/achilles/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/depmap.svg",
-				"label": "Project Achilles",
-				"props": {
-					"libraries": [
-						"Achilles_fitness_decrease_lncRNA",
-						"Achilles_fitness_increase_lncRNA"
-					],
-					"relation": [
-						"Achilles decrease",
-						"Achilles increase"
-					]
-				},
-				"width": 90
-			},
-			{
-				"height": 100,
-				"href": "https://hpo.jax.org/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/hpo.png",
-				"label": "Human Phenotype Ontology",
-				"props": {
-					"libraries": [
-						"Human_Phenotype_Ontology_lncRNA"
-					],
-					"relation": [
-						"Human Phenotype Ontology"
-					]
-				},
-				"width": 80
-			},
-			{
-				"height": 100,
-				"href": "http://www.informatics.jax.org",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/mgi.png",
-				"label": "Mouse Genome informatics",
-				"props": {
-					"libraries": [
-						"MGI_Mammalian_Phenotype_Level_4_2021_lncRNA"
-					],
-					"relation": [
-						"MGI"
-					]
-				},
-				"width": 80
-			},
-			{
-				"height": 100,
-				"href": "http://geneontology.org/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/go-logo.png",
-				"label": "Gene Ontology",
-				"props": {
-					"libraries": [
-						"GO_Biological_Process_2021_lncRNA"
-					],
-					"relation": [
-						"GOBP"
-					]
-				},
-				"width": 100
-			},
-			{
-				"height": 100,
-				"href": "https://www.ebi.ac.uk/interpro/entry/pfam",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/Pfam_logo.png",
-				"label": "Pfam",
-				"props": {
-					"libraries": [
-						"Pfam_InterPro_Domains_lncRNA"
-					],
-					"relation": [
-						"Pfam"
-					]
-				},
-				"width": 80
-			},
-			{
-				"height": 100,
-				"href": "http://biogps.org/downloads/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/biogps_logo.png",
-				"label": "Human Gene Atlas",
-				"props": {
-					"libraries": [
-						"Human_Gene_Atlas_lncRNA"
-					],
-					"relation": [
-						"Human Gene Atlas"
-					]
-				},
-				"width": 80
-			},
-			{
-				"height": 80,
-				"href": "https://www.genome.jp/kegg/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/kegg.png",
-				"label": "KEGG Pathway",
-				"props": {
-					"libraries": [
-						"KEGG_2021_Human_lncRNA"
-					],
-					"relation": [
-						"KEGG"
-					]
-				},
-				"width": 60
-			},
-			{
-				"height": 100,
-				"href": "https://www.wikipathways.org",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/wiki.png",
-				"label": "WikiPathways",
-				"props": {
-					"libraries": [
-						"WikiPathway_2021_Human_lncRNA",
-						"PFOCR_Pathways_lncRNA"
-					],
-					"relation": [
-						"WikiPathway 2021 Human",
-						"PFOCR"
-					]
-				},
-				"width": 60
-			},
-			{
-				"height": 100,
-				"href": "https://maayanlab.cloud/archs4",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/archs4.png",
-				"label": "ARCHS4",
-				"props": {
-					"libraries": [
-						"ARCHS4_TFs_Coexp_lncRNA"
-					],
-					"relation": [
-						"ARCHS4"
-					]
-				},
-				"width": 70
-			},
-			{
-				"height": 90,
-				"href": "https://reactome.org",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/reactome.png",
-				"label": "Reactome",
-				"props": {
-					"libraries": [
-						"Reactome_2022_lncRNA"
-					],
-					"relation": [
-						"Reactome 2022"
-					]
-				},
-				"width": 90
-			},
-			{
-				"height": 100,
-				"href": "https://www.ebi.ac.uk/gwas/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/GWAS_Catalog.png",
-				"label": "GWAS Catalog",
-				"props": {
-					"libraries": [
-						"GWAS_Catalog_2019_lncRNA"
-					],
-					"relation": [
-						"GWAS"
-					]
-				},
-				"width": 90
-			},
-			{
-				"height": 100,
-				"href": "https://www.grnpedia.org/trrust/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/TRRUST.jpeg",
-				"label": "TRRUST",
-				"props": {
-					"libraries": [
-						"TRRUST_Transcription_Factors_2019_lncRNA"
-					],
-					"relation": [
-						"TRRUST"
-					]
-				},
-				"width": 120
-			},
-			{
-				"height": 100,
-				"href": "https://maayanlab.cloud/chea3/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/chea3.png",
-				"label": "ChEA3",
-				"props": {
-					"libraries": [
-						"ChEA_2022_lncRNA"
-					],
-					"relation": [
-						"ChEA3"
-					]
-				},
-				"width": 40
-			},
-			{
-				"height": 100,
-				"href": "https://tabula-sapiens-portal.ds.czbiohub.org/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/tabula_sapiens.png",
-				"label": "Tabula Sapiens",
-				"props": {
-					"libraries": [
-						"Tabula_Sapiens_lncRNA"
-					],
-					"relation": [
-						"Tabula Sapiens"
-					]
-				},
-				"width": 100
-			},
-			{
-				"height": 100,
-				"href": "https://tabula-muris.ds.czbiohub.org/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/tabula_muris.png",
-				"label": "Tabula Muris",
-				"props": {
-					"libraries": [
-						"Tabula_Muris_lncRNA"
-					],
-					"relation": [
-						"Tabula Muris"
-					]
-				},
-				"width": 100
-			},
-			{
-				"height": 100,
-				"href": "https://sites.broadinstitute.org/ccle",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/ccle.jpg",
-				"label": "CCLE Proteomics",
-				"props": {
-					"libraries": [
-						"CCLE_Proteomics_2020_lncRNA"
-					],
-					"relation": [
-						"CCLE"
-					]
-				},
-				"width": 100
-			},
-			{
-				"height": 100,
-				"href": "https://descartes.brotmanbaty.org/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/descartes.png",
-				"label": "Descartes",
-				"props": {
-					"libraries": [
-						"Descartes_Cell_Types_and_Tissue_2021_lncRNA"
-					],
-					"relation": [
-						"Descartes"
-					]
-				},
-				"width": 80
-			},
-			{
-				"height": 100,
-				"href": "https://www.disgenet.org/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/disgenet.png",
-				"label": "DisGeNET",
-				"props": {
-					"libraries": [
-						"DisGeNET_lncRNA"
-					],
-					"relation": [
-						"DisGeNET"
-					]
-				},
-				"width": 100
-			},
-			{
-				"height": 100,
-				"href": "https://fantom.gsc.riken.jp/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/FANTOM.png",
-				"label": "FANTOM",
-				"props": {
-					"libraries": [
-						"FANTOM6_lncRNA_KD_DEGs_lncRNA"
-					],
-					"relation": [
-						"FANTOM"
-					]
-				},
-				"width": 40
-			},
-			{
-				"height": 100,
-				"href": "https://diseases.jensenlab.org/Search",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/JENSEN_Diseases.png",
-				"label": "Jensen Diseases",
-				"props": {
-					"libraries": [
-						"Jensen_DISEASES_lncRNA"
-					],
-					"relation": [
-						"Jensen lab DISEASES"
-					]
-				},
-				"width": 100
-			},
-			{
-				"height": 100,
-				"href": "https://kinase-library.phosphosite.org/site",
-				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/assets/The_Kinase_Library.png",
-				"label": "The Kinase Library",
-				"props": {
-					"libraries": [
-						"The_Kinase_Library_2023_lncRNA"
-					],
-					"relation": [
-						"The Kinase Library"
-					]
-				},
-				"width": 40
-			},
-			{
-				"height": 100,
-				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/assets/Proteomics_Drug_Atlas.png",
-				"label": "Proteomics Drug Atlas",
-				"props": {
-					"libraries": [
-						"Proteomics_Drug_Atlas_2023_lncRNA"
-					],
-					"relation": [
-						"Proteomics Drug Atlas 2023"
-					]
-				},
-				"width": 40
-			}
-		],
-		"tabs": [
-			{
-				"component": "KnowledgeGraph",
-				"endpoint": "/search",
-				"label": "Term & Gene Search",
-				"props": {
-					"gene_link_button": true,
-					"init_function": "initialize_kg",
-					"subheader": {
-						"url_field": "filter",
-						"query_field": "relation"
-					},
-                    "initial_query": {
-                        "start": "ARCHS4 TFs Coexpression lncRNA",
-                        "start_term": "22RV1 PROSTATE TenPx24"
+            ],
+            [
+                {
+                    "component": "text",
+                    "props": {
+                        "text": "Consortium"
                     }
-				},
-				"type": "page"
-			},
-			{
-				"component": "Enrichment",
-				"endpoint": "/",
-				"label": "Enrichment Analysis",
-				"props": {
-                    "disableHeader": true,
-					"default_options": {
-						"libraries": [
-							{
-								"name": "GlyGen_Glycosylated_Proteins_2022_lncRNA",
-								"limit": 5
-							},
-							{
-								"name": "LINCS_L1000_Chem_Pert_Consensus_Sigs_lncRNA",
-								"limit": 5
-							},
-							{
-								"name": "IDG_Drug_Targets_2022_lncRNA",
-								"limit": 5
-							},
-							{
-								"name": "Metabolomics_Workbench_Metabolites_2022_lncRNA",
-								"limit": 5
-							},
-							{
-								"name": "HuBMAP_ASCTplusB_augmented_2022_lncRNA",
-								"limit": 5
-							}
-						],
-						"name": 1,
-						"limit": 5
-					},
-					"description": "Enter a list of genes below to perform enrichment analysis using [Independent Enrichment Analysis](https://appyters.maayanlab.cloud/Independent_Enrichment_Analysis/).",
-					"example": {
-						"gene_degree": 3,
-						"gene_set": "ENSG00000261474\nTMEM147-AS1\nENSG00000268069\nENSG00000273248\nENSG00000288756\nOIP5-AS1\nENSG00000289194\nMOCS2-DT\nENSG00000260877\nPRKACB-DT\nHDAC4-AS1\nENSG00000276728\nSTAM-DT\nHOXA-AS2\nENSG00000248367\nENSG00000289161\nENSG00000270933\nENSG00000281468\nKTN1-AS1\nDICER1-AS1\nENSG00000273486\nLINC02043\nEMSLR\nHOTAIRM1\nENSG00000288816\nMAN1B1-DT\nKCNIP2-AS1\nENSG00000264548\nLINC01023\nENSG00000258561\nLINC01003\nENSG00000278642\nENSG00000261798\nENSG00000233230\nLINC00653\nENSG00000271993\nENSG00000271427\nEDRF1-DT\nPRRT3-AS1\nMALT1-AS1\nPRKAG2-AS1\nENSG00000287088\nENSG00000261572\nPAK6-AS1\nENSG00000275180\nENSG00000261757\nENSG00000286989",
-						"libraries": [
-							{
-								"name": "GlyGen_Glycosylated_Proteins_2022_lncRNA",
-								"limit": 5
-							},
-							{
-								"name": "LINCS_L1000_Chem_Pert_Consensus_Sigs_lncRNA",
-								"limit": 5
-							},
-							{
-								"name": "IDG_Drug_Targets_2022_lncRNA",
-								"limit": 5
-							},
-							{
-								"name": "Metabolomics_Workbench_Metabolites_2022_lncRNA",
-								"limit": 5
-							},
-							{
-								"name": "HuBMAP_ASCTplusB_augmented_2022_lncRNA",
-								"limit": 5
-							}
-						]
-					},
-					"init_function": "initialize_enrichment",
-					"libraries": [
-						{
-							"name": "ARCHS4_TFs_Coexp_lncRNA",
-							"node": "ARCHS4 TFs Coexpression lncRNA"
-						},
-						{
-							"name": "Achilles_fitness_decrease_lncRNA",
-							"node": "Project Achilles Decrease lncRNA"
-						},
-						{
-							"name": "Achilles_fitness_increase_lncRNA",
-							"node": "Project Achilles Increase lncRNA"
-						},
-						{
-							"name": "CCLE_Proteomics_2020_lncRNA",
-							"node": "CCLE Proteomics 2020 lncRNA"
-						},
-						{
-							"name": "ChEA_2022_lncRNA",
-							"node": "ChEA 2022 lncRNA"
-						},
-						{
-							"name": "Descartes_Cell_Types_and_Tissue_2021_lncRNA",
-							"node": "Descartes lncRNA"
-						},
-						{
-							"name": "DisGeNET_lncRNA",
-							"node": "DisGeNET lncRNA"
-						},
-						{
-							"name": "FANTOM6_lncRNA_KD_DEGs_lncRNA",
-							"node": "FANTOM6 lncRNA"
-						},
-						{
-							"name": "GlyGen_Glycosylated_Proteins_2022_lncRNA",
-							"node": "GlyGen Glycosylated Proteins 2022 lncRNA"
-						},
-						{
-							"name": "GO_Biological_Process_2021_lncRNA",
-							"node": "GO Biological Process lncRNA"
-						},
-						{
-							"name": "GTEx_Aging_Signatures_2021_lncRNA",
-							"node": "GTEx Aging Signatures 2021 lncRNA"
-						},
-						{
-							"name": "GTEx_Tissues_V8_2023_lncRNA",
-							"node": "GTEx Tissues V8 2023 lncRNA"
-						},
-						{
-							"name": "GWAS_Catalog_2019_lncRNA",
-							"node": "GWAS Catalog lncRNA"
-						},
-						{
-							"name": "HuBMAP_ASCTplusB_augmented_2022_lncRNA",
-							"node": "HuBMAP ASCTplusB lncRNA"
-						},
-						{
-							"name": "Human_Gene_Atlas_lncRNA",
-							"node": "Human Gene Atlas lncRNA"
-						},
-						{
-							"name": "Human_Phenotype_Ontology_lncRNA",
-							"node": "Human Phenotype Ontology lncRNA"
-						},
-						{
-							"name": "IDG_Drug_Targets_2022_lncRNA",
-							"node": "IDG Drug Targets 2022 lncRNA"
-						},
-						{
-							"name": "Jensen_DISEASES_lncRNA",
-							"node": "Jensen Lab DISEASES lncRNA"
-						},
-						{
-							"name": "KEGG_2021_Human_lncRNA",
-							"node": "KEGG Pathway lncRNA"
-						},
-						{
-							"name": "KOMP2_Mouse_Phenotypes_2022_lncRNA",
-							"node": "KOMP2 Mouse Phenotypes 2022 lncRNA"
-						},
-						{
-							"name": "LINCS_L1000_Chem_Pert_Consensus_Sigs_lncRNA",
-							"node": "LINCS Chem Pert Consensus Sigs lncRNA"
-						},
-						{
-							"name": "LINCS_L1000_CRISPR_KO_Consensus_Sigs_lncRNA",
-							"node": "LINCS CRISPR KO Consensus Sigs lncRNA"
-						},
-						{
-							"name": "Metabolomics_Workbench_Metabolites_2022_lncRNA",
-							"node": "Metabolomics Workbench Metabolites 2022 lncRNA"
-						},
-						{
-							"name": "MGI_Mammalian_Phenotype_Level_4_2021_lncRNA",
-							"node": "MGI Mammalian Phenotype Level 4 2021 lncRNA"
-						},
-						{
-							"name": "PFOCR_Pathways_lncRNA",
-							"node": "PFOCR Pathways lncRNA"
-						},
-						{
-							"name": "Pfam_InterPro_Domains_lncRNA",
-							"node": "Pfam lncRNA"
-						},
-						{
-							"name": "Proteomics_Drug_Atlas_2023_lncRNA",
-							"node": "Proteomics Drug Atlas 2023 lncRNA"
-						},
-						{
-							"name": "Reactome_2022_lncRNA",
-							"node": "Reactome 2022 lncRNA"
-						},
-						{
-							"name": "TRRUST_Transcription_Factors_2019_lncRNA",
-							"node": "TRRUST TFs 2019 lncRNA"
-						},
-						{
-							"name": "Tabula_Muris_lncRNA",
-							"node": "Tabula Muris lncRNA"
-						},
-						{
-							"name": "Tabula_Sapiens_lncRNA",
-							"node": "Tabula Sapiens lncRNA"
-						},
-						{
-							"name": "The_Kinase_Library_2023_lncRNA",
-							"node": "The Kinase Library 2023 lncRNA"
-						},
-						{
-							"name": "WikiPathway_2021_Human_lncRNA",
-							"node": "WikiPathway 2021 Human lncRNA"
-						}
-					],
-					"placeholder": "Enter newline separated gene sets",
-					"subheader": {
-						"url_field": "q",
-						"query_field": "libraries"
-					}
-				},
-				"type": "page"
-			},
-			{
-				"component": "Markdown",
-				"endpoint": "/libraries",
-				"label": "Libraries",
-				"props": {
-					"src": "https://minio.dev.maayanlab.cloud/lncrnalyzr/assets/libraries.md"
-				},
-				"type": "markdown"
-			},
-			{
-				"component": "Markdown",
-				"endpoint": "/help",
-				"label": "Help",
-				"props": {
-					"src": "https://minio.dev.maayanlab.cloud/lncrnalyzr/assets/help.md"
-				},
-				"type": "markdown"
-			}
-		],
-        "header": "lncRNAlyzr",
-		"title": "<span style='color:#212070;font-weight:600'>lncRNA</span><span style='color:#000'>lyzr"
-	},
-	"nodes": [
-		{
-			"color": "#cfc6d9",
-			"display": [
-				{
-					"label": "ARCHS4 TFs Coexpression lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"22RV1 PROSTATE TenPx24",
-				"697 HAEMATOPOIETIC AND LYMPHOID TISSUE TenPx30"
-			],
-			"node": "ARCHS4 TFs Coexpression lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#f2c6a1",
-			"display": [
-				{
-					"label": "ChEA 2022 lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"BP1 19119308 ChIP-ChIP Hs578T Human",
-				"FOXP1 22492998 ChIP-Seq STRATIUM Mouse"
-			],
-			"node": "ChEA 2022 lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#f2e0d4",
-			"display": [
-				{
-					"label": "CCLE Proteomics 2020 lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"22RV1 PROSTATE TenPx24",
-				"697 HAEMATOPOIETIC AND LYMPHOID TISSUE TenPx30"
-			],
-			"node": "CCLE Proteomics 2020 lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#9fcfe1",
-			"display": [
-				{
-					"label": "Descartes lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"Acinar cells in Pancreas",
-				"Adrenocortical cells in Adrenal"
-			],
-			"node": "Descartes lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#d9d88e",
-			"display": [
-				{
-					"label": "DisGeNET lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"46, XX Testicular Disorders of Sex Development",
-				"46, XY Disorders of Sex Development"
-			],
-			"node": "DisGeNET lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#f4c3b3",
-			"display": [
-				{
-					"label": "FANTOM lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"A1BG-AS1-ASO_G0268895_01-DEGs Up",
-				"A1BG-AS1-ASO_G0268895_01-DEGs Down"
-			],
-			"node": "FANTOM lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#fee6ec",
-			"display": [
-				{
-					"label": "Gene ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				},
-				{
-					"label": "acc",
-					"text": "${acc}",
-					"type": "text"
-				},
-				{
-					"href": "${uri}",
-					"label": "uri",
-					"text": "${uri}",
-					"type": "link"
-				}
-			],
-			"example": [
-				"VPS9D1-AS1",
-				"KIFC1"
-			],
-			"node": "Gene",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#ccedff",
-			"display": [
-				{
-					"label": "GO Biological Process lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"'de novo' posttranslational protein folding (GO:0051084)",
-				"2-oxoglutarate metabolic process (GO:0006103)"
-			],
-			"node": "GO Biological Process lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#ffecb9",
-			"display": [
-				{
-					"label": "GWAS Catalog lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"Beta2-Glycoprotein I plasma levels",
-				"1,5-anhydroglucitol levels"
-			],
-			"node": "GWAS Catalog lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#dfacf6",
-			"display": [
-				{
-					"label": "HuBMAP ASCTplusB lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"Paneth Cell Of Epithelium Proper Of Small intestine - Small Intestine",
-				"Duodenal Goblet cell - Small Intestine"
-			],
-			"node": "HuBMAP ASCTplusB lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#bbd6fd",
-			"display": [
-				{
-					"label": "Human Gene Atlas lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"Thyroid",
-				"CD33+ Myeloid"
-			],
-			"node": "Human Gene Atlas lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#8d9df5",
-			"display": [
-				{
-					"label": "Human Phenotype Ontology lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"Abnormality of B cell number (HP:0010975)",
-				"B lymphocytopenia (HP:0010976)"
-			],
-			"node": "Human Phenotype Ontology lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#acdbc9",
-			"display": [
-				{
-					"label": "Jensen Lab DISEASES lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"3-M syndrome",
-				"3-Methylcrotonyl-CoA carboxylase deficiency"
-			],
-			"node": "Jensen Lab DISEASES lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#dbecc0",
-			"display": [
-				{
-					"label": "KEGG Pathway lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				},
-				{
-					"href": "${uri}",
-					"label": "uri",
-					"text": "${uri}",
-					"type": "link"
-				}
-			],
-			"example": [
-				"ABC transporters",
-				"AGE-RAGE signaling pathway in diabetic complications"
-			],
-			"node": "KEGG Pathway lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#fdd285",
-			"display": [
-				{
-					"label": "LINCS Chem Pert Consensus Sigs lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"Afatinib Up",
-				"Erlotinib Up"
-			],
-			"node": "LINCS Chem Pert Consensus Sigs lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#f7a7a6",
-			"display": [
-				{
-					"label": "LINCS CRISPR KO Consensus Sigs lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"A1BG Up",
-				"A1CF Up"
-			],
-			"node": "LINCS CRISPR KO Consensus Sigs lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#f4ba94",
-			"display": [
-				{
-					"label": "MGI Mammalian Phenotype Level 4 2021 lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"abdominal situs ambiguus MP:0011250",
-				"abdominal situs inversus MP:0011249"
-			],
-			"node": "MGI Mammalian Phenotype Level 4 2021 lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#d9c8f2",
-			"display": [
-				{
-					"label": "Pfam lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"abdominal situs ambiguus MP:0011250",
-				"abdominal situs inversus MP:0011249"
-			],
-			"node": "Pfam lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#d8d887",
-			"display": [
-				{
-					"label": "PFOCR Pathways lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"PMC102186 Mb2400926009",
-				"PMC1064894 Ar1469-3"
-			],
-			"node": "PFOCR Pathways lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#ecefc4",
-			"display": [
-				{
-					"label": "Project Achilles Decrease lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"22RV1-prostate",
-				"697-haematopoietic and lymphoid tissue"
-			],
-			"node": "Project Achilles Decrease lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#e4a6a1",
-			"display": [
-				{
-					"label": "Project Achilles Increase lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"22RV1-prostate",
-				"697-haematopoietic and lymphoid tissue"
-			],
-			"node": "Project Achilles Increase lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#fa8750",
-			"display": [
-				{
-					"label": "Proteomics Drug Atlas 2023 lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"SR 142948 Up",
-				"SR 142948 Down"
-			],
-			"node": "Proteomics Drug Atlas 2023 lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#fab28c",
-			"display": [
-				{
-					"label": "Reactome 2022 lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"2-LTR Circle Formation R-HSA-164843",
-				"GAG Synthesis Requires Tetrasaccharide Linker Sequence R-HSA-1971475"
-			],
-			"node": "Reactome 2022 lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#99d689",
-			"display": [
-				{
-					"label": "Tabula Muris lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"B Cell Spleen CL:0000236",
-				"T Cell Spleen CL:0000084"
-			],
-			"node": "Tabula Muris lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#083476",
-			"display": [
-				{
-					"label": "Tabula Sapiens lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"Bladder-bladder Urothelial Cell",
-				"Bladder-capillary Endothelial Cell"
-			],
-			"node": "Tabula Sapiens lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#edc9dd",
-			"display": [
-				{
-					"label": "The Kinase Library 2023 lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"AAK1",
-				"ACVR2A"
-			],
-			"node": "The Kinase Library 2023 lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#f7d8cd",
-			"display": [
-				{
-					"label": "TRRUST TFs 2019 lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"AATF mouse",
-				"ABL1 human"
-			],
-			"node": "TRRUST TFs 2019 lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#daddf0",
-			"display": [
-				{
-					"label": "WikiPathway 2021 Human lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"15q11.2 copy number variation syndrome WP4940",
-				"15q13.3 copy number variation syndrome WP4942"
-			],
-			"node": "WikiPathway 2021 Human lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#a2e1db",
-			"display": [
-				{
-					"label": "GlyGen Glycosylated Proteins 2022 lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"G00031MO",
-				"G00406II"
-			],
-			"node": "GlyGen Glycosylated Proteins 2022 lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#55cbcd",
-			"display": [
-				{
-					"label": "GTEx Aging Signatures 2021 lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"GTEx Uterus 20-29 vs 40-49 Up",
-				"GTEx Uterus 20-29 vs 40-49 Down"
-			],
-			"node": "GTEx Aging Signatures 2021 lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#ffc8a2",
-			"display": [
-				{
-					"label": "GTEx Tissues V8 2023 lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"Adipose - Subcutaneous Female 60-69 Up",
-				"Muscle - Skeletal Female 60-69 Up"
-			],
-			"node": "GTEx Tissues V8 2023 lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#97c1a9",
-			"display": [
-				{
-					"label": "IDG Drug Targets 2022 lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"Levobupivacaine",
-				"(S)-nitrendipine"
-			],
-			"node": "IDG Drug Targets 2022 lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#cce2cb",
-			"display": [
-				{
-					"label": "KOMP2 Mouse Phenotypes 2022 lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"Increased Lean Body Mass (MP:0003960)",
-				"Decreased Erythrocyte Cell Number (MP:0002875)"
-			],
-			"node": "KOMP2 Mouse Phenotypes 2022 lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		},
-		{
-			"color": "#d4f0f0",
-			"display": [
-				{
-					"label": "Metabolomics Workbench Metabolites 2022 lncRNA ID",
-					"text": "${id}",
-					"type": "text"
-				},
-				{
-					"label": "label",
-					"text": "${label}",
-					"type": "text"
-				}
-			],
-			"example": [
-				"(S)-Methylmalonate Semialdehyde",
-				"1,2-Diacyl-sn-glycerol"
-			],
-			"node": "Metabolomics Workbench Metabolites 2022 lncRNA",
-			"relation": [
-
-			],
-			"search": [
-				"id",
-				"label"
-			]
-		}
-	],
-    "ui_theme": "lncRNAlyzr"
+                },
+                {
+                    "component": "link",
+                    "props": {
+                        "text": "Information Portal",
+                        "href": "https://info.cfde.cloud/"
+                    }
+                },
+                {
+                    "component": "link",
+                    "props": {
+                        "text": "Data Portal",
+                        "href": "https://data.cfde.cloud/"
+                    }
+                }
+            ],
+            [
+                {
+                    "component": "text",
+                    "props": {
+                        "text": "Data Distillery"
+                    }
+                },
+                {
+                    "component": "link",
+                    "props": {
+                        "text": "Connection Explorer",
+                        "href": "/"
+                    }
+                },
+                {
+                    "component": "link",
+                    "props": {
+                        "text": "Apps",
+                        "href": "/dd_apps"
+                    }
+                },
+                {
+                    "component": "link",
+                    "props": {
+                        "text": "Use Cases",
+                        "href": "/use_cases"
+                    }
+                }
+            ],
+            [
+                {
+                    "component": "text",
+                    "props": {
+                        "text": "Data Access"
+                    }
+                },
+                {
+                    "component": "link",
+                    "props": {
+                        "text": "Data Dictionary",
+                        "href": "/dictionary"
+                    }
+                },
+                {
+                    "component": "link",
+                    "props": {
+                        "text": "Downloads",
+                        "href": "/downloads"
+                    }
+                },
+                {
+                    "component": "link",
+                    "props": {
+                        "text": "About",
+                        "href": "/about"
+                    }
+                }
+            ]
+        ]
+    }
 }
