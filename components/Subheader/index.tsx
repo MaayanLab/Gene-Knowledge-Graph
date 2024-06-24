@@ -70,11 +70,12 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 				}
 				if (subheader_props === null) subheader_props = tab.props.subheader
 				if (default_options === null) {
-					default_options = tab.props.initial_query
+					default_options = tab.props.initial_query || tab.props.default_options
 				}
 				if (tab.props.disableLibraryLimit) disableLibraryLimit = true
 			}
 		}
+		console.log(default_options, "default")
 		if (subheader_props === null) return null
 		return (
 			<Grid container spacing={1} justifyContent={'center'} alignItems={"center"}>
