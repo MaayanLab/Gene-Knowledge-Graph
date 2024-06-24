@@ -516,7 +516,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                                 </Grid>
                                             ))
                                         }
-                                        <Grid item xs={12} className='flex'>
+                                        <Grid item xs={12} className='flex' sx={{ml: -1}}>
                                             <Tooltip title="Show gene links">
                                                 <IconButton color="secondary" 
                                                     disabled={geneLinks.length ===  0 && additionalLinkTags.length === 0}
