@@ -2445,7 +2445,7 @@
                                 "endpoint": "/api/distillery/tissue2drugs",
                                 "type": "Anatomy",
                                 "options_endpoint": "/api/distillery/gtex_tissue",
-                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/tissues2drugs.png",
+                                "icon": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/img/apps/tissues2drugs.png",
                                 "fields": [
                                     "UBERON",
                                     "id",
@@ -2464,7 +2464,7 @@
                                 "title": "MW2Disease",
                                 "description": "For a specific disease in Metabolomics Workbench, find all IDG and GTEx assertions that may be related to the disease in a specific tissue type.",
                                 "endpoint": "/api/distillery/mw",
-                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/MW2Disease.png",
+                                "icon": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/img/apps/MW2Disease.png",
                                 "type": "Disease or Phenotype",
                                 "options_endpoint": "/api/distillery/mw_diseases",
                                 "fields": [
@@ -2499,7 +2499,7 @@
                                     }
                                 ],
                                 "title": "EnzymeMiner",
-                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/EnzymeMiner.png",
+                                "icon": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/img/apps/EnzymeMiner.png",
                                 "description": "Select a drug processing enzyme to view drugs that up or down regulate it from LINCS as well as tissues where it is highly expressed based on data from GTEx.",
                                 "endpoint": "/api/knowledge_graph",
                                 "type": "Enzyme",
@@ -2522,7 +2522,7 @@
                             "props": {
                                 "init_function": "initialize_kg",
                                 "title": "Liquid Biopsy of Condition",
-                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/disease2exrna.png",
+                                "icon": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/img/apps/disease2exrna.png",
                                 "description": "For a given set of genes that are highly expressed in a specific disease, identify extracellular RNAs (exRNAs) that may be detected in human biofluids and thus serve as non-invasive disease biomarkers.",
                                 "endpoint": "/api/distillery/disease2exrna",
                                 "type": "Disease or Phenotype",
@@ -2546,7 +2546,7 @@
                             "props": {
                                 "init_function": "initialize_kg",
                                 "title": "Liquid Biopsy of Drug Response",
-                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/drug2exrna.png",
+                                "icon": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/img/apps/drug2exrna.png",
                                 "description": "For a given drug term, return (1) up-regulated genes, (2) loci expressed in exRNA that overlap RBP binding regions, (3) the RBP that overlaps the locus, and (4) the biofluid(s) where locus was expressed in exRNA.",
                                 "endpoint": "/api/distillery/drug2exrna",
                                 "type": "Compound",
@@ -2579,7 +2579,7 @@
                             "component": "DistilleryUseCase",
                             "props": {
                                 "init_function": "initialize_kg",
-                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/use-case1.png",
+                                "icon": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/img/apps/use-case1.png",
                                 "title": "Breast Epitheliumn Use Case",
                                 "description": "Find the genes that are highly expressed in breast epithelium as well as drugs that target these genes.",
                                 "endpoint": "/api/distillery/tissue2drugs",
@@ -2601,7 +2601,7 @@
                             "props": {
                                 "init_function": "initialize_kg",
                                 "title": "Mild Cognitive Impairment Use Case",
-                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/use-case2.png",
+                                "icon": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/img/apps/use-case2.png",
                                 "width": 130,
                                 "height": 130,
                                 "description": "Find all IDG and GTEx assertions that may be related to mild cognitive impairment and any tissue type.",
@@ -2643,7 +2643,7 @@
                                 "title": "CES1 Use Case",
                                 "description": "Display drugs that up or down regulate the gene CES1 from LINCS as well as tissues where it is highly expressed based on assertions from GTEx.",
                                 "endpoint": "/api/knowledge_graph",
-                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/use-case3.png",
+                                "icon": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/img/apps/use-case3.png",
                                 "type": "Enzyme",
                                 "options_endpoint": "/api/knowledge_graph/node_search",
                                 "fields": [
@@ -2663,7 +2663,7 @@
                             "props": {
                                 "init_function": "initialize_kg",
                                 "title": "Frontotemporal Dementia Use Case",
-                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/dementiabiopsy.png",
+                                "icon": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/img/apps/dementiabiopsy.png",
                                 "description": "For genes that are correlated with frontotemporal dementia, identify extracellular RNAs (exRNAs) that may be detected in human biofluids and thus serve as non-invasive disease biomarkers.",
                                 "endpoint": "/api/distillery/disease2exrna",
                                 "type": "Disease or Phenotype",
@@ -2687,7 +2687,7 @@
                             "props": {
                                 "init_function": "initialize_kg",
                                 "title": "Liquid Biopsy of Dexamethasone Response",
-                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/dexamethasonebiopsy.png",
+                                "icon": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/img/apps/dexamethasonebiopsy.png",
                                 "description": "Find genes that are up-regulated by dexamethasone, (2) loci expressed in exRNA that overlap RBP binding regions, (3) the RBP that overlaps the locus, and (4) the biofluid(s) where locus was expressed in exRNA.",
                                 "endpoint": "/api/distillery/drug2exrna",
                                 "type": "Compound",
@@ -2724,7 +2724,7 @@
                 "component": "SanitizedHTML",
                 "position": "bottom",
                 "props": {
-                    "src": "https://minio.dev.maayanlab.cloud/datadistillery-kg/Dictionary/DataDistilleryDataDictionary0228.html"
+                    "src": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/Dictionary/DataDistilleryDataDictionary0228.html"
                 }
             },
             {
@@ -2734,7 +2734,7 @@
                 "component": "Download",
                 "position": "bottom",
                 "props": {
-                    "src": "https://minio.dev.maayanlab.cloud/datadistillery-kg/download_detailed.json"
+                    "src": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/download_detailed.json"
                 }
             },
             {
@@ -2744,7 +2744,7 @@
                 "component": "APIDoc",
                 "position": "top",
                 "props": {
-                    "spec": "https://minio.dev.maayanlab.cloud/datadistillery-kg/specs.json"
+                    "spec": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/specs.json"
                 }
             },
             {
@@ -2754,7 +2754,7 @@
                 "component": "Markdown",
                 "position": "top",
                 "props": {
-                    "src": "https://minio.dev.maayanlab.cloud/datadistillery-kg/about.md"
+                    "src": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/about.md"
                 }
             }
         ]
