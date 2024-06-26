@@ -1675,7 +1675,7 @@
 					"props": {
 						"type": "icon",
 						"key": "lab_icon",
-						"src": "https://minio.dev.maayanlab.cloud/enrichr-kg/maayanlab.png",
+						"src": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/maayanlab.png",
 						"alt": "MaayanLab",
 						"href": "https://labs.icahn.mssm.edu/maayanlab/",
 						"height": 60,
@@ -1689,7 +1689,7 @@
 					"props": {
 						"type": "icon",
 						"key": "center_icon",
-						"src": "https://minio.dev.maayanlab.cloud/enrichr-kg/bioinformatics.png",
+						"src": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/bioinformatics.png",
 						"alt": "COB",
 						"href": "https://icahn.mssm.edu/research/bioinformatics",
 						"height": 60,
@@ -1705,7 +1705,7 @@
 						"height": 45,
 						"href": "https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en",
 						"key": "license_icon",
-						"src": "https://minio.dev.maayanlab.cloud/lncrnalyzr/cc-by-nc-sa.webp",
+						"src": "https://s3.amazonaws.com/maayan-kg/lncrnalyzr/cc-by-nc-sa.webp",
 						"type": "icon",
 						"width": 128
 					}
@@ -1817,7 +1817,7 @@
 			{
 				"height": 100,
 				"href": "https://hubmapconsortium.github.io/ccf-asct-reporter/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/HuBMAP.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/HuBMAP.png",
 				"label": "HuBMAP",
 				"props": {
 					"libraries": [
@@ -1832,7 +1832,7 @@
 			{
 				"height": 100,
 				"href": "https://depmap.org/portal/achilles/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/depmap.svg",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/depmap.svg",
 				"label": "Project Achilles",
 				"props": {
 					"libraries": [
@@ -1849,7 +1849,7 @@
 			{
 				"height": 100,
 				"href": "https://hpo.jax.org/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/hpo.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/hpo.png",
 				"label": "Human Phenotype Ontology",
 				"props": {
 					"libraries": [
@@ -1864,7 +1864,7 @@
 			{
 				"height": 100,
 				"href": "http://www.informatics.jax.org",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/mgi.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/mgi.png",
 				"label": "Mouse Genome informatics",
 				"props": {
 					"libraries": [
@@ -1879,7 +1879,7 @@
 			{
 				"height": 100,
 				"href": "http://geneontology.org/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/go-logo.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/go-logo.png",
 				"label": "Gene Ontology",
 				"props": {
 					"libraries": [
@@ -1894,7 +1894,7 @@
 			{
 				"height": 100,
 				"href": "https://www.ebi.ac.uk/interpro/entry/pfam",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/Pfam_logo.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/Pfam_logo.png",
 				"label": "Pfam",
 				"props": {
 					"libraries": [
@@ -1909,7 +1909,7 @@
 			{
 				"height": 100,
 				"href": "http://biogps.org/downloads/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/biogps_logo.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/biogps_logo.png",
 				"label": "Human Gene Atlas",
 				"props": {
 					"libraries": [
@@ -1924,7 +1924,7 @@
 			{
 				"height": 80,
 				"href": "https://www.genome.jp/kegg/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/kegg.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/kegg.png",
 				"label": "KEGG Pathway",
 				"props": {
 					"libraries": [
@@ -1939,7 +1939,7 @@
 			{
 				"height": 100,
 				"href": "https://www.wikipathways.org",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/wiki.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/wiki.png",
 				"label": "WikiPathways",
 				"props": {
 					"libraries": [
@@ -1956,7 +1956,7 @@
 			{
 				"height": 100,
 				"href": "https://maayanlab.cloud/archs4",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/archs4.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/archs4.png",
 				"label": "ARCHS4",
 				"props": {
 					"libraries": [
@@ -1971,7 +1971,7 @@
 			{
 				"height": 90,
 				"href": "https://reactome.org",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/reactome.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/reactome.png",
 				"label": "Reactome",
 				"props": {
 					"libraries": [
@@ -1986,7 +1986,7 @@
 			{
 				"height": 100,
 				"href": "https://www.ebi.ac.uk/gwas/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/GWAS_Catalog.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/GWAS_Catalog.png",
 				"label": "GWAS Catalog",
 				"props": {
 					"libraries": [
@@ -2001,7 +2001,7 @@
 			{
 				"height": 100,
 				"href": "https://www.grnpedia.org/trrust/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/TRRUST.jpeg",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/TRRUST.jpeg",
 				"label": "TRRUST",
 				"props": {
 					"libraries": [
@@ -2016,7 +2016,7 @@
 			{
 				"height": 100,
 				"href": "https://maayanlab.cloud/chea3/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/chea3.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/chea3.png",
 				"label": "ChEA3",
 				"props": {
 					"libraries": [
@@ -2031,7 +2031,7 @@
 			{
 				"height": 100,
 				"href": "https://tabula-sapiens-portal.ds.czbiohub.org/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/tabula_sapiens.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/tabula_sapiens.png",
 				"label": "Tabula Sapiens",
 				"props": {
 					"libraries": [
@@ -2046,7 +2046,7 @@
 			{
 				"height": 100,
 				"href": "https://tabula-muris.ds.czbiohub.org/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/tabula_muris.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/tabula_muris.png",
 				"label": "Tabula Muris",
 				"props": {
 					"libraries": [
@@ -2061,7 +2061,7 @@
 			{
 				"height": 100,
 				"href": "https://sites.broadinstitute.org/ccle",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/ccle.jpg",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/ccle.jpg",
 				"label": "CCLE Proteomics",
 				"props": {
 					"libraries": [
@@ -2076,7 +2076,7 @@
 			{
 				"height": 100,
 				"href": "https://descartes.brotmanbaty.org/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/descartes.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/descartes.png",
 				"label": "Descartes",
 				"props": {
 					"libraries": [
@@ -2091,7 +2091,7 @@
 			{
 				"height": 100,
 				"href": "https://www.disgenet.org/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/disgenet.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/disgenet.png",
 				"label": "DisGeNET",
 				"props": {
 					"libraries": [
@@ -2106,7 +2106,7 @@
 			{
 				"height": 100,
 				"href": "https://fantom.gsc.riken.jp/",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/FANTOM.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/FANTOM.png",
 				"label": "FANTOM",
 				"props": {
 					"libraries": [
@@ -2121,7 +2121,7 @@
 			{
 				"height": 100,
 				"href": "https://diseases.jensenlab.org/Search",
-				"icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/JENSEN_Diseases.png",
+				"icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/JENSEN_Diseases.png",
 				"label": "Jensen Diseases",
 				"props": {
 					"libraries": [
