@@ -174,6 +174,9 @@ export const resolve_results = async ({
                     const relation_id = `${nodes[relation.start].data.id}_${nodes[relation.end].data.id}`
                     if (edges[relation_id] === undefined) {
                         const relation_type = relation.type
+                        if (colors[relation_type] === undefined) {
+                            console.log(`${relation_type} is undefined`)
+                        }
                         edges[relation_id] = {
                             data: {
                                 source: nodes[relation.start].data.id,
@@ -184,8 +187,8 @@ export const resolve_results = async ({
                                 label: relation_type,
                                 ...properties[relation_type] || {},
                                 ...process_properties(relation.properties),
-                                ...(get_edge_color({relation, record, aggr_scores, ...colors[relation_type]})),
-                                relation: colors[relation_type].edge_suffix ? `${relation_type} ${colors[relation_type].edge_suffix}`:relation_type,
+                                ...(get_edge_color({relation, record, aggr_scores, ...(colors[relation_type] || {})})),
+                                relation: (colors[relation_type] || {}).edge_suffix ? `${relation_type} ${colors[relation_type].edge_suffix}`:relation_type,
                                 directed: relation.properties.directed ? 'triangle': 'none'
                             }
                         }
