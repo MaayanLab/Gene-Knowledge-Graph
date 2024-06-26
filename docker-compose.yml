@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/lncrnalyzr:2.3.9
+    image: maayanlab/lncrnalyzr:2.3.10
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
@@ -43,7 +43,7 @@ services:
       -  lncrnalyzr-neo4j-v5:/data
   
   enrichment:
-    image: maayanlab/independent_enrichment:0.0.9
+    image: maayanlab/independent_enrichment:0.0.10
     ports:
       - 5000:80
     x-kubernetes:
