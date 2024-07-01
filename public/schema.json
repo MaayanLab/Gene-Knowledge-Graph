@@ -2734,7 +2734,7 @@
                 "component": "Download",
                 "position": "bottom",
                 "props": {
-                    "src": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/download_detailed.json"
+                    "src": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/downloads.json"
                 }
             },
             {
