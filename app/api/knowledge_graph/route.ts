@@ -4,7 +4,7 @@ import { z } from "zod"
 import { NextResponse } from "next/server"
 import type { NextRequest } from 'next/server'
 import { augment_gene_set, kind_mapper, get_node_color_and_type_augmented } from "@/utils/helper"
-import { resolve_results } from "./helper"
+import { resolve_results, resolve_node_types } from "./helper"
 import { fetch_kg_schema } from "@/utils/initialize"
 import { initialize } from "../initialize/helper"
 export interface NetworkSchema {
@@ -88,12 +88,13 @@ const resolve_two_terms = async ({
 		`
 	} 
 	const gl = []
+	const q = query
 	query = query + `RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
-	if (gene_links) {
+	if (gene_links.length > 0 || additional_link_tags.length > 0) {
 		query = `CALL {
 			${query}
 		}
-		WITH p as q
+		WITH p as q, n as n1, r as r1
 		`
 		for (const i of gene_links) {
 			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
@@ -102,12 +103,12 @@ const resolve_two_terms = async ({
 		if (gl.length > 0) {
 			query = query + `
 				CALL {
-					WITH q
-					RETURN q as p, nodes(q) as n, relationships(q) as r
+					WITH q, n1, r1
+					RETURN q as p, n1 as n, r1 as r
 					UNION
 					WITH q
-					MATCH p=(c:Gene)-[r:${gl.join("|")}]-(d:Gene)
-					WHERE c in NODES(q) and d in NODES(q)
+					MATCH p=(c)-[r:${gl.join("|")}]-(d)
+					WHERE c in n1 and d in n1
 					${additional_link_tags.length > 0 ?
 						`AND r.hidden_tag IN ${JSON.stringify(additional_link_tags)}`:
 						""
@@ -116,19 +117,21 @@ const resolve_two_terms = async ({
 				}
 				RETURN p, n, r `
 		} else if (additional_link_tags.length > 0){
+			const node_types = await  resolve_node_types({query: q, query_params: { start_term, end_term, limit, ...vars }})
 			query = query + `
 				CALL {
-					WITH q
-					RETURN q as p, nodes(q) as n, relationships(q) as r
-					UNION
-					WITH q
-					MATCH p=(c:Gene)-[r]-(d:Gene)
-					WHERE c in NODES(q) and d in NODES(q)
+					WITH q, n1, r1
+					MATCH p=(c:${node_types})-[r]-(d:${node_types})
+					WHERE c in n1 and d in n1
 					${additional_link_tags.length > 0 ?
 						`AND r.hidden_tag IN ${JSON.stringify(additional_link_tags)}`:
 						""
 					}
 					RETURN p, nodes(p) as n, relationships(p) as r			
+					UNION
+					WITH q, n1, r1
+					RETURN q as p, n1 as n, r1 as r
+					
 				}
 				RETURN p, n, r `
 		}
@@ -151,6 +154,7 @@ const resolve_two_terms = async ({
 			`   
 		}
 	}
+	console.log(query)
 	const query_params = { start_term, end_term, limit, ...vars }
 	return resolve_results({query, query_params, terms: [start_term, end_term],  aggr_scores, colors, fields: [start_field, end_field]})
 }
@@ -190,6 +194,7 @@ const resolve_term_and_end_type = async (
 	
 	let query = `MATCH p=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\`))
 		USING INDEX a:\`${start}\`(${start_field})
+		WHERE all(rel in relationships(p) WHERE rel.hidden IS NULL)
 	`
 	  if (relation) {
 		const rels = []
@@ -217,13 +222,14 @@ const resolve_term_and_end_type = async (
 			`
 		}
 	}
+	const q = query
 	const gl = []
 	query = query + `RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
 	if (gene_links.length > 0 || additional_link_tags.length > 0) {
 		query = `CALL {
 			${query}
 		}
-			WITH p as q
+			WITH p as q, n as n1, r as r1
 		`
 		for (const i of gene_links) {
 			if (edges.indexOf(i) === -1) throw {message: `Invalid relationship ${i}`}
@@ -232,12 +238,12 @@ const resolve_term_and_end_type = async (
 		if (gl.length > 0) {
 			query = query + `
 				CALL {
-					WITH q
-					RETURN q as p, nodes(q) as n, relationships(q) as r
+					WITH q, n1, r1
+					RETURN q as p, n1 as n, r1 as r
 					UNION
-					WITH q
+					WITH q, n1, r1
 					MATCH p=(c:Gene)-[r:${gl.join("|")}]-(d:Gene)
-					WHERE c in NODES(q) and d in NODES(q)
+					WHERE c in n1 and d in n1
 					${additional_link_tags.length > 0 ?
 						`AND r.hidden_tag IN ${JSON.stringify(additional_link_tags)}`:
 						""
@@ -246,19 +252,21 @@ const resolve_term_and_end_type = async (
 				}
 				RETURN p, n, r `
 		} else if (additional_link_tags.length > 0){
+			const node_types = await  resolve_node_types({query: q, query_params: { start_term, limit, ...vars }})
 			query = query + `
 				CALL {
-					WITH q
-					RETURN q as p, nodes(q) as n, relationships(q) as r
-					UNION
-					WITH q
-					MATCH p=(c:Gene)-[r]-(d:Gene)
-					WHERE c in NODES(q) and d in NODES(q)
+					WITH q, n1, r1
+					MATCH p=(c:${node_types})-[r]-(d:${node_types})
+					WHERE c in n1 and d in n1
 					${additional_link_tags.length > 0 ?
 						`AND r.hidden_tag IN ${JSON.stringify(additional_link_tags)}`:
 						""
 					}
 					RETURN p, nodes(p) as n, relationships(p) as r			
+					UNION
+					WITH q, n1, r1
+					RETURN q as p, n1 as n, r1 as r
+					
 				}
 				RETURN p, n, r `
 		}
@@ -492,7 +500,7 @@ const resolve_one_term = async ({
 				MATCH p=(a: Gene)
 				WHERE a.label IN ${JSON.stringify(augmented_genes)}
 				RETURN p, nodes(p) as n, relationships(p) as r
-			`
+			` 
 		}	
 		const augmented_results = await resolve_results({query: q, query_params: { term, limit, ...vars }, terms: [term],  aggr_scores, get_node_color_and_type: get_node_color_and_type_augmented, colors, fields: [field], kind_mapper, misc_props: {augmented_genes, augment, gene_list}})
 		const augmented_edges = []

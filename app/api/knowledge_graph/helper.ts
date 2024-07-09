@@ -4,6 +4,7 @@ import Color from 'color'
 import { process_properties } from "@/utils/helper"
 import {default_color, mui_colors} from '@/utils/colors'
 import { NetworkSchema } from "./route"
+import { e } from "next-usequerystate/dist/serializer-5da93b5e"
 
 let color_map = {}
 let score_fields
@@ -76,6 +77,35 @@ export const default_get_edge_color = ({relation, color, aggr_field, field, aggr
 	}
 }
 
+export const resolve_node_types = async ({
+    query,
+    query_params
+}: {
+    query: string,
+    query_params?: {[key:string]: any},
+}) => {
+    try {
+        const session = neo4jDriver.session({
+            defaultAccessMode: neo4j.session.READ
+        })
+        const q = query + `
+            WITH p limit TOINTEGER($limit)
+            UNWIND NODES(p) as n
+            RETURN DISTINCT labels(n)[0] as node_types LIMIT TOINTEGER($limit)
+        `
+        const results = await session.readTransaction(txc => txc.run(q, query_params))
+        const node_types = []
+        for (const record of results.records) {
+            node_types.push(record.get('node_types'))
+        }
+        console.log(node_types.map(i=>(`\`${i}\``)).join("|"))
+        return node_types.map(i=>(`\`${i}\``)).join("|")
+    }
+    catch (error) {
+        console.log(error)
+        throw error
+    }
+}
 
 export const resolve_results = async ({
     query,
@@ -205,3 +235,5 @@ export const resolve_results = async ({
         }
 	}
 
+
+    
