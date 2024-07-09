@@ -137,6 +137,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
     useEffect(()=>{
         if (gene_links) setGeneLinks(gene_links)
         if (additional_link_tags) setAdditionalLinkTags(additional_link_tags)
+        else setAdditionalLinkTags([])
     }, [searchParams.filter])
     const handleClickMenu = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>, setter:Function) => {
 		setter(e.currentTarget);
