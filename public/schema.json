@@ -486,8 +486,8 @@
                             "component": "DistilleryUseCase",
                             "props": {
                                 "init_function": "initialize_kg",
-                                "title": "Lung Carcinoma Risk",
-                                "icon": "https://minio.dev.maayanlab.cloud/datadistillery-kg/img/apps/disease2exrna.png",
+                                "title": "Risks for Lung Carcinoma",
+                                "icon": "/icon/lungcarc.png",
                                 "description": "Explore the SNPs that indicate risk for lung carcinoma and the tissues they were collected from.",
                                 "endpoint": "/api/biomarker/lungcarcinomarisk",
                                 "type": "Condition",
@@ -499,6 +499,71 @@
                                     "Biomarker"
                                 ],
                                 "default_term": "lung carcinoma"
+                            }
+                        },
+                        {
+                            "endpoint": "/use_cases/brainandthyroid",
+                            "label": "Common SNPs between Brain and Thyroid Cancer",
+                            "type": "page",
+                            "component": "DistilleryUseCase",
+                            "props": {
+                                "init_function": "initialize_kg",
+                                "title": "Common SNPs between Brain and Thyroid Cancer",
+                                "icon": "/icon/brainandthyroid.png",
+                                "description": "See the SNPs that indicate risks for both thyroid and brain cancer.",
+                                "endpoint": "/api/biomarker/brainandthyroid",
+                                "type": "Condition",
+                                "fields": [
+                                    "Condition",
+                                    "id",
+                                    "label",
+                                    "Biomarker"
+                                ],
+                                "default_term": "brain cancer"
+                            }
+                        },
+                        {
+                            "endpoint": "/use_cases/blooddiagnostic",
+                            "label": "SNPs Collected from Blood and Conditions They Can Diagnose",
+                            "type": "page",
+                            "component": "DistilleryUseCase",
+                            "props": {
+                                "init_function": "initialize_kg",
+                                "title": "SNPs Collected from Blood and Conditions They Can Diagnose",
+                                "icon": "/icon/blood.png",
+                                "description": "See the SNPs collected from blood and the conditions they are diagnostic for.",
+                                "endpoint": "/api/biomarker/blooddiagnostic",
+                                "type": "Condition",
+                                "fields": [
+                                    "Anatomy",
+                                    "id",
+                                    "label",
+                                    "Biomarker",
+                                    "Condition"
+                                ],
+                                "default_term": "blood"
+                            }
+                        },
+                        {
+                            "endpoint": "/use_cases/basalcellcarcinomarisk",
+                            "label": "Mutations that Suggest Risk for Basal Cell Carcinoma",
+                            "type": "page",
+                            "component": "DistilleryUseCase",
+                            "props": {
+                                "init_function": "initialize_kg",
+                                "title": "Mutations that Suggest Risk for Basal Cell Carcinoma",
+                                "icon": "/icon/basalcell.png",
+                                "description": "Explore the mutations that indicate risk for basal cell carcinoma.",
+                                "endpoint": "/api/biomarker/basalcellcarcinomarisk",
+                                "type": "Condition",
+                                "fields": [
+                                    "Anatomy",
+                                    "id",
+                                    "label",
+                                    "Biomarker",
+                                    "Variant"
+                                ],
+                                "default_term": "basal cell carcinoma"
                             }
                         }
                     ]
