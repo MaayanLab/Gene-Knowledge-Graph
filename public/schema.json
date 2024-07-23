@@ -252,29 +252,6 @@
         },
         {
             "match": [
-                "indicated_by_below_normal_level_of_(Gene)"
-            ],
-            "selected": true,
-            "display": [
-                {
-                    "label": "source",
-                    "text": "${source}",
-                    "type": "text"
-                },
-                {
-                    "label": "relation",
-                    "text": "${relation}",
-                    "type": "text"
-                },
-                {
-                    "label": "target",
-                    "text": "${target}",
-                    "type": "text"
-                }
-            ]
-        },
-        {
-            "match": [
                 "determined_using_sample_from"
             ],
             "selected": true,
@@ -344,7 +321,7 @@
         },
         {
             "match": [
-                "indicated_by_below_normal_level_of_(Compound)"
+                "indicated_by_below_normal_level_of"
             ],
             "selected": true,
             "display": [
@@ -467,7 +444,7 @@
                 "type": "markdown",
                 "component": "Markdown",
                 "props": {
-                  "src": "https://raw.githubusercontent.com/nialingam/BiomarkerKGDemo/main/About3.md"
+                  "src": "https://raw.githubusercontent.com/nialingam/BiomarkerKGDemo/main/About5.md"
                 }
             },
             {
@@ -480,90 +457,47 @@
                     "description": "Explore use cases that use data from the Biomarker Partnership",
                     "pages": [
                         {
-                            "endpoint": "/use_cases/lungcarcinomarisk",
-                            "label": "Lung Carcinoma Risk",
+                            "endpoint": "/use_cases/thyroidandskinmelanoma",
+                            "label": "Mutations that Pose Risks for Thyroid Cancer and Skin Melanoma",
                             "type": "page",
                             "component": "DistilleryUseCase",
                             "props": {
                                 "init_function": "initialize_kg",
-                                "title": "Risks for Lung Carcinoma",
-                                "icon": "/icon/lungcarc.png",
-                                "description": "Explore the SNPs that indicate risk for lung carcinoma and the tissues they were collected from.",
-                                "endpoint": "/api/biomarker/lungcarcinomarisk",
+                                "title": "Risks for Thyroid Cancer and Skin Melanoma",
+                                "icon": "/icon/thyroidandskin.png",
+                                "description": "Explore the mutations that indicate risk for developing thyroid cancer and skin melanoma.",
+                                "endpoint": "/api/biomarker/thyroidandskinmelanoma",
                                 "type": "Condition",
                                 "fields": [
                                     "Condition",
-                                    "id",
-                                    "label",
-                                    "Anatomy",
-                                    "Biomarker"
-                                ],
-                                "default_term": "lung carcinoma"
-                            }
-                        },
-                        {
-                            "endpoint": "/use_cases/brainandthyroid",
-                            "label": "Common SNPs between Brain and Thyroid Cancer",
-                            "type": "page",
-                            "component": "DistilleryUseCase",
-                            "props": {
-                                "init_function": "initialize_kg",
-                                "title": "Common SNPs between Brain and Thyroid Cancer",
-                                "icon": "/icon/brainandthyroid.png",
-                                "description": "See the SNPs that indicate risks for both thyroid and brain cancer.",
-                                "endpoint": "/api/biomarker/brainandthyroid",
-                                "type": "Condition",
-                                "fields": [
-                                    "Condition",
-                                    "id",
-                                    "label",
-                                    "Biomarker"
-                                ],
-                                "default_term": "brain cancer"
-                            }
-                        },
-                        {
-                            "endpoint": "/use_cases/blooddiagnostic",
-                            "label": "SNPs Collected from Blood and Conditions They Can Diagnose",
-                            "type": "page",
-                            "component": "DistilleryUseCase",
-                            "props": {
-                                "init_function": "initialize_kg",
-                                "title": "SNPs Collected from Blood and Conditions They Can Diagnose",
-                                "icon": "/icon/blood.png",
-                                "description": "See the SNPs collected from blood and the conditions they are diagnostic for.",
-                                "endpoint": "/api/biomarker/blooddiagnostic",
-                                "type": "Condition",
-                                "fields": [
-                                    "Anatomy",
                                     "id",
                                     "label",
                                     "Biomarker",
                                     "Condition"
                                 ],
-                                "default_term": "blood"
+                                "default_term": "thyroid cancer"
                             }
                         },
                         {
-                            "endpoint": "/use_cases/basalcellcarcinomarisk",
-                            "label": "Mutations that Suggest Risk for Basal Cell Carcinoma",
+                            "endpoint": "/use_cases/breastcancerdiagnosis",
+                            "label": "Conditions that biomarkers diagnostic for breast cancer can also diagnose",
                             "type": "page",
                             "component": "DistilleryUseCase",
                             "props": {
                                 "init_function": "initialize_kg",
-                                "title": "Mutations that Suggest Risk for Basal Cell Carcinoma",
-                                "icon": "/icon/basalcell.png",
-                                "description": "Explore the mutations that indicate risk for basal cell carcinoma.",
-                                "endpoint": "/api/biomarker/basalcellcarcinomarisk",
+                                "title": "Conditions that biomarkers diagnostic for breast cancer can also diagnose",
+                                "icon": "/icon/breast.png",
+                                "description": "Discover which other conditions that biomarkers diagnostic for breast cancer can also diagnose.",
+                                "endpoint": "/api/biomarker/breastcancerdiagnosis",
                                 "type": "Condition",
                                 "fields": [
-                                    "Anatomy",
+                                    "Condition",
                                     "id",
                                     "label",
                                     "Biomarker",
-                                    "Variant"
+                                    "Condition"
                                 ],
-                                "default_term": "basal cell carcinoma"
+                                "default_term": "breast cancer"
                             }
                         }
                     ]
@@ -595,7 +529,7 @@
                 "props": {
                   "relation": [
                     "indicated_by_above_normal_level_of",
-                    "indicated_by_below_normal_level_of_(Compound)",
+                    "indicated_by_below_normal_level_of",
                     "indicated_by_presence_of"
                   ],
                   "libraries": [
@@ -622,22 +556,6 @@
               },
               "href": "https://depmap.org/portal/achilles/"
             },
-            {
-                "label": "Gene",
-                "icon": "/icon/gene.png",
-                "height": 100,
-                "width": 100,
-                "props": {
-                  "relation": [
-                    "indicated_by_below_normal_level_of_(Gene)"
-                  ],
-                  "libraries": [
-                    "Achilles_fitness_decrease",
-                    "Achilles_fitness_increase"
-                  ]
-                },
-                "href": "https://depmap.org/portal/achilles/"
-              },
               {
                 "label": "Role",
                 "icon": "/icon/role.png",
