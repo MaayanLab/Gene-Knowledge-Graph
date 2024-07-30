@@ -18,7 +18,7 @@ export default function Footer({style, layout, footer_text}: {
     footer_text?: string
 }) {
     return (
-        <Paper sx={{background: "#336699", color: "#FFF", padding: 2, paddingTop: 5, borderRadius: 0, ...style}}>
+        <Paper sx={{background: "#336699", color: "#FFF", padding: 1, paddingTop: 5, borderRadius: 0, ...style}}>
             <Container maxWidth="lg">
                 <Grid container justifyContent={"space-around"} alignItems={"center"}>
                     {layout.map((part, index)=>{

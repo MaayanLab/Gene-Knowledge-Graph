@@ -1,8 +1,8 @@
-import { resolve_results } from "/Users/nialingam/BiomarkerKGDemo-1/Gene-Knowledge-Graph/app/api/knowledge_graph/helper";
+import { resolve_results } from "../../knowledge_graph/helper";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { z } from 'zod';
-import { initialize } from "/Users/nialingam/BiomarkerKGDemo-1/Gene-Knowledge-Graph/app/api/initialize/helper";
+import { initialize } from "../../initialize/helper";
 async function process_query({
     term,
     limit,
@@ -17,8 +17,8 @@ async function process_query({
         field: string,
         type: string,
     }) {
-    
-    const query = `MATCH path = (c:Condition {label: \`lung carcinoma\`})<-[:indicates_risk_of_developing]-(b:Biomarker)-[:determined_using_sample_from]->(a:Anatomy) RETURN path
+    const query = `MATCH p = (c:Condition {label: 'breast cancer'})<-[:diagnostic_for]-(b:Biomarker)-[:diagnostic_for]->(a:Condition)
+    RETURN p, nodes(p) AS n, relationships(p) AS r LIMIT TOINTEGER($limit)
     
     `
     const query_params = { term, limit }

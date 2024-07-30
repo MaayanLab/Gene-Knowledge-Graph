@@ -16,7 +16,8 @@ const default_header: GridColDef[] = [
         headerName: "Source",
         // flex: 1,
         // style: {flexDirection: "row"},
-        align: "left"
+        align: "left",
+        minWidth: 200
     },
 	{
         field: 'description',
@@ -31,7 +32,7 @@ const default_header: GridColDef[] = [
         align: "left"
     },
     {
-        field: 'terms',
+        field: 'nodes',
         headerName: "Nodes",
         align: "left"
     },

@@ -1,23 +1,23 @@
 import { createTheme } from "@mui/material"
-import { Inter, DM_Sans, Montserrat, Hanken_Grotesk } from 'next/font/google'
+import { DM_Sans } from 'next/font/google'
 
-export const dm_sans = DM_Sans({ 
-    weight: ['500', '700'],
+export const sans = DM_Sans({ 
+    weight: ['400', '500', '600', '700'],
     subsets: ['latin'],
     display: 'swap',
 })
 
 
-export const biomarker_kg_theme = createTheme({
+export const harmonizome_kg_theme = createTheme({
     typography: {
-        fontFamily: dm_sans.style.fontFamily,
+        fontFamily: sans.style.fontFamily,
         h1: {
             fontSize: 40,
             fontStyle: "normal",
             fontWeight: 500,
         },
         h2: {
-            fontSize: 28,
+            fontSize: 32,
             fontWeight: 500,
             fontStyle: "normal",
         },
@@ -40,13 +40,11 @@ export const biomarker_kg_theme = createTheme({
             fontSize: "40px",
             fontStyle: "normal",
             fontWeight: 500,
-            textTransform: "uppercase"
         },
         cfde_small: {
             fontSize: 24,
             fontStyle: "normal",
             fontWeight: 500,
-            textTransform: "uppercase"
         },
         subtitle1: {
             fontSize: 16,
@@ -57,12 +55,12 @@ export const biomarker_kg_theme = createTheme({
             fontWeight: 500,
         },
         body1: {
-            fontFamily: dm_sans.style.fontFamily,
+            fontFamily: sans.style.fontFamily,
             fontSize: 16,
             fontWeight: 500,
         },
         body2: {
-            fontFamily: dm_sans.style.fontFamily,
+            fontFamily: sans.style.fontFamily,
             fontSize: 15,
             fontWeight: 500,
         },
@@ -75,11 +73,10 @@ export const biomarker_kg_theme = createTheme({
             fontSize: 16,
             fontStyle: "normal",
             fontWeight: 600,
-            textTransform: "uppercase",
-            color: "#053c5b"
+            color: "#FFF"
         },
         footer: {
-            fontFamily: dm_sans.style.fontFamily,
+            fontFamily: sans.style.fontFamily,
             fontSize: 16,
             fontStyle: "normal",
             fontWeight: 400,
@@ -88,7 +85,7 @@ export const biomarker_kg_theme = createTheme({
             fontSize: 24,
             fontStyle: "normal",
             fontWeight: 500,
-            color: "#9E9E9E"
+            color: "#339eac"
         },
         stats_sub: {
             fontSize: 16,
@@ -99,19 +96,19 @@ export const biomarker_kg_theme = createTheme({
     },
     palette: {
         primary: {
-            main: "#053c5b",
-            light: "#053c5b",
-            dark: "#84A9AE"
+            main: "#1d2c58", // keep
+            light: "#1d2c58",
+            dark: "#139f9f"
         },
         secondary: {
-            main: "#053c5b",
-            light: "#053c5b",
-            dark: "#1F3D5C"
+            main: "#1d2c58", // text color
+            light: "#1d2c58",
+            dark: "#192048"
         },
         tertiary: {
-            main: "#FFFFFF",
-            light: "#EDF0F8",
-            dark: "#053c5b"
+            main: "#eeeeee",
+            light: "#c9d2e9",
+            dark: "#139f9f"
         },
         paperGray: {
             main: "#FAFAFA",
@@ -129,23 +126,24 @@ export const biomarker_kg_theme = createTheme({
                 // Name of the slot
                 root: {
                   // Some CSS
-                  background: "#FFF",
+                  background: "#132457",
                   boxShadow: "none",
                 },
               },
         },
+
         MuiTableHead: {
             styleOverrides: {
                 root: {
                     borderRadius: "0px 0px 0px 0px",
-                    background: "#C9D2E9"
+                    background: "#FFF"
                 }
             }
         },
         MuiOutlinedInput: {
             styleOverrides: {
                 notchedOutline: {
-                    borderColor: '#336699',
+                    borderColor: '#070707',
                 },
             },
         },
