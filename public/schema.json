@@ -9401,7 +9401,7 @@
         "subheader": [
             {
             "label": "Project Achilles",
-            "icon": "/icons/achilles.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/achilles.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9445,7 +9445,7 @@
             },
             {
                 "label": "BioCarta",
-                "icon": "/icons/biocarta.png",
+                "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/biocarta.png",
                 "height": 40,
                 "width": 40,
                 "props": {
@@ -9461,7 +9461,7 @@
               },
           {
             "label": "BioGPS",
-            "icon": "/icons/biogps.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/biogps.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9484,7 +9484,7 @@
           },
           {
             "label": "CCLE",
-            "icon": "/icons/CCLE.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/CCLE.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9509,7 +9509,7 @@
           },
           {
             "label": "Cell Marker",
-            "icon": "/icons/cellmarker.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/cellmarker.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9525,7 +9525,7 @@
           },
           {
             "label": "ChEA",
-            "icon": "/icons/chea.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/chea.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9543,7 +9543,7 @@
           },
           {
             "label": "ClinVar",
-            "icon": "/icons/clinvar.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/clinvar.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9559,7 +9559,7 @@
           },
           {
             "label": "COMPARTMENTS",
-            "icon": "/icons/jensencomp.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/jensencomp.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9595,7 +9595,7 @@
           },
           {
             "label": "COSMIC",
-            "icon": "/icons/cosmic.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/cosmic.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9614,7 +9614,7 @@
           },
           {
             "label": "CTD",
-            "icon": "/icons/ctd.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/ctd.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9632,7 +9632,7 @@
           },
           {
             "label": "dbGAP",
-            "icon": "/icons/dbgap.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/dbgap.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9648,7 +9648,7 @@
           },
           {
             "label": "DeepCoverMOA",
-            "icon": "/icons/deepcovermoa.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/deepcovermoa.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9665,7 +9665,7 @@
           },
           {
             "label": "DepMap",
-            "icon": "/icons/depmapgenedep.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/depmapgenedep.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9681,7 +9681,7 @@
           },
           {
             "label": "DEPOD",
-            "icon": "/icons/depod.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/depod.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9697,7 +9697,7 @@
           },
           {
             "label": "DISEASES",
-            "icon": "/icons/diseases.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/diseases.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9715,7 +9715,7 @@
           },
           {
             "label": "DrugBank",
-            "icon": "/icons/drugbank.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/drugbank.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9731,7 +9731,7 @@
           },
           {
             "label": "ENCODE",
-            "icon": "/icons/encode.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/encode.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9751,7 +9751,7 @@
           },
           {
             "label": "GAD",
-            "icon": "/icons/gad.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/gad.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9769,7 +9769,7 @@
           },
           {
             "label": "GDSC",
-            "icon": "/icons/gdsc.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/gdsc.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9786,7 +9786,7 @@
           },
           {
             "label": "Gene Ontology",
-            "icon": "/icons/go.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/go.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9806,7 +9806,7 @@
           },
           {
             "label": "GEO",
-            "icon": "/icons/geo.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/geo.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9837,7 +9837,7 @@
           },
           {
             "label": "GeneSigDB",
-            "icon": "/icons/genesigdb.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/genesigdb.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9853,7 +9853,7 @@
           },
           {
             "label": "GlyGen",
-            "icon": "/icons/glygen.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/glygen.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9869,7 +9869,7 @@
           },
           {
             "label": "GTEx",
-            "icon": "/icons/gtex.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/gtex.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9894,7 +9894,7 @@
           },
           {
             "label": "Guide To Pharmacology",
-            "icon": "/icons/guidetopharm.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/guidetopharm.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9912,7 +9912,7 @@
           },
           {
             "label": "GWAS Catalog",
-            "icon": "/icons/gwascatalog.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/gwascatalog.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9928,7 +9928,7 @@
           },
           {
             "label": "GWASdb",
-            "icon": "/icons/gwasdb.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/gwasdb.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9946,7 +9946,7 @@
           },
           {
             "label": "Heiser et al., PNAS, 2011",
-            "icon": "/icons/heiser.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/heiser.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9963,7 +9963,7 @@
           },
           {
             "label": "HMDB",
-            "icon": "/icons/hmdb.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/hmdb.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9979,7 +9979,7 @@
           },
           {
             "label": "HumanCyc",
-            "icon": "/icons/humancyc.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/humancyc.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9995,7 +9995,7 @@
           },
           {
             "label": "Human Protein Atlas",
-            "icon": "/icons/hpa.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/hpa.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10017,7 +10017,7 @@
           },
           {
             "label": "HPM",
-            "icon": "/icons/hpm.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/hpm.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10034,7 +10034,7 @@
           },
           {
             "label": "Human Phenotype Ontology",
-            "icon": "/icons/hpo.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/hpo.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10050,7 +10050,7 @@
           },
           {
             "label": "HuBMAP",
-            "icon": "/icons/hubmap.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/hubmap.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10067,7 +10067,7 @@
           },
           {
             "label": "Hub Proteins",
-            "icon": "/icons/hubproteins.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/hubproteins.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10084,7 +10084,7 @@
           },
           {
             "label": "HuGE Navigator",
-            "icon": "/icons/huge.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/huge.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10100,7 +10100,7 @@
           },
           {
             "label": "IMPC",
-            "icon": "/icons/impc.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/impc.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10116,7 +10116,7 @@
           },
           {
             "label": "InterPro",
-            "icon": "/icons/interpro.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/interpro.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10132,7 +10132,7 @@
           },
           {
             "label": "JASPAR PWMs",
-            "icon": "/icons/jaspar.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/jaspar.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10148,7 +10148,7 @@
           },
           {
             "label": "KEA3",
-            "icon": "/icons/kea3.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/kea3.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10164,7 +10164,7 @@
           },
           {
             "label": "KEGG Pathway",
-            "icon": "/icons/KEGG.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/KEGG.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10180,7 +10180,7 @@
           },
           {
             "label": "Kinase Library",
-            "icon": "/icons/kinaselibrary.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/kinaselibrary.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10196,7 +10196,7 @@
           },
           {
             "label": "Klijn et al., Nat. Biotechnol., 2015",
-            "icon": "/icons/klijn.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/klijn.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10218,7 +10218,7 @@
           },
           {
             "label": "KnockTF",
-            "icon": "/icons/knock.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/knock.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10235,7 +10235,7 @@
           },
           {
             "label": "LINCS Kinativ",
-            "icon": "/icons/kinativ.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/kinativ.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10252,7 +10252,7 @@
           },
           {
             "label": "LINCS KinomeScan",
-            "icon": "/icons/kinscan.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/kinscan.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10268,7 +10268,7 @@
           },
           {
             "label": "LINCS L1000 Connectivity Map",
-            "icon": "/icons/l1000.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/l1000.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10291,7 +10291,7 @@
           },
           {
             "label": "LOCATE",
-            "icon": "/icons/locate.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/locate.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10309,7 +10309,7 @@
           },
           {
             "label": "MiRTarBase",
-            "icon": "/icons/mirtarbase.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/mirtarbase.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10325,7 +10325,7 @@
           },
           {
             "label": "MotifMap",
-            "icon": "/icons/motifmap.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/motifmap.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10341,7 +10341,7 @@
           },
           {
             "label": "MoTrPAC",
-            "icon": "/icons/motrpac.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/motrpac.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10358,7 +10358,7 @@
           },
           {
             "label": "MPO",
-            "icon": "/icons/mpo.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/mpo.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10375,7 +10375,7 @@
           },
           {
             "label": "MSigDB",
-            "icon": "/icons/msigdb.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/msigdb.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10393,7 +10393,7 @@
           },
           {
             "label": "MW Metabolites",
-            "icon": "/icons/mw.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/mw.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10409,7 +10409,7 @@
           },
           {
             "label": "OMIM",
-            "icon": "/icons/omim.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/omim.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10425,7 +10425,7 @@
           },
           {
             "label": "PANTHER",
-            "icon": "/icons/panther.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/panther.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10441,7 +10441,7 @@
           },
           {
             "label": "Pathway Commons",
-            "icon": "/icons/pc.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/pc.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10457,7 +10457,7 @@
           },
           {
             "label": "PhosphoSitePlus",
-            "icon": "/icons/phosphosite.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/phosphosite.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10484,7 +10484,7 @@
           },
           {
             "label": "PID Pathways",
-            "icon": "/icons/pid.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/pid.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10501,7 +10501,7 @@
           },
           {
             "label": "Proteomics DB",
-            "icon": "/icons/proteomicsdb.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/proteomicsdb.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10519,7 +10519,7 @@
           },
           {
             "label": "Reactome",
-            "icon": "/icons/reactome.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/reactome.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10536,7 +10536,7 @@
           },
           {
             "label": "Roadmap Epigenomics",
-            "icon": "/icons/roadmap.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/roadmap.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10558,7 +10558,7 @@
           },
           {
             "label": "Sanger Dep Map",
-            "icon": "/icons/sanger.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/sanger.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10576,7 +10576,7 @@
           },
           {
             "label": "Tabula Sapiens",
-            "icon": "/icons/tabula.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/tabula.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10592,7 +10592,7 @@
           },
           {
             "label": "TargetScan",
-            "icon": "/icons/targetscan.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/targetscan.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10609,7 +10609,7 @@
           },
           {
             "label": "TCGA",
-            "icon": "/icons/tcga.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/tcga.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10626,7 +10626,7 @@
           },
           {
             "label": "TISSUES",
-            "icon": "/icons/tissues.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/tissues.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10646,7 +10646,7 @@
           },
           {
             "label": "VirusMINT",
-            "icon": "/icons/virusmint.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/virusmint.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10664,7 +10664,7 @@
           },
           {
             "label": "WikiPathways",
-            "icon": "/icons/wikipathways.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/wikipathways.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -10736,7 +10736,7 @@
                 }
             ]
         ],
-        "footer_text": "<span style='color:white'>Please acknowledge Enrichr-KG in your publications by citing the following reference:<br><a style='color: cyan' href='https://doi.org/10.1093/nar/gkad393'>Evangelista JE, Xie Z, Marino GB, Nguyen N, Clarke DJB, Ma'ayan A. Enrichr-KG: bridging enrichment analysis across multiple libraries. Nucleic Acids Res. 2023 May 11:gkad393. doi: 10.1093/nar/gkad393. PMID: 37166973.</a></span>"
+        "footer_text": ""
     },
     "ui_theme": "harmonizome_kg_theme"
 }
