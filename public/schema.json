@@ -30,34 +30,6 @@
             ]
         },
         {
-            "node": "Gene",
-            "example": [
-                "VEGFA"
-            ],
-            "display": [
-                {
-                    "label": "Gene ID",
-                    "text": "${id}",
-                    "type": "text"
-                },
-                {
-                    "label": "label",
-                    "text": "${label}",
-                    "type": "text"
-                },
-                {
-                    "label": "type",
-                    "text": "${type}",
-                    "type": "text"
-                }
-            ],
-            "relation": [],
-            "search": [
-                "id",
-                "label"
-            ]
-        },
-        {
             "node": "Anatomy",
             "example": [
                 "blood",
