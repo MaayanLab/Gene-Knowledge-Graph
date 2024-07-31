@@ -9579,7 +9579,7 @@
           },
           {
             "label": "CORUM",
-            "icon": "/icons/corum.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/CORUM.png",
             "height": 40,
             "width": 40,
             "props": {
