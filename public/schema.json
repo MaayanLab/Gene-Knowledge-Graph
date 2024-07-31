@@ -9418,7 +9418,7 @@
           },
           {
             "label": "Allen Brain Atlas",
-            "icon": "/icons/ABA.png",
+            "icon": "s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/ABA.png",
             "height": 40,
             "width": 40,
             "props": {
