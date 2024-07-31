@@ -9401,7 +9401,7 @@
         "subheader": [
             {
             "label": "Project Achilles",
-            "icon": "https://https://s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/achilles.png",
+            "icon": "https://s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/achilles.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9418,7 +9418,7 @@
           },
           {
             "label": "Allen Brain Atlas",
-            "icon": "https://https://s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/ABA.png",
+            "icon": "https://s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/ABA.png",
             "height": 40,
             "width": 40,
             "props": {
@@ -9445,7 +9445,7 @@
             },
             {
                 "label": "BioCarta",
-                "icon": "https://https://s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/biocarta.png",
+                "icon": "https://s3.amazonaws.com/maayan-kg/harmonizome-kg/assets/biocarta.png",
                 "height": 40,
                 "width": 40,
                 "props": {
