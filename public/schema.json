@@ -266,7 +266,8 @@
                     "text": "${target}",
                     "type": "text"
                 }
-            ]
+            ],
+            "color": "#4fc3f7"
         },
         {
             "match": [
@@ -312,7 +313,8 @@
                     "text": "${target}",
                     "type": "text"
                 }
-            ]
+            ],
+            "color": "#f38d9f"
         },
         {
             "match": [
@@ -385,8 +387,8 @@
                 "component": "KnowledgeGraph",
                 "props": {
                     "init_function": "initialize_kg",
-                    "title": "BKG Explorer: Find connections between different BKG entities.",
-                    "description": "Search two BKG entities or one entity to see related BKG entities.",
+                    "title": "BKG Explorer: Find connections between different entities from the Biomarker Partnership.",
+                    "description": "Search two entities or one entity to see related entities.",
                     "initial_query": {
                         "start": "Condition",
                         "start_term": "lung carcinoma",
@@ -416,7 +418,7 @@
                 "type": "markdown",
                 "component": "Markdown",
                 "props": {
-                  "src": "https://raw.githubusercontent.com/nialingam/BiomarkerKGDemo/main/About5.md"
+                  "src": "https://raw.githubusercontent.com/MaayanLab/BiomarkerKG/main/About5.md"
                 }
             },
             {
