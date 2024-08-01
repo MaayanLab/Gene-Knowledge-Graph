@@ -106,13 +106,6 @@ const node_header: GridColDef[] = [
 ]
 
 const edge_header: GridColDef[] = [
-    {
-        field: 'resource',
-        headerName: "Resource",
-        // flex: 1,
-        // style: {flexDirection: "row"},
-        align: "left"
-    },
 	{
         field: 'source',
         headerName: "Source",
@@ -245,13 +238,12 @@ const ClientSide = ({download, type}: {download: Array<{
 	size: string
 }> | Array<{
 	node_type: string,
-	resource: string,
 	description?: string,
 	terms: number,
 	url: string,
 	size: string
 }> | Array<{
-	resource: string,
+
 	source: string,
 	relation: string,
 	target: string,
