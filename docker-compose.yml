@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: nlingam05/bkg:2.3.21
+    image: nlingam05/bkg:2.3.22
     x-kubernetes:
       strategy:
         type: Recreate
