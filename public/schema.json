@@ -432,14 +432,14 @@
                     "pages": [
                         {
                             "endpoint": "/use_cases/thyroidandskinmelanoma",
-                            "label": "Mutations that Pose Risks for Thyroid Cancer and Skin Melanoma",
+                            "label": "HRAS and BRAF Variant Risks for Thyroid Cancer and Skin Melanoma",
                             "type": "page",
                             "component": "DistilleryUseCase",
                             "props": {
                                 "init_function": "initialize_kg",
-                                "title": "Risks for Thyroid Cancer and Skin Melanoma",
+                                "title": "HRAS and BRAF Variant Risks for Thyroid Cancer and Skin Melanoma",
                                 "icon": "/icon/thyroidandskin.png",
-                                "description": "Explore the mutations that indicate risk for developing thyroid cancer and skin melanoma.",
+                                "description": "Discover the variants in HRAS and BRAF that indicate common risk for developing both thyroid cancer and melanoma.",
                                 "endpoint": "/api/biomarker/thyroidandskinmelanoma",
                                 "type": "Condition",
                                 "fields": [
@@ -618,7 +618,7 @@
                 }
             ]
         ],
-        "footer_text": "."
+        "footer_text": ""
     },
     "ui_theme": "biomarker_kg_theme"
 }
