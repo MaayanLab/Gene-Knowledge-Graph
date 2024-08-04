@@ -432,15 +432,15 @@
                     "pages": [
                         {
                             "endpoint": "/use_cases/thyroidandskinmelanoma",
-                            "label": "HRAS Variant Risks for Thyroid Cancer and Skin Melanoma",
+                            "label": "HRAS Variant Risks for Thyroid Cancer and Skin Carcinoma",
                             "type": "page",
                             "component": "DistilleryUseCase",
                             "props": {
                                 "init_function": "initialize_kg",
-                                "title": "HRAS Variant Risks for Thyroid Cancer and Skin Melanoma",
+                                "title": "HRAS Variant Risks for Thyroid Cancer and Skin Carcinoma",
                                 "icon": "/icon/thyroidandskin.png",
-                                "description": "Discover the variants in HRAS that indicate common risk for developing both thyroid cancer and melanoma.",
-                                "endpoint": "/api/biomarker/thyroidandskinmelanoma",
+                                "description": "Discover the variants in HRAS that indicate common risk for developing both thyroid cancer and skin carcinoma.",
+                                "endpoint": "/api/biomarker/thyroidandskincarcinoma",
                                 "type": "Condition",
                                 "fields": [
                                     "Condition",
