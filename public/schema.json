@@ -393,8 +393,8 @@
                         "start": "Condition",
                         "start_term": "lung carcinoma",
                         "start_field": "label",
-                        "end": "Anatomy",
-                        "end_term": "blood",
+                        "end": "Condition",
+                        "end_term": "ovarian carcinoma",
                         "end_field": "label"
                     },
                     "subheader": {
@@ -432,14 +432,14 @@
                     "pages": [
                         {
                             "endpoint": "/use_cases/thyroidandskinmelanoma",
-                            "label": "HRAS and BRAF Variant Risks for Thyroid Cancer and Skin Melanoma",
+                            "label": "HRAS Variant Risks for Thyroid Cancer and Skin Melanoma",
                             "type": "page",
                             "component": "DistilleryUseCase",
                             "props": {
                                 "init_function": "initialize_kg",
-                                "title": "HRAS and BRAF Variant Risks for Thyroid Cancer and Skin Melanoma",
+                                "title": "HRAS Variant Risks for Thyroid Cancer and Skin Melanoma",
                                 "icon": "/icon/thyroidandskin.png",
-                                "description": "Discover the variants in HRAS and BRAF that indicate common risk for developing both thyroid cancer and melanoma.",
+                                "description": "Discover the variants in HRAS that indicate common risk for developing both thyroid cancer and melanoma.",
                                 "endpoint": "/api/biomarker/thyroidandskinmelanoma",
                                 "type": "Condition",
                                 "fields": [
