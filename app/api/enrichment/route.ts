@@ -60,7 +60,7 @@ const enrichment = async ({
     expand_limit?: number,
 }) => {
     try {
-        const nod = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/enrichment/node_mapping`)
+        const nod = await fetch(`${process.env.NODE_ENV==="development" ? process.env.NEXT_PUBLIC_HOST_DEV : process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/enrichment/node_mapping`)
         if (nod.ok !== true) {
             throw new Error(`Error fetching node_map`)
         }
@@ -204,7 +204,6 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({error: "library is empty"}, {status: 400})
         }
         const results = await enrichment({userListId, libraries, gene_limit, term_degree, min_lib, gene_degree, remove, expand, gene_links, expand_limit})
-        fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/counter/update`)
         return NextResponse.json(results, {status: 200})
     } catch (error) {
         console.error(error)

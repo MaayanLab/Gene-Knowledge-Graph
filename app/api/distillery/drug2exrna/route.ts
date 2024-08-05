@@ -99,7 +99,6 @@ export async function GET(req: NextRequest) {
         else { 
             try {
                 const results = await process_query({term:start_term, limit, aggr_scores, colors, field:start_field })
-                fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/counter/update`)
                 return NextResponse.json(results, {status: 200})
             } catch (e) {
                 return NextResponse.json(e, {status: 400})
