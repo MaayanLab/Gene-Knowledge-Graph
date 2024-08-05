@@ -431,7 +431,7 @@
                     "description": "Explore use cases that use data from the Biomarker Partnership",
                     "pages": [
                         {
-                            "endpoint": "/use_cases/thyroidandskinmelanoma",
+                            "endpoint": "/use_cases/thyroidandskincarcinoma",
                             "label": "HRAS Variant Risks for Thyroid Cancer and Skin Carcinoma",
                             "type": "page",
                             "component": "DistilleryUseCase",
@@ -440,7 +440,7 @@
                                 "title": "HRAS Variant Risks for Thyroid Cancer and Skin Carcinoma",
                                 "icon": "/icon/thyroidandskin.png",
                                 "description": "Discover the variants in HRAS that indicate common risk for developing both thyroid cancer and skin carcinoma.",
-                                "endpoint": "/api/biomarker/thyroidandskincarcinoma",
+                                "endpoint": "/api/biomarker/thyroidandskinmelanoma",
                                 "type": "Condition",
                                 "fields": [
                                     "Condition",
