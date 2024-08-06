@@ -2392,6 +2392,7 @@
     "header": {
         "title": "Data Distillery KG",
         "fullWidth": false,
+        "counterTop": false,
         "icon": {
             "src": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/CFDE.png",
             "favicon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/favicon.png",
