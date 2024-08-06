@@ -1,6 +1,5 @@
 'use client'
 import { useRef, useState, useEffect } from 'react';
-import { useSWRConfig } from 'swr'
 // import dynamic from 'next/dynamic';
 import { NetworkSchema } from '@/app/api/knowledge_graph/route';
 import CytoscapeComponent from 'react-cytoscapejs';
@@ -12,6 +11,7 @@ import HubIcon from '@mui/icons-material/Hub';
 import { mdiFamilyTree,  mdiDotsCircle} from '@mdi/js';
 import Icon from '@mdi/react';
 import fileDownload from 'js-file-download';
+
 export const layouts = {
     "Force-directed": {
       name: 'cose',
@@ -36,9 +36,6 @@ export const layouts = {
     },
   }
 
-
-
-
 export default function Cytoscape ({
 	elements,
 	schema,
@@ -54,6 +51,7 @@ export default function Cytoscape ({
 }) {
 	const cyref = useRef(null);
 	const networkRef = useRef(null);
+	const [ready, setReady] = useState<boolean>(false)
 	const [id, setId] = useState<number>(0)
 	const [node, setNode] = useState(null)
     const [edge, setEdge] = useState(null)
@@ -66,8 +64,6 @@ export default function Cytoscape ({
 	const [legend_size, setLegendSize] = useQueryState('legend_size')
 	const [download_image, setDownloadImage] = useQueryState('download_image')
 	const edgeStyle = edge_labels ? {label: 'data(label)'} : {}
-
-	const { mutate } = useSWRConfig()
 	useEffect(()=>{
 		const cytoscape = require('cytoscape')
 		const svg = require('cytoscape-svg')
@@ -86,18 +82,8 @@ export default function Cytoscape ({
 	}, [download_image])
 
 	useEffect(()=>{
-		const update_counter = async () => {
-			await fetch(`${process.env.NODE_ENV==="development" ? process.env.NEXT_PUBLIC_HOST_DEV : process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/counter/update`)
-			mutate('/api/counter')
-		}
-		if (elements && elements.nodes.length > 0) update_counter()
 		setId(id+1)
-	}, [elements])
-
-
-	useEffect(()=>{
-		setId(id+1)
-	},[layout, elements])
+	},[elements, layout])
 	// if (!ready) return <CircularProgress/>
 	return (
 		<div id="kg-network" style={{minHeight: 500, position: "relative"}} ref={networkRef}>
