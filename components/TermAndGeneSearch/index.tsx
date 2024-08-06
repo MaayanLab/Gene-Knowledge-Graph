@@ -117,8 +117,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                 signal: controller.signal,
             }) 
             if (!res.ok) console.log(await res.text())
-            else elements = await res.json()
-        
+            else elements = await res.json()        
         
             for (const i of (elements || {}).edges || []) {
                 if (i.data.relation && selected_edges.indexOf(i.data.label) === -1) {

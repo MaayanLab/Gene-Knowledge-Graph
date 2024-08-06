@@ -35,10 +35,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 # CFDE-KX
 
 ## Install
-helm install lncrnalyzr maayanlab/docker-compose -f <(docker-compose config) -n lncrnalyzr --create-namespace 
+helm install distillery maayanlab/docker-compose -f <(docker-compose config) -n distillery --create-namespace 
 
 ## UPGRADE
-helm upgrade lncrnalyzr maayanlab/docker-compose -f <(docker-compose config) -n lncrnalyzr 
+helm upgrade distillery maayanlab/docker-compose -f <(docker-compose config) -n distillery 
 
 helm template cfde-gse maayanlab/docker-compose -f <(docker-compose config) -n cfde-gse 
 

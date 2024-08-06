@@ -11,6 +11,7 @@ import { UISchema } from '@/app/api/schema/route';
 import { Logo } from '../misc/logo';
 import Counter from '../Counter';
 import { TextNav } from './TextNav';
+import { fetch_kg_schema } from '@/utils/initialize';
 export const Nav = ({tabs, ui_theme, divider, title, icon}:
 	{
 		ui_theme?: string,
@@ -31,6 +32,7 @@ export const Nav = ({tabs, ui_theme, divider, title, icon}:
 				[key: string]: any
 			}
 		}>}) => {
+	
 	const tab_component = {top: [], bottom:[]}
 	for (const tab of tabs) {
 		const position = tab.position || 'top'
@@ -60,16 +62,17 @@ export const Nav = ({tabs, ui_theme, divider, title, icon}:
 				</Stack>
 			</Grid>
 			{tab_component.bottom.length > 0 &&
-				<Grid item>
-					<Stack direction={"row"} alignItems={"center"} spacing={2}>
-						{tab_component.bottom}		
+				<Grid item xs={12}>
+					<Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"} spacing={2}>
+						<Stack direction={"row"} alignItems={"center"} spacing={2}>
+							{tab_component.bottom}		
+						</Stack>
+						<Counter ui_theme={ui_theme}/>
 					</Stack>
+					
 				</Grid>
 			}
-			{tab_component.bottom.length > 0 ?
-				<Grid item>		
-					<Counter ui_theme={ui_theme}/>
-				</Grid>:
+			{tab_component.bottom.length === 0 &&
 				<Grid item xs={12} className='flex justify-end'>		
 					<Counter ui_theme={ui_theme}/>
 				</Grid>
@@ -78,7 +81,7 @@ export const Nav = ({tabs, ui_theme, divider, title, icon}:
 	)
 }
 
-export default function Header ({schema}: {schema: UISchema}) {
+export default async function Header ({schema}: {schema:UISchema}) {
 	const {title, icon, tabs, divider} = schema.header
 	return  (
 		<AppBar position="static" sx={{color: "#000", paddingTop: 3, paddingBottom: 3, mb: 2}}>
