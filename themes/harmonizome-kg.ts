@@ -71,6 +71,7 @@ export const harmonizome_kg_theme = createTheme({
         nav: {
             fontSize: 16,
             fontStyle: "normal",
+            textTransform: "uppercase",
             fontWeight: 600,
             color: "#FFF"
         },
@@ -120,11 +121,26 @@ export const harmonizome_kg_theme = createTheme({
         }
     },
     components: {
+        MuiToolbar: {
+            styleOverrides: {
+                // Name of the slot
+                root: {
+                  // Some CSS
+                  maxWidth: 1200,
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '0',  
+                  marginLeft: 'auto',
+                  marginRight: 'auto'    
+                },
+              },
+        },
         MuiAppBar: {
             styleOverrides: {
                 // Name of the slot
                 root: {
                   // Some CSS
+                  height: '50px',
                   background: "#132457",
                   boxShadow: "none",
                 },

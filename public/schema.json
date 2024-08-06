@@ -9351,19 +9351,21 @@
             "backgroundColor": "#000",
             "contrastText": "#FFF"
         },
+        "fullWidth": true,
+        "counterTop": true,
         "icon": {
             "src": "/icons/logo.png",
             "favicon": "/icons/logo.png",
             "faviconTitle": "Harmonizome-KG",
             "alt": "Harmonizome-KG",
             "key": "Harmonizome-KG_logo",
-            "width": 100,
-            "height": 60
+            "width": 30,
+            "height": 30
         },
         "tabs": [
             {
                 "endpoint": "/",
-                "label": "Term & Gene Search",
+                "label": "TERM & GENE SEARCH",
                 "type": "page",
                 "component": "KnowledgeGraph",
                 "props": {
@@ -9381,7 +9383,7 @@
             },
             {
                 "endpoint": "/downloads",
-                "label": "Download",
+                "label": "DOWNLOAD",
                 "type": "page",
                 "component": "Download",
                 "props": {
@@ -9390,7 +9392,7 @@
             },
             {
                 "endpoint": "/tutorial",
-                "label": "Tutorial",
+                "label": "TUTORIAL",
                 "type": "markdown",
                 "component": "Markdown",
                 "props": {

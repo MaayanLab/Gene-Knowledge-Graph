@@ -5,11 +5,7 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-<<<<<<< HEAD
     image: nlingam05/harmonizome-kg:2.3.21
-=======
-    image: maayanlab/distillery:2.4.0
->>>>>>> upstream/next14
     x-kubernetes:
       strategy:
         type: Recreate
