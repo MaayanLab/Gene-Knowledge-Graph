@@ -1,15 +1,15 @@
 import { createTheme } from "@mui/material"
-import { Noto_Sans_Display } from 'next/font/google'
+import { DM_Sans } from 'next/font/google'
 
-export const noto_sans = Noto_Sans_Display({ 
+export const sans = DM_Sans({ 
     weight: ['400', '500', '600', '700'],
     subsets: ['latin'],
     display: 'swap',
 })
 
-export const enrichr_kg_theme = createTheme({
+export const harmonizome_kg_theme = createTheme({
     typography: {
-        fontFamily: noto_sans.style.fontFamily,
+        fontFamily: sans.style.fontFamily,
         h1: {
             fontSize: 40,
             fontStyle: "normal",
@@ -36,7 +36,7 @@ export const enrichr_kg_theme = createTheme({
             fontWeight: 500,
         },
         cfde: {
-            fontSize: "40px",
+            fontSize: 25,
             fontStyle: "normal",
             fontWeight: 500,
         },
@@ -54,12 +54,12 @@ export const enrichr_kg_theme = createTheme({
             fontWeight: 500,
         },
         body1: {
-            fontFamily: noto_sans.style.fontFamily,
+            fontFamily: sans.style.fontFamily,
             fontSize: 16,
             fontWeight: 500,
         },
         body2: {
-            fontFamily: noto_sans.style.fontFamily,
+            fontFamily: sans.style.fontFamily,
             fontSize: 15,
             fontWeight: 500,
         },
@@ -69,13 +69,14 @@ export const enrichr_kg_theme = createTheme({
             fontWeight: 500,
         },
         nav: {
-            fontSize: 16,
+            fontSize: 14,
             fontStyle: "normal",
+            textTransform: "uppercase",
             fontWeight: 600,
             color: "#FFF"
         },
         footer: {
-            fontFamily: noto_sans.style.fontFamily,
+            fontFamily: sans.style.fontFamily,
             fontSize: 16,
             fontStyle: "normal",
             fontWeight: 400,
@@ -84,7 +85,7 @@ export const enrichr_kg_theme = createTheme({
             fontSize: 24,
             fontStyle: "normal",
             fontWeight: 500,
-            color: "#9E9E9E"
+            color: "#339eac"
         },
         stats_sub: {
             fontSize: 16,
@@ -95,18 +96,18 @@ export const enrichr_kg_theme = createTheme({
     },
     palette: {
         primary: {
-            main: "#C5F8F8",
-            light: "#e8fcfc",
+            main: "#1d2c58", // keep
+            light: "#1d2c58",
             dark: "#139f9f"
         },
         secondary: {
-            main: "#3F51B5",
-            light: "#b0b8e4",
+            main: "#1d2c58", // text color
+            light: "#1d2c58",
             dark: "#192048"
         },
         tertiary: {
-            main: "#C5F8F8",
-            light: "#e8fcfc",
+            main: "#eeeeee",
+            light: "#c9d2e9",
             dark: "#139f9f"
         },
         paperGray: {
@@ -120,31 +121,48 @@ export const enrichr_kg_theme = createTheme({
         }
     },
     components: {
+        MuiToolbar: {
+            styleOverrides: {
+                // Name of the slot
+                root: ({ theme }) => ({
+					width: 1170,
+					marginLeft: 'auto',
+					marginRight: 'auto',
+					height: 50,
+					[theme.breakpoints.down('md')]: {
+						width: 1000,
+					},
+					[theme.breakpoints.down('sm')]: {
+						width: 800,
+					},
+				  })
+              },
+        },
         MuiAppBar: {
             styleOverrides: {
                 // Name of the slot
                 root: {
                   // Some CSS
-                  background: "#000",
+                  minHeight: 50,
+                  background: "#132457",
                   boxShadow: "none",
-                  paddingTop: 3, 
-                  paddingBottom: 3, 
-                  mb: 2
+				  marginBottom: 10,
                 },
               },
         },
+
         MuiTableHead: {
             styleOverrides: {
                 root: {
                     borderRadius: "0px 0px 0px 0px",
-                    background: "#C9D2E9"
+                    background: "#FFF"
                 }
             }
         },
         MuiOutlinedInput: {
             styleOverrides: {
                 notchedOutline: {
-                    borderColor: '#336699',
+                    borderColor: '#070707',
                 },
             },
         },
