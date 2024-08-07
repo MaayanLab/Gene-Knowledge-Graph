@@ -9,7 +9,6 @@ import { cfde_theme } from '@/themes/cfde';
 import { enrichr_kg_theme } from '@/themes/enrichr-kg';
 import { lncRNAlyzr } from '@/themes/lncRNAlyzr';
 import { harmonizome_kg_theme } from '@/themes/harmonizome-kg';
-
 const themes = {
     cfde_theme: cfde_theme,
     enrichr_kg_theme: enrichr_kg_theme,

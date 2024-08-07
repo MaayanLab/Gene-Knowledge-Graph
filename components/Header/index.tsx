@@ -85,7 +85,7 @@ export const Nav = ({tabs, ui_theme, divider, title, icon, counterTop}:
 export default async function Header ({schema}: {schema:UISchema}) {
 	const {title, icon, tabs, divider, counterTop} = schema.header
 	return  (
-		<AppBar position="static" sx={{color: "#000", paddingTop: 0, paddingBottom: 0, mb: 2}}>
+		<AppBar position="static" sx={{color: "#000"}}>
 			<Toolbar>
 				<Nav counterTop={counterTop} tabs={tabs} divider={divider} ui_theme={schema.ui_theme} title={title} icon={icon}/>
 			</Toolbar>

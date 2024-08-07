@@ -36,7 +36,7 @@ export const harmonizome_kg_theme = createTheme({
             fontWeight: 500,
         },
         cfde: {
-            fontSize: "40px",
+            fontSize: 25,
             fontStyle: "normal",
             fontWeight: 500,
         },
@@ -69,7 +69,7 @@ export const harmonizome_kg_theme = createTheme({
             fontWeight: 500,
         },
         nav: {
-            fontSize: 16,
+            fontSize: 14,
             fontStyle: "normal",
             textTransform: "uppercase",
             fontWeight: 600,
@@ -124,14 +124,18 @@ export const harmonizome_kg_theme = createTheme({
         MuiToolbar: {
             styleOverrides: {
                 // Name of the slot
-                root: {
-                  // Some CSS
-                  maxWidth: 1200,
-                  display: 'flex',
-                  alignItems: 'center',
-                  marginLeft: 'auto',
-                  marginRight: 'auto'    
-                },
+                root: ({ theme }) => ({
+					width: 1170,
+					marginLeft: 'auto',
+					marginRight: 'auto',
+					height: 50,
+					[theme.breakpoints.down('md')]: {
+						width: 1000,
+					},
+					[theme.breakpoints.down('sm')]: {
+						width: 800,
+					},
+				  })
               },
         },
         MuiAppBar: {
@@ -139,9 +143,10 @@ export const harmonizome_kg_theme = createTheme({
                 // Name of the slot
                 root: {
                   // Some CSS
-                  height: '50px',
+                  minHeight: 50,
                   background: "#132457",
                   boxShadow: "none",
+				  marginBottom: 10,
                 },
               },
         },
