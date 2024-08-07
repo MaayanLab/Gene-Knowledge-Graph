@@ -175,14 +175,79 @@ export const Icon = ({src, alt, href, height, width}: {src: string, alt: string,
   }
 }
 
-const MiscComponent = ({component, props}) => {
-    if (component === 'logo') return <Logo {...props}/>
-    else if (component === 'github') return <Github {...props}/>
-    // else if (component === 'social') return <Socials {...props}/>
-    else if (component === 'text') return <Text {...props}/>
-    else if (component === 'link') return <TextLink {...props}/>
-    else if (component === 'icon') return <Icon {...props}/>
-    else return null
-}
+const HarmonizomeFooter = () => {
+  return (
+    <Box className="footer container-full" sx={{ width: '100%', backgroundColor: '#eee', color: '#444', padding: '13px' }}>
+      <Grid container className="container" sx={{ justifyContent: 'space-between' }}>
+        <Grid item xs={12} md={8} className="pull-left">
+          <ul id="contact" className="list-inline" style={{ listStyleType: 'none', padding: 0, display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
+            <li>
+              <Link href="http://icahn.mssm.edu/research/labs/maayan-laboratory" target="_blank" legacyBehavior>
+                <a style={{ fontSize: '14px', textDecoration: 'none', color: 'inherit' }}>
+                  Ma'ayan Laboratory of Computational Systems Biology
+                </a>
+              </Link>
+            </li>
+            <li style={{ borderLeft: '1px solid #aaa', paddingLeft: '8px' }}>
+              <Link href="/contact" legacyBehavior>
+                <a style={{ fontSize: '14px', textDecoration: 'none', color: 'inherit' }}>Contact Us</a>
+              </Link>
+            </li>
+            <li style={{ borderLeft: '1px solid #aaa', paddingLeft: '8px' }}>
+              <Link href="https://github.com/MaayanLab/harmonizome-issues/issues" target="_blank" legacyBehavior>
+                <a style={{ fontSize: '14px', textDecoration: 'none', color: 'inherit' }}>Submit an issue on GitHub</a>
+              </Link>
+            </li>
+            <li style={{ borderLeft: '1px solid #aaa', paddingLeft: '8px' }}>
+              <Link href="/terms" legacyBehavior>
+                <a style={{ fontSize: '14px', textDecoration: 'none', color: 'inherit' }}>Terms</a>
+              </Link>
+            </li>
+          </ul>
+          <Box id="citation" sx={{ marginTop: '15px' }}>
+            <Typography variant="subtitle2" component="h6" sx={{ fontWeight: 'bold', fontSize: '14px', marginBottom: '5px' }}>
+              Please acknowledge the Harmonizome in your publications by citing the following reference:
+            </Typography>
+            <Typography variant="body2" component="p" sx={{ fontSize: '14px', fontFamily: 'Roboto, Helvetica, Arial, sans-serif' }}>
+              <Link href="http://database.oxfordjournals.org/content/2016/baw100.short" target="_blank" legacyBehavior>
+                <a style={{ textDecoration: 'none', color: 'inherit' }}>
+                  Rouillard AD, Gundersen GW, Fernandez NF, Wang Z, Monteiro CD, McDermott MG, Ma'ayan A. 
+                  <em>The harmonizome: a collection of processed datasets gathered to serve and mine knowledge 
+                  about genes and proteins</em>. Database (Oxford). 2016 Jul 3;2016. pii: baw100.
+                </a>
+              </Link>
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={4} className="footer-right" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+          <Box id="share" sx={{ display: 'flex', gap: '5px', marginBottom: '10px' }}>
+            <Link href="https://www.linkedin.com/shareArticle?url=https://maayanlab.cloud/Harmonizome" target="_blank" legacyBehavior>
+              <a style={{ textDecoration: 'none' }}>
+                <Image src="/images/share/linkedin.png" alt="LinkedIn" width={30} height={30} />
+              </a>
+            </Link>
+            <Link href="https://www.facebook.com/sharer/sharer.php?u=https://maayanlab.cloud/Harmonizome/" target="_blank" legacyBehavior>
+              <a style={{ textDecoration: 'none' }}>
+                <Image src="/images/share/facebook.png" alt="Facebook" width={30} height={30} />
+              </a>
+            </Link>
+            <Link href="https://twitter.com/intent/tweet?text=Harmonizome%203.0:%20Integrated%20Knowledge%20about%20Genes%20and%20Proteins%20from%20Diverse%20Multi-Omics%20Resources&url=https://maayanlab.cloud/Harmonizome" target="_blank" legacyBehavior>
+              <a style={{ textDecoration: 'none' }}>
+                <Image src="/images/share/twitter.png" alt="Twitter" width={30} height={30} />
+              </a>
+            </Link>
+          </Box>
+          <Box id="license">
+            <Link href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" legacyBehavior>
+              <a style={{ textDecoration: 'none' }}>
+                <Image src="/images/cc-by-nc-sa.png" alt="Creative Commons License" width={100} height={100} />
+              </a>
+            </Link>
+          </Box>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
 
-export default MiscComponent
+export default HarmonizomeFooter;

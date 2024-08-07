@@ -1,11 +1,18 @@
 import { createTheme } from "@mui/material"
 import { DM_Sans } from 'next/font/google'
+import { Roboto } from 'next/font/google'
 
 export const sans = DM_Sans({ 
     weight: ['400', '500', '600', '700'],
     subsets: ['latin'],
     display: 'swap',
 })
+
+export const roboto = Roboto({
+    weight: ['300'], 
+    subsets: ['latin'],
+    display: 'swap',
+  });
 
 export const harmonizome_kg_theme = createTheme({
     typography: {
@@ -36,6 +43,7 @@ export const harmonizome_kg_theme = createTheme({
             fontWeight: 500,
         },
         cfde: {
+            fontFamily: 'Georgia, serif',
             fontSize: 25,
             fontStyle: "normal",
             fontWeight: 500,
@@ -69,6 +77,7 @@ export const harmonizome_kg_theme = createTheme({
             fontWeight: 500,
         },
         nav: {
+            fontFamily: roboto.style.fontFamily,
             fontSize: 14,
             fontStyle: "normal",
             textTransform: "uppercase",
@@ -106,7 +115,7 @@ export const harmonizome_kg_theme = createTheme({
             dark: "#192048"
         },
         tertiary: {
-            main: "#eeeeee",
+            main: "#FFFFFF",
             light: "#c9d2e9",
             dark: "#139f9f"
         },
