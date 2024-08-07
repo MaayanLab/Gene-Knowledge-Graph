@@ -38,15 +38,15 @@ export default function Footer({style, layout, footer_text}: {
                             </Grid>
                         )   
                     })}
-                    <Grid item xs={12} sx={{marginTop: 5, marginRight: 5, marginLeft: 6}}>
-                        <Stack spacing={2} direction={"row"} justifyContent="space-between">
+                    {/* <Grid item xs={12} sx={{marginTop: 5, marginRight: 5, marginLeft: 6}}>
+                        <Stack spacing={2} direction={"row"} justifyContent="space-between"> */}
                             {/* <div className='flex space-x-5'>
                                 <Link href="/info/coming_soon"><Typography variant="caption">Terms of Service</Typography></Link>
                                 <Link href="/info/coming_soon"><Typography variant="caption">Privacy Policy</Typography></Link>
                             </div> */}
                             {/* <Typography variant="caption">©CFDE Workbench {new Date().getFullYear()}</Typography> */}
-                        </Stack>
-                    </Grid>
+                        {/* </Stack>
+                    </Grid> */}
                     {footer_text &&
                         <Grid item xs={10} style={{marginTop: 30}}>
                             <Typography variant="caption">{parse(footer_text)}</Typography>
