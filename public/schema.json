@@ -9346,7 +9346,7 @@
     ],
     "header": {
         "header": "<span style='color:white'>Harmonizome-KG",
-        "title": "<span style='color:white; font-family: Georgia, serif; font-weight:700; letter-spacing: 0.5px;'>Harmonizome-KG",
+        "title": "<span style='color:white; font-family: Georgia, serif; font-weight:400; letter-spacing: 0.5px;'>Harmonizome-KG",
         "background": {
             "backgroundColor": "#000",
             "contrastText": "#FFF"
@@ -10688,59 +10688,17 @@
     },
     "footer": {
         "style": {
-            "background": "#132457",
-            "color": "#FFF"
+            "background": "#eeeeee",
+            "color": "#FFF",
+            "padding": 0
         },
         "layout": [
             [
                 {
-                    "component": "logo",
-                    "props": {
-                        "src": "/icons/logo.png",
-                        "alt": "harmonizome-kg",
-                        "title": "Harmonizome-KG",
-                        "color": "inherit",
-                        "size": "small"
-                    }
-                },
-                {
-                    "component": "github",
-                    "props": {
-                        "code": "https://github.com/nialingam/KnowledgeGraphDemo",
-                        "issues": "https://github.com/nialingam/Harmonizome-KG-Issues/issues/new"
-                    }
-                }
-            ],
-            [
-                {
-                    "component": "icon",
-                    "props": {
-                        "type": "icon",
-                        "key": "lab_icon",
-                        "src": "https://minio.dev.maayanlab.cloud/enrichr-kg/maayanlab.png",
-                        "alt": "MaayanLab",
-                        "href": "https://labs.icahn.mssm.edu/maayanlab/",
-                        "height": 60,
-                        "width": 150
-                    }
-                }
-            ],
-            [
-                {
-                    "component": "icon",
-                    "props": {
-                        "type": "icon",
-                        "key": "center_icon",
-                        "src": "https://minio.dev.maayanlab.cloud/enrichr-kg/bioinformatics.png",
-                        "alt": "COB",
-                        "href": "https://icahn.mssm.edu/research/bioinformatics",
-                        "height": 60,
-                        "width": 150
-                    }
+                    "component": "harmonizome"
                 }
             ]
-        ],
-        "footer_text": ""
+        ]
     },
     "ui_theme": "harmonizome_kg_theme"
 }

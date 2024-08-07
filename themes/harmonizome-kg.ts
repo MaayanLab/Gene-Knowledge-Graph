@@ -85,7 +85,7 @@ export const harmonizome_kg_theme = createTheme({
             color: "#FFF"
         },
         footer: {
-            fontFamily: sans.style.fontFamily,
+            fontFamily: roboto.style.fontFamily,
             fontSize: 16,
             fontStyle: "normal",
             fontWeight: 400,
