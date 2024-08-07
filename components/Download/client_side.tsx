@@ -65,13 +65,6 @@ const default_header: GridColDef[] = [
 ]
 
 const node_header: GridColDef[] = [
-    {
-        field: 'resource',
-        headerName: "Resource",
-        // flex: 1,
-        // style: {flexDirection: "row"},
-        align: "left"
-    },
 	{
         field: 'node_type',
         headerName: "Node Type",
@@ -92,7 +85,7 @@ const node_header: GridColDef[] = [
         align: "left"
     },
     {
-        field: 'terms',
+        field: 'nodes',
         headerName: "Nodes",
         align: "left"
     },
