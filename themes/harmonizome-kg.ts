@@ -129,7 +129,6 @@ export const harmonizome_kg_theme = createTheme({
                   maxWidth: 1200,
                   display: 'flex',
                   alignItems: 'center',
-                  padding: '0',  
                   marginLeft: 'auto',
                   marginRight: 'auto'    
                 },
