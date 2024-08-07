@@ -187,7 +187,7 @@ export const Icon = ({src, alt, href, height, width}: {src: string, alt: string,
 
 const HarmonizomeFooter = () => {
   return (
-    <Box className="footer container-full" sx={{ width: '100%', backgroundColor: '#eee', color: '#444', padding: '13px', paddingTop: '5px', overflow: 'hidden', display: 'flex'}}>
+    <Box className="footer container-full" sx={{ width: '100%', backgroundColor: '#eee', color: '#444', padding: '13px', paddingTop: '5px', height: '170px', overflow: 'hidden', display: 'flex' }}>
       <Grid container className="container" sx={{ justifyContent: 'space-between', paddingLeft: '1%'}}>
         <Grid item xs={12} md={10} className="pull-left" sx={{ maxWidth: '70%' }}>
           <ul id="contact" className="list-inline" style={{ listStyleType: 'none', padding: 0, display: 'flex', flexWrap: 'wrap', gap: '15px', fontFamily: roboto.style.fontFamily }}>
@@ -229,28 +229,28 @@ const HarmonizomeFooter = () => {
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={12} md={1} className="footer-right" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', paddingLeft: '20px', maxWidth: '70%' }}>
+        <Grid item xs={12} md={2} className="footer-right" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'space-between', height: '100%' }}>
           <Box id="share" sx={{ display: 'flex', gap: '5px', marginBottom: '10px' }}>
-            <Link href="https://www.linkedin.com/shareArticle?url=https://maayanlab.cloud/Harmonizome" target="_blank" rel="noopener noreferrer" passHref>
+            <Link href="https://twitter.com/intent/tweet?text=Harmonizome%203.0:%20Integrated%20Knowledge%20about%20Genes%20and%20Proteins%20from%20Diverse%20Multi-Omics%20Resources&url=https://maayanlab.cloud/Harmonizome" target="_blank" rel="noopener noreferrer" passHref>
               <span style={{ textDecoration: 'none' }}>
-                <Image src="/Users/nialingam/KG-Nia/KnowledgeGraphDemo/Gene-Knowledge-Graph/public/image/share/linkedin.png" alt="LinkedIn" width={30} height={30} />
+                <Image src="/image/share/twitter.png" alt="Twitter" width={25} height={25} />
               </span>
             </Link>
             <Link href="https://www.facebook.com/sharer/sharer.php?u=https://maayanlab.cloud/Harmonizome/" target="_blank" rel="noopener noreferrer" passHref>
               <span style={{ textDecoration: 'none' }}>
-                <Image src="/Users/nialingam/KG-Nia/KnowledgeGraphDemo/Gene-Knowledge-Graph/public/image/share/facebook.png" alt="Facebook" width={30} height={30} />
+                <Image src="/image/share/facebook.png" alt="Facebook" width={25} height={25} />
               </span>
             </Link>
-            <Link href="https://twitter.com/intent/tweet?text=Harmonizome%203.0:%20Integrated%20Knowledge%20about%20Genes%20and%20Proteins%20from%20Diverse%20Multi-Omics%20Resources&url=https://maayanlab.cloud/Harmonizome" target="_blank" rel="noopener noreferrer" passHref>
+            <Link href="https://www.linkedin.com/shareArticle?url=https://maayanlab.cloud/Harmonizome" target="_blank" rel="noopener noreferrer" passHref>
               <span style={{ textDecoration: 'none' }}>
-                <Image src="/Users/nialingam/KG-Nia/KnowledgeGraphDemo/Gene-Knowledge-Graph/public/image/share/twitter.png" alt="Twitter" width={30} height={30} />
+                <Image src="/image/share/linkedin.png" alt="LinkedIn" width={25} height={25} />
               </span>
             </Link>
           </Box>
-          <Box id="license">
+          <Box id="license" sx={{ marginTop: 'auto', paddingBottom: '10px' }}>
             <Link href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" passHref>
               <span style={{ textDecoration: 'none' }}>
-                <Image src="/Users/nialingam/KG-Nia/KnowledgeGraphDemo/Gene-Knowledge-Graph/public/image/cc-by-nc-sa.png" alt="Creative Commons License" width={100} height={100} />
+                <Image src="/image/cc-by-nc-sa.png" alt="Creative Commons License" width={100} height={100} />
               </span>
             </Link>
           </Box>
