@@ -52,8 +52,9 @@ export const harmonizome_kg_theme = createTheme({
             fontFamily: Georgia.style.fontFamily,
             fontSize: 25,
             fontStyle: "normal",
-            fontWeight: 600,
-            color: '#FFF'
+            fontWeight: 500,
+            color: '#FFF',
+            paddingLeft: 5
         },
         subtitle1: {
             fontSize: 16,
@@ -135,7 +136,7 @@ export const harmonizome_kg_theme = createTheme({
             styleOverrides: {
                 // Name of the slot
                 root: ({theme})=> theme.unstable_sx({
-                    width: 1170,
+                    width: 1190,
 					marginLeft: 'auto',
 					marginRight: 'auto',
                     '@media (min-width: 600px)': {
