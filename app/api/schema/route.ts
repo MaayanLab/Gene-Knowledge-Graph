@@ -48,8 +48,8 @@ export interface UISchema {
             favicon: string,
             faviconTitle?: string,
             alt: string,
-            width: number,
-            height: number,
+            width?: number,
+            height?: number,
             avatar?: boolean
         },
         tabs: Array<{
