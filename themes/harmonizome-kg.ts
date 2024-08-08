@@ -83,7 +83,8 @@ export const harmonizome_kg_theme = createTheme({
             fontStyle: "normal",
             textTransform: "uppercase",
             fontWeight: 300,
-            color: "#FFF"
+            color: "#FFF",
+            lineHeight: 20,
         },
         footer: {
             fontFamily: sans.style.fontFamily,
@@ -153,7 +154,7 @@ export const harmonizome_kg_theme = createTheme({
                   height: 50,
                   background: "#132457",
                   boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.26)",
-				  marginBottom: 10,
+				  marginBottom: 30,
                 },
               },
         },
