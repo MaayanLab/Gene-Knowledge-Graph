@@ -1,7 +1,6 @@
 import { createTheme } from "@mui/material"
 import { DM_Sans } from 'next/font/google'
-import { Roboto } from 'next/font/google'
-import { Merriweather } from 'next/font/google'
+import localFont from 'next/font/local'
 
 export const sans = DM_Sans({ 
     weight: ['400', '500', '600', '700'],
@@ -9,12 +8,10 @@ export const sans = DM_Sans({
     display: 'swap',
 })
 
-export const roboto = Roboto({
-    weight: ['300'], 
-    subsets: ['latin'],
+const Georgia = localFont({
+    src: './georgia.woff',
     display: 'swap',
-  });
-
+  })
 
 export const harmonizome_kg_theme = createTheme({
     typography: {
@@ -45,16 +42,18 @@ export const harmonizome_kg_theme = createTheme({
             fontWeight: 500,
         },
         cfde: {
+            fontFamily: Georgia.style.fontFamily,
             fontSize: 25,
             fontStyle: "normal",
-            fontWeight: 500,
+            fontWeight: 600,
+            color: '#FFF'
         },
         cfde_small: {
-            fontFamily: 'Georgia, sans-serif',
+            fontFamily: Georgia.style.fontFamily,
             fontSize: 25,
             fontStyle: "normal",
-            fontWeight: 300,
-            lineHeight: 28,
+            fontWeight: 600,
+            color: '#FFF'
         },
         subtitle1: {
             fontSize: 16,
@@ -80,15 +79,14 @@ export const harmonizome_kg_theme = createTheme({
             fontWeight: 500,
         },
         nav: {
-            fontFamily: roboto.style.fontFamily,
             fontSize: 14,
             fontStyle: "normal",
             textTransform: "uppercase",
-            fontWeight: 600,
+            fontWeight: 300,
             color: "#FFF"
         },
         footer: {
-            fontFamily: roboto.style.fontFamily,
+            fontFamily: sans.style.fontFamily,
             fontSize: 16,
             fontStyle: "normal",
             fontWeight: 400,
@@ -118,9 +116,9 @@ export const harmonizome_kg_theme = createTheme({
             dark: "#192048"
         },
         tertiary: {
-            main: "#FFFFFF",
-            light: "#FFFFFF",
-            dark: "#FFFFFF"
+            main: "#FFF",
+            light: "#FFF",
+            dark: "#FFF"
         },
         paperGray: {
             main: "#FAFAFA",
@@ -141,11 +139,11 @@ export const harmonizome_kg_theme = createTheme({
 					marginLeft: 'auto',
 					marginRight: 'auto',
                     '@media (min-width: 600px)': {
-                        minHeight: '50px',
+                        minHeight: '47px',
                     }
                   }),
-                },
 
+              },
         },
         MuiAppBar: {
             styleOverrides: {
@@ -155,11 +153,10 @@ export const harmonizome_kg_theme = createTheme({
                   height: 50,
                   background: "#132457",
                   boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.26)",
-				  marginBottom: 40,
+				  marginBottom: 10,
                 },
               },
         },
-        
         MuiTableHead: {
             styleOverrides: {
                 root: {
