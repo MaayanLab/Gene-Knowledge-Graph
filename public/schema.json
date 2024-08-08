@@ -9346,7 +9346,7 @@
     ],
     "header": {
         "header": "<span style='color:white'>Harmonizome-KG",
-        "title": "<span style='color:white; font-family: Georgia, serif; font-weight:400; letter-spacing: 0.5px;'>Harmonizome-KG",
+        "title": "<span style='color:white'>Harmonizome-KG",
         "background": {
             "backgroundColor": "#000",
             "contrastText": "#FFF"
@@ -9359,8 +9359,8 @@
             "faviconTitle": "Harmonizome-KG",
             "alt": "Harmonizome-KG",
             "key": "Harmonizome-KG_logo",
-            "width": 30,
-            "height": 30
+            "width": 40,
+            "height": 40
         },
         "tabs": [
             {

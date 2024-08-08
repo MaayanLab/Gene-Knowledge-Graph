@@ -187,8 +187,8 @@ export const Icon = ({src, alt, href, height, width}: {src: string, alt: string,
 
 const HarmonizomeFooter = () => {
   return (
-    <Box className="footer container-full" sx={{ width: '100%', backgroundColor: '#eee', color: '#444', padding: '13px', paddingTop: '5px', height: '170px', overflow: 'hidden', display: 'flex' }}>
-      <Grid container className="container" sx={{ justifyContent: 'space-between', paddingLeft: '1%'}}>
+    <Box className="footer container-full" sx={{ width: '100%', backgroundColor: '#eee', color: '#444', paddingTop: '0px !important', height: '150px', overflow: 'hidden', display: 'flex' }}>
+      <Grid container className="container" sx={{ justifyContent: 'space-between', paddingLeft: '1%', marginTop: '0px'}}>
         <Grid item xs={12} md={10} className="pull-left" sx={{ maxWidth: '70%' }}>
           <ul id="contact" className="list-inline" style={{ listStyleType: 'none', padding: 0, display: 'flex', flexWrap: 'wrap', gap: '15px', fontFamily: roboto.style.fontFamily }}>
             <li>
@@ -247,7 +247,7 @@ const HarmonizomeFooter = () => {
               </span>
             </Link>
           </Box>
-          <Box id="license" sx={{ marginTop: 'auto', paddingBottom: '10px' }}>
+          <Box id="license" sx={{ marginTop: 'auto', paddingBottom: '50px' }}>
             <Link href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" passHref>
               <span style={{ textDecoration: 'none' }}>
                 <Image src="/image/cc-by-nc-sa.png" alt="Creative Commons License" width={100} height={100} />

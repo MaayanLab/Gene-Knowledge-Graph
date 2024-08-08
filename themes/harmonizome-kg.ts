@@ -1,6 +1,7 @@
 import { createTheme } from "@mui/material"
 import { DM_Sans } from 'next/font/google'
 import { Roboto } from 'next/font/google'
+import { Merriweather } from 'next/font/google'
 
 export const sans = DM_Sans({ 
     weight: ['400', '500', '600', '700'],
@@ -9,6 +10,12 @@ export const sans = DM_Sans({
 })
 
 export const roboto = Roboto({
+    weight: ['300'], 
+    subsets: ['latin'],
+    display: 'swap',
+  });
+
+export const merri = Merriweather({
     weight: ['300'], 
     subsets: ['latin'],
     display: 'swap',
@@ -43,15 +50,15 @@ export const harmonizome_kg_theme = createTheme({
             fontWeight: 500,
         },
         cfde: {
-            fontFamily: 'Georgia, serif',
             fontSize: 25,
             fontStyle: "normal",
             fontWeight: 500,
         },
         cfde_small: {
-            fontSize: 24,
+            fontFamily: 'Georgia, sans-serif',
+            fontSize: 22,
             fontStyle: "normal",
-            fontWeight: 500,
+            fontWeight: 400,
         },
         subtitle1: {
             fontSize: 16,
@@ -137,13 +144,8 @@ export const harmonizome_kg_theme = createTheme({
 					width: 1170,
 					marginLeft: 'auto',
 					marginRight: 'auto',
-					height: 50,
-					[theme.breakpoints.down('md')]: {
-						width: 1000,
-					},
-					[theme.breakpoints.down('sm')]: {
-						width: 800,
-					},
+                    height:50,
+					minHeight:40
 				  })
               },
         },
@@ -152,14 +154,14 @@ export const harmonizome_kg_theme = createTheme({
                 // Name of the slot
                 root: {
                   // Some CSS
-                  minHeight: 50,
+                  height: 50,
                   background: "#132457",
-                  boxShadow: "none",
-				  marginBottom: 10,
+                  boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.26)",
+				  marginBottom: 40,
                 },
               },
         },
-
+        
         MuiTableHead: {
             styleOverrides: {
                 root: {
