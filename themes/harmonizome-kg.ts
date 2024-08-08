@@ -1,25 +1,11 @@
 import { createTheme } from "@mui/material"
 import { DM_Sans } from 'next/font/google'
-import { Roboto } from 'next/font/google'
-import { Merriweather } from 'next/font/google'
 
 export const sans = DM_Sans({ 
     weight: ['400', '500', '600', '700'],
     subsets: ['latin'],
     display: 'swap',
 })
-
-export const roboto = Roboto({
-    weight: ['300'], 
-    subsets: ['latin'],
-    display: 'swap',
-  });
-
-export const merri = Merriweather({
-    weight: ['300'], 
-    subsets: ['latin'],
-    display: 'swap',
-  });
 
 export const harmonizome_kg_theme = createTheme({
     typography: {
@@ -55,10 +41,9 @@ export const harmonizome_kg_theme = createTheme({
             fontWeight: 500,
         },
         cfde_small: {
-            fontFamily: 'Georgia, sans-serif',
-            fontSize: 22,
+            fontSize: 24,
             fontStyle: "normal",
-            fontWeight: 400,
+            fontWeight: 500,
         },
         subtitle1: {
             fontSize: 16,
@@ -84,7 +69,6 @@ export const harmonizome_kg_theme = createTheme({
             fontWeight: 500,
         },
         nav: {
-            fontFamily: roboto.style.fontFamily,
             fontSize: 14,
             fontStyle: "normal",
             textTransform: "uppercase",
@@ -92,7 +76,7 @@ export const harmonizome_kg_theme = createTheme({
             color: "#FFF"
         },
         footer: {
-            fontFamily: roboto.style.fontFamily,
+            fontFamily: sans.style.fontFamily,
             fontSize: 16,
             fontStyle: "normal",
             fontWeight: 400,
@@ -122,7 +106,7 @@ export const harmonizome_kg_theme = createTheme({
             dark: "#192048"
         },
         tertiary: {
-            main: "#FFFFFF",
+            main: "#eeeeee",
             light: "#c9d2e9",
             dark: "#139f9f"
         },
@@ -140,13 +124,15 @@ export const harmonizome_kg_theme = createTheme({
         MuiToolbar: {
             styleOverrides: {
                 // Name of the slot
-                root: ({ theme }) => ({
-					width: 1170,
+                root: ({theme})=> theme.unstable_sx({
+                    width: 1170,
 					marginLeft: 'auto',
 					marginRight: 'auto',
-                    height:50,
-					minHeight:40
-				  })
+                    '@media (min-width: 600px)': {
+                        minHeight: '50px',
+                    }
+                  }),
+
               },
         },
         MuiAppBar: {
@@ -157,11 +143,10 @@ export const harmonizome_kg_theme = createTheme({
                   height: 50,
                   background: "#132457",
                   boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.26)",
-				  marginBottom: 40,
+				  marginBottom: 10,
                 },
               },
         },
-        
         MuiTableHead: {
             styleOverrides: {
                 root: {
