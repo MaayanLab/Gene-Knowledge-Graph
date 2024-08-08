@@ -42,6 +42,7 @@ export interface UISchema {
         divider?: boolean,
         fullWidth?:boolean,
         counterTop?: boolean,
+        counter?: boolean,
         icon: {
             src: string,
             favicon: string,
