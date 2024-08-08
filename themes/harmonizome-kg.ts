@@ -106,9 +106,9 @@ export const harmonizome_kg_theme = createTheme({
             dark: "#192048"
         },
         tertiary: {
-            main: "#eeeeee",
-            light: "#c9d2e9",
-            dark: "#139f9f"
+            main: "#FFF",
+            light: "#FFF",
+            dark: "#FFF"
         },
         paperGray: {
             main: "#FAFAFA",
