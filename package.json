@@ -1,6 +1,6 @@
 {
   "name": "cfde-knowledge-exchange",
-  "version": "2.3.12",
+  "version": "2.4.1",
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development next dev",
@@ -52,6 +52,7 @@
     "sanitize-html": "^2.11.0",
     "sharp": "^0.33.2",
     "swagger-ui-react": "^5.15.2",
+    "swr": "^2.2.5",
     "tailwindcss": "^3.4.1",
     "zod": "^3.22.4",
     "zod_utilz": "^0.7.3"

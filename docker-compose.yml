@@ -5,13 +5,13 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/distillery:2.3.12
+    image: nlingam05/harmonizome-kg:2.4.1
     x-kubernetes:
       strategy:
         type: Recreate
       imagePullPolicy: IfNotPresent
       annotations:
-        maayanlab.cloud/ingress: https://dd-kg-ui.cfde.cloud
+        maayanlab.cloud/ingress: https://harmonizome-kg.dev.maayanlab.cloud/
     ports:
       - 3000:3000
     environment:
@@ -48,7 +48,7 @@ services:
       - 7687:7687
       - 7474:7474
     volumes:
-      - distillery-neo4j-v5:/data
+      - harmonizome-kg-neo4j-v5:/data
     deploy:
       resources:
         limits:
@@ -57,11 +57,11 @@ services:
           memory: 10G
 
 volumes:
-  distillery-neo4j-v5:
+  harmonizome-kg-neo4j-v5:
     x-kubernetes:
       size: 25Gi
       class: gp2
 
 x-kubernetes:
-  name: distillery
-  namespace: distillery
+  name: harmonizome-kg
+  namespace: harmonizome-kg

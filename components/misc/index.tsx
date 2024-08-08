@@ -14,6 +14,15 @@ import { Typography,
     Button
  } from "@mui/material"
 import { NetworkSchema } from "@/app/api/knowledge_graph/route";
+import { Roboto } from 'next/font/google';
+
+const roboto = Roboto({
+  weight: ['400'],
+  subsets: ['latin'],
+  display: 'swap',
+});
+
+
 export const Selector = ({entries, 
     value, 
     onChange, 
@@ -175,14 +184,90 @@ export const Icon = ({src, alt, href, height, width}: {src: string, alt: string,
   }
 }
 
+
+const HarmonizomeFooter = () => {
+  return (
+    <Box className="footer container-full" sx={{ width: '100%', backgroundColor: '#eee', color: '#444', paddingTop: '0px !important', height: '150px', overflow: 'hidden', display: 'flex' }}>
+      <Grid container className="container" sx={{ justifyContent: 'space-between', paddingLeft: '1%', marginTop: '0px'}}>
+        <Grid item xs={12} md={10} className="pull-left" sx={{ maxWidth: '70%' }}>
+          <ul id="contact" className="list-inline" style={{ listStyleType: 'none', padding: 0, display: 'flex', flexWrap: 'wrap', gap: '15px', fontFamily: roboto.style.fontFamily }}>
+            <li>
+              <Link href="http://icahn.mssm.edu/research/labs/maayan-laboratory" target="_blank" rel="noopener noreferrer" passHref>
+                <Typography component="span" style={{ fontSize: '14px', textDecoration: 'none', color: 'inherit', fontFamily: roboto.style.fontFamily, fontWeight: '300' }}>
+                  Ma'ayan Laboratory of Computational Systems Biology
+                </Typography>
+              </Link>
+            </li>
+            <li style={{ borderLeft: '1px solid #aaa', paddingLeft: '8px' }}>
+              <Link href="/contact" passHref>
+                <Typography component="span" style={{ fontSize: '14px', textDecoration: 'none', color: 'inherit', fontFamily: roboto.style.fontFamily }}>Contact Us</Typography>
+              </Link>
+            </li>
+            <li style={{ borderLeft: '1px solid #aaa', paddingLeft: '8px' }}>
+              <Link href="https://github.com/MaayanLab/harmonizome-issues/issues" target="_blank" rel="noopener noreferrer" passHref>
+                <Typography component="span" style={{ fontSize: '14px', textDecoration: 'none', color: 'inherit', fontFamily: roboto.style.fontFamily }}>Submit an issue on GitHub</Typography>
+              </Link>
+            </li>
+            <li style={{ borderLeft: '1px solid #aaa', paddingLeft: '8px' }}>
+              <Link href="/terms" passHref>
+                <Typography component="span" style={{ fontSize: '14px', textDecoration: 'none', color: 'inherit', fontFamily: roboto.style.fontFamily }}>Terms</Typography>
+              </Link>
+            </li>
+          </ul>
+          <Box id="citation" sx={{ marginTop: '5px' }}>
+            <Typography variant="subtitle2" component="h6" sx={{ fontWeight: 'bold', fontSize: '14px', marginBottom: '5px', fontFamily: roboto.style.fontFamily }}>
+              Please acknowledge the Harmonizome in your publications by citing the following reference:
+            </Typography>
+            <Typography variant="body2" component="p" sx={{ fontSize: '14px', fontFamily: roboto.style.fontFamily, fontWeight: '300' }}>
+              <Link href="http://database.oxfordjournals.org/content/2016/baw100.short" target="_blank" rel="noopener noreferrer" passHref>
+                <span style={{ textDecoration: 'none', color: 'inherit', fontFamily: roboto.style.fontFamily }}>
+                  Rouillard AD, Gundersen GW, Fernandez NF, Wang Z, Monteiro CD, McDermott MG, Ma'ayan A. 
+                  <em>The harmonizome: a collection of processed datasets gathered to serve and mine knowledge 
+                  about genes and proteins</em>. Database (Oxford). 2016 Jul 3;2016. pii: baw100.
+                </span>
+              </Link>
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={2} className="footer-right" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'space-between', height: '100%' }}>
+          <Box id="share" sx={{ display: 'flex', gap: '5px', marginBottom: '10px' }}>
+            <Link href="https://twitter.com/intent/tweet?text=Harmonizome%203.0:%20Integrated%20Knowledge%20about%20Genes%20and%20Proteins%20from%20Diverse%20Multi-Omics%20Resources&url=https://maayanlab.cloud/Harmonizome" target="_blank" rel="noopener noreferrer" passHref>
+              <span style={{ textDecoration: 'none' }}>
+                <Image src="/image/share/twitter.png" alt="Twitter" width={25} height={25} />
+              </span>
+            </Link>
+            <Link href="https://www.facebook.com/sharer/sharer.php?u=https://maayanlab.cloud/Harmonizome/" target="_blank" rel="noopener noreferrer" passHref>
+              <span style={{ textDecoration: 'none' }}>
+                <Image src="/image/share/facebook.png" alt="Facebook" width={25} height={25} />
+              </span>
+            </Link>
+            <Link href="https://www.linkedin.com/shareArticle?url=https://maayanlab.cloud/Harmonizome" target="_blank" rel="noopener noreferrer" passHref>
+              <span style={{ textDecoration: 'none' }}>
+                <Image src="/image/share/linkedin.png" alt="LinkedIn" width={25} height={25} />
+              </span>
+            </Link>
+          </Box>
+          <Box id="license" sx={{ marginTop: 'auto', paddingBottom: '50px' }}>
+            <Link href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" passHref>
+              <span style={{ textDecoration: 'none' }}>
+                <Image src="/image/cc-by-nc-sa.png" alt="Creative Commons License" width={100} height={100} />
+              </span>
+            </Link>
+          </Box>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
+
 const MiscComponent = ({component, props}) => {
-    if (component === 'logo') return <Logo {...props}/>
-    else if (component === 'github') return <Github {...props}/>
-    // else if (component === 'social') return <Socials {...props}/>
-    else if (component === 'text') return <Text {...props}/>
-    else if (component === 'link') return <TextLink {...props}/>
-    else if (component === 'icon') return <Icon {...props}/>
-    else return null
+  if (component === 'logo') return <Logo {...props}/>
+  else if (component === 'github') return <Github {...props}/>
+  // else if (component === 'social') return <Socials {...props}/>
+  else if (component === 'text') return <Text {...props}/>
+  else if (component === 'link') return <TextLink {...props}/>
+  else if (component === 'icon') return <Icon {...props}/>
+  else if (component === 'harmonizome') return <HarmonizomeFooter/>
 }
 
-export default MiscComponent
+export default MiscComponent;

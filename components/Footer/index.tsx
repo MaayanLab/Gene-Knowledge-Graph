@@ -18,7 +18,7 @@ export default function Footer({style, layout, footer_text}: {
     footer_text?: string
 }) {
     return (
-        <Paper sx={{background: "#336699", color: "#FFF", padding: 2, paddingTop: 5, borderRadius: 0, ...style}}>
+        <Paper sx={{background: "#336699", color: "#FFF", padding: 1, paddingTop: 1, borderRadius: 0, ...style}}>
             <Container maxWidth="lg">
                 <Grid container justifyContent={"space-around"} alignItems={"center"}>
                     {layout.map((part, index)=>{
@@ -38,15 +38,15 @@ export default function Footer({style, layout, footer_text}: {
                             </Grid>
                         )   
                     })}
-                    <Grid item xs={12} sx={{marginTop: 5, marginRight: 5, marginLeft: 6}}>
-                        <Stack spacing={2} direction={"row"} justifyContent="space-between">
+                    {/* <Grid item xs={12} sx={{marginTop: 5, marginRight: 5, marginLeft: 6}}>
+                        <Stack spacing={2} direction={"row"} justifyContent="space-between"> */}
                             {/* <div className='flex space-x-5'>
                                 <Link href="/info/coming_soon"><Typography variant="caption">Terms of Service</Typography></Link>
                                 <Link href="/info/coming_soon"><Typography variant="caption">Privacy Policy</Typography></Link>
                             </div> */}
                             {/* <Typography variant="caption">©CFDE Workbench {new Date().getFullYear()}</Typography> */}
-                        </Stack>
-                    </Grid>
+                        {/* </Stack>
+                    </Grid> */}
                     {footer_text &&
                         <Grid item xs={10} style={{marginTop: 30}}>
                             <Typography variant="caption">{parse(footer_text)}</Typography>
