@@ -15,11 +15,6 @@ export const roboto = Roboto({
     display: 'swap',
   });
 
-export const merri = Merriweather({
-    weight: ['300'], 
-    subsets: ['latin'],
-    display: 'swap',
-  });
 
 export const harmonizome_kg_theme = createTheme({
     typography: {
@@ -56,9 +51,10 @@ export const harmonizome_kg_theme = createTheme({
         },
         cfde_small: {
             fontFamily: 'Georgia, sans-serif',
-            fontSize: 22,
+            fontSize: 25,
             fontStyle: "normal",
-            fontWeight: 400,
+            fontWeight: 300,
+            lineHeight: 28,
         },
         subtitle1: {
             fontSize: 16,
@@ -123,8 +119,8 @@ export const harmonizome_kg_theme = createTheme({
         },
         tertiary: {
             main: "#FFFFFF",
-            light: "#c9d2e9",
-            dark: "#139f9f"
+            light: "#FFFFFF",
+            dark: "#FFFFFF"
         },
         paperGray: {
             main: "#FAFAFA",

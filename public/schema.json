@@ -9345,17 +9345,17 @@
         }
     ],
     "header": {
-        "header": "<span style='color:white'>Harmonizome-KG",
-        "title": "<span style='color:white'>Harmonizome-KG",
+        "header": "<span style='color:white'>Harmonizome 3.0",
+        "title": "<span style='color:white'>Harmonizome 3.0",
         "background": {
             "backgroundColor": "#000",
             "contrastText": "#FFF"
         },
         "fullWidth": true,
-        "counterTop": true,
+        "counter": false,
         "icon": {
-            "src": "/icons/logo.png",
-            "favicon": "/icons/logo.png",
+            "src": "/image/logo_30x26.png",
+            "favicon": "/image/logo_30x26.png",
             "faviconTitle": "Harmonizome-KG",
             "alt": "Harmonizome-KG",
             "key": "Harmonizome-KG_logo",
