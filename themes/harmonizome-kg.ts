@@ -1,11 +1,17 @@
 import { createTheme } from "@mui/material"
 import { DM_Sans } from 'next/font/google'
+import localFont from 'next/font/local'
 
 export const sans = DM_Sans({ 
     weight: ['400', '500', '600', '700'],
     subsets: ['latin'],
     display: 'swap',
 })
+
+const Georgia = localFont({
+    src: './georgia.woff',
+    display: 'swap',
+  })
 
 export const harmonizome_kg_theme = createTheme({
     typography: {
@@ -36,14 +42,18 @@ export const harmonizome_kg_theme = createTheme({
             fontWeight: 500,
         },
         cfde: {
+            fontFamily: Georgia.style.fontFamily,
             fontSize: 25,
             fontStyle: "normal",
-            fontWeight: 500,
+            fontWeight: 600,
+            color: '#FFF'
         },
         cfde_small: {
-            fontSize: 24,
+            fontFamily: Georgia.style.fontFamily,
+            fontSize: 25,
             fontStyle: "normal",
-            fontWeight: 500,
+            fontWeight: 600,
+            color: '#FFF'
         },
         subtitle1: {
             fontSize: 16,
@@ -72,7 +82,7 @@ export const harmonizome_kg_theme = createTheme({
             fontSize: 14,
             fontStyle: "normal",
             textTransform: "uppercase",
-            fontWeight: 600,
+            fontWeight: 300,
             color: "#FFF"
         },
         footer: {
@@ -129,7 +139,7 @@ export const harmonizome_kg_theme = createTheme({
 					marginLeft: 'auto',
 					marginRight: 'auto',
                     '@media (min-width: 600px)': {
-                        minHeight: '50px',
+                        minHeight: '47px',
                     }
                   }),
 
