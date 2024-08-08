@@ -9365,7 +9365,7 @@
         "tabs": [
             {
                 "endpoint": "/",
-                "label": "KG",
+                "label": "TERM & GENE SEARCH",
                 "type": "page",
                 "component": "KnowledgeGraph",
                 "props": {

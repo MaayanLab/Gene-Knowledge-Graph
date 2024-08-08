@@ -136,14 +136,16 @@ export const harmonizome_kg_theme = createTheme({
         MuiToolbar: {
             styleOverrides: {
                 // Name of the slot
-                root: ({ theme }) => ({
-					width: 1170,
+                root: ({theme})=> theme.unstable_sx({
+                    width: 1170,
 					marginLeft: 'auto',
 					marginRight: 'auto',
-                    height:50,
-					minHeight:40
-				  })
-              },
+                    '@media (min-width: 600px)': {
+                        minHeight: '50px',
+                    }
+                  }),
+                },
+
         },
         MuiAppBar: {
             styleOverrides: {
