@@ -51,4 +51,3 @@ legacy_components/
 docker-compose.*.yml
 settings.json
 
-public/icons
