@@ -9359,10 +9359,58 @@
             "faviconTitle": "Harmonizome",
             "alt": "Harmonizome-KG",
             "key": "Harmonizome-KG_logo",
-            "width": 40,
-            "height": 40
+            "width": 30,
+            "height": 30
         },
         "tabs": [
+            {
+                "endpoint": "https://maayanlab.cloud/Harmonizome/",
+                "label": "SEARCH",
+                "type": "link",
+                "component": "Link",
+                "position": "top",
+                "href": "https://maayanlab.cloud/Harmonizome/"
+            },
+            {
+                "endpoint": "https://maayanlab.cloud/Harmonizome/download",
+                "label": "DOWNLOAD",
+                "type": "link",
+                "component": "Link",
+                "position": "top",
+                "href": "https://maayanlab.cloud/Harmonizome/download"
+            },
+            {
+                "endpoint": "#",
+                "label": "VISUALIZE",
+                "type": "link",
+                "component": "Link",
+                "position": "top",
+                "href": "#"
+            },
+            {
+                "endpoint": "#",
+                "label": "PREDICT",
+                "type": "link",
+                "component": "Link",
+                "position": "top",
+                "href": "#"
+            },
+            {
+                "endpoint": "https://maayanlab.cloud/Harmonizome/cross",
+                "label": "CROSS",
+                "type": "link",
+                "component": "Link",
+                "position": "top",
+                "href": "https://maayanlab.cloud/Harmonizome/cross"
+            },
+            {
+                "endpoint": "https://maayanlab.cloud/Harmonizome/chatbot",
+                "label": "CHATBOT",
+                "type": "link",
+                "component": "Link",
+                "position": "top",
+                "href": "https://maayanlab.cloud/Harmonizome/chatbot"
+            },
             {
                 "endpoint": "/",
                 "label": "KG",
@@ -9384,22 +9432,20 @@
                 }
             },
             {
-                "endpoint": "/downloads",
-                "label": "DOWNLOAD",
-                "type": "page",
-                "component": "Download",
-                "props": {
-                  "src": "https://raw.githubusercontent.com/nialingam/KnowledgeGraphDemo/main/downloads_6.json"
-                }
+                "endpoint": "https://maayanlab.cloud/Harmonizome/documentation",
+                "label": "DOCS",
+                "type": "link",
+                "component": "Link",
+                "position": "top",
+                "href": "https://maayanlab.cloud/Harmonizome/documentation"
             },
             {
-                "endpoint": "/tutorial",
-                "label": "TUTORIAL",
-                "type": "markdown",
-                "component": "Markdown",
-                "props": {
-                  "src": "https://raw.githubusercontent.com/MaayanLab/HarmonizomeKG/main/about8.md"
-                }
+                "endpoint": "#",
+                "label": "ABOUT",
+                "type": "link",
+                "component": "Link",
+                "position": "top",
+                "href": "#"
             }
         ],
         "subheader": [
