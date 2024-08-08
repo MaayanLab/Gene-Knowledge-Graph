@@ -12,11 +12,12 @@ import { Logo } from '../misc/logo';
 import Counter from '../Counter';
 import { TextNav } from './TextNav';
 import { fetch_kg_schema } from '@/utils/initialize';
-export const Nav = ({tabs, ui_theme, divider, title, icon, counterTop}:
+export const Nav = ({tabs, ui_theme, divider, title, icon, counterTop, counter}:
 	{
 		ui_theme?: string,
 		divider?: boolean,
 		title: string,
+		counter?: boolean,
 		counterTop?: boolean,
 		icon: {
 			favicon: string,
@@ -57,7 +58,7 @@ export const Nav = ({tabs, ui_theme, divider, title, icon, counterTop}:
 			<Grid item>
 				<Stack direction={"row"} alignItems={"center"} spacing={2}>
 					{tab_component.top}
-					{(tab_component.bottom.length === 0 && counterTop) && 
+					{(counter && tab_component.bottom.length === 0 && counterTop) && 
 						<Counter ui_theme={ui_theme}/>
 					}
 				</Stack>
@@ -73,7 +74,7 @@ export const Nav = ({tabs, ui_theme, divider, title, icon, counterTop}:
 					
 				</Grid>
 			}
-			{(tab_component.bottom.length === 0 && !counterTop) &&
+			{(counter && tab_component.bottom.length === 0 && !counterTop) &&
 				<Grid item xs={12} className='flex justify-end'>		
 					<Counter ui_theme={ui_theme}/>
 				</Grid>
@@ -83,11 +84,11 @@ export const Nav = ({tabs, ui_theme, divider, title, icon, counterTop}:
 }
 
 export default async function Header ({schema}: {schema:UISchema}) {
-	const {title, icon, tabs, divider, counterTop} = schema.header
+	const {title, icon, tabs, divider, counterTop, counter} = schema.header
 	return  (
 		<AppBar position="static" sx={{color: "#000"}}>
 			<Toolbar>
-				<Nav counterTop={counterTop} tabs={tabs} divider={divider} ui_theme={schema.ui_theme} title={title} icon={icon}/>
+				<Nav counterTop={counterTop} counter={counter} tabs={tabs} divider={divider} ui_theme={schema.ui_theme} title={title} icon={icon}/>
 			</Toolbar>
 		</AppBar>
 	)
