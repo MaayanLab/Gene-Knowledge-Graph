@@ -22,7 +22,9 @@ export const Nav = ({tabs, ui_theme, divider, title, icon, counterTop, counter}:
 		icon: {
 			favicon: string,
 			alt: string,
-			avatar?: boolean
+			avatar?: boolean,
+			width?: number,
+			height?: number
 		},
 		tabs: Array<{
 			endpoint: string,
@@ -53,7 +55,7 @@ export const Nav = ({tabs, ui_theme, divider, title, icon, counterTop, counter}:
 	return (
 		<Grid container justifyContent={"space-between"} alignItems={"center"}>
 			<Grid item sx={{ flexGrow: 1 }}>
-				<Logo alt={icon.alt} src={icon.favicon} title={title} avatar={icon.avatar} size='small' color="secondary"/>
+				<Logo alt={icon.alt} src={icon.favicon} title={title} avatar={icon.avatar} width={icon.width} height={icon.height} size='small' color="secondary"/>
 			</Grid>
 			<Grid item>
 				<Stack direction={"row"} alignItems={"center"} spacing={2}>

@@ -52,7 +52,7 @@ export const harmonizome_kg_theme = createTheme({
             fontFamily: Georgia.style.fontFamily,
             fontSize: 25,
             fontStyle: "normal",
-            fontWeight: 600,
+            fontWeight: 300,
             color: '#FFF',
             paddingLeft: 5
         },
