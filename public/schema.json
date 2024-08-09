@@ -9467,8 +9467,6 @@
                 "type": "page",
                 "component": "KnowledgeGraph",
                 "props": {
-                    "title": "Term & Gene Search: Visualize connections between genes and terms from the 200+ datasets of Harmonizome.",
-                    "description": "Search one or two genes or terms to see related entities.",
                     "init_function": "initialize_kg",
                     "initial_query": {
                         "start": "gene",
