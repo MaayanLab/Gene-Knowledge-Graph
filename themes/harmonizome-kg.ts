@@ -1,9 +1,9 @@
 import { createTheme } from "@mui/material"
-import { DM_Sans } from 'next/font/google'
+import { Roboto } from 'next/font/google'
 import localFont from 'next/font/local'
 
-export const sans = DM_Sans({ 
-    weight: ['400', '500', '600', '700'],
+export const sans = Roboto({ 
+    weight: ['400', '500', '700'],
     subsets: ['latin'],
     display: 'swap',
 })
@@ -42,14 +42,14 @@ export const harmonizome_kg_theme = createTheme({
             fontWeight: 500,
         },
         cfde: {
-            fontFamily: Georgia.style.fontFamily,
+            fontFamily: 'Georgia, sans',
             fontSize: 25,
             fontStyle: "normal",
             fontWeight: 600,
             color: '#FFF'
         },
         cfde_small: {
-            fontFamily: Georgia.style.fontFamily,
+            fontFamily: 'Georgia, sans',
             fontSize: 25,
             fontStyle: "normal",
             fontWeight: 300,
@@ -84,8 +84,6 @@ export const harmonizome_kg_theme = createTheme({
             fontStyle: "normal",
             textTransform: "uppercase",
             fontWeight: 300,
-            color: "#FFF",
-            lineHeight: 20,
         },
         footer: {
             fontFamily: sans.style.fontFamily,
@@ -155,9 +153,25 @@ export const harmonizome_kg_theme = createTheme({
                   height: 50,
                   background: "#132457",
                   boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.26)",
-				  marginBottom: 30,
+				  marginBottom: 10,
                 },
               },
+        },
+        MuiMenu: {
+            styleOverrides: {
+                paper: {
+                    backgroundColor: "#1d2c58"
+                }
+            }
+        },
+        MuiMenuItem: {
+            styleOverrides: {
+                root: {
+                    padding: 0,
+                    marginLeft: 5,
+                    marginRight: 5
+                }
+            }
         },
         MuiTableHead: {
             styleOverrides: {
@@ -201,6 +215,13 @@ export const harmonizome_kg_theme = createTheme({
                      {
                         color: '#7187C3',
                       }),
+                    ...(ownerState.variant === 'nav' &&
+                    {
+                        color: "#FFF",
+                        "&:hover": {
+                            color: '#aaa',
+                        }
+                    }),
                   }),
             }
         },

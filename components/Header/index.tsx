@@ -40,10 +40,9 @@ export const Nav = ({tabs, ui_theme, divider, title, icon, counterTop, counter}:
 	const tab_component = {top: [], bottom:[]}
 	for (const tab of tabs) {
 		const position = tab.position || 'top'
+		const props = tab.props
 		tab_component[position].push(
-			<Link href={tab.endpoint} key={tab.label}>
-				<TextNav path={tab.endpoint} title={tab.label}/>
-			</Link>
+			<TextNav key={tab.label} path={tab.endpoint} title={tab.label} props={props}/>
 		)
 		if (divider) tab_component[position].push(<Divider orientation='vertical' flexItem sx={{borderColor: "#000"}}/>)
 	}
@@ -85,7 +84,7 @@ export const Nav = ({tabs, ui_theme, divider, title, icon, counterTop, counter}:
 	)
 }
 
-export default async function Header ({schema}: {schema:UISchema}) {
+export default function Header ({schema}: {schema:UISchema}) {
 	const {title, icon, tabs, divider, counterTop, counter} = schema.header
 	return  (
 		<AppBar position="static" sx={{color: "#000"}}>
