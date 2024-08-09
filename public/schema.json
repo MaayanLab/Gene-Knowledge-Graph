@@ -9383,7 +9383,7 @@
                 "endpoint": "#",
                 "label": "VISUALIZE",
                 "type": "link",
-                "component": "Link",
+                "component": "dropdown",
                 "position": "top",
                 "props": { 
                     "submenu": [
