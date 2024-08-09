@@ -154,7 +154,7 @@ export const harmonizome_kg_theme = createTheme({
                   height: 50,
                   background: "#132457",
                   boxShadow: "0 2px 5px 0 rgba(0, 0, 0, 0.26)",
-				  marginBottom: 10,
+				  marginBottom: 35,
                 },
               },
         },
