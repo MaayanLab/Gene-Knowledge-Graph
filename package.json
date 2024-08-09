@@ -23,6 +23,7 @@
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/typography": "^0.5.10",
     "@types/react-cytoscapejs": "^1.2.5",
+    "@types/react": "^18.2.8",
     "cytoscape": "^3.21.0",
     "cytoscape-avsdf": "^1.0.0",
     "cytoscape-fcose": "^2.1.0",
@@ -62,6 +63,6 @@
     "eslint": "8.14.0",
     "eslint-config-next": "^14.1.0",
     "ts-node": "^10.9.1",
-    "typescript": "^4.6.4"
+    "typescript": "^5.1.3"
   }
 }
