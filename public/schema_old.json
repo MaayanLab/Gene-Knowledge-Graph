@@ -9345,8 +9345,8 @@
         }
     ],
     "header": {
-        "header": "<span style='color:white'>Harmonizome 3.0</span>",
-        "title": "<span style='color:white'>Harmonizome 3.0</span>",
+        "header": "<span style='color:white'>Harmonizome 3.0",
+        "title": "<span style='color:white'>Harmonizome 3.0",
         "background": {
             "backgroundColor": "#000",
             "contrastText": "#FFF"
@@ -9359,111 +9359,13 @@
             "faviconTitle": "Harmonizome",
             "alt": "Harmonizome-KG",
             "key": "Harmonizome-KG_logo",
-            "width": 34,
-            "height": 34
+            "width": 40,
+            "height": 40
         },
         "tabs": [
             {
-                "endpoint": "https://maayanlab.cloud/Harmonizome/",
-                "label": "SEARCH",
-                "type": "link",
-                "component": "Link",
-                "position": "top",
-                "href": "https://maayanlab.cloud/Harmonizome/"
-            },
-            {
-                "endpoint": "https://maayanlab.cloud/Harmonizome/download",
-                "label": "DOWNLOAD",
-                "type": "link",
-                "component": "Link",
-                "position": "top",
-                "href": "https://maayanlab.cloud/Harmonizome/download"
-            },
-            {
-                "endpoint": "#",
-                "label": "VISUALIZE",
-                "type": "link",
-                "component": "Link",
-                "position": "top",
-                "props": { 
-                    "submenu": [
-                        {
-                            "name": "GENE ATTRIBUTE HEAT MAPS",
-                            "href": "https://maayanlab.cloud/Harmonizome/visualize/heat_map/gene_attribute"
-                        },
-                        {
-                            "name": "GENE SIMILARITY HEAT MAPS",
-                            "href": "https://maayanlab.cloud/Harmonizome/visualize/heat_map/gene_similarity"
-                        },
-                        {
-                            "name": "ATTRIBUTE SIMILARITY HEAT MAPS",
-                            "href": "https://maayanlab.cloud/Harmonizome/visualize/heat_map/attribute_similarity"
-                        },
-                        {
-                            "name": "UMAP",
-                            "href": "https://maayanlab.cloud/Harmonizome/visualize/umap"
-                        },
-                        {
-                            "name": "DATASET PAIR HEAT MAPS",
-                            "href": "https://maayanlab.cloud/Harmonizome/visualize/heat_map/dataset_pairs"
-                        },
-                        {
-                            "name": "HEAT MAP WITH INPUT GENES",
-                            "href": "https://maayanlab.cloud/Harmonizome/visualize/heat_map/input_genes"
-                        }
-                    ]
-                }
-            },
-            {
-                "endpoint": "#",
-                "label": "PREDICT",
-                "type": "link",
-                "component": "Link",
-                "position": "top",
-                "props": { 
-                    "submenu": [
-                        {
-                            "name": "INTRO",
-                            "href": "https://maayanlab.cloud/Harmonizome/machine_learning"
-                        },
-                        {
-                            "name": "ION CHANNELS",
-                            "href": "https://maayanlab.cloud/Harmonizome/machine_learning/ic_predictions"
-                        },
-                        {
-                            "name": "MOUSE PHENOTYPES",
-                            "href": "https://maayanlab.cloud/Harmonizome/machine_learning/mp_predictions"
-                        },
-                        {
-                            "name": "GPCR-LIGANDS",
-                            "href": "https://maayanlab.cloud/Harmonizome/machine_learning/gl_predictions"
-                        },
-                        {
-                            "name": "KINASE-SUBSTRATES",
-                            "href": "https://maayanlab.cloud/Harmonizome/machine_learning/ks_predictions"
-                        }
-                    ]
-                }
-            },
-            {
-                "endpoint": "https://maayanlab.cloud/Harmonizome/cross",
-                "label": "CROSS",
-                "type": "link",
-                "component": "Link",
-                "position": "top",
-                "href": "https://maayanlab.cloud/Harmonizome/cross"
-            },
-            {
-                "endpoint": "https://maayanlab.cloud/Harmonizome/chatbot",
-                "label": "CHATBOT",
-                "type": "link",
-                "component": "Link",
-                "position": "top",
-                "href": "https://maayanlab.cloud/Harmonizome/chatbot"
-            },
-            {
                 "endpoint": "/",
-                "label": "KG",
+                "label": "TERM & GENE SEARCH",
                 "type": "page",
                 "component": "KnowledgeGraph",
                 "props": {
@@ -9482,30 +9384,21 @@
                 }
             },
             {
-                "endpoint": "https://maayanlab.cloud/Harmonizome/documentation",
-                "label": "DOCS",
-                "type": "link",
-                "component": "Link",
-                "position": "top",
-                "href": "https://maayanlab.cloud/Harmonizome/documentation"
+                "endpoint": "/downloads",
+                "label": "DOWNLOAD",
+                "type": "page",
+                "component": "Download",
+                "props": {
+                  "src": "https://raw.githubusercontent.com/nialingam/KnowledgeGraphDemo/main/downloads_6.json"
+                }
             },
             {
-                "endpoint": "#",
-                "label": "ABOUT",
-                "type": "link",
-                "component": "Link",
-                "position": "top",
-                "props": { 
-                    "submenu": [
-                        {
-                            "name": "ABOUT",
-                            "href": "https://maayanlab.cloud/Harmonizome/about"
-                        },
-                        {
-                            "name": "WHAT'S NEW",
-                            "href": "https://maayanlab.cloud/Harmonizome/whatsNew"
-                        }
-                    ]
+                "endpoint": "/tutorial",
+                "label": "TUTORIAL",
+                "type": "markdown",
+                "component": "Markdown",
+                "props": {
+                  "src": "https://raw.githubusercontent.com/MaayanLab/HarmonizomeKG/main/about8.md"
                 }
             }
         ],
