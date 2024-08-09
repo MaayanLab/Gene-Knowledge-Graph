@@ -10,7 +10,8 @@ export const sans = Roboto({
 
 const Georgia = localFont({
     src: './georgia.woff',
-    display: 'swap',
+    weight: "300 600",
+    display: "block"    
   })
 
 export const harmonizome_kg_theme = createTheme({
@@ -42,14 +43,14 @@ export const harmonizome_kg_theme = createTheme({
             fontWeight: 500,
         },
         cfde: {
-            fontFamily: 'Georgia, sans',
+            fontFamily: Georgia.style.fontFamily,
             fontSize: 25,
             fontStyle: "normal",
             fontWeight: 600,
             color: '#FFF'
         },
         cfde_small: {
-            fontFamily: 'Georgia, sans',
+            fontFamily: Georgia.style.fontFamily,
             fontSize: 25,
             fontStyle: "normal",
             fontWeight: 300,
@@ -156,13 +157,6 @@ export const harmonizome_kg_theme = createTheme({
 				  marginBottom: 10,
                 },
               },
-        },
-        MuiMenu: {
-            styleOverrides: {
-                paper: {
-                    backgroundColor: "#1d2c58"
-                }
-            }
         },
         MuiMenuItem: {
             styleOverrides: {

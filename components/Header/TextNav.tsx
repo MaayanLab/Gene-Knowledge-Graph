@@ -49,6 +49,11 @@ export  function TextNav({title, path, props}: {
 					MenuListProps={{
 					'aria-labelledby': 'basic-button',
 					}}
+					sx={{
+						"& .MuiMenu-paper": {
+							backgroundColor: "primary.main"
+						}
+					}}
 				>
 					{props.submenu.map(({name, href})=>(
 						<MenuItem key={name} onClick={handleClose}>
