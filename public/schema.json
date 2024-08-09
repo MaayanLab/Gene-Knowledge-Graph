@@ -30,34 +30,6 @@
             ]
         },
         {
-            "node": "Gene",
-            "example": [
-                "VEGFA"
-            ],
-            "display": [
-                {
-                    "label": "Gene ID",
-                    "text": "${id}",
-                    "type": "text"
-                },
-                {
-                    "label": "label",
-                    "text": "${label}",
-                    "type": "text"
-                },
-                {
-                    "label": "type",
-                    "text": "${type}",
-                    "type": "text"
-                }
-            ],
-            "relation": [],
-            "search": [
-                "id",
-                "label"
-            ]
-        },
-        {
             "node": "Anatomy",
             "example": [
                 "blood",
@@ -294,7 +266,8 @@
                     "text": "${target}",
                     "type": "text"
                 }
-            ]
+            ],
+            "color": "#4fc3f7"
         },
         {
             "match": [
@@ -340,7 +313,8 @@
                     "text": "${target}",
                     "type": "text"
                 }
-            ]
+            ],
+            "color": "#f38d9f"
         },
         {
             "match": [
@@ -413,14 +387,14 @@
                 "component": "KnowledgeGraph",
                 "props": {
                     "init_function": "initialize_kg",
-                    "title": "BKG Explorer: Find connections between different BKG entities.",
-                    "description": "Search two BKG entities or one entity to see related BKG entities.",
+                    "title": "BKG Explorer: Find connections between different entities from the Biomarker Partnership.",
+                    "description": "Search two entities or one entity to see related entities.",
                     "initial_query": {
                         "start": "Condition",
                         "start_term": "lung carcinoma",
                         "start_field": "label",
-                        "end": "Anatomy",
-                        "end_term": "blood",
+                        "end": "Condition",
+                        "end_term": "ovarian carcinoma",
                         "end_field": "label"
                     },
                     "subheader": {
@@ -444,7 +418,7 @@
                 "type": "markdown",
                 "component": "Markdown",
                 "props": {
-                  "src": "https://raw.githubusercontent.com/nialingam/BiomarkerKGDemo/main/About5.md"
+                  "src": "https://raw.githubusercontent.com/MaayanLab/BiomarkerKG/main/About6.md"
                 }
             },
             {
@@ -457,15 +431,15 @@
                     "description": "Explore use cases that use data from the Biomarker Partnership",
                     "pages": [
                         {
-                            "endpoint": "/use_cases/thyroidandskinmelanoma",
-                            "label": "Mutations that Pose Risks for Thyroid Cancer and Skin Melanoma",
+                            "endpoint": "/use_cases/thyroidandskincarcinoma",
+                            "label": "HRAS Variant Risks for Thyroid Cancer and Skin Carcinoma",
                             "type": "page",
                             "component": "DistilleryUseCase",
                             "props": {
                                 "init_function": "initialize_kg",
-                                "title": "Risks for Thyroid Cancer and Skin Melanoma",
+                                "title": "HRAS Variant Risks for Thyroid Cancer and Skin Carcinoma",
                                 "icon": "/icon/thyroidandskin.png",
-                                "description": "Explore the mutations that indicate risk for developing thyroid cancer and skin melanoma.",
+                                "description": "Discover the variants in HRAS that indicate common risk for developing both thyroid cancer and skin carcinoma.",
                                 "endpoint": "/api/biomarker/thyroidandskinmelanoma",
                                 "type": "Condition",
                                 "fields": [
@@ -644,7 +618,7 @@
                 }
             ]
         ],
-        "footer_text": "<span style='color:white'>Please acknowledge Enrichr-KG in your publications by citing the following reference:<br><a style='color: cyan' href='https://doi.org/10.1093/nar/gkad393'>Evangelista JE, Xie Z, Marino GB, Nguyen N, Clarke DJB, Ma'ayan A. Enrichr-KG: bridging enrichment analysis across multiple libraries. Nucleic Acids Res. 2023 May 11:gkad393. doi: 10.1093/nar/gkad393. PMID: 37166973.</a></span>"
+        "footer_text": ""
     },
     "ui_theme": "biomarker_kg_theme"
 }

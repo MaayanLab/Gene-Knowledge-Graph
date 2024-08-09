@@ -18,7 +18,7 @@ async function process_query({
         type: string,
     }) {
     
-    const query = `MATCH p = (c:Condition {label: 'thyroid cancer'})<-[:indicates_risk_of_developing]-(b:Biomarker)-[:indicates_risk_of_developing]->(a:Condition {label: 'skin melanoma'})
+    const query = `MATCH p = (c:Condition {label: 'thyroid cancer'})<-[:indicates_risk_of_developing]-(b:Biomarker)-[:indicates_risk_of_developing]->(a:Condition {label: 'Skin Squamous Cell Carcinoma'})
     RETURN p, nodes(p) AS n, relationships(p) AS r LIMIT TOINTEGER($limit)
     
     `
