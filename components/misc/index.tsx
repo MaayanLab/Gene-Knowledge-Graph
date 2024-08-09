@@ -194,7 +194,7 @@ const HarmonizomeFooter = () => {
             <li>
               <Link href="http://icahn.mssm.edu/research/labs/maayan-laboratory" target="_blank" rel="noopener noreferrer" passHref>
                 <Typography component="span" style={{ fontSize: '14px', textDecoration: 'none', color: 'inherit', fontFamily: roboto.style.fontFamily, fontWeight: '300' }}>
-                  Ma&apos;ayan Laboratory of Computational Systems Biology
+                  Ma`ayan Laboratory of Computational Systems Biology
                 </Typography>
               </Link>
             </li>
@@ -221,7 +221,7 @@ const HarmonizomeFooter = () => {
             <Typography variant="body2" component="p" sx={{ fontSize: '14px', fontFamily: roboto.style.fontFamily, fontWeight: '300' }}>
               <Link href="http://database.oxfordjournals.org/content/2016/baw100.short" target="_blank" rel="noopener noreferrer" passHref>
                 <span style={{ textDecoration: 'none', color: 'inherit', fontFamily: roboto.style.fontFamily }}>
-                  Rouillard AD, Gundersen GW, Fernandez NF, Wang Z, Monteiro CD, McDermott MG, Ma&apos;ayan A. 
+                  Rouillard AD, Gundersen GW, Fernandez NF, Wang Z, Monteiro CD, McDermott MG, Ma`ayan A. 
                   <em>The harmonizome: a collection of processed datasets gathered to serve and mine knowledge 
                   about genes and proteins</em>. Database (Oxford). 2016 Jul 3;2016. pii: baw100.
                 </span>
