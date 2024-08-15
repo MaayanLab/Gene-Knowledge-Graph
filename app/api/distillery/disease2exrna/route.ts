@@ -22,7 +22,7 @@ async function process_query({
                     ORDER BY r1.evidence DESC 
                     CALL {
                         WITH q, a, r1, b
-                        MATCH p=(a)-[r1]-(b)-[r2: overlaps]-(c: \`exRNA Loci\`)-[r3:correlated_in]-(d)-[r4:predicted_in]-(e)-[r5:molecularly_interacts_with]-(f)-[r6:overlaps]-(b)
+                        MATCH p=(a)-[r1]-(b)-[r2: overlaps]-(c: \`exRNA Loci\`)-[r3:molecularly_interacts_with]-(d)-[r4:predicted_in]-(e)-[r5:correlated_in]-(c)
                         RETURN p, nodes(p) as n, relationships(p) as r LIMIT 1
                     }
                     RETURN p, nodes(p) as n, relationships(p) as r
