@@ -19,8 +19,8 @@ const EdgeOnly = ({download}: {download: Array<{
 			<Grid item xs={12}>
 				<Typography variant={"body1"}>
 					Each dataset below contains a link to `[source].new_archive.zip` file. 
-					This zip file contains 1. a '[source].nodes.csv' file containing the terms' information; 2. edges files containing
-					the triple source, relation, and target signifying an edge in the network, and 3. a '[genes].nodes.csv' file containing the genes that are covered in the dataset.
+					This zip file contains 1. a `[source].nodes.csv` file containing the terms&apos; information; 2. edges files containing
+					the triple source, relation, and target signifying an edge in the network, and 3. a `[genes].nodes.csv` file containing the genes that are covered in the dataset.
 					Additionally these files may also include associated metadata for the source and target nodes as well as the edges.
 				</Typography>
 			</Grid>
