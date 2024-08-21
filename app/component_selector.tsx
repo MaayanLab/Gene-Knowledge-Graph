@@ -6,6 +6,7 @@ import DistilleryUseCase from '@/components/Distillery/DistilleryUseCase'
 import Enrichment from '@/components/Enrichment'
 import Download from '@/components/Download'
 import APIDoc from '@/components/APIDoc'
+import SimpleTermAndGeneSearch from '@/components/SimpleTermAndGeneSearch'
 import Tutorial from '@/components/Tutorial.mdx'
 import { Suspense } from 'react'
 import { CircularProgress } from '@mui/material'
@@ -13,6 +14,7 @@ const AsyncComponent = async ({component, searchParams, props, endpoint,}:
 	{component: string, endpoint: string, searchParams: {[key:string]: any}, 
 	props: {[key:string]: any}}) => {
 	if (component === "KnowledgeGraph") return await TermAndGeneSearch({props, searchParams})
+	else if (component === "SimpleKnowledgeGraph") return await SimpleTermAndGeneSearch({props, searchParams})
 	else if (component === "DistilleryLanding") return await DistilleryLanding({...props})
 	else if (component === "SanitizedHTML") return await SanitizedHTML({...props})
 	else if (component === "Markdown") return await Markdown({...props})
