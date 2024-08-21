@@ -7,8 +7,6 @@ services:
     platform: linux/amd64
     image: maayanlab/harmonizome-kg:2.4.2
     x-kubernetes:
-      strategy:
-        type: Recreate
       imagePullPolicy: IfNotPresent
       annotations:
         maayanlab.cloud/ingress: https://harmonizome-kg.maayanlab.cloud
@@ -27,17 +25,12 @@ services:
       - NEXT_PUBLIC_SCHEMA
       - NEXT_PUBLIC_TURL
       - NEXT_PUBLIC_TURL_URL
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-        reservations:
-          memory: 1G
 
   neo4j-v5:
     image: neo4j:5.19
     x-kubernetes:
       imagePullPolicy: IfNotPresent
+    command: ["bash", "-c", "while true; do echo 'Neo4j is not running. Pod is in offline maintenance mode. Remove neo4j.offlineMaintenanceModeEnabled setting and run `helm upgrade ...` to resume normal operation.'; sleep 60; done"]
     environment:
       - NEO4J_PLUGINS= ["apoc", "n10s"]
       - NEO4J_AUTH=${NEXT_PUBLIC_NEO4J_USER}/${NEXT_PUBLIC_NEO4J_PASSWORD}
@@ -55,7 +48,6 @@ services:
           memory: 15G
         reservations:
           memory: 10G
-
 volumes:
   harmonizome-kg-neo4j-v5:
     x-kubernetes:
