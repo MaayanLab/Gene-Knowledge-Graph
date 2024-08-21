@@ -227,16 +227,6 @@ export const harmonizome_kg_theme = createTheme({
                     borderRadius: 2,
                     fontWeight: 600,
                     padding: "8px 16px",
-                    ...(ownerState.variant === 'contained' &&
-                      ownerState.color === 'primary' && {
-                        backgroundColor: '#C3E1E6',
-                        color: '#336699',
-                      }),
-                    ...(ownerState.variant === 'contained' &&
-                      ownerState.color === 'tertiary' && {
-                        backgroundColor: '#7187C3',
-                        color: '#FFFFFF',
-                      }),
                   }),
               },
         },
