@@ -4,6 +4,7 @@ import {toNumber} from './math'
 import type { NextRequest } from 'next/server'
 import Color from 'color'
 import { default_get_node_color_and_type } from '@/app/api/knowledge_graph/helper'
+import Integer from 'neo4j-driver-core/lib/integer.js'
 
 export function makeTemplate(
     templateString: string,
@@ -106,7 +107,7 @@ export const process_properties = (properties) => {
 	for ( const k of Object.keys(properties)) {
 		const v:string | number | {low: number, high: number} = properties[k]
 		if (typeof v === "object") {
-			props[k] = toNumber(v)
+			props[k] = Integer.toNumber(v)
 		} else {
 			props[k] = v
 		}
