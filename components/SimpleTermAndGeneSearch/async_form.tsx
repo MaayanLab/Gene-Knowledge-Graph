@@ -10,13 +10,15 @@ const AsyncFormComponent = ({direction,
     nodes, 
     filter,
     initial_query,
-    setInputFilter
+    setInputFilter,
+    term = ''
 }: {
 		direction: string,
         initial_query: {[key: string]: string},
 		nodes: {[key:string]: {[key:string]: any}},
 		filter: {[key:string]: string},
-        setInputFilter: Function
+        setInputFilter: Function,
+        term: string
 	}) => {
 	const pathname = usePathname()
     console.log(filter)
@@ -41,7 +43,7 @@ const AsyncFormComponent = ({direction,
 
     
     const field = 'label'
-    const term = (direction === 'Start' ? start_term: end_term) || ''
+    // const term = (direction === 'Start' ? start_term: end_term) || ''
     const type = (direction === 'Start' ? start: end) || ''
     const [inputTerm, setInputTerm] = useState<string>(term)
     const [controller, setController] = useState<{signal: AbortSignal, abort: Function} | null>(null)
