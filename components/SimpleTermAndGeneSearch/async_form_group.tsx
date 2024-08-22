@@ -188,16 +188,18 @@ const AsyncFormComponentGroup = ({
 				nodes={nodes}
 				initial_query={initial_query}
 				direction={'Start'}
-				filter={{...filter, ...inputFilter}}
+				filter={inputFilter}
 				setInputFilter={setInputFilter}
+				term={filter.start_term || ''}
 			/>
 			{inputFilter.end !== undefined && 
 			<AsyncFormComponent 
 				initial_query={initial_query}
 				nodes={nodes}
 				direction={'End'}
-				filter={{...filter, ...inputFilter}}
+				filter={inputFilter}
 				setInputFilter={setInputFilter}
+				term={filter.end_term || ''}
 			/>}
 			{(user_input !== null && elementMapper[user_input.type][user_input.id] !== undefined) &&
 				<TooltipComponent 
