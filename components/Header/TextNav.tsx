@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react"
 import Link from "next/link"
-import { Typography, Menu, MenuItem, ButtonBase } from "@mui/material"
+import { Typography, Menu, MenuItem, ButtonBase, List, ListItem, Collapse } from "@mui/material"
 import { usePathname } from "next/navigation"
 
 export  function TextNav({title, path, props}: {
@@ -16,6 +16,7 @@ export  function TextNav({title, path, props}: {
 }) {
 	const pathname = `/${usePathname().split("/")[1]}`
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	const [clicked, setClicked] = useState<null | string>(null);
   	const open = Boolean(anchorEl);
 	let sx
 	if (pathname === path) {
@@ -24,7 +25,8 @@ export  function TextNav({title, path, props}: {
 	}
 	if (props !== undefined && props.submenu !== undefined) {
 		const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-			setAnchorEl(event.currentTarget);
+			if (anchorEl) setAnchorEl(null)
+			else setAnchorEl(event.currentTarget);
 		};
 		const handleClose = () => {
 			setAnchorEl(null);
@@ -37,7 +39,7 @@ export  function TextNav({title, path, props}: {
 					aria-haspopup="true"
 					aria-expanded={open ? 'true' : undefined}
 					onClick={handleClick}
-					sx={{padding: 0, marginLeft: 0}}
+					sx={{padding: 0, marginLeft: 0, display: {xs: "none", sm: "none", md: "block"}}}
 				>
 					<Typography variant="nav" sx={sx}>{title}</Typography>
 				</ButtonBase>
@@ -52,7 +54,8 @@ export  function TextNav({title, path, props}: {
 					sx={{
 						"& .MuiMenu-paper": {
 							backgroundColor: "primary.main"
-						}
+						},
+						display: {xs: "none", sm: "none", md: "block"}
 					}}
 				>
 					{props.submenu.map(({name, href})=>(
@@ -63,13 +66,43 @@ export  function TextNav({title, path, props}: {
 						</MenuItem>
 					))}
 				</Menu>
+				<ListItem sx={{display: {xs: "block", sm: "block", md: "none", lg: "none", xl: "none"}}}>
+					<ButtonBase
+						id="basic-button"
+						aria-controls={open ? 'basic-menu' : undefined}
+						aria-haspopup="true"
+						aria-expanded={open ? 'true' : undefined}
+						onClick={()=>clicked===title?setClicked(null): setClicked(title)}
+						sx={{padding: 0, marginLeft: 0}}
+					>
+						<Typography variant="nav" sx={sx}>{title}</Typography>
+					</ButtonBase>
+				</ListItem>
+				<Collapse in={clicked===title} timeout="auto" unmountOnExit  sx={{display: {xs: "block", sm: "block", md: "none", lg: "none", xl: "none"}}}>
+					<List component="div" disablePadding>
+						{props.submenu.map(({name, href})=>(
+							<ListItem key={name} onClick={handleClose}>
+								<Link href={href}>
+									<Typography variant="nav">{name}</Typography>
+								</Link>
+							</ListItem>
+						))}
+					</List>
+				</Collapse>
 			</>
 		)
 	} else {
 		return(
-			<Link href={path}>
-				<Typography variant="nav" sx={sx}>{title}</Typography>
-			</Link>
+			<>
+				<Link href={path}>
+					<Typography sx={{display: {xs: "none", sm: "none", md: "block"}, ...sx}} variant="nav">{title}</Typography>
+				</Link>
+				<ListItem sx={{display: {xs: "block", sm: "block", md: "none", lg: "none", xl: "none"}}}>
+					<Link href={path}>
+						<Typography variant="nav">{title}</Typography>
+					</Link>
+				</ListItem>
+			</>
 		)
 	} 
 }
