@@ -659,7 +659,7 @@ export async function GET(req: NextRequest) {
                 end_field="label",
                 end_term,
                 relation,
-                limit=5,
+                limit=25,
                 path_length,
                 remove = [],
                 expand = [],
