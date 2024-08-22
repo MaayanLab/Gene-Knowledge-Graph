@@ -9547,7 +9547,8 @@
                     "initial_query": {
                         "start": "Gene",
                         "start_term": "STAT3",
-                        "start_field": "label"
+                        "start_field": "label",
+                        "limit": 25
                     },
                     "subheader": {
                         "url_field": "filter",

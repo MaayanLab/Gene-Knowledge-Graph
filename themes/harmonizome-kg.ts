@@ -55,7 +55,7 @@ export const harmonizome_kg_theme = createTheme({
             fontStyle: "normal",
             fontWeight: 300,
             color: '#FFF',
-            paddingLeft: 5
+            paddingLeft: 5,
         },
         subtitle1: {
             fontSize: 16,
@@ -136,12 +136,28 @@ export const harmonizome_kg_theme = createTheme({
             styleOverrides: {
                 // Name of the slot
                 root: ({theme})=> theme.unstable_sx({
-                    width: 1190,
-					marginLeft: 'auto',
-					marginRight: 'auto',
-                    '@media (min-width: 600px)': {
+                    // '@media (min-width: 650px)': {
+                    //     minHeight: '47px',
+                    //     width:'650px',
+                    // },
+					'@media (min-width: 768px)': {
                         minHeight: '47px',
-                    }
+                        width:'750px',
+                        marginLeft: 'auto',
+					    marginRight: 'auto',
+                    },
+                    '@media (min-width: 992px)': {
+                        minHeight: '47px',
+                        width:'970px',
+                        marginLeft: 'auto',
+					    marginRight: 'auto',
+                    },
+                    '@media (min-width: 1200px)': {
+                        minHeight: '47px',
+                        width:'1170px',
+                        marginLeft: 'auto',
+					    marginRight: 'auto',
+                    },
                   }),
 
               },
@@ -167,6 +183,20 @@ export const harmonizome_kg_theme = createTheme({
                 }
             }
         },
+        MuiListItem: {
+            styleOverrides: {
+                root: {
+                    padding: "2px 5px"
+                }
+            }
+        },
+        MuiMenu: {
+            styleOverrides: {
+                paper: {
+                    width: '100%'
+                }
+            }
+        },
         MuiTableHead: {
             styleOverrides: {
                 root: {
@@ -189,6 +219,7 @@ export const harmonizome_kg_theme = createTheme({
                 },
             },
         },
+
         MuiCheckbox: {
             styleOverrides: {
                 root: {
@@ -216,6 +247,12 @@ export const harmonizome_kg_theme = createTheme({
                             color: '#aaa',
                         }
                     }),
+                    ...(ownerState.variant === 'cfde_small' &&
+                        {
+                            '@media (max-width: 1000px)': {
+                                display: 'none'
+                            }
+                        }),
                   }),
             }
         },
