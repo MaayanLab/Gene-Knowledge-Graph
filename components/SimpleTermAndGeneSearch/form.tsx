@@ -149,6 +149,35 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
         <Grid container justifyContent="space-around" spacing={1}>
             <Grid item xs={12}>
                 <Grid container spacing={1} alignItems="flex-start" justifyContent="flex-start">
+                    <Grid item xs={12}>
+                        <Grid container spacing={1} alignItems="center">
+                            {relation.map((value) => (
+                                <Grid item key={value.name}>
+                                    <Tooltip title={`${value.name}`} key={value.name} placement="top">
+                                        <Chip label={value.name}
+                                            color="primary"
+                                            sx={{padding: 0, borderRadius: "8px"}}
+                                            onDelete={()=>{
+                                                const {filter: f, ...rest} = searchParams
+                                                const filter = JSON.parse(f || '{}')
+                                                const rels = []
+                                                for (const i of filter.relation || []) {
+                                                    if (i.name !== value.name) {
+                                                        rels.push(i)
+                                                    }
+                                                }
+                                                filter.relation = rels
+                                                const query = {
+                                                    ...rest,
+                                                    filter: JSON.stringify(filter)
+                                                }
+                                                router_push(router, pathname, query)                                                    
+                                        }}/>
+                                    </Tooltip>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Grid>
                     <Grid item>
                         <Stack direction={"row"} alignItems={"center"} spacing={2}>
                             <Typography variant="subtitle2">Size:</Typography>
