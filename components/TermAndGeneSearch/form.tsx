@@ -107,7 +107,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
         view,
         fullscreen
     } = searchParams
-    const filter:FilterSchema = JSON.parse(f || '{}')
+    const filter:FilterSchema = f && f !== '{}' ? JSON.parse(f || '{}'): initial_query
     const {
         start,
         end,

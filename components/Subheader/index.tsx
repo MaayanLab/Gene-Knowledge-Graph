@@ -101,7 +101,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 					const {url_field, query_field} = subheader_props || {}
 					const query_parser = parseAsJson<EnrichmentParams | FilterSchema>()
 					const query = query_parser.parse(searchParams.get(url_field)) || default_options || {}
-					const selected = query[query_field] || []
+					const selected = query[query_field] || []					
 					const active = contains(selected.map(({name})=>name), i.props[query_field])
 					const enabled = selected.length === 0
 					let style = {}
