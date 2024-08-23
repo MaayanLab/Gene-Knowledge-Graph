@@ -9548,7 +9548,8 @@
                         "start": "Gene",
                         "start_term": "STAT3",
                         "start_field": "label",
-                        "limit": 25
+                        "limit": 25,
+                        "relation":[{"name":"participates_in_(GO Bio Process 2023)","limit":5},{"name":"positively_regulated_by_(LINCS L1000 CRISPR)","limit":5},{"name":"negatively_regulated_by_(LINCS L1000 CRISPR)","limit":5},{"name":"participates_in_(WikiPathways Pathways)","limit":5},{"name":"over-expressed_in_(BioGPS Human)","limit":5},{"name":"under-expressed_in_(BioGPS Human)","limit":5}]
                     },
                     "subheader": {
                         "url_field": "filter",
@@ -9964,7 +9965,7 @@
                 "props": {
                     "relation": [
                         "contained_in_(GO Cellular Component 2023)",
-                        "has function_(GO Molecular Func 2023)",
+                        "has_function_(GO Molecular Func 2023)",
                         "participates_in_(GO Bio Process 2023)"
                     ],
                     "libraries": [
