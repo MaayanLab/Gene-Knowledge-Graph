@@ -190,7 +190,7 @@ const AsyncFormComponentGroup = ({
 				direction={'Start'}
 				filter={inputFilter}
 				setInputFilter={setInputFilter}
-				term={filter.start_term || ''}
+				term={filter.start_term || initial_query.start_term || ''}
 			/>
 			{inputFilter.end !== undefined && 
 			<AsyncFormComponent 
