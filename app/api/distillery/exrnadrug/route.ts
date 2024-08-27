@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
         })
         try {
             const {term="", field="label", limit=100} = InputSchema.parse(convert_query(req))
-            const query = `MATCH (a:Compound)-[r]-(b:Gene) WHERE a.${field} =~ $term RETURN DISTINCT(a) LIMIT TOINTEGER($limit)`
+            const query = `MATCH (a:Compound)-[r:positively_regulates]-(b:Gene) WHERE a.${field} =~ $term RETURN DISTINCT(a) LIMIT TOINTEGER($limit)`
             const results = await session.readTransaction(txc => txc.run(query, {limit, term: `(?i).*${term}.*`}))
             const records = {}
             for (const record of results.records) {
