@@ -159,7 +159,9 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                             sx={{padding: 0, borderRadius: "8px"}}
                                             onDelete={()=>{
                                                 const {filter: f, ...rest} = searchParams
-                                                const filter = JSON.parse(f || '{}')
+                                                const fj = JSON.parse(f || '{}')
+                                                let filter = Object.keys(fj).length === 0 ? initial_query: fj
+                                                
                                                 const rels = []
                                                 for (const i of filter.relation || []) {
                                                     if (i.name !== value.name) {
