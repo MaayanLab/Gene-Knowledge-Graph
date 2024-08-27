@@ -15,6 +15,7 @@ const Georgia = localFont({
   })
 
 export const harmonizome_kg_theme = createTheme({
+    spacing: (factor) => `${0.37 * factor}rem`,
     typography: {
         fontFamily: sans.style.fontFamily,
         h1: {
@@ -56,6 +57,7 @@ export const harmonizome_kg_theme = createTheme({
             fontWeight: 300,
             color: '#FFF',
             paddingLeft: 5,
+            lineHeight: 1.1,
         },
         subtitle1: {
             fontSize: 16,
@@ -140,6 +142,9 @@ export const harmonizome_kg_theme = createTheme({
                     //     minHeight: '47px',
                     //     width:'650px',
                     // },
+                    // padding: "10px",
+                    position: "relative",
+                    top: "4px",
 					'@media (min-width: 768px)': {
                         minHeight: '47px',
                         width:'750px',
