@@ -4785,32 +4785,7 @@
                         "start_term": "STAT3",
                         "start_field": "label",
                         "limit": 25,
-                        "relation": [
-                            {
-                                "name": "participates_in_(GO Bio Process 2023)",
-                                "limit": 5
-                            },
-                            {
-                                "name": "positively_regulated_by_(LINCS L1000 CRISPR)",
-                                "limit": 5
-                            },
-                            {
-                                "name": "negatively_regulated_by_(LINCS L1000 CRISPR)",
-                                "limit": 5
-                            },
-                            {
-                                "name": "participates_in_(WikiPathways Pathways)",
-                                "limit": 5
-                            },
-                            {
-                                "name": "over-expressed_in_(BioGPS Human)",
-                                "limit": 5
-                            },
-                            {
-                                "name": "under-expressed_in_(BioGPS Human)",
-                                "limit": 5
-                            }
-                        ]
+                        "relation": [{"name":"negatively_regulated_by_(LINCS L1000 Chem Pert)","limit":5},{"name":"positively_regulated_by_(LINCS L1000 Chem Pert)","limit":5},{"name":"participates_in_(GO Bio Process 2023)","limit":5},{"name":"participates_in_(WikiPathways Pathways)","limit":5},{"name":"knockout_increases_fitness_of_(DepMap Gene Dependency)","limit":5}]
                     },
                     "subheader": {
                         "url_field": "filter",
