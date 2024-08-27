@@ -4784,8 +4784,8 @@
                         "start": "Gene",
                         "start_term": "STAT3",
                         "start_field": "label",
-                        "limit": 25,
-                        "relation": [{"name":"negatively_regulated_by_(LINCS L1000 Chem Pert)","limit":5},{"name":"positively_regulated_by_(LINCS L1000 Chem Pert)","limit":5},{"name":"participates_in_(GO Bio Process 2023)","limit":5},{"name":"participates_in_(WikiPathways Pathways)","limit":5},{"name":"knockout_increases_fitness_of_(DepMap Gene Dependency)","limit":5}]
+                        "limit": 10,
+                        "relation": [{"name":"negatively_regulated_by_(LINCS L1000 Chem Pert)","limit":10},{"name":"positively_regulated_by_(LINCS L1000 Chem Pert)","limit":10},{"name":"participates_in_(GO Bio Process 2023)","limit":10},{"name":"participates_in_(WikiPathways Pathways)","limit":10},{"name":"knockout_increases_fitness_of_(DepMap Gene Dependency)","limit":10}]
                     },
                     "subheader": {
                         "url_field": "filter",
