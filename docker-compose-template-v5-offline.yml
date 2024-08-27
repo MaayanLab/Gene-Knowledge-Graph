@@ -25,6 +25,7 @@ services:
       - NEXT_PUBLIC_SCHEMA
       - NEXT_PUBLIC_TURL
       - NEXT_PUBLIC_TURL_URL
+      - NEXT_PUBLIC_HOMEPAGE
 
   neo4j-v5:
     image: neo4j:5.19
