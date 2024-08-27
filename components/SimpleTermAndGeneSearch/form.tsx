@@ -206,7 +206,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                         router_push(router, pathname, query)
                                     }}
                                     min={1}
-                                    max={!end ? start === "Gene" ? 100/(relation.length || 1): neighborCount : 150}
+                                    max={!end ? start === "Gene" ? 50: neighborCount : 150}
                                     sx={{width: 150}}
                                     aria-labelledby="continuous-slider"
                                 />
