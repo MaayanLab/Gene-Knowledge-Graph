@@ -1,0 +1,318 @@
+## Data Distillery Knowledge Graph
+
+### Table of Contents
+1. [Introduction](#introduction)
+2. [Common Fund Datasets](#cfdatasets)
+	1. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4DN](#4DN)
+	2. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ERCC](#ERCC)
+	3. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[GlyGen](#GlyGen)
+	4. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[GTEx](#GTEx)
+	5. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[HuBMAP](#HuBMAP)
+	6. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[IDG](#IDG)
+	7. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Kids First](#KF)
+	8. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[LINCS](#LINCS)
+	9. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[MoTRPAC](#MoTRPAC)
+	10. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[SPARC](#SPARC)
+3. [Using the UI](#ui)
+	1. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Connection Explorer](#connection-explorer)
+		1. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Single Term Search](#single-term)
+		2. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Term to Node Type](#term-to-type)
+		3. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Two Term Search](#two-term)
+	3. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Apps and Use Cases](#apps-use-cases)
+		1. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Apps](#apps)
+		2. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Use Cases](#use-cases)
+<br/><br/>
+### Introduction <a name="introduction"></a>
+The Data Distillery project aims to integrate summarized (“distilled”) Common Fund data within a knowledge graph. The purpose of the Data Distillery Knowledge Graph (DDKG) is to link multiple sources of expertly curated data, thus providing data integration across multiple Common Fund data coordinating centers (DCCs).  The summarized data are provided by participating DCCs and funded as part of the Common Fund Data Ecosystem (CFDE) project. The DDKG can be used to create simple to complex queries, and use the results for a range of different applications related to the use of Common Fund data.
+
+DD-KG-UI extracted Common Fund Datasets from the Unified Biomedical Knowledge Graph (UBKG) and transformed it to an easily queriable graph with defined node types. This document describes the different DCCs included, their respective node types and relationships, as well as how to use the site for querying Common Fund Data. For a more detailed explanation of the different datasets, go to the the [Data Dictionary](/dictionary) page.
+
+### Common Fund Datasets <a name="cfdatasets"></a>
+#### 4DN <a name="4DN"></a>
+The goal of the Common Fund’s 4D Nucleome (4DN) program is to study the three-dimensional organization of the nucleus in space and time (the 4th dimension). The nucleus of a cell contains DNA, the genetic “blueprint” that encodes all of the genes a living organism uses to produce proteins needed to carry out life-sustaining cellular functions. Scientists know that how the information in the nucleus organized, stored, and unpackaged are all important to basic human health and we are only starting to learn how changes in this organization can lead to the development of different diseases, such as cancer or our response to infectious agents like viruses. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/4DN))
+[4DN Data Portal](https://data.4dnucleome.org)
+
+**Overview**
+
+Representing topologically associated domains and loops by chromosomal location can allow exploration of gene expression, genomic variation and other biological information in the context of chromatin architecture. 
+
+| Source | Relation | Target |
+| ------ | -------- | ------ |
+| 4DN Dataset | has_assay_type | Assay |
+| 4DN Dataset | dataset_involves_cell_type | Anatomy |
+| 4DN Dataset | dataset_has_file | 4DN File |
+| 4DN File | file_has_loop | 4DN Loop |
+| 4DN Loop | loop_has_qvalue_bin | 4DN QVal Bin |
+| 4DN Loop | loop_us_start | HSCLO |
+| 4DN Loop | loop_us_end | HSCLO |
+| 4DN Loop | loop_ds_start | HSCLO |
+| 4DN Loop | loop_ds_end | HSCLO |
+<br/>
+#### ERCC <a name="ERCC"></a>
+
+The Extracellular RNA Communication program is exploring the biology of extracellular RNA (exRNA). Once thought to exist only within cells, in a paradigm shift for science, RNA is now known to be exported from cells as “extracellular RNA” and to play a role in cell-to-cell communication. Since its founding, the program has established data standards, a data portal, and tools and reagents available to the scientific community. The program cataloged exRNA molecules found in human biofluids like plasma, saliva, and urine from over 2000 donors. It also identified potential exRNA biomarkers for nearly 30 diseases, including cardiovascular disease, pregnancy complications, glaucoma, diabetes, and multiple types of cancer. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/ExRNA))
+
+[ERCC Data Portal](https://exrna.org/)
+
+**ERCC RBP dataset overview**
+
+Assertions describe relationships between RBPs, RBP binding sites, genes, and biofluids. RBP binding sites refers to both eCLIP peaks and a second type of genomic locus. The group is the result of trimming the eCLIP loci so that there are no overlaps between sets of loci from a given pair of RBPs.
+
+| Source | Relation | Target |
+| ------ | -------- | ------ |
+| exRNA Loci | overlaps | Gene |
+| Protein | molecularly_interacts_with | exRNA Loci |
+| Protein | predicted_in | Biofluid |
+| Protein | not_predicted_in | Biofluid |
+| exRNA Loci | correlated_in | Biofluid |
+| exRNA Loci | not_correlated_in | Biofluid |
+
+**ERCC Regulatory Element dataset overview**
+
+The tissue specific regulation of a gene by an eQTL is modeled using variant, tissue, eQTL, and gene nodes. The same model structure is also used for regulatory elements. In this case a “regulatory element activity” (SAB=ENCODE.CCRE.ACTIVITY) node is used as the central node rather than the eQTL node. Regulatory element activity nodes are also decorated with relationships to other nodes to assist in determining the tissue specific transcriptional role of the regulatory element. eQTL and regulatory element models are connected by a relationship between variant and regulatory element nodes.
+
+| Source | Relation | Target |
+| ------ | -------- | ------ |
+| Regulatory Element Activity | isa | ENCODE CCRE Data Matrix |
+| Anatomy | part_of | Regulatory Element Activity |
+| ENCODE CCRE | part_of_ccre | Regulatory Element Activity |
+| CLINGEN ALLELE REGISTRY | part_of_clingen | GTEXEQTL |
+| Anatomy | part_of_uberon | GTEXEQTL |
+| Regulatory Element Activity | regulates | Gene |
+| GTEXEQTL | negatively_regulates | Gene |
+| GTEXEQTL | positively_regulates | Gene |
+| CLINGEN ALLELE REGISTRY | located_in | ENCODE CCRE |
+
+#### GlyGen <a name="GlyGen"></a>
+The goal of the Common Fund’s Glycoscience program is to create new resources, tools, and method to make the study of glycans (sugars) more accessible to the broader research community. Glycans play a critical role in nearly all aspects of biology, ranging from how our bodies recognize and fight viruses and bacteria to how proteins are moved throughout our cells to perform different tasks. Despite being an important part to nearly all biological functions, the study of glycans and the roles they play is limited due to the complexity surrounding the chemistry to make, study, and sequence all the different glycans in our body. To combat this, the Glycoscience program has developed a variety of tools, resources, and information for researchers unfamiliar with glycans to incorporate them into their studies. This includes techniques for identifying especially difficult glycans, probes to study glycans in bacterial cell walls, standards for glycan chemical synthesis, methods for high-throughput glycan studies, and glycoscience educational materials. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/Glycoscience))
+
+[GlyGen Data Portal](https://www.glygen.org/)
+
+**Overview**
+
+Data for GlyGen is retrieved from multiple glycomics database (e.g. GlyTouCan, GlyConnect, MatrixDB), proteomics database (e.g. UniProtKB) and other domain database (e.g. Ensembl, RefSeq, BioMuta, OMA, MGI, Bgee). All data is transformed in standardized representation and integrate in GlyGen
+
+| Source | Relation | Target |
+| ------ | -------- | ------ |
+| Protein | has_isoform | Isoform |
+| Glycoprotein | has_evidence | Glycoprotein Evidence |
+| Glycoprotein | sequence | Isoform |
+| Glycoprotein Evidence | citation | Glycoprotein Citation |
+| Glycoprotein | has_pro_entry | GP ID2PRO |
+| Glycoprotein | glycosylated_at | Glycosylation Site |
+| Glycosylation Site | location | GlyGen Location |
+| Glycosylation Site | has_saccharide | Glytoucan |
+| GlyGen Location | has_amino_acid | Amino Acid |
+| Glycosylation | has_enzyme_protein | Protein |
+| Glycosyltransferase Reaction | has_enzyme_protein_gr | Protein |
+| Glytoucan | is_from_source | GlyGen src |
+| Glytoucan | has_glycosequence | GlyGen Glycosequence |
+| GlyGen Residue | attached_by | Glycosylation |
+| Glytoucan | synthesized_by | Glycosyltransferase Reaction |
+| Glytoucan | has_motif | Glycan Motif |
+| Glytoucan | has_canonical_residue | GlyGen Residue |
+| GlyGen Residue | has_parent | GlyGen Residue |
+
+#### GTEx <a name="GTEx"></a>
+
+The Common Fund's Genotype-Tissue Expression (GTEx) Program established a data resource and tissue bank to study the relationship between genetic variants (inherited changes in DNA sequence) and gene expression (how genes are turned on and off) in multiple human tissues and across individuals. GTEx also increased our understanding of how gene expression varies between male and female. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/GTEx))
+
+[GTEx Data Portal](https://www.gtexportal.org/home/)
+
+**Overview**
+The Genotype-Tissue Expression (GTEx) project is an ongoing effort to build a comprehensive public resource to study tissue-specific gene expression and regulation. Samples were collected from 54 non-diseased tissue sites across nearly 1000 individuals, primarily for molecular assays including WGS, WES, and RNA-Seq. This database includes expression levels for genes by tissue in terms of transcripts per mission (TPM). The database also contains the p-values and relationships between loci and genes as expression quantitative trait loci (eQTLs). 
+
+
+| Source | Relation | Target |
+| ------ | -------- | ------ |
+| GTEXEXP | expressed_in | Gene |
+| GTEXEXP | expressed_in | Anatomy |
+| GTEXEXP | has_expression | EXPBINS |
+| GTEXEQTL | located_in | Gene |
+| GTEXEQTL | located_in | Anatomy |
+| GTEXEQTL | located_in | HSCLO |
+| GTEXEQTL | p_value | GTEXPVALUEBIN |
+
+#### HuBMAP <a name="HuBMAP"></a>
+
+The goal of the Human BioMolecular Atlas Program (HuBMAP) is to develop an open and global platform to map healthy cells in the human body. In humans, the proper functioning of organs and tissues is dependent on the interaction, spatial organization, and specialization of all our cells. Scientists estimate there are 37 trillion cells in an adult human body, so determining the function and relationship among these cells is a monumental undertaking. Using the latest molecular and cellular biology technologies, HuBMAP researchers are studying the connections that cells have with each other throughout the body. HuBMAP will build the framework necessary to construct the tools, resources, and cell atlases needed to determine how the relationships between cells can affect the health of an individual. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/HuBMAP))
+
+[HuBMAP Data Portal](https://commonfund.nih.gov/HuBMAP)
+
+**Overview**
+HuBMAP data provides tissue, cell-type and gene specific markers from single-cell data. The purpose of the Hubmap/AZ data is to provide cell-type-specific gene expression markers from single-cell experiments across each tissue.
+
+| Source | Relation | Target |
+| ------ | -------- | ------ |
+| Anatomy | isa | Anatomy |
+| Anatomy | located_in | Anatomy |
+| Anatomy | has_marker_gene_in_heart | Gene |
+| Anatomy | has_marker_gene_in_kidney | Gene |
+| Anatomy | has_marker_gene_in_liver | Gene |
+
+
+#### IDG <a name="IDG"></a>
+To improve our scientific understanding of understudied members of these three protein families, the National Institutes of Health (NIH) Common Fund launched the Illuminating the Druggable Genome (IDG) Program in 2014. The overall goal of the IDG Program is to catalyze research in areas of biology that are currently understudied but that have high potential to impact human health. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/IDG))
+
+[IDG Data Portal](https://druggablegenome.net/)
+
+**Overview**
+
+Relationships between compounds, diseases, and proteins drawn from the IDG Target Central Resource Database (TCRD) hosted at https://pharos.nih.gov and at DrugCentral https://drugcentral.org/.
+
+
+| Source | Relation | Target |
+| ------ | -------- | ------ |
+| Compound | bioactivity | Protein |
+| Compound | indication | Disease or Phenotype |
+
+
+#### Kids First <a name="KF"></a>
+The goal of the Gabriella Miller Kids First Pediatric Research Program (Kids First) is to help researchers uncover new insights into the biology of childhood cancer and structural birth defects, including the discovery of shared genetic pathways between these disorders. Children with birth defects have an increased risk of developing childhood cancer. This suggests there are shared genetic pathways underlying some types of childhood cancer and structural birth defects. Kids First is achieving this goal through two initiatives: 1) identifying children with childhood cancer and structural birth defects and their families for whole genome sequencing performed by the Kids First sequencing centers 2) developing the Gabriella Miller Kids First Data Resource, a large-scale database of clinical and genetic data from patients with childhood cancers and structural birth defects and their families. Analyzing genetic sequence data from children with childhood cancer and structural birth defects together may lead to the discovery of new genetic pathways. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/KidsFirst))
+
+[Kids First Data Portal](https://kidsfirstdrc.org/)
+
+**Overview**
+
+Genomic and phenotypic data, broadly summarized from trio cohorts with cardiac birth defects from the Pediatric Cardiac Genetics Consortium cohort in Kids First,cohort SD_PREASA7S
+
+| Source | Relation | Target |
+| ------ | -------- | ------ |
+| KFPT | has_phenotype | Disease or Phenotype |
+| KFPT | belongs_to_cohort | KFCOHORT |
+| KFGENEBIN | gene_has_variants | Gene |
+
+
+#### LINCS <a name="LINCS"></a>
+
+The Common Fund’s Library of Integrated Network-based Cellular Signatures (LINCS) program developed a library that catalogs changes that occur when different types of cells are exposed to a variety of agents that disrupt normal cellular functions, called “perturbagens.” This library integrated data across cell types, perturbagens, and measurements of cellular responses for use by scientists to design and conduct experiments that can help us better understand normal and diseased cellular states and how to alter them. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/LINCS))
+
+[LINCS Data Portal](https://lincsproject.org/)
+
+**Overview**
+
+The LINCS assertions include drug-gene associations and drug-drug similarity associations computed from the LINCS L1000 consensus signatures dataset. Each drug is linked to the top 25 most up-regulated and top 25 most down-regulated genes in the L1000 consensus signatures for the drug/small-molecule, as well as to the top 5 most similar other drugs in the dataset based on the correlation between the consensus signatures for each drug. 
+
+| Source | Relation | Target |
+| ------ | -------- | ------ |
+| Compound | negatively_regulates | Gene |
+| Compound | positively_regulates | Gene |
+| Compound | in_similarity_relationship_with | Compound |
+
+#### MoTrPAC <a name="MoTrPAC"></a>
+
+The Molecular Transducers of Physical Activity Consortium (MoTrPAC) aims to uncover, at the molecular level, how exercise improves and maintains the health of the body’s tissues and organs. Tracking exercise’s impact on biological molecules through time will help MoTrPAC researchers create a map of molecular changes in the body. Studies in three human tissues will be complemented by more extensive studies in an animal model, allowing many additional tissue types to be explored and substantially increasing the impact of the consortium. Researchers will use the molecular map to better understand how exercise affects people of different ages, sexes, body compositions, and fitness levels. In the future, it may also enable clinicians to make more specific exercise recommendations to patients when using exercise as an intervention to improve health. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/MolecularTransducers))
+
+[MoTrPAC Data Portal](https://motrpac-data.org/)
+
+**Overview**
+
+The Molecular Transducers of Physical Activity Consortium (MoTrPAC) aims to elucidate how exercise improves health and ameliorates diseases by building a map of the molecular responses to endurance exercise.
+
+| Source | Relation | Target |
+| ------ | -------- | ------ |
+| MOTRPAC | associated_with | Gene |
+| MOTRPAC | located_in | Anatomy |
+| MOTRPAC | sex | Sex |
+
+#### SPARC <a name="SPARC"></a>
+
+The Common Fund’s Stimulating Peripheral Activity to Relieve Conditions (SPARC) program accelerates development of therapeutic devices that modulate electrical activity in nerves to improve organ function. This therapeutic strategy, also known as “bioelectronic medicine,” could offer new treatment options for diverse diseases and conditions such as hypertension, heart failure, gastrointestinal disorders, and more. (Retrieved from the [NIH Common Fund site](https://sparc.science/))
+
+**Overview**
+
+The SPARC Knowledge base of the Automatic Nervous System (SCKAN) is an integrated graph database composed of three parts: the SPARC dataset metadata graph, ApiNATOMY and Neuron Phenotype Ontology (NPO) models of connectivity, and the larger ontology used  by SPARC which is a combination of the NIF-Ontology and community ontologies.
+
+| Source | Relation | Target |
+| ------ | -------- | ------ |
+| Taxon | isa | Taxon |
+| GO | isa | GO |
+| GO | part_of | Anatomy |
+| GO | isa | Anatomy |
+| GO | part_of | GO |
+| GO | isa | Protein |
+| GO | part_of | NIFSTD |
+| ILX | isa | NIFSTD |
+| Protein | isa | Compound |
+| Protein | part_of | Anatomy |
+| Protein | part_of | GO |
+| NIFSTD | isa | NIFSTD |
+| Compound | isa | Compound |
+| Taxon | isa | NIFSTD |
+| Anatomy | part_of | Anatomy |
+| NIFSTD | isa | Protein |
+| Anatomy | isa | Anatomy |
+| ILX | isa | PATO |
+| Anatomy | isa | GO |
+| Anatomy | isdelineatedby | Anatomy |
+| Compound | part_of | Compound |
+| SO | isa | SO |
+| Anatomy | delineates | Anatomy |
+| ILX | isa | Anatomy |
+| NIFSTD | isa | Compound |
+| NIFSTD | isa | Anatomy |
+| NIFSTD | part_of | Anatomy |
+| Anatomy | contributes_to_morphology_of | Anatomy |
+| Anatomy | isa | ILX |
+| Protein | isa | NIFSTD |
+| NIFSTD | is_part_of | Anatomy |
+| Gene | isa | SO |
+| Protein | part_of | Protein |
+| Protein | isa | Protein |
+| ILX | is_part_of | Anatomy |
+| ILX | isa | ILX |
+| Compound | isa | NIFSTD |
+| PATO | isa | PATO |
+| ILX | has_role | NIFSTD |
+| Anatomy | isa | Protein |
+| Compound | isa | Protein |
+| NIFSTD | isa | ILX |
+
+
+### Using the UI <a name="ui"></a>
+#### Connection Explorer <a name="connection-explorer"></a>
+Connection Explorer allows users to query DD-KG for (1) immediate neighbor or a term (single term search), (2) shortest path between a term and a node type, or (3) shortest path between two terms. These can be toggled by clicking on the "End Node" switch at the bottom left.
+
+##### Single Term Search <a name="single-term"></a>
+Single term search returns the immediate neighbor of a term. The input consists of three input forms: first you can filter for node type, Fig 1 has compound selected but this can easily be changed by interacting with this dropdown form. The second input form asks which identifier would be used for the query, by default this is the label but it can be changed to the different external ids associated with a node type (e.g. PubChem ids). The last input is an autocomplete form where you can search for a term.
+
+The top form on the other hand allows you to add additional filters like (1) defining relationships you want to include in the subnetwork, (2) adjusting the size of the network, (3) toggling the view between network and tables, (4) saving the subnetwork, (5) label and legend visibility, as well as (6) full screen mode.
+
+![dd-1](/tutorial/dd-1.png)
+
+
+**Figure 1** Single Term Search
+<br/><br/>
+##### Term to Node Type <a name="term-to-type"></a>
+Once the end node switch is toggled, the End with form appears. If you leave the last form blank it allows you to find the shortest path between your search term (dexamethasone) and a node type (Gene)
+
+![dd-2](/tutorial/dd-2.png)
+**Figure 2** Term to Node Type Search 
+<br/><br/>
+##### Two term search <a name="two-term"></a>
+This search finds the shortest path between two terms (dexamethasone and STAT3).
+
+
+![dd-3](/tutorial/dd-3.png)
+**Figure 3** Two Term Search
+
+
+#### Apps and Use Cases <a name="apps-use-cases"></a>
+
+#### Apps <a name="apps"></a>
+Apps features specialized queries that integrate data from multiple dccs (Fig 4). DD-KG currently hosts five apps, Fig 5 shows one of the Liquid Biopsy of Condition app.
+
+![dd-4](/tutorial/dd-4.png)
+**Figure 4** App Page
+
+![dd-5](/tutorial/dd-5.png)
+**Figure 5** Liquid Biopsy of Condition
+#### Use Cases <a name="use-cases"></a>
+
+Use Cases on the other hand are specific instantiation of an app. Fig 7 identifies potential biofluids that can be used as non-invasive disease biomarkers for frontotemporal dementia.
+
+![dd-6](/tutorial/dd-6.png)
+**Figure 6** Use Case Page
+
+![dd-7](/tutorial/dd-7.png)
+**Figure 7** Frontotemporal Dementia Use Case

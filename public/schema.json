@@ -2666,6 +2666,13 @@
                 }
             },
             {
+                "endpoint": "/tutorial",
+                "label": "Tutorial",
+                "type": "component",
+                "component": "Tutorial",
+                "position": "bottom"
+            },
+            {
                 "endpoint": "/downloads",
                 "label": "Downloads",
                 "type": "page",
