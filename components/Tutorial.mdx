@@ -23,9 +23,9 @@
 		2. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Use Cases](#use-cases)
 <br/><br/>
 ### Introduction <a name="introduction"></a>
-The Data Distillery project aims to integrate summarized (“distilled”) Common Fund data within a knowledge graph. The purpose of the Data Distillery Knowledge Graph (DDKG) is to link multiple sources of expertly curated data, thus providing data integration across multiple Common Fund data coordinating centers (DCCs).  The summarized data are provided by participating DCCs and funded as part of the Common Fund Data Ecosystem (CFDE) project. The DDKG can be used to create simple to complex queries, and use the results for a range of different applications related to the use of Common Fund data.
+The Data Distillery project aims to integrate summarized (“distilled”) Common Fund data as a knowledge graph. The purpose of the Data Distillery Knowledge Graph (DD-KG) is to link multiple sources of expertly curated data, thus providing data integration across multiple Common Fund data coordinating centers (DCCs). The summarized data are provided by participating DCCs that are funded by the NIH as part of the Common Fund Data Ecosystem (CFDE) program. The DD-KG can be used to create simple and complex queries, and the results can be applied for a range of applications related to the use of Common Fund datasets.
 
-DD-KG-UI extracted Common Fund Datasets from the Unified Biomedical Knowledge Graph (UBKG) and transformed it to an easily queriable graph with defined node types. This document describes the different DCCs included, their respective node types and relationships, as well as how to use the site for querying Common Fund Data. For a more detailed explanation of the different datasets, go to the the [Data Dictionary](/dictionary) page.
+The DD-KG user interface (UI) extracted Common Fund datasets from the DD-KG and transformed it into an easily queriable graph with defined node types. This document describes the different DCCs included, their respective node types and relationships, as well as how to use the DD-KGUI site for querying Common Fund datasets. For a more detailed explanation of the different datasets, please visit the the [Data Dictionary](/dictionary) page.
 
 ### Common Fund Datasets <a name="cfdatasets"></a>
 #### 4DN <a name="4DN"></a>
@@ -50,7 +50,7 @@ Representing topologically associated domains and loops by chromosomal location 
 <br/>
 #### ERCC <a name="ERCC"></a>
 
-The Extracellular RNA Communication program is exploring the biology of extracellular RNA (exRNA). Once thought to exist only within cells, in a paradigm shift for science, RNA is now known to be exported from cells as “extracellular RNA” and to play a role in cell-to-cell communication. Since its founding, the program has established data standards, a data portal, and tools and reagents available to the scientific community. The program cataloged exRNA molecules found in human biofluids like plasma, saliva, and urine from over 2000 donors. It also identified potential exRNA biomarkers for nearly 30 diseases, including cardiovascular disease, pregnancy complications, glaucoma, diabetes, and multiple types of cancer. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/ExRNA))
+The Extracellular RNA Communication program is exploring the biology of extracellular RNA (exRNA). Once thought to exist only within cells, in a paradigm shift for science, RNA is now known to be exported from cells as “extracellular RNA” and to play a role in cell-to-cell communication. Since its founding, the program has established data standards, a data portal, and tools and reagents available to the scientific community. The program cataloged exRNA molecules found in human biofluids like plasma, saliva, and urine from over 2000 donors. It also identified potential exRNA biomarkers for nearly 30 diseases, including cardiovascular disease, pregnancy complications, glaucoma, diabetes, and multiple types of cancer. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/ExRNA)).
 
 [ERCC Data Portal](https://exrna.org/)
 
@@ -84,13 +84,13 @@ The tissue specific regulation of a gene by an eQTL is modeled using variant, ti
 | CLINGEN ALLELE REGISTRY | located_in | ENCODE CCRE |
 
 #### GlyGen <a name="GlyGen"></a>
-The goal of the Common Fund’s Glycoscience program is to create new resources, tools, and method to make the study of glycans (sugars) more accessible to the broader research community. Glycans play a critical role in nearly all aspects of biology, ranging from how our bodies recognize and fight viruses and bacteria to how proteins are moved throughout our cells to perform different tasks. Despite being an important part to nearly all biological functions, the study of glycans and the roles they play is limited due to the complexity surrounding the chemistry to make, study, and sequence all the different glycans in our body. To combat this, the Glycoscience program has developed a variety of tools, resources, and information for researchers unfamiliar with glycans to incorporate them into their studies. This includes techniques for identifying especially difficult glycans, probes to study glycans in bacterial cell walls, standards for glycan chemical synthesis, methods for high-throughput glycan studies, and glycoscience educational materials. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/Glycoscience))
+The goal of the Common Fund’s Glycoscience program is to create new resources, tools, and method to make the study of glycans (sugars) more accessible to the broader research community. Glycans play a critical role in nearly all aspects of biology, ranging from how our bodies recognize and fight viruses and bacteria to how proteins are moved throughout our cells to perform different tasks. Despite being an important part to nearly all biological functions, the study of glycans and the roles they play is limited due to the complexity surrounding the chemistry to make, study, and sequence all the different glycans in our body. To combat this, the Glycoscience program has developed a variety of tools, resources, and information for researchers unfamiliar with glycans to incorporate them into their studies. This includes techniques for identifying especially difficult glycans, probes to study glycans in bacterial cell walls, standards for glycan chemical synthesis, methods for high-throughput glycan studies, and glycoscience educational materials. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/Glycoscience)).
 
 [GlyGen Data Portal](https://www.glygen.org/)
 
 **Overview**
 
-Data for GlyGen is retrieved from multiple glycomics database (e.g. GlyTouCan, GlyConnect, MatrixDB), proteomics database (e.g. UniProtKB) and other domain database (e.g. Ensembl, RefSeq, BioMuta, OMA, MGI, Bgee). All data is transformed in standardized representation and integrate in GlyGen
+Data for GlyGen is retrieved from multiple glycomics database (e.g. GlyTouCan, GlyConnect, MatrixDB), proteomics database (e.g. UniProtKB) and other domain database (e.g. Ensembl, RefSeq, BioMuta, OMA, MGI, Bgee). All data is transformed in standardized representation and integrate in GlyGen.
 
 | Source | Relation | Target |
 | ------ | -------- | ------ |
@@ -115,7 +115,7 @@ Data for GlyGen is retrieved from multiple glycomics database (e.g. GlyTouCan, G
 
 #### GTEx <a name="GTEx"></a>
 
-The Common Fund's Genotype-Tissue Expression (GTEx) Program established a data resource and tissue bank to study the relationship between genetic variants (inherited changes in DNA sequence) and gene expression (how genes are turned on and off) in multiple human tissues and across individuals. GTEx also increased our understanding of how gene expression varies between male and female. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/GTEx))
+The Common Fund's Genotype-Tissue Expression (GTEx) Program established a data resource and tissue bank to study the relationship between genetic variants (inherited changes in DNA sequence) and gene expression (how genes are turned on and off) in multiple human tissues and across individuals. GTEx also increased our understanding of how gene expression varies between male and female. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/GTEx)).
 
 [GTEx Data Portal](https://www.gtexportal.org/home/)
 
@@ -135,7 +135,7 @@ The Genotype-Tissue Expression (GTEx) project is an ongoing effort to build a co
 
 #### HuBMAP <a name="HuBMAP"></a>
 
-The goal of the Human BioMolecular Atlas Program (HuBMAP) is to develop an open and global platform to map healthy cells in the human body. In humans, the proper functioning of organs and tissues is dependent on the interaction, spatial organization, and specialization of all our cells. Scientists estimate there are 37 trillion cells in an adult human body, so determining the function and relationship among these cells is a monumental undertaking. Using the latest molecular and cellular biology technologies, HuBMAP researchers are studying the connections that cells have with each other throughout the body. HuBMAP will build the framework necessary to construct the tools, resources, and cell atlases needed to determine how the relationships between cells can affect the health of an individual. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/HuBMAP))
+The goal of the Human BioMolecular Atlas Program (HuBMAP) is to develop an open and global platform to map healthy cells in the human body. In humans, the proper functioning of organs and tissues is dependent on the interaction, spatial organization, and specialization of all our cells. Scientists estimate there are 37 trillion cells in an adult human body, so determining the function and relationship among these cells is a monumental undertaking. Using the latest molecular and cellular biology technologies, HuBMAP researchers are studying the connections that cells have with each other throughout the body. HuBMAP will build the framework necessary to construct the tools, resources, and cell atlases needed to determine how the relationships between cells can affect the health of an individual. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/HuBMAP)).
 
 [HuBMAP Data Portal](https://commonfund.nih.gov/HuBMAP)
 
@@ -152,7 +152,7 @@ HuBMAP data provides tissue, cell-type and gene specific markers from single-cel
 
 
 #### IDG <a name="IDG"></a>
-To improve our scientific understanding of understudied members of these three protein families, the National Institutes of Health (NIH) Common Fund launched the Illuminating the Druggable Genome (IDG) Program in 2014. The overall goal of the IDG Program is to catalyze research in areas of biology that are currently understudied but that have high potential to impact human health. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/IDG))
+To improve our scientific understanding of understudied members of these three protein families, the National Institutes of Health (NIH) Common Fund launched the Illuminating the Druggable Genome (IDG) Program in 2014. The overall goal of the IDG Program is to catalyze research in areas of biology that are currently understudied but that have high potential to impact human health. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/IDG)).
 
 [IDG Data Portal](https://druggablegenome.net/)
 
@@ -168,13 +168,13 @@ Relationships between compounds, diseases, and proteins drawn from the IDG Targe
 
 
 #### Kids First <a name="KF"></a>
-The goal of the Gabriella Miller Kids First Pediatric Research Program (Kids First) is to help researchers uncover new insights into the biology of childhood cancer and structural birth defects, including the discovery of shared genetic pathways between these disorders. Children with birth defects have an increased risk of developing childhood cancer. This suggests there are shared genetic pathways underlying some types of childhood cancer and structural birth defects. Kids First is achieving this goal through two initiatives: 1) identifying children with childhood cancer and structural birth defects and their families for whole genome sequencing performed by the Kids First sequencing centers 2) developing the Gabriella Miller Kids First Data Resource, a large-scale database of clinical and genetic data from patients with childhood cancers and structural birth defects and their families. Analyzing genetic sequence data from children with childhood cancer and structural birth defects together may lead to the discovery of new genetic pathways. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/KidsFirst))
+The goal of the Gabriella Miller Kids First Pediatric Research Program (Kids First) is to help researchers uncover new insights into the biology of childhood cancer and structural birth defects, including the discovery of shared genetic pathways between these disorders. Children with birth defects have an increased risk of developing childhood cancer. This suggests there are shared genetic pathways underlying some types of childhood cancer and structural birth defects. Kids First is achieving this goal through two initiatives: 1) identifying children with childhood cancer and structural birth defects and their families for whole genome sequencing performed by the Kids First sequencing centers 2) developing the Gabriella Miller Kids First Data Resource, a large-scale database of clinical and genetic data from patients with childhood cancers and structural birth defects and their families. Analyzing genetic sequence data from children with childhood cancer and structural birth defects together may lead to the discovery of new genetic pathways. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/KidsFirst)).
 
 [Kids First Data Portal](https://kidsfirstdrc.org/)
 
 **Overview**
 
-Genomic and phenotypic data, broadly summarized from trio cohorts with cardiac birth defects from the Pediatric Cardiac Genetics Consortium cohort in Kids First,cohort SD_PREASA7S
+Genomic and phenotypic data, broadly summarized from trio cohorts with cardiac birth defects from the Pediatric Cardiac Genetics Consortium cohort in Kids First,cohort SD_PREASA7S.
 
 | Source | Relation | Target |
 | ------ | -------- | ------ |
@@ -185,7 +185,7 @@ Genomic and phenotypic data, broadly summarized from trio cohorts with cardiac b
 
 #### LINCS <a name="LINCS"></a>
 
-The Common Fund’s Library of Integrated Network-based Cellular Signatures (LINCS) program developed a library that catalogs changes that occur when different types of cells are exposed to a variety of agents that disrupt normal cellular functions, called “perturbagens.” This library integrated data across cell types, perturbagens, and measurements of cellular responses for use by scientists to design and conduct experiments that can help us better understand normal and diseased cellular states and how to alter them. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/LINCS))
+The Common Fund’s Library of Integrated Network-based Cellular Signatures (LINCS) program developed a library that catalogs changes that occur when different types of cells are exposed to a variety of agents that disrupt normal cellular functions, called “perturbagens.” This library integrated data across cell types, perturbagens, and measurements of cellular responses for use by scientists to design and conduct experiments that can help us better understand normal and diseased cellular states and how to alter them. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/LINCS)).
 
 [LINCS Data Portal](https://lincsproject.org/)
 
@@ -201,7 +201,7 @@ The LINCS assertions include drug-gene associations and drug-drug similarity ass
 
 #### MoTrPAC <a name="MoTrPAC"></a>
 
-The Molecular Transducers of Physical Activity Consortium (MoTrPAC) aims to uncover, at the molecular level, how exercise improves and maintains the health of the body’s tissues and organs. Tracking exercise’s impact on biological molecules through time will help MoTrPAC researchers create a map of molecular changes in the body. Studies in three human tissues will be complemented by more extensive studies in an animal model, allowing many additional tissue types to be explored and substantially increasing the impact of the consortium. Researchers will use the molecular map to better understand how exercise affects people of different ages, sexes, body compositions, and fitness levels. In the future, it may also enable clinicians to make more specific exercise recommendations to patients when using exercise as an intervention to improve health. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/MolecularTransducers))
+The Molecular Transducers of Physical Activity Consortium (MoTrPAC) aims to uncover, at the molecular level, how exercise improves and maintains the health of the body’s tissues and organs. Tracking exercise’s impact on biological molecules through time will help MoTrPAC researchers create a map of molecular changes in the body. Studies in three human tissues will be complemented by more extensive studies in an animal model, allowing many additional tissue types to be explored and substantially increasing the impact of the consortium. Researchers will use the molecular map to better understand how exercise affects people of different ages, sexes, body compositions, and fitness levels. In the future, it may also enable clinicians to make more specific exercise recommendations to patients when using exercise as an intervention to improve health. (Retrieved from the [NIH Common Fund site](https://commonfund.nih.gov/MolecularTransducers)).
 
 [MoTrPAC Data Portal](https://motrpac-data.org/)
 
@@ -217,7 +217,7 @@ The Molecular Transducers of Physical Activity Consortium (MoTrPAC) aims to eluc
 
 #### SPARC <a name="SPARC"></a>
 
-The Common Fund’s Stimulating Peripheral Activity to Relieve Conditions (SPARC) program accelerates development of therapeutic devices that modulate electrical activity in nerves to improve organ function. This therapeutic strategy, also known as “bioelectronic medicine,” could offer new treatment options for diverse diseases and conditions such as hypertension, heart failure, gastrointestinal disorders, and more. (Retrieved from the [NIH Common Fund site](https://sparc.science/))
+The Common Fund’s Stimulating Peripheral Activity to Relieve Conditions (SPARC) program accelerates development of therapeutic devices that modulate electrical activity in nerves to improve organ function. This therapeutic strategy, also known as “bioelectronic medicine,” could offer new treatment options for diverse diseases and conditions such as hypertension, heart failure, gastrointestinal disorders, and more. (Retrieved from the [NIH Common Fund site](https://sparc.science/)).
 
 **Overview**
 
@@ -271,12 +271,12 @@ The SPARC Knowledge base of the Automatic Nervous System (SCKAN) is an integrate
 
 ### Using the UI <a name="ui"></a>
 #### Connection Explorer <a name="connection-explorer"></a>
-Connection Explorer allows users to query DD-KG for (1) immediate neighbor or a term (single term search), (2) shortest path between a term and a node type, or (3) shortest path between two terms. These can be toggled by clicking on the "End Node" switch at the bottom left.
+Connection Explorer allows users to query the DD-KG for (1) immediate neighbors or terms (single term search), and (2) find shortest paths between a term and a node type, or (3) find shortest paths between two terms. These can be toggled by clicking on the "End Node" switch at the bottom left.
 
 ##### Single Term Search <a name="single-term"></a>
 Single term search returns the immediate neighbor of a term. The input consists of three input forms: first you can filter for node type, Fig 1 has compound selected but this can easily be changed by interacting with this dropdown form. The second input form asks which identifier would be used for the query, by default this is the label but it can be changed to the different external ids associated with a node type (e.g. PubChem ids). The last input is an autocomplete form where you can search for a term.
 
-The top form on the other hand allows you to add additional filters like (1) defining relationships you want to include in the subnetwork, (2) adjusting the size of the network, (3) toggling the view between network and tables, (4) saving the subnetwork, (5) label and legend visibility, as well as (6) full screen mode.
+The top form provides additional filters such as (1) defining relationships you want to include in the subnetwork, (2) adjusting the size of the network, (3) toggling the view between network and tables, (4) saving the subnetwork, (5) label and legend visibility, as well as (6) full screen mode.
 
 ![dd-1](/tutorial/dd-1.png)
 
@@ -284,7 +284,7 @@ The top form on the other hand allows you to add additional filters like (1) def
 **Figure 1** Single Term Search
 <br/><br/>
 ##### Term to Node Type <a name="term-to-type"></a>
-Once the end node switch is toggled, the End with form appears. If you leave the last form blank it allows you to find the shortest path between your search term (dexamethasone) and a node type (Gene)
+Once the end node switch is toggled, the End form appears. If you leave the entry in the form blank, it allows you to find the shortest path between your search term (dexamethasone) and any node of a specific type (Gene).
 
 ![dd-2](/tutorial/dd-2.png)
 **Figure 2** Term to Node Type Search 
@@ -300,7 +300,7 @@ This search finds the shortest path between two terms (dexamethasone and STAT3).
 #### Apps and Use Cases <a name="apps-use-cases"></a>
 
 #### Apps <a name="apps"></a>
-Apps features specialized queries that integrate data from multiple dccs (Fig 4). DD-KG currently hosts five apps, Fig 5 shows one of the Liquid Biopsy of Condition app.
+The Apps feature of the DD-KG-UI provides specialized queries that integrate data from multiple DCCs (Fig. 4). DD-KG-UI currently hosts five apps. Fig. 5 shows one of the "Liquid Biopsy of Condition" Apps.
 
 ![dd-4](/tutorial/dd-4.png)
 **Figure 4** App Page
@@ -309,7 +309,7 @@ Apps features specialized queries that integrate data from multiple dccs (Fig 4)
 **Figure 5** Liquid Biopsy of Condition
 #### Use Cases <a name="use-cases"></a>
 
-Use Cases on the other hand are specific instantiation of an app. Fig 7 identifies potential biofluids that can be used as non-invasive disease biomarkers for frontotemporal dementia.
+DD-KG-UI Use Cases are specific instantiation of the Apps. In Fig. 7 demonstrates identified potential biofluids that can be used as non-invasive disease biomarkers for frontotemporal dementia.
 
 ![dd-6](/tutorial/dd-6.png)
 **Figure 6** Use Case Page
