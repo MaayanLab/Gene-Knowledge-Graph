@@ -26,6 +26,7 @@ const AsyncComponent = async ({component, searchParams, props, endpoint,}:
 
 export const Component = (props: {component: string, endpoint: string, searchParams: {[key:string]: any}, props: {[key:string]: any}}) => {
 	return <Suspense fallback={<CircularProgress/>}>
+		{/* @ts-expect-error Server Component */}
 		<AsyncComponent {...props}/>
 	</Suspense>
 }
