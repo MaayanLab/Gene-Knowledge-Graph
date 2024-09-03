@@ -2028,75 +2028,10 @@
         },
         {
             "match": [
-                "negatively_regulates"
-            ],
-            "color": "#1FE0E0",
-            "display": [
-                {
-                    "label": "source",
-                    "text": "${source}",
-                    "type": "text"
-                },
-                {
-                    "label": "target",
-                    "text": "${target}",
-                    "type": "text"
-                },
-                {
-                    "label": "relation",
-                    "text": "${relation}",
-                    "type": "text"
-                },
-                {
-                    "label": "SAB",
-                    "text": "${SAB}",
-                    "type": "text"
-                },
-                {
-                    "label": "dcc",
-                    "text": "${dcc}",
-                    "type": "text"
-                }
-            ]
-        },
-        {
-            "match": [
                 "positively_regulates"
             ],
             "color": "#E01F1F",
-            "display": [
-                {
-                    "label": "source",
-                    "text": "${source}",
-                    "type": "text"
-                },
-                {
-                    "label": "target",
-                    "text": "${target}",
-                    "type": "text"
-                },
-                {
-                    "label": "relation",
-                    "text": "${relation}",
-                    "type": "text"
-                },
-                {
-                    "label": "SAB",
-                    "text": "${SAB}",
-                    "type": "text"
-                },
-                {
-                    "label": "dcc",
-                    "text": "${dcc}",
-                    "type": "text"
-                }
-            ]
-        },
-        {
-            "match": [
-                "positively_regulates"
-            ],
-            "color": "#E01F1F",
+            "directed": "triangle",
             "display": [
                 {
                     "label": "source",
@@ -2138,7 +2073,8 @@
             "match": [
                 "negatively_regulates"
             ],
-            "color": "#1FE0E0",
+            "color": "#6495ED",
+            "directed": "tee",
             "display": [
                 {
                     "label": "source",

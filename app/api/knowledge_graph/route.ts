@@ -7,6 +7,7 @@ import { augment_gene_set, kind_mapper, get_node_color_and_type_augmented } from
 import { resolve_results, resolve_node_types } from "./helper"
 import { fetch_kg_schema } from "@/utils/initialize"
 import { initialize } from "../initialize/helper"
+import { ArrowShape } from "@/components/Cytoscape"
 export interface NetworkSchema {
     nodes: Array<{
         data: {
@@ -26,6 +27,7 @@ export interface NetworkSchema {
             kind: string,
             label: string,
 			relation?: string,
+			directed?: string,
             [key: string]: string | number | boolean,
         }
     }>
@@ -48,7 +50,8 @@ const resolve_two_terms = async ({
     expand: e, 
     remove, 
     gene_links,
-	additional_link_tags
+	additional_link_tags,
+	arrow_shape
 }: {
         edges: Array<string>,
         start: string,
@@ -66,6 +69,7 @@ const resolve_two_terms = async ({
         remove?: Array<string>,
         gene_links?: Array<string>,
 		additional_link_tags?: Array<string>,
+		arrow_shape?: {[key: string]: ArrowShape}
 })=> {
 	let query = `MATCH p=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\` {${end_field}: $end_term}))
 		USING INDEX a:\`${start}\`(${start_field})
@@ -156,7 +160,7 @@ const resolve_two_terms = async ({
 	}
 	console.log(query)
 	const query_params = { start_term, end_term, limit, ...vars }
-	return resolve_results({query, query_params, terms: [start_term, end_term],  aggr_scores, colors, fields: [start_field, end_field]})
+	return resolve_results({query, query_params, terms: [start_term, end_term],  aggr_scores, colors, fields: [start_field, end_field], arrow_shape})
 }
 
 const resolve_term_and_end_type = async (
@@ -174,7 +178,8 @@ const resolve_term_and_end_type = async (
         expand: e, 
         remove, 
         gene_links,
-		additional_link_tags
+		additional_link_tags,
+		arrow_shape
 	}: {
             edges: Array<string>,
             start: string,
@@ -190,6 +195,7 @@ const resolve_term_and_end_type = async (
             remove?: Array<string>,
             gene_links?: Array<string>,
 			additional_link_tags?: Array<string>,
+			arrow_shape?: {[key: string]: ArrowShape}
     })=> {
 	
 	let query = `MATCH p=allShortestPaths((a: \`${start}\` {${start_field}: $start_term})-[*..${path_length}]-(b: \`${end}\`))
@@ -295,7 +301,7 @@ const resolve_term_and_end_type = async (
 	// query = `${query} RETURN * ORDER BY rand() LIMIT ${limit}`
     const query_params = { start_term, limit, ...vars }
 	console.log(query)
-	return resolve_results({query, query_params, terms: [start_term],  aggr_scores, colors, fields:[start_field]})
+	return resolve_results({query, query_params, terms: [start_term],  aggr_scores, colors, fields:[start_field], arrow_shape})
 }
 
 
@@ -314,7 +320,9 @@ const resolve_one_term = async ({
     gene_links,
 	additional_link_tags, 
     augment, 
-    augment_limit=10}: {
+    augment_limit=10,
+	arrow_shape
+}: {
         edges: Array<string>,
         start: string,
         field: string,
@@ -329,7 +337,8 @@ const resolve_one_term = async ({
         gene_links?: Array<string>,
 		additional_link_tags?: Array<string>,
         augment?: Boolean,
-        augment_limit?: number
+        augment_limit?: number,
+		arrow_shape?: {[key: string]: ArrowShape}
     }) => {
 	const rels = []
 	const valid_relations = []
@@ -453,9 +462,9 @@ const resolve_one_term = async ({
 	// const results = await session.readTransaction(txc => txc.run(query, { term, limit, ...vars }))
 	if (!augment) {
 		console.log(query)
-		return await resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field]})
+		return await resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field], arrow_shape})
 	} else {
-		const initial_results = await resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field]})
+		const initial_results = await resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field], arrow_shape})
 		const gene_list = []
 		let gene_nodes = []
 		let start_node
@@ -502,7 +511,7 @@ const resolve_one_term = async ({
 				RETURN p, nodes(p) as n, relationships(p) as r
 			` 
 		}	
-		const augmented_results = await resolve_results({query: q, query_params: { term, limit, ...vars }, terms: [term],  aggr_scores, get_node_color_and_type: get_node_color_and_type_augmented, colors, fields: [field], kind_mapper, misc_props: {augmented_genes, augment, gene_list}})
+		const augmented_results = await resolve_results({query: q, query_params: { term, limit, ...vars }, terms: [term],  aggr_scores, get_node_color_and_type: get_node_color_and_type_augmented, colors, fields: [field], kind_mapper, misc_props: {augmented_genes, augment, gene_list}, arrow_shape})
 		const augmented_edges = []
 		for (const i of augmented_results.nodes) {
 			if (i.data.kind !== "Relation") {
@@ -668,7 +677,7 @@ export async function GET(req: NextRequest) {
                 augment_limit,
 				additional_link_tags = []
 			 } = input_query_schema.parse(f)
-        const {aggr_scores, colors, edges} = await initialize()
+        const {aggr_scores, colors, edges, arrow_shape} = await initialize()
         const nodes = schema.nodes.map(i=>i.node)
         if (nodes.indexOf(start) < 0) return NextResponse.json({error: "Invalid start node"}, {status: 400})
         else if (end && nodes.indexOf(end) < 0) return NextResponse.json({error: "Invalid end node"}, {status: 400})
@@ -680,14 +689,14 @@ export async function GET(req: NextRequest) {
                 try {
                     if (start && end && start_term && end_term) {
                         if(augment)  return NextResponse.json({error: "You can only augment on single search"}, {status: 400})
-                        const results = await resolve_two_terms({edges, start, start_field, start_term, end, end_field, end_term, relation, limit, path_length, aggr_scores, colors, remove: remove ?  remove: [], expand: expand ? expand : [], gene_links, additional_link_tags})
+                        const results = await resolve_two_terms({edges, start, start_field, start_term, end, end_field, end_term, relation, limit, path_length, aggr_scores, colors, remove: remove ?  remove: [], expand: expand ? expand : [], gene_links, additional_link_tags, arrow_shape})
                         return NextResponse.json(results, {status: 200})
                     } else if (start && end && start_term ) {
                         if(augment)  return NextResponse.json({error: "You can only augment on single search"}, {status: 400})
-                        const results = await resolve_term_and_end_type({edges, start_term, start_field, start, end, relation, limit, path_length, aggr_scores, colors, remove, expand: expand, gene_links, additional_link_tags})
+                        const results = await resolve_term_and_end_type({edges, start_term, start_field, start, end, relation, limit, path_length, aggr_scores, colors, remove, expand: expand, gene_links, additional_link_tags, arrow_shape})
                         return NextResponse.json(results, {status: 200})
                     } else if (start) {
-                        const results = await resolve_one_term({edges, start, field: start_field, term: start_term, relation, limit, path_length, aggr_scores, colors, remove, expand, gene_links, additional_link_tags, augment, augment_limit })
+                        const results = await resolve_one_term({edges, start, field: start_field, term: start_term, relation, limit, path_length, aggr_scores, colors, remove, expand, gene_links, additional_link_tags, augment, augment_limit, arrow_shape })
                         return NextResponse.json(results, {status: 200})
                     } else {
                         return NextResponse.json({error: "Invalid Input"}, {status: 400})

@@ -1,7 +1,7 @@
 import cache from "memory-cache";
 import { NextResponse } from "next/server";
 import {initialize} from './helper'
-
+import { ArrowShape } from "@/components/Cytoscape";
 export interface Initialize_Type {
     aggr_scores?: {[key:string]: {max: number, min: number}},
     colors?: {[key:string]: {
@@ -13,7 +13,8 @@ export interface Initialize_Type {
         border_color?: string,
         ring_label?: string,
     }},
-    edges?: Array<string>
+    edges?: Array<string>,
+    arrow_shape?: {[key:string]: ArrowShape}
 }
 
 export async function GET() {
