@@ -361,7 +361,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                     </Grid>
                     {(!view) &&
                         <React.Fragment>
-                            <Grid item>
+                            {/* <Grid item>
                                 <Tooltip title={tooltip ? "Hide tooltip": "Show tooltip"}>
                                     <IconButton color="secondary"
                                         onClick={()=>{
@@ -373,7 +373,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                         {tooltip ? <Icon path={mdiTooltipRemove} size={0.8} />: <Icon path={mdiTooltip} size={0.8} />}
                                     </IconButton>
                                 </Tooltip>
-                            </Grid>
+                            </Grid> */}
                             <Grid item>
                                 <Tooltip title="Switch Graph Layout">
                                     <IconButton color="secondary" 

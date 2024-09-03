@@ -2,6 +2,7 @@ import neo4j from "neo4j-driver"
 import { neo4jDriver } from "@/utils/neo4j"
 import { default_color } from "@/utils/colors";
 import { fetch_kg_schema } from "@/utils/initialize";
+import { ArrowShape } from "@/components/Cytoscape";
 
 export const initialize = async () => {
 	try {
@@ -12,6 +13,7 @@ export const initialize = async () => {
 		const aggr_scores = {}
 		const colors = {}
 		const edges = []
+		const arrow_shape: {[key:string]: ArrowShape} = {}
 		for (const s of schema.edges) {	
 			for (const i of (s.match || [])) {
 				
@@ -26,6 +28,10 @@ export const initialize = async () => {
 					}
 				}
 				edges.push(i)
+
+				if (s.directed) {
+					arrow_shape[i] = s.directed
+				} 
 			}
 			if (s.order) {
 				const [field, order] = s.order
@@ -90,7 +96,7 @@ export const initialize = async () => {
 			}
 		}
 		
-		return {aggr_scores, colors, edges}
+		return {aggr_scores, colors, edges, arrow_shape}
 	} catch (error) {
 		console.log(error)
 		return null

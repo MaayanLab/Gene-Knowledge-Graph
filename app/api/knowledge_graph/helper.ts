@@ -5,6 +5,7 @@ import { process_properties } from "@/utils/helper"
 import {default_color, mui_colors} from '@/utils/colors'
 import { NetworkSchema } from "./route"
 import { e } from "next-usequerystate/dist/serializer-5da93b5e"
+import { ArrowShape } from "@/components/Cytoscape"
 
 let color_map = {}
 let score_fields
@@ -120,6 +121,7 @@ export const resolve_results = async ({
 	kind_properties = {},
 	misc_props = {},
 	kind_mapper = null, 
+    arrow_shape = {}
 }: {
     query: string,
     query_params?: {[key:string]: any},
@@ -132,7 +134,8 @@ export const resolve_results = async ({
     properties?: {[key: string]: any},
     kind_properties?: {[key: string]: any},
     misc_props?: {[key: string]: any},
-    kind_mapper?: Function
+    kind_mapper?: Function,
+    arrow_shape?: {[key:string]: ArrowShape}
 }):Promise<NetworkSchema> => {
         try {
             const session = neo4jDriver.session({
@@ -219,7 +222,7 @@ export const resolve_results = async ({
                                 ...process_properties(relation.properties),
                                 ...(get_edge_color({relation, record, aggr_scores, ...(colors[relation_type] || {})})),
                                 relation: (colors[relation_type] || {}).edge_suffix ? `${relation_type} ${colors[relation_type].edge_suffix}`:relation_type,
-                                directed: relation.properties.directed ? 'triangle': 'none'
+                                directed: arrow_shape[relation_type] || 'none'
                             }
                         }
                     }

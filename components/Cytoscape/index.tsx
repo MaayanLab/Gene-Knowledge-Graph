@@ -37,7 +37,19 @@ export const layouts = {
   }
 
 
-
+  export type ArrowShape =
+  | "tee"
+  | "vee"
+  | "triangle"
+  | "triangle-tee"
+  | "circle-triangle"
+  | "triangle-cross"
+  | "triangle-backcurve"
+  | "square"
+  | "circle"
+  | "diamond"
+  | "chevron"
+  | "none";
 
 export default function Cytoscape ({
 	elements,
@@ -144,7 +156,7 @@ export default function Cytoscape ({
 								"text-margin-x": 0,
 								"text-margin-y": 0,
 								'font-size': '12px',
-								// 'target-arrow-shape': `data(directed)`,
+								'target-arrow-shape': `data(directed)` as ArrowShape,
 								'target-endpoint': 'outside-to-node',
 								'source-endpoint': 'outside-to-node',
 								'target-arrow-color': 'data(lineColor)',
