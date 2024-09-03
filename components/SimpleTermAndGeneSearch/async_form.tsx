@@ -21,7 +21,6 @@ const AsyncFormComponent = ({direction,
         term: string
 	}) => {
 	const pathname = usePathname()
-    console.log(filter)
 	if (Object.keys(filter || {}).length === 0) filter = initial_query
     const {
         start,
@@ -76,7 +75,7 @@ const AsyncFormComponent = ({direction,
             let options:{[key:string]: {label: string, node_type: string}} = {}
             if (res.ok) options = await (res).json()
             const key = `${type}: ${inputTerm}`
-            if (options[key]) setSelected(options[key])
+            if (options[key]) setInputTerm(options[key].label)
             setOptions(options)  
         } catch (error) {
             // console.error(error)
@@ -122,6 +121,7 @@ const AsyncFormComponent = ({direction,
                     value={selected}
                     loading={loading}
                     onChange={(evt, selected) => {
+                        console.log(selected)
                         if (selected === null) setInputTerm('')
                         if (direction === 'Start') {
                             setSelected(selected)
