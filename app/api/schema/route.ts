@@ -1,7 +1,7 @@
 import cache from "memory-cache";
 import { fetch_kg_schema } from "@/utils/initialize"
 import { NextResponse } from "next/server";
-
+import { ArrowShape } from "@/components/Cytoscape";
 export interface UISchema {
     nodes: Array<{
         node: string,
@@ -35,6 +35,7 @@ export interface UISchema {
         hidden?: boolean,
         color?: string,
         order?: Array<string>
+        directed?: ArrowShape
     }>,
     header: {
         title: string,
@@ -48,8 +49,8 @@ export interface UISchema {
             favicon: string,
             faviconTitle?: string,
             alt: string,
-            width?: number,
-            height?: number,
+            width: number,
+            height: number,
             avatar?: boolean
         },
         tabs: Array<{
