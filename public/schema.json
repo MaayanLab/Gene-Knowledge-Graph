@@ -4457,7 +4457,7 @@
             "match": [
                 "negatively_regulated_by_(LINCS L1000 Consensus Chem Pert)",
                 "decreases_expression_of_(GEO Virus Perturbation)",
-                "negatively_regulated_by_(LINCS L1000 Consensus CRISPR)",
+                "negatively_regulated_by_(LINCS L1000 Consensus CRISPR KO)",
                 "decreases_expression_of_(GEO TF Perturbation)",
                 "under-expressed_in_(GTEx Aging Signatures)",
                 "decreases_expression_of_(GEO Chem Perturbation)",
@@ -4498,7 +4498,7 @@
             "match": [
                 "positively_regulated_by_(LINCS L1000 Consensus Chem Pert)",
                 "increases_expression_of_(GEO Virus Perturbation)",
-                "positively_regulated_by_(LINCS L1000 Consensus CRISPR)",
+                "positively_regulated_by_(LINCS L1000 Consensus CRISPR KO)",
                 "increases_expression_of_(GEO TF Perturbation)",
                 "over-expressed_in_(Azimuth Cell Type)",
                 "over-expressed_in_(GTEx Aging Signatures)",
