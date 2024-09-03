@@ -4455,9 +4455,9 @@
         },
         {
             "match": [
-                "negatively_regulated_by_(LINCS L1000 Chem Pert)",
+                "negatively_regulated_by_(LINCS L1000 Consensus Chem Pert)",
                 "decreases_expression_of_(GEO Virus Perturbation)",
-                "negatively_regulated_by_(LINCS L1000 CRISPR)",
+                "negatively_regulated_by_(LINCS L1000 Consensus CRISPR)",
                 "decreases_expression_of_(GEO TF Perturbation)",
                 "under-expressed_in_(GTEx Aging Signatures)",
                 "decreases_expression_of_(GEO Chem Perturbation)",
@@ -4496,9 +4496,9 @@
         },
         {
             "match": [
-                "positively_regulated_by_(LINCS L1000 Chem Pert)",
+                "positively_regulated_by_(LINCS L1000 Consensus Chem Pert)",
                 "increases_expression_of_(GEO Virus Perturbation)",
-                "positively_regulated_by_(LINCS L1000 CRISPR)",
+                "positively_regulated_by_(LINCS L1000 Consensus CRISPR)",
                 "increases_expression_of_(GEO TF Perturbation)",
                 "over-expressed_in_(Azimuth Cell Type)",
                 "over-expressed_in_(GTEx Aging Signatures)",
@@ -4785,7 +4785,7 @@
                         "start_term": "STAT3",
                         "start_field": "label",
                         "limit": 10,
-                        "relation": [{"name":"negatively_regulated_by_(LINCS L1000 Chem Pert)","limit":10},{"name":"positively_regulated_by_(LINCS L1000 Chem Pert)","limit":10},{"name":"participates_in_(GO Bio Process 2023)","limit":10},{"name":"participates_in_(WikiPathways Pathways)","limit":10},{"name":"knockout_increases_fitness_of_(DepMap Gene Dependency)","limit":10}]
+                        "relation": [{"name":"negatively_regulated_by_(LINCS L1000 Consensus Chem Pert)","limit":10},{"name":"positively_regulated_by_(LINCS L1000 Consensus Chem Pert)","limit":10},{"name":"participates_in_(GO Bio Process 2023)","limit":10},{"name":"participates_in_(WikiPathways Pathways)","limit":10},{"name":"knockout_increases_fitness_of_(DepMap Gene Dependency)","limit":10}]
                     },
                     "subheader": {
                         "url_field": "filter",
@@ -5410,14 +5410,14 @@
                 "width": 40,
                 "props": {
                     "relation": [
-                        "negatively_regulated_by_(LINCS L1000 CRISPR)",
-                        "positively_regulated_by_(LINCS L1000 CRISPR)",
+                        "negatively_regulated_by_(LINCS L1000 Consensus CRISPR KO)",
+                        "positively_regulated_by_(LINCS L1000 Consensus CRISPR KO)",
                         "decreases_expression_of_(CMAP Small Molecule Perturbations)",
                         "decreases_expression_of_(LINCS CMAP Chemical)",
                         "increases_expression_of_(CMAP Small Molecule Perturbations)",
                         "increases_expression_of_(LINCS CMAP Chemical)",
-                        "negatively_regulated_by_(LINCS L1000 Chem Pert)",
-                        "positively_regulated_by_(LINCS L1000 Chem Pert)"
+                        "negatively_regulated_by_(LINCS L1000 Consensus Chem Pert)",
+                        "positively_regulated_by_(LINCS L1000 Consensus Chem Pert)"
                     ]
                 },
                 "href": "https://clue.io/"
