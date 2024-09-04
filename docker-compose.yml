@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/harmonizome-kg:2.4.10
+    image: maayanlab/harmonizome-kg:2.4.11
     x-kubernetes:
       strategy:
         type: Recreate
