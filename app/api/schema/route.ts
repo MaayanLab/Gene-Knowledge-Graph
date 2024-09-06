@@ -34,7 +34,8 @@ export interface UISchema {
         }>,
         hidden?: boolean,
         color?: string,
-        order?: Array<string>
+        order?: Array<string>,
+        directed?: string
     }>,
     header: {
         title: string,

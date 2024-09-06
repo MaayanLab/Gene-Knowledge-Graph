@@ -30,7 +30,7 @@ export const initialize = async () => {
 				edges.push(i)
 
 				if (s.directed) {
-					arrow_shape[i] = s.directed
+					arrow_shape[i] = s.directed as ArrowShape
 				} 
 			}
 			if (s.order) {
