@@ -2454,7 +2454,7 @@
                             "props": {
                                 "init_function": "initialize_kg",
                                 "icon": "https://s3.amazonaws.com/maayan-kg/dd-kg/minio/img/apps/use-case1.png",
-                                "title": "Breast Epitheliumn Use Case",
+                                "title": "Breast Epithelium Use Case",
                                 "description": "Find the genes that are highly expressed in breast epithelium as well as drugs that target these genes.",
                                 "endpoint": "/api/distillery/tissue2drugs",
                                 "type": "Anatomy",
