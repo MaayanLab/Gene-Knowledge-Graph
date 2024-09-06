@@ -5,13 +5,13 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/distillery:2.4.0
+    image: maayanlab/distillery:2.4.1
     x-kubernetes:
       strategy:
         type: Recreate
       imagePullPolicy: IfNotPresent
       annotations:
-        maayanlab.cloud/ingress: https://dd-kg-ui.cfde.cloud
+        maayanlab.cloud/ingress: https://dd-kg-ui.cfde.cloud/
     ports:
       - 3000:3000
     environment:
@@ -27,6 +27,7 @@ services:
       - NEXT_PUBLIC_SCHEMA
       - NEXT_PUBLIC_TURL
       - NEXT_PUBLIC_TURL_URL
+      - NEXT_PUBLIC_HOMEPAGE
     deploy:
       resources:
         limits:
