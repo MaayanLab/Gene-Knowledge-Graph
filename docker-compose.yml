@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/distillery:2.4.3
+    image: maayanlab/distillery:2.4.5
     x-kubernetes:
       strategy:
         type: Recreate
