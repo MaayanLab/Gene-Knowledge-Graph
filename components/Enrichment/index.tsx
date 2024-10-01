@@ -15,6 +15,7 @@ import { NetworkSchema } from '@/app/api/knowledge_graph/route';
 import { parseAsJson } from 'next-usequerystate';
 import InteractiveButtons from './InteractiveButtons';
 import { fetch_kg_schema } from '@/utils/initialize';
+import TooltipComponentGroup from '../TermAndGeneSearch/tooltip';
 
 export interface EnrichmentParams {
     libraries?: Array<{
@@ -86,10 +87,10 @@ const Enrichment = async ({
      }): l
 
 
-    const tooltip_templates_node = {}
+    const tooltip_templates_nodes = {}
     const tooltip_templates_edges = {}
     for (const i of schema.nodes) {
-        tooltip_templates_node[i.node] = i.display
+        tooltip_templates_nodes[i.node] = i.display
     }
 
     for (const e of schema.edges) {
@@ -209,6 +210,12 @@ const Enrichment = async ({
                                 elements={elements}
                                 {...props}
                             />
+                            <TooltipComponentGroup
+                            elements={elements}
+                                tooltip_templates_edges={tooltip_templates_edges}
+                                tooltip_templates_nodes={tooltip_templates_nodes}
+                                schema={schema}
+                            />
                         </CardContent>
                     </Card>
                 </Grid>
@@ -239,7 +246,7 @@ const Enrichment = async ({
                                         elements={elements} 
                                         schema={schema}
                                         tooltip_templates_edges={tooltip_templates_edges}
-                                        tooltip_templates_nodes={tooltip_templates_node}
+                                        tooltip_templates_nodes={tooltip_templates_nodes}
                                     />
                                 </CardContent>
                             </Card>
