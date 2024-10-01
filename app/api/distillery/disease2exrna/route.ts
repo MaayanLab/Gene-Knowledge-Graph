@@ -3,33 +3,34 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { z } from 'zod';
 import { initialize } from "../../initialize/helper";
+import { ArrowShape } from "@/components/Cytoscape";
 async function process_query({
     term,
     limit,
     aggr_scores,
     colors,
     field,
-    type}: {
+    arrow_shape}: {
         term: string,
         limit: number,
         aggr_scores?: {[key:string]: {max: number, min: number}},
         colors?: {[key: string]: {color?: string, field?: string, aggr_type?: string}},
         field: string,
-        type: string,
+        arrow_shape?: {[key:string]: ArrowShape},
     }) {
     const query = `MATCH q=(a:\`Disease or Phenotype\` {${field}: $term})-[r1]-(b:Gene)
                     WITH q, a, r1, b
                     ORDER BY r1.evidence DESC 
                     CALL {
                         WITH q, a, r1, b
-                        MATCH p=(a)-[r1]-(b)-[r2: overlaps]-(c: \`exRNA Loci\`)-[r3:correlated_in]-(d)-[r4:predicted_in]-(e)-[r5:molecularly_interacts_with]-(f)-[r6:overlaps]-(b)
+                        MATCH p=(a)-[r1]-(b)-[r2: overlaps]-(c: \`exRNA Loci\`)-[r3:molecularly_interacts_with]-(d)-[r4:predicted_in]-(e)-[r5:correlated_in]-(c)
                         RETURN p, nodes(p) as n, relationships(p) as r LIMIT 1
                     }
                     RETURN p, nodes(p) as n, relationships(p) as r
                     LIMIT TOINTEGER($limit)
     `
     const query_params = { term, limit }
-    return resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field]})
+    return resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field], arrow_shape})
 }
 
 const InputSchema = z.object({
@@ -97,13 +98,12 @@ export async function GET(req: NextRequest) {
         if (f.limit && !isNaN(f.limit) && typeof f.limit === 'string') f.limit = parseInt(f.limit)
         const { start, start_term, limit=10, start_field="label" } = InputSchema.parse(f)
         
-        const {aggr_scores, colors} = await initialize()
+        const {aggr_scores, colors, arrow_shape} = await initialize()
         
         if (start_term === undefined) return NextResponse.json({error: "No term inputted"}, {status: 400})
         else { 
             try {
-                const results = await process_query({type:start, term:start_term, limit, aggr_scores, colors, field:start_field })
-                fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/counter/update`)
+                const results = await process_query({term:start_term, limit, aggr_scores, colors, field:start_field, arrow_shape })
                 return NextResponse.json(results, {status: 200})
             } catch (e) {
                 return NextResponse.json(e, {status: 400})

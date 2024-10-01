@@ -102,7 +102,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 					const {url_field, query_field} = subheader_props || {}
 					const query_parser = parseAsJson<EnrichmentParams | FilterSchema>()
 					const query = query_parser.parse(searchParams.get(url_field)) || default_options || {}
-					const selected = query[query_field] || []
+					const selected = query[query_field] || []					
 					const active = contains(selected.map(({name})=>name), i.props[query_field])
 					const enabled = selected.length === 0
 					let style = {}
@@ -129,7 +129,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 												[url_field]: JSON.stringify(query)
 											})
 										} else { // add
-											if (selected.length >= 5 && !disableLibraryLimit) setError({message: `A maximum of only five ${query_field} can selected`, type: "fail"})
+											if (selected.length >= 5 && !disableLibraryLimit) setError({message: `The maximum number of ${query_field} has been selected`, type: "fail"})
 											else {
 												query[query_field] = [...selected, ...i.props[query_field].map((name:string)=>({name, limit: 5}))]
 												router_push(router, pathname, {

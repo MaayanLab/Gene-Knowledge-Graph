@@ -107,7 +107,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
         view,
         fullscreen
     } = searchParams
-    const filter:FilterSchema = JSON.parse(f || '{}')
+    const filter:FilterSchema = f && f !== '{}' ? JSON.parse(f || '{}'): initial_query
     const {
         start,
         end,
@@ -137,6 +137,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
     useEffect(()=>{
         if (gene_links) setGeneLinks(gene_links)
         if (additional_link_tags) setAdditionalLinkTags(additional_link_tags)
+        else setAdditionalLinkTags([])
     }, [searchParams.filter])
     const handleClickMenu = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>, setter:Function) => {
 		setter(e.currentTarget);
@@ -246,7 +247,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                         router_push(router, pathname, query)
                                     }}
                                     min={1}
-                                    max={!end ? start === "Gene" ? 100/(relation.length || 1): neighborCount : 150}
+                                    max={!end ? start === "Gene" ? 50: neighborCount : 150}
                                     sx={{width: 150}}
                                     aria-labelledby="continuous-slider"
                                 />
@@ -360,7 +361,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                     </Grid>
                     {(!view) &&
                         <React.Fragment>
-                            <Grid item>
+                            {/* <Grid item>
                                 <Tooltip title={tooltip ? "Hide tooltip": "Show tooltip"}>
                                     <IconButton color="secondary"
                                         onClick={()=>{
@@ -372,7 +373,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                         {tooltip ? <Icon path={mdiTooltipRemove} size={0.8} />: <Icon path={mdiTooltip} size={0.8} />}
                                     </IconButton>
                                 </Tooltip>
-                            </Grid>
+                            </Grid> */}
                             <Grid item>
                                 <Tooltip title="Switch Graph Layout">
                                     <IconButton color="secondary" 

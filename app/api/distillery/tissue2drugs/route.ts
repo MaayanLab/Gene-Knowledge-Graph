@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { z } from 'zod';
 import { initialize } from "../../initialize/helper";
+import { ArrowShape } from "@/components/Cytoscape";
 async function process_query({
     term,
     limit,
@@ -10,14 +11,17 @@ async function process_query({
     aggr_scores,
     colors,
     field,
-    type}: {
+    type,
+    arrow_shape
+}: {
         term: string,
         limit: number,
         aggr_scores?: {[key:string]: {max: number, min: number}},
         colors?: {[key: string]: {color?: string, field?: string, aggr_type?: string}},
         field: string,
         type: string,
-        relation: Array<string>
+        relation: Array<string>,
+        arrow_shape: {[key:string]: ArrowShape}
     }) {
     const queries = []
     for (const rel of relation) {
@@ -43,7 +47,7 @@ async function process_query({
     
     const query = queries.join(" UNION ")
     const query_params = { term, limit }
-    return resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field]})
+    return resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field], arrow_shape})
 }
 
 const InputSchema = z.object({
@@ -116,13 +120,12 @@ export async function GET(req: NextRequest) {
         if (f.limit && !isNaN(f.limit) && typeof f.limit === 'string') f.limit = parseInt(f.limit)
         const { start, start_term, limit=10, relation=['bioactivity', 'positively_regulates', 'negatively_regulates'], start_field="label" } = InputSchema.parse(f)
         
-        const {aggr_scores, colors} = await initialize()
+        const {aggr_scores, colors, arrow_shape} = await initialize()
         
         if (start_term === undefined) return NextResponse.json({error: "No term inputted"}, {status: 400})
         else { 
             try {
-                const results = await process_query({type:start, term:start_term, limit, relation, aggr_scores, colors, field:start_field })
-                fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/counter/update`)
+                const results = await process_query({type:start, term:start_term, limit, relation, aggr_scores, colors, field:start_field, arrow_shape })
                 return NextResponse.json(results, {status: 200})
             } catch (e) {
                 return NextResponse.json(e, {status: 400})

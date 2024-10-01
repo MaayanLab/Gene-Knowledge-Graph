@@ -33,3 +33,5 @@ export async function GET() {
         return NextResponse.error()
     }
 }
+
+export const revalidate = 0;
