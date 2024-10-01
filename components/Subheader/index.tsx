@@ -4,7 +4,7 @@ import { Grid, Button, Tooltip, Snackbar, Alert, Typography } from "@mui/materia
 import { UISchema } from "@/app/api/schema/route";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { router_push } from "@/utils/client_side";
-import { parseAsJson } from "next-usequerystate";
+import { parseAsJson, useQueryState } from "next-usequerystate";
 import { EnrichmentParams } from "../Enrichment";
 import { FilterSchema } from "@/utils/helper";
 import { useState } from "react";
@@ -48,6 +48,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 	const subheader = schema.header.subheader
 	const searchParams = useSearchParams()
 	const [error, setError] = useState<{message: string, type:string}>(null)
+	const [userQuery, setQuery] = useQueryState('query', parseAsJson<EnrichmentParams>().withDefault({}))
 	const subpaths = (pathname.split("/")).slice(1)
 	if (typeof subheader === 'undefined') return null
 	else {
@@ -75,7 +76,6 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 				if (tab.props.disableLibraryLimit) disableLibraryLimit = true
 			}
 		}
-		console.log(default_options, "default")
 		if (subheader_props === null) return null
 		return (
 			<Grid container spacing={1} justifyContent={'center'} alignItems={"center"}>
@@ -102,7 +102,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 					const {url_field, query_field} = subheader_props || {}
 					const query_parser = parseAsJson<EnrichmentParams | FilterSchema>()
 					const query = query_parser.parse(searchParams.get(url_field)) || default_options || {}
-					const selected = query[query_field] || []					
+					const selected = userQuery[query_field] || query[query_field] || []					
 					const active = contains(selected.map(({name})=>name), i.props[query_field])
 					const enabled = selected.length === 0
 					let style = {}
@@ -129,6 +129,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 												[url_field]: JSON.stringify(query)
 											})
 										} else { // add
+											console.log(selected)
 											if (selected.length >= 5 && !disableLibraryLimit) setError({message: `The maximum number of ${query_field} has been selected`, type: "fail"})
 											else {
 												query[query_field] = [...selected, ...i.props[query_field].map((name:string)=>({name, limit: 5}))]
