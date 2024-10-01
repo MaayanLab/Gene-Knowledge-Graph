@@ -34,12 +34,16 @@ export interface UISchema {
         }>,
         hidden?: boolean,
         color?: string,
-        order?: Array<string>
+        order?: Array<string>,
+        directed?: string
     }>,
     header: {
         title: string,
         header?: string,
         divider?: boolean,
+        fullWidth?:boolean,
+        counterTop?: boolean,
+        counter?: boolean,
         icon: {
             src: string,
             favicon: string,

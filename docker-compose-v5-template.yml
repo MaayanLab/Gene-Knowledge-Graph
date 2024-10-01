@@ -27,6 +27,7 @@ services:
       - NEXT_PUBLIC_SCHEMA
       - NEXT_PUBLIC_TURL
       - NEXT_PUBLIC_TURL_URL
+      - NEXT_PUBLIC_HOMEPAGE
     deploy:
       resources:
         limits:

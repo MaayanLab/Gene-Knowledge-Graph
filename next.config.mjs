@@ -1,6 +1,12 @@
-module.exports = {
+import createMDX from '@next/mdx'
+import remarkGfm from 'remark-gfm'
+
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
   staticPageGenerationTimeout: 1500,
+  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Important: return the modified config
     const fileLoaderRule = config.module.rules.find((rule) =>
@@ -60,3 +66,12 @@ module.exports = {
     ]
 }
 }
+
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: [remarkGfm],
+    rehypePlugins: [],
+  },
+})
+
+export default withMDX(nextConfig)

@@ -5,7 +5,7 @@ import { ElevatedIconButton } from "../Header/buttons"
 import { sanitize } from "../SanitizedHTML"
 export const Logo = ({src, alt, title, color="secondary", size, avatar}: {src: string, alt: string, title: string, color: "primary"| "secondary" | "inherit", size?: "small" | "large", avatar?: boolean}) => {
     return (
-        <Link href={"/"} className='flex items-center space-x-3'>
+        <Link href={process.env.NEXT_PUBLIC_HOMEPAGE || "/"} className='flex items-center space-x-3'>
             {avatar ?
             <div>
                 <ElevatedIconButton

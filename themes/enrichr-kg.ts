@@ -127,6 +127,9 @@ export const enrichr_kg_theme = createTheme({
                   // Some CSS
                   background: "#000",
                   boxShadow: "none",
+                  paddingTop: 3, 
+                  paddingBottom: 3, 
+                  mb: 2
                 },
               },
         },

@@ -339,7 +339,7 @@ const AsyncFormComponent = ({direction,
                                 if (filter.end) {
                                     // const {filter, ...rest} = searchParams
                                     // c
-                                    const {relation, end, end_term, end_field, augment, augment_limit, ...filt} = filter
+                                    const {relation, end, end_term, end_field, augment, augment_limit, additional_link_tags, ...filt} = filter
                             
                                     const query = process_filter({
                                         ...rest,
@@ -348,7 +348,7 @@ const AsyncFormComponent = ({direction,
                                     router_push(router, pathname, query)
                                 } else {
                                     // const {filter, ...rest} = searchParams
-                                    const {relation, augment, augment_limit, ...f}: {
+                                    const {relation, augment, augment_limit, additional_link_tags, ...f}: {
                                         start?: string,
                                         start_field?: string,
                                         start_term?: string,
