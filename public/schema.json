@@ -147,10 +147,11 @@
                         "alt": "enrichr-kg",
                         "title": "Enrichr-KG",
                         "color": "inherit",
-                        "size": "small"
+                        "size": "small",
+                        "avatar": false
                     }
                 },
-                {
+				{
                     "component": "github",
                     "props": {
                         "code": "https://github.com/MaayanLab/enrichr-kg",

@@ -110,6 +110,9 @@ async function DistilleryUseCase({
                                     options_endpoint={options_endpoint}
                                     searchParams={searchParams}
                                     elements={elements}
+                                    schema={schema}
+                                    tooltip_templates_edges={tooltip_templates_edges}
+                                    tooltip_templates_nodes={tooltip_templates_nodes}
                                 />
                             </CardContent>
                         </Card>
