@@ -8,14 +8,15 @@
             ],
             "display": [
                 {
-                    "label": "Transcription Factor ID",
-                    "text": "${id}",
+                    "label": "Transcription Factor",
+                    "text": "${label}",
                     "type": "text"
                 },
                 {
-                    "label": "label",
-                    "text": "${label}",
-                    "type": "text"
+                    "label": "Gene Page",
+                    "href": "https://cfde-gene-pages.cloud/gene/${label}",
+                    "text": "GDLPA",
+                    "type": "link"
                 }
             ],
             "relation": [],
@@ -111,26 +112,7 @@
                         "query_field": "relation"
                     }
                 }
-            },
-            {
-                "endpoint": "/all",
-                "label": "Network Visualization",
-                "type": "page",
-                "component": "WholeNetwork",
-                "props": {
-                    "init_function": "initialize_kg",
-                    "initial_query": {
-                        "start": "Transcription Factor",
-                        "start_term": "LYL1",
-                        "start_field": "label"
-                    },
-                    "subheader": {
-                        "url_field": "filter",
-                        "query_field": "relation"
-                    }
-                }
             }
-           
         ]
     },
     "footer": {
@@ -147,11 +129,10 @@
                         "alt": "enrichr-kg",
                         "title": "Enrichr-KG",
                         "color": "inherit",
-                        "size": "small",
-                        "avatar": false
+                        "size": "small"
                     }
                 },
-				{
+                {
                     "component": "github",
                     "props": {
                         "code": "https://github.com/MaayanLab/enrichr-kg",
