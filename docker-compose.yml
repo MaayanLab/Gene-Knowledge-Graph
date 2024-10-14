@@ -5,17 +5,15 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/harmonizome-kg:2.4.11
+    image: maayanlab/harmonizome-kg:2.4.12
     x-kubernetes:
-      strategy:
-        type: Recreate
       imagePullPolicy: IfNotPresent
       annotations:
-        maayanlab.cloud/ingress: https://harmonizome-kg.maayanlab.cloud
+        maayanlab.cloud/ingress: https://harmonizome-kg.maayanlab.cloud/
     ports:
       - 3000:3000
     environment:
-      - NEXT_PUBLIC_NEO4J_URL=bolt://neo4j-v5:7687
+      - NEXT_PUBLIC_NEO4J_URL=bolt://neo4j:7687
       - NEXT_PUBLIC_ENRICHR_URL=https://maayanlab.cloud/Enrichr
       - NEXT_PUBLIC_GENESHOT_URL=https://maayanlab.cloud/geneshot
       - NEXT_PUBLIC_NEO4J_USER
@@ -27,20 +25,13 @@ services:
       - NEXT_PUBLIC_SCHEMA
       - NEXT_PUBLIC_TURL
       - NEXT_PUBLIC_TURL_URL
-      - NEXT_PUBLIC_HOMEPAGE
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-        reservations:
-          memory: 1G
 
-  neo4j-v5:
-    image: neo4j:5.19
+  neo4j:
+    image: neo4j:4.4
     x-kubernetes:
       imagePullPolicy: IfNotPresent
     environment:
-      - NEO4J_PLUGINS= ["apoc", "n10s"]
+      - NEO4JLABS_PLUGINS='["apoc", "n10s"]'
       - NEO4J_AUTH=${NEXT_PUBLIC_NEO4J_USER}/${NEXT_PUBLIC_NEO4J_PASSWORD}
       - NEO4J_dbms_memory_heap_max__size=8G
       - NEO4J_dbms_memory_heap_initial__size=2G
@@ -49,16 +40,10 @@ services:
       - 7687:7687
       - 7474:7474
     volumes:
-      - harmonizome-kg-neo4j-v5:/data
-    deploy:
-      resources:
-        limits:
-          memory: 15G
-        reservations:
-          memory: 10G
+      - harmonizome-kg-neo4j:/data
 
 volumes:
-  harmonizome-kg-neo4j-v5:
+  harmonizome-kg-neo4j:
     x-kubernetes:
       size: 25Gi
       class: gp2
