@@ -35,10 +35,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 # CFDE-KX
 
 ## Install
-helm install lncrnalyzr maayanlab/docker-compose -f <(docker-compose config) -n lncrnalyzr --create-namespace 
+helm install harmonizome-kg maayanlab/docker-compose -f <(docker-compose config) -n harmonizome-kg --create-namespace 
 
 ## UPGRADE
-helm upgrade lncrnalyzr maayanlab/docker-compose -f <(docker-compose config) -n lncrnalyzr 
+helm upgrade harmonizome-kg maayanlab/docker-compose -f <(docker-compose config) -n harmonizome-kg 
 
 helm template cfde-gse maayanlab/docker-compose -f <(docker-compose config) -n cfde-gse 
 
