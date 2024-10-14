@@ -33,7 +33,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ff2d6d"
         },
         {
             "node": "HMDB",
@@ -67,7 +68,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#1cae00"
         },
         {
             "node": "ENCODE Histone Modification",
@@ -101,7 +103,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#1c9aff"
         },
         {
             "node": "Sanger Dep Map",
@@ -135,7 +138,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#fba204"
         },
         {
             "node": "HuBMAP Azimuth Cell Type",
@@ -169,7 +173,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ce5dff"
         },
         {
             "node": "CellMarker",
@@ -203,7 +208,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#0cd7c6"
         },
         {
             "node": "PID Pathways",
@@ -237,7 +243,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#caff00"
         },
         {
             "node": "GAD High Level",
@@ -271,7 +278,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#a68a8a"
         },
         {
             "node": "CCLE Mutations",
@@ -305,7 +313,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#c2beff"
         },
         {
             "node": "GTEx Tissue Sample",
@@ -339,7 +348,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#b2ca8e"
         },
         {
             "node": "HPO",
@@ -373,7 +383,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ff9ad2"
         },
         {
             "node": "LINCS KiNativ",
@@ -407,7 +418,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ef5904"
         },
         {
             "node": "TCGA",
@@ -441,7 +453,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#00ff92"
         },
         {
             "node": "GWASdb Phenotype",
@@ -475,7 +488,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ffc2aa"
         },
         {
             "node": "GeneSigDB",
@@ -509,7 +523,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#759aa6"
         },
         {
             "node": "MSigDB Comp Signatures",
@@ -543,7 +558,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#9e9618"
         },
         {
             "node": "DrugBank",
@@ -577,7 +593,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ff2dce"
         },
         {
             "node": "GEO Chem Perturbation",
@@ -611,7 +628,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#aee7ff"
         },
         {
             "node": "TISSUES Expts",
@@ -645,7 +663,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#49a679"
         },
         {
             "node": "CCLE Proteomics",
@@ -679,7 +698,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#9a8abe"
         },
         {
             "node": "Biocarta",
@@ -713,7 +733,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ffe369"
         },
         {
             "node": "Klijn Mutations",
@@ -747,7 +768,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#eb827d"
         },
         {
             "node": "Pathway Commons",
@@ -781,7 +803,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#b6fbdb"
         },
         {
             "node": "TargetScan Nonconserved",
@@ -815,7 +838,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ffd7ff"
         },
         {
             "node": "ChEA TF Targets",
@@ -849,7 +873,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#00c6f7"
         },
         {
             "node": "DISEASES Text Mining",
@@ -883,7 +908,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#c28241"
         },
         {
             "node": "VirusMINT Virus",
@@ -917,7 +943,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#9ac600"
         },
         {
             "node": "GEO Virus Perturbation",
@@ -951,7 +978,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#c671a2"
         },
         {
             "node": "MPO Phenotype",
@@ -985,7 +1013,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#aebebe"
         },
         {
             "node": "ABA Prenatal Human",
@@ -1019,7 +1048,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#929a71"
         },
         {
             "node": "COSMIC CNV",
@@ -1053,7 +1083,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#c2aac2"
         },
         {
             "node": "ABA Adult Human",
@@ -1087,7 +1118,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#e39eff"
         },
         {
             "node": "ABA Developmental Human Microarray",
@@ -1121,7 +1153,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#5dca6d"
         },
         {
             "node": "ChEA Binding Site 2022",
@@ -1155,7 +1188,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#c6fb9a"
         },
         {
             "node": "Klijn CNV",
@@ -1189,7 +1223,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#8686ff"
         },
         {
             "node": "CCLE CNV",
@@ -1223,7 +1258,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ebebbe"
         },
         {
             "node": "BioGPS NCI-60",
@@ -1257,7 +1293,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#d2ae71"
         },
         {
             "node": "JASPAR PWMs",
@@ -1291,7 +1328,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#8aaedf"
         },
         {
             "node": "GDSC",
@@ -1325,7 +1363,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#51ffff"
         },
         {
             "node": "HuGE Navigator",
@@ -1359,7 +1398,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#d2ba20"
         },
         {
             "node": "LINCS L1000 CRISPR",
@@ -1393,7 +1433,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#61ef31"
         },
         {
             "node": "WikiPathways Pathways",
@@ -1427,7 +1468,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#00aeaa"
         },
         {
             "node": "PhosphoSitePlus Disease",
@@ -1461,7 +1503,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ff8a49"
         },
         {
             "node": "DeepCoverMOA",
@@ -1495,7 +1538,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ff69a6"
         },
         {
             "node": "GlyGen",
@@ -1529,7 +1573,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#d7dbeb"
         },
         {
             "node": "WikiPathways PFOCR",
@@ -1563,7 +1608,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#82c2a2"
         },
         {
             "node": "ABA Adult Mouse",
@@ -1597,7 +1643,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ff69ff"
         },
         {
             "node": "GTEx Aging Signatures",
@@ -1631,7 +1678,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#71a24d"
         },
         {
             "node": "COSMIC Mutations",
@@ -1665,7 +1713,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#0cfbca"
         },
         {
             "node": "CCLE Gene Expression",
@@ -1699,7 +1748,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#b692ff"
         },
         {
             "node": "SILAC Drug Perturbation",
@@ -1733,7 +1783,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#1ca2ca"
         },
         {
             "node": "ABA Developmental Human RNA Seq",
@@ -1767,7 +1818,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#d2a29a"
         },
         {
             "node": "ENCODE TF Binding Site",
@@ -1801,7 +1853,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#82c6d2"
         },
         {
             "node": "ENCODE TF Targets",
@@ -1835,7 +1888,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ff5951"
         },
         {
             "node": "LINCS KinomeScan",
@@ -1869,7 +1923,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#cec6ae"
         },
         {
             "node": "Guide To Pharm Protein",
@@ -1903,7 +1958,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#c282ce"
         },
         {
             "node": "KEA",
@@ -1937,7 +1993,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#8ee3a2"
         },
         {
             "node": "PhosphoSitePlus Kinase",
@@ -1971,7 +2028,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#f3bace"
         },
         {
             "node": "Roadmap Epigenomics Histone Modification",
@@ -2005,7 +2063,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#cadf4d"
         },
         {
             "node": "Hub Proteins",
@@ -2039,7 +2098,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#9a9aa6"
         },
         {
             "node": "Tabula Sapiens",
@@ -2073,7 +2133,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#fbdfe3"
         },
         {
             "node": "GEO Disease Perturbation",
@@ -2107,7 +2168,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ca9200"
         },
         {
             "node": "KEGG",
@@ -2141,7 +2203,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#cadfd2"
         },
         {
             "node": "VirusMINT Viral Protein",
@@ -2175,7 +2238,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ffc269"
         },
         {
             "node": "CTD Chemical",
@@ -2209,7 +2273,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#86a296"
         },
         {
             "node": "Roadmap Epigenomics DNA Methylation",
@@ -2243,7 +2308,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#a6b651"
         },
         {
             "node": "LINCS L1000 CMAP Chem Pert Consensus Signatures",
@@ -2277,7 +2343,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#08d79e"
         },
         {
             "node": "ClinVar",
@@ -2311,7 +2378,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#aa86a6"
         },
         {
             "node": "GTEx Tissue 2023",
@@ -2345,7 +2413,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#31ce0c"
         },
         {
             "node": "MSigDB Oncogenic Signatures",
@@ -2379,7 +2448,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#aec6e3"
         },
         {
             "node": "CORUM",
@@ -2413,7 +2483,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#96dfd2"
         },
         {
             "node": "Phosphosite Textmining",
@@ -2447,7 +2518,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#d759ce"
         },
         {
             "node": "Guide To Pharm Chem",
@@ -2481,7 +2553,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#fbef0c"
         },
         {
             "node": "IMPC Knockout",
@@ -2515,7 +2588,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#d792ae"
         },
         {
             "node": "GO Bio Process 2023",
@@ -2549,7 +2623,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#55e3ff"
         },
         {
             "node": "TISSUES Curated",
@@ -2583,7 +2658,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#df6179"
         },
         {
             "node": "Achilles",
@@ -2617,7 +2693,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ffa2a6"
         },
         {
             "node": "HPM",
@@ -2651,7 +2728,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#96df69"
         },
         {
             "node": "DISEASES Curated",
@@ -2685,7 +2763,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#d7714d"
         },
         {
             "node": "GEO Kinase Perturbation",
@@ -2719,7 +2798,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#c27982"
         },
         {
             "node": "OMIM",
@@ -2753,7 +2833,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#b69671"
         },
         {
             "node": "MiRTarBase",
@@ -2787,7 +2868,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#aaaace"
         },
         {
             "node": "GEO TF Perturbation",
@@ -2821,7 +2903,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#7d92ce"
         },
         {
             "node": "Proteomics DB",
@@ -2855,7 +2938,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#aaae9a"
         },
         {
             "node": "HPA Cell Lines",
@@ -2889,7 +2973,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#e37900"
         },
         {
             "node": "HPA Tissues mRNA",
@@ -2923,7 +3008,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#dfbaef"
         },
         {
             "node": "BioGPS Human",
@@ -2957,7 +3043,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#9ea6ff"
         },
         {
             "node": "PANTHER",
@@ -2991,7 +3078,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ef75ca"
         },
         {
             "node": "HPA Tissue Samples",
@@ -3025,7 +3113,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#00b259"
         },
         {
             "node": "HPA Tissue Protein",
@@ -3059,7 +3148,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#82aa04"
         },
         {
             "node": "TISSUES TextMining",
@@ -3093,7 +3183,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#f7359a"
         },
         {
             "node": "MW Metabolites",
@@ -3127,7 +3218,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#f3a27d"
         },
         {
             "node": "LOCATE Curated Protein",
@@ -3161,7 +3253,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#86ceff"
         },
         {
             "node": "MotifMap",
@@ -3195,7 +3288,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#8ab679"
         },
         {
             "node": "HumanCYC Pathways",
@@ -3229,7 +3323,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#d7ca71"
         },
         {
             "node": "Kinase Library",
@@ -3263,7 +3358,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#b29e51"
         },
         {
             "node": "COMPARTMENTS Curated",
@@ -3297,7 +3393,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#be9edb"
         },
         {
             "node": "LINCS L1000 CMAP Signatures of Diff Expressed Genes",
@@ -3331,7 +3428,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#c6f3f3"
         },
         {
             "node": "CTD Disease",
@@ -3365,7 +3463,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ffc21c"
         },
         {
             "node": "DISEASES Expts",
@@ -3399,7 +3498,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#a2ff69"
         },
         {
             "node": "SILAC Gene Perturbation",
@@ -3433,7 +3533,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#c2e7b6"
         },
         {
             "node": "GEO Gene Perturbation",
@@ -3467,7 +3568,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#96aebe"
         },
         {
             "node": "InterPro",
@@ -3501,7 +3603,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#4db2fb"
         },
         {
             "node": "GAD Cell Line",
@@ -3535,7 +3638,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ffaefb"
         },
         {
             "node": "DepMap Gene Dependency",
@@ -3569,7 +3673,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#00be9e"
         },
         {
             "node": "MoTrPAC",
@@ -3603,7 +3708,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#db9ad2"
         },
         {
             "node": "MPO Mouse Phenotype 2023",
@@ -3637,7 +3743,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#dbc6db"
         },
         {
             "node": "dbGAP",
@@ -3671,7 +3778,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ae71f7"
         },
         {
             "node": "Roadmap Epigenomics Gene Expression",
@@ -3705,7 +3813,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#75b2ae"
         },
         {
             "node": "COMPARTMENTS Expts",
@@ -3739,7 +3848,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#e39a49"
         },
         {
             "node": "Klijn mRNA",
@@ -3773,7 +3883,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#ce8a71"
         },
         {
             "node": "BioGPS Mouse",
@@ -3807,7 +3918,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#41b6ca"
         },
         {
             "node": "KnockTF",
@@ -3841,7 +3953,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#00e35d"
         },
         {
             "node": "GWASdb Disease",
@@ -3875,7 +3988,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#fbd79e"
         },
         {
             "node": "COMPARTMENTS Text Mining",
@@ -3909,7 +4023,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#aec6ae"
         },
         {
             "node": "GO Cellular Component 2023",
@@ -3943,7 +4058,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#a6e300"
         },
         {
             "node": "DEPOD",
@@ -3977,7 +4093,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#719eff"
         },
         {
             "node": "TargetScan Conserved",
@@ -4011,7 +4128,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#dbbebe"
         },
         {
             "node": "GWAS Catalog",
@@ -4045,7 +4163,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#e72dff"
         },
         {
             "node": "Heiser",
@@ -4079,7 +4198,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#dfe792"
         },
         {
             "node": "LOCATE Predicted Protein",
@@ -4113,7 +4233,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#dfd2ff"
         },
         {
             "node": "GTEx eQTL",
@@ -4147,7 +4268,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#86ffbe"
         },
         {
             "node": "GO Molecular Func 2023",
@@ -4181,7 +4303,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#bad7df"
         },
         {
             "node": "Reactome",
@@ -4215,7 +4338,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#df59ae"
         },
         {
             "node": "SILAC Ligand Perturbation",
@@ -4249,7 +4373,8 @@
             "search": [
                 "id",
                 "label"
-            ]
+            ],
+            "color": "#b2b279"
         }
     ],
     "edges": [
@@ -4785,7 +4910,28 @@
                         "start_term": "STAT3",
                         "start_field": "label",
                         "limit": 10,
-                        "relation": [{"name":"negatively_regulated_by_(LINCS L1000 Consensus Chem Pert)","limit":10},{"name":"positively_regulated_by_(LINCS L1000 Consensus Chem Pert)","limit":10},{"name":"participates_in_(GO Bio Process 2023)","limit":10},{"name":"participates_in_(WikiPathways Pathways)","limit":10},{"name":"knockout_increases_fitness_of_(DepMap Gene Dependency)","limit":10}]
+                        "relation": [
+                            {
+                                "name": "negatively_regulated_by_(LINCS L1000 Consensus Chem Pert)",
+                                "limit": 10
+                            },
+                            {
+                                "name": "positively_regulated_by_(LINCS L1000 Consensus Chem Pert)",
+                                "limit": 10
+                            },
+                            {
+                                "name": "participates_in_(GO Bio Process 2023)",
+                                "limit": 10
+                            },
+                            {
+                                "name": "participates_in_(WikiPathways Pathways)",
+                                "limit": 10
+                            },
+                            {
+                                "name": "knockout_increases_fitness_of_(DepMap Gene Dependency)",
+                                "limit": 10
+                            }
+                        ]
                     },
                     "subheader": {
                         "url_field": "filter",
