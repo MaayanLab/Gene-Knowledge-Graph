@@ -7,7 +7,7 @@ import CytoscapeComponent from 'react-cytoscapejs';
 import { TooltipCard } from '../misc/client_side';
 import { Legend } from '../misc';
 import { UISchema } from '@/app/api/schema/route';
-import { useQueryState, parseAsString, parseAsJson } from 'next-usequerystate';
+import { useQueryState, parseAsString, parseAsJson, parseAsBoolean } from 'next-usequerystate';
 import HubIcon from '@mui/icons-material/Hub';
 import { mdiFamilyTree,  mdiDotsCircle} from '@mdi/js';
 import Icon from '@mdi/react';
@@ -71,7 +71,7 @@ export default function Cytoscape ({
 	const [edge_labels, setEdgeLabels] = useQueryState('edge_labels')
 	const [tooltip, setTooltip] = useQueryState('tooltip')
 	const [layout, setLayout] = useQueryState('layout', parseAsString.withDefault('Force-directed'))
-	const [legend, setLegend] = useQueryState('legend')
+	const [legend, setLegend] = useQueryState('legend', parseAsBoolean.withDefault(true))
 	const [legend_size, setLegendSize] = useQueryState('legend_size')
 	const [download_image, setDownloadImage] = useQueryState('download_image')
 	const [selected, setSelected] = useQueryState('selected',  parseAsJson<{id: string, type: 'nodes' | 'edges'}>().withDefault(null))

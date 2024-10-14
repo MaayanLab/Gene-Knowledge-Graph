@@ -1,6 +1,6 @@
 'use client'
 import { useRouter, usePathname, useSearchParams} from 'next/navigation';
-import { parseAsJson, useQueryState } from 'next-usequerystate';
+import { parseAsBoolean, parseAsJson, useQueryState } from 'next-usequerystate';
 import React, {useState, useEffect } from 'react';
 import { layouts } from '../Cytoscape';
 import Tooltip from '@mui/material/Tooltip';
@@ -82,7 +82,7 @@ const InteractiveButtons = ({
     const [edge_labels, setEdgeLabels] = useQueryState('edge_labels')
     const [view, setView] = useQueryState('view')
 	const [layout, setLayout] = useQueryState('layout')
-	const [legend, setLegend] = useQueryState('legend')
+	const [legend, setLegend] = useQueryState('legend', parseAsBoolean.withDefault(true))
     const [tooltip, setTooltip] = useQueryState('tooltip')
 	const [legend_size, setLegendSize] = useQueryState('legend_size')
     const [query, setQuery] = useQueryState('query', parseAsJson<EnrichmentParams>().withDefault({}))
@@ -407,11 +407,11 @@ const InteractiveButtons = ({
                             <IconButton color="secondary"
                                 onClick={()=>{
                                     if (legend) {
-                                        setLegend(null)
+                                        setLegend(false)
                                         setLegendSize(null)
                                     }
                                     else {
-                                        setLegend('true')
+                                        setLegend(true)
                                         setLegendSize('0')
                                     }
                                     // const {legend, legend_size, ...query} = searchParams

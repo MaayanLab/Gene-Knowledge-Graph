@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import { useQueryState } from 'next-usequerystate'
+import { parseAsBoolean, useQueryState } from 'next-usequerystate'
 import { usePathname, useRouter } from 'next/navigation';
 import { 
     Tooltip, 
@@ -67,7 +67,7 @@ import { layouts } from '../Cytoscape';
     const [edge_labels, setEdgeLabels] = useQueryState('edge_labels')
     const [tooltip, setTooltip] = useQueryState('tooltip')
 	const [layout, setLayout] = useQueryState('layout')
-	const [legend, setLegend] = useQueryState('legend')
+	const [legend, setLegend] = useQueryState('legend', parseAsBoolean.withDefault(true))
 	const [legend_size, setLegendSize] = useQueryState('legend_size')
 	const [download_image, setDownloadImage] = useQueryState('download_image')
     const [anchorEl, setAnchorEl] = useState<HTMLElement>(null)
@@ -280,11 +280,11 @@ import { layouts } from '../Cytoscape';
 							<IconButton color="secondary"
 								onClick={()=>{
 									if (legend) {
-										setLegend(null)
+										setLegend(false)
 										setLegendSize(null)
 									}
 									else {
-										setLegend('true')
+										setLegend(true)
 										setLegendSize('0')
 									}
 									// const {legend, legend_size, ...query} = searchParams
