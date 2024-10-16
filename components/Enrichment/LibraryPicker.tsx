@@ -34,12 +34,14 @@ const LibraryPicker = ({
 	parsedParams,
 	libraries_list,
 	fullWidth,
-	disableLibraryLimit
+	disableLibraryLimit,
+	fullscreen
 }: {
 	fullWidth: boolean,
     disableLibraryLimit?: boolean,
     libraries_list: Array<string>,
     parsedParams: EnrichmentParams,
+	fullscreen?: 'true'
 }) => {
 	const router = useRouter()
 	const pathname = usePathname()
@@ -116,7 +118,8 @@ const LibraryPicker = ({
 									q: JSON.stringify({
 										...parsedParams,
 										libraries: new_libraries
-									})	
+									}),
+									fullscreen	
 								})
 							}
 							
@@ -151,7 +154,8 @@ const LibraryPicker = ({
 															q: JSON.stringify({
 																...parsedParams,
 																libraries: new_libraries
-															})	
+															}),
+															fullscreen
 														})
 													}    
 												}                                             
@@ -186,7 +190,8 @@ const LibraryPicker = ({
 																q: JSON.stringify({
 																	...parsedParams,
 																	libraries: new_libraries
-																})	
+																}),
+																fullscreen	
 															})
 														}
 													}}

@@ -35,7 +35,8 @@ const GeneSetForm = ({
     libraries_list,
     parsedParams,
     fullWidth,
-    elements
+    elements,
+    fullscreen
 }: {
     fullWidth:boolean,
     elements: NetworkSchema,
@@ -57,7 +58,8 @@ const GeneSetForm = ({
         gene_set?: string,
     },
     libraries_list: Array<string>,
-    parsedParams: EnrichmentParams
+    parsedParams: EnrichmentParams,
+    fullscreen?: 'true'
 }) => {
     const router = useRouter()
     const [query, setQuery] = useQueryState('query', parseAsJson<EnrichmentParams>().withDefault({}))
@@ -539,6 +541,7 @@ const GeneSetForm = ({
                                     libraries_list={libraries_list}
                                     fullWidth={fullWidth}
                                     disableLibraryLimit={disableLibraryLimit || true}
+                                    fullscreen={fullscreen}
                                 />
                             </Grid>
                         </Grid>    
