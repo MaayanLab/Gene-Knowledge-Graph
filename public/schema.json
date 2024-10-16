@@ -1613,7 +1613,7 @@
                 "component": "Download",
                 "position": "bottom",
                 "props": {
-                    "src": "https://minio.dev.maayanlab.cloud/cfde-gse/download.json"
+                    "src": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/download.json"
                 }
             },
             {
