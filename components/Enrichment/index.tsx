@@ -207,6 +207,7 @@ const Enrichment = async ({
                                 parsedParams={parsedParams}
                                 fullWidth={elements===null}
                                 elements={elements}
+                                fullscreen={searchParams.fullscreen}
                                 {...props}
                             />
                         </CardContent>
