@@ -15,7 +15,7 @@ import { NetworkSchema } from '@/app/api/knowledge_graph/route';
 import { parseAsJson } from 'next-usequerystate';
 import InteractiveButtons from './InteractiveButtons';
 import { fetch_kg_schema } from '@/utils/initialize';
-
+import { sanitize } from '../SanitizedHTML';
 export interface EnrichmentParams {
     libraries?: Array<{
         name?: string,
@@ -65,7 +65,7 @@ const Enrichment = async ({
     libraries?: Array<{name: string, node: string, regex?: string}>,
     sortLibraries?: boolean,
     disableLibraryLimit?: boolean,
-    disableHeader?: boolean,
+    enrichrHeader?: boolean,
     title?: string,
     description?: string,
     searchParams: {
@@ -187,7 +187,7 @@ const Enrichment = async ({
             <Grid container spacing={1} alignItems={"flex-start"}>
                 <Grid item xs={12}>
                     <Typography variant={"h2"}>{props.title || 'Enrichment Analysis'}</Typography>
-                    { props.disableHeader ? <Typography variant={"subtitle1"}>Enter a set of Entrez gene below to perform enrichment analysis.</Typography>:
+                    { props.enrichrHeader ?
                         <Typography variant="subtitle1" sx={{marginBottom: 3}}>Submit your gene set for enrichment analysis with &nbsp;
                             <Link href={shortId ? `https://maayanlab.cloud/Enrichr/enrich?dataset=${shortId}` : "https://maayanlab.cloud/Enrichr/"} 
                                 target="_blank"
@@ -196,7 +196,8 @@ const Enrichment = async ({
                             >
                                 <span style={{fontSize: 20, fontWeight: 500, letterSpacing: '0.1em'}}>En</span><span style={{color: 'red', fontSize: 20, fontWeight: 500, letterSpacing: '0.1em'}}>rich</span><span style={{fontSize: 20, fontWeight: 500, letterSpacing: '0.1em'}}>r</span>
                             </Link>
-                        </Typography>
+                        </Typography>:
+                        <Typography variant={"subtitle1"} dangerouslySetInnerHTML={sanitize(props.description)}></Typography>
                     }
                 </Grid>
                 <Grid item xs={12} md={elements===null?12:3}>
