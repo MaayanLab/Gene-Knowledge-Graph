@@ -39,9 +39,7 @@ export const Nav = ({tabs, ui_theme, divider, title, icon, counterTop, counter}:
 	for (const tab of tabs) {
 		const position = tab.position || 'top'
 		tab_component[position].push(
-			<Link href={tab.endpoint} key={tab.label}>
-				<TextNav path={tab.endpoint} title={tab.label}/>
-			</Link>
+			<TextNav path={tab.endpoint} title={tab.label} key={tab.label}/>
 		)
 		if (divider) tab_component[position].push(<Divider key={tab.label + "div"} sx={{display: {xs: "none", sm: "none", md: "block", borderColor: "#000"}}} orientation='vertical' flexItem/>)
 	}
