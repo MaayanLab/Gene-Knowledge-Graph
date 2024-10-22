@@ -125,7 +125,7 @@ export const resolve_results = async ({
 }: {
     query: string,
     query_params?: {[key:string]: any},
-    terms?: Array<string>,
+    terms?: Array<string | number>,
     fields?: Array<string>,
     colors?: {[key: string]: {color?: string, field?: string, aggr_type?: string, border_color?: string, ring_label?: string, edge_suffix?: string }},
     aggr_scores?: {[key:string]: {max: number, min: number}},
