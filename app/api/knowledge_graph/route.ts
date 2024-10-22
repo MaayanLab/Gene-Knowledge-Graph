@@ -382,7 +382,7 @@ const resolve_one_term = async ({
 			AND NOT en.id in ${JSON.stringify(remove)}
 		`
 	}
-	query = query + ` RETURN p, nodes(p) as n, relationships(p) as r, st  LIMIT TOINTEGER($limit)`
+	query = query + ` RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
 	
 	if (rels.length > 0) {
 		query = rels.join("\nUNION\n")
