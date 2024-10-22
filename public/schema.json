@@ -1493,7 +1493,7 @@
                 "props": {
                     "init_function": "initialize_enrichment",
                     "title": "Common Fund Data Ecosystem (CFDE) Gene Set Enrichment (GSE)",
-                    "description": "Enter a set of Entrez gene below to perform enrichment analysis using [Enrichr](https://maayanlab.cloud/Enrichr/).",
+                    "description": "Enter a set of Entrez gene below to perform enrichment analysis using <a style='color:blue' href='https://maayanlab.cloud/Enrichr/'>Enrichr</a>.",
                     "placeholder": "Enter newline separated gene sets",
                     "disableHeader": true,
                     "disableLibraryLimit": true,

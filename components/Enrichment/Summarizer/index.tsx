@@ -36,7 +36,8 @@ export const Summarizer = ({elements, schema, augmented}) => {
 	for (const i of schema.edges){
 		const template = i.templates
 		for (const j of i.match) {
-			templates[j] = template
+			const edge = i.edge_suffix ? j + " " + i.edge_suffix: j
+			templates[edge] = template
 		}
 	}
 

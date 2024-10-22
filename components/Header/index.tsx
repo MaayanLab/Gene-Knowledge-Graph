@@ -27,7 +27,6 @@ export const Nav = ({tabs, ui_theme, divider, title, icon, counterTop, counter}:
 		tabs: Array<{
 			endpoint: string,
 			label: string,
-			type: string,
 			component: string,
 			position?:  string,
 			props?: {

@@ -56,7 +56,6 @@ export interface UISchema {
         tabs: Array<{
             endpoint: string,
             label: string,
-            type: string,
             component: string,
             position?: string,
             props?: {
