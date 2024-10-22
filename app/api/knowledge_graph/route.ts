@@ -56,10 +56,10 @@ const resolve_two_terms = async ({
         edges: Array<string>,
         start: string,
         start_field: string,
-        start_term: string,
+        start_term: string | number,
         end: string,
         end_field: string,
-        end_term: string,
+        end_term: string | number,
         limit?: number,
         path_length?: number,
         relation?: Array<{name?: string, limit?: number, end?: string}>,
@@ -184,7 +184,7 @@ const resolve_term_and_end_type = async (
             edges: Array<string>,
             start: string,
             start_field: string,
-            start_term: string,
+            start_term: string | number,
             end: string,
             limit?: number,
             path_length?: number,
@@ -326,7 +326,7 @@ const resolve_one_term = async ({
         edges: Array<string>,
         start: string,
         field: string,
-        term: string,
+        term: string | number,
         relation?: Array<{name?: string, limit?: number, end?: string}>,
         limit?: number,
         path_length?: number,
@@ -382,7 +382,7 @@ const resolve_one_term = async ({
 			AND NOT en.id in ${JSON.stringify(remove)}
 		`
 	}
-	query = query + ` RETURN p, nodes(p) as n, relationships(p) as r, st  LIMIT TOINTEGER($limit)`
+	query = query + ` RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
 	
 	if (rels.length > 0) {
 		query = rels.join("\nUNION\n")
@@ -547,10 +547,10 @@ const resolve_one_term = async ({
 const input_query_schema = z.object({
     start: z.string(),
     start_field: z.optional(z.string()),
-    start_term: z.string(),
+    start_term: z.string().or(z.number()),
     end: z.optional(z.string()),
     end_field: z.optional(z.string()),
-    end_term: z.optional(z.string()),
+    end_term: z.optional(z.string().or(z.number())),
     limit: z.optional(z.number()),
     relation: z.optional(z.array(z.object({
         name: z.string(),

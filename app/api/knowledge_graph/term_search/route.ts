@@ -8,7 +8,7 @@ import { zu } from 'zod_utilz'
 import { convert_query } from "@/utils/helper"
 import { fetch_kg_schema } from "@/utils/initialize"
 const query_schema = z.object({
-    term: z.optional(z.string()),
+    term: z.optional(z.string().or(z.number())),
     limit: z.optional(z.number()),
 })
 // This function returns a gene list based on a search term
