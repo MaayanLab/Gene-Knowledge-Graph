@@ -309,7 +309,7 @@ const AsyncForm = ({
                     />
                 )}
             />
-            <Typography><b>Select Field:</b></Typography>
+            {fields.length > 1 && <Typography><b>Select Field:</b></Typography>}
             <Selector entries={fields} 
                 value={field ||"label"} 
                 prefix={"Field"} onChange={(e)=>{

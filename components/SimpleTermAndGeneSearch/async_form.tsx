@@ -11,17 +11,22 @@ const AsyncFormComponent = ({direction,
     filter,
     initial_query,
     setInputFilter,
-    term = ''
+    term = '',
+    example,
 }: {
 		direction: string,
         initial_query: {[key: string]: string},
 		nodes: {[key:string]: {[key:string]: any}},
 		filter: {[key:string]: string},
         setInputFilter: Function,
-        term: string
+        term: string,
+        example?: Array<{
+            node: string,
+            field?: string,
+            term: string
+        }>
 	}) => {
 	const pathname = usePathname()
-    console.log(filter)
 	if (Object.keys(filter || {}).length === 0) filter = initial_query
     const {
         start,
@@ -122,23 +127,28 @@ const AsyncFormComponent = ({direction,
                     value={selected}
                     loading={loading}
                     onChange={(evt, selected) => {
-                        if (selected === null) setInputTerm('')
-                        if (direction === 'Start') {
+                        if (selected === null) {
+                            setInputTerm('')
                             setSelected(selected)
-							setInputFilter({
-                                start: selected.node_type,
-                                start_field: 'label',
-                                start_term: selected.label,
-                                ...end_filter
-                            })
-                        } else {
-							setInputFilter({
-                                        ...start_filter,
-                                        end: selected.node_type,
-                                        end_field: "label",
-                                        end_term: selected.label,
-                            })
-                                
+                        }
+                        else {
+                            if (direction === 'Start') {
+                                setSelected(selected)
+                                setInputFilter({
+                                    start: selected.node_type,
+                                    start_field: 'label',
+                                    start_term: selected.label,
+                                    ...end_filter
+                                })
+                            } else {
+                                setInputFilter({
+                                            ...start_filter,
+                                            end: selected.node_type,
+                                            end_field: "label",
+                                            end_term: selected.label,
+                                })
+                                    
+                            }
                         }
                     }}
                     sx={{ width: '100%'}}
@@ -178,7 +188,49 @@ const AsyncFormComponent = ({direction,
             <Grid item xs={12}>
                 <Stack>
                     <Typography variant="caption">Example</Typography>
-                    {((nodes[Object.keys(nodes)[0]] || {}).example || []).map((e,i)=>{
+                    {example !== undefined ? 
+                        example.map(({node, field, term})=>{
+                            let query = {}
+                            if (direction === 'Start') {
+                                query = {
+                                    start: node,
+                                    start_field: field || "label",
+                                    start_term: term,
+                                }
+                                if (end_filter.end) {
+                                    query = {
+                                        ...query,
+                                        ...end_filter
+                                    }
+                                }
+                            } else {
+                                query = {
+                                    ...start_filter,
+                                    end: node,
+                                    end_field: field || "label",
+                                    end_term: term,
+                                }
+                            }
+                            return (
+                                <Link
+                                    key={term}
+                                    href={{
+                                        pathname,
+                                        query: {
+                                            filter: JSON.stringify(query)
+                                        },
+                                        // relation
+                                    }}
+                                    onClick={()=>{
+                                        setInputFilter(query)
+                                    }}
+                                    // shallow
+                                >
+                                <Button sx={{padding: 0, justifyContent: "flex-start"}}><Typography variant="body2" color="secondary" sx={{textAlign: "left"}}>{term}</Typography></Button>
+                            </Link> 
+                        )
+                        })
+                    :((nodes[Object.keys(nodes)[0]] || {}).example || []).map((e,i)=>{
                         let query = {}
                         if (direction === 'Start') {
                             query = {
@@ -244,7 +296,7 @@ const AsyncFormComponent = ({direction,
                                     } = filter
                                     setInputFilter({
                                         ...f,
-                                        end: nodes['Gene'] !== undefined ? 'Gene': Object.keys(nodes)[0],
+                                        end: nodes['lncRNA'] !== undefined ? 'lncRNA': Object.keys(nodes)[0],
                                         end_field: 'label',
                                     })
                                 }

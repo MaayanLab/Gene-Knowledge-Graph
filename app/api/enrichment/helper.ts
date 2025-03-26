@@ -29,6 +29,7 @@ export const enrichr_query = async ({
     for (const i of results[library].slice(0,term_limit)) {
         const enrichr_label = i[1]
         const label = regex[library] !== undefined ? regex[library].exec(enrichr_label).groups.label:enrichr_label
+        const direction = regex[library] !== undefined ? regex[library].exec(enrichr_label).groups.direction:undefined
         const pval = i[2]
         const zscore = i[3]
         const combined_score = i[4]
@@ -48,6 +49,7 @@ export const enrichr_query = async ({
                 terms[label].qval = qval
                 terms[label].logpval = -Math.log(pval)
                 terms[label].overlap = overlapping_genes.length
+                terms[label].overlapping_set = overlapping_genes
             } else {
                 // if it appeared before (e.g. drug up, drug down) then use the one with lower pvalue 
                 // as default and push alternative enrichment to enrichment
@@ -62,7 +64,8 @@ export const enrichr_query = async ({
                     combined_score,
                     qval,
                     logpval: -Math.log(pval),
-                    overlap: overlapping_genes.length
+                    overlap: overlapping_genes.length,
+                    overlapping_set: overlapping_genes
                 })
                 if (terms[label].pval > pval) {
                     terms[label].enrichr_label = enrichr_label
@@ -72,6 +75,8 @@ export const enrichr_query = async ({
                     terms[label].qval = qval
                     terms[label].logpval = -Math.log(pval)
                     terms[label].overlap = overlapping_genes.length
+                    terms[label].overlapping_set = overlapping_genes
+
                 }
             }
             for (const gene of overlapping_genes) {

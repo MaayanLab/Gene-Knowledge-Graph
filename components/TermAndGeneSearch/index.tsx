@@ -178,7 +178,6 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                         </CardContent>
                     </Card>
                     <TooltipComponentGroup
-                            initial_query={props.initial_query}
                             elements={elements}
                             tooltip_templates_edges={tooltip_templates_edges}
                             tooltip_templates_nodes={tooltip_templates_nodes}

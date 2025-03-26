@@ -4,6 +4,7 @@ import {
 	Grid, 
 	Button, 
 	Menu,
+	MenuItem,
 } from "@mui/material";
 import Counter from '../Counter';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -26,7 +27,7 @@ export const SmallNav = ({tab_component, ui_theme,  counter}:
 	};
 	return (
 		<>		
-			{counter && <Counter ui_theme={ui_theme}/>}
+			{/* {counter && <Counter ui_theme={ui_theme}/>} */}
 			<Button color="tertiary" onClick={handleClick}><MenuIcon/></Button>
 			<Menu
 				id="basic-menu"
@@ -38,15 +39,17 @@ export const SmallNav = ({tab_component, ui_theme,  counter}:
 				}}
 				sx={{
 					"& .MuiMenu-paper": {
-						backgroundColor: "primary.main",
+						// backgroundColor: "primary.main",
 						padding: '15px'
 					},
 					width: '100%',
 				}}
 				
 			>
-				{...tab_component.top}
-				{...tab_component.bottom}
+				{/* {counter && <MenuItem><Counter ui_theme={ui_theme}/></MenuItem>} */}
+				{tab_component.top.map((c,i)=><MenuItem key={i}>{c}</MenuItem>)}
+				{tab_component.bottom.map((c,i)=><MenuItem key={i}>{c}</MenuItem>)}
+				{/* {...tab_component.bottom} */}
 			</Menu>
 		</>
 	)

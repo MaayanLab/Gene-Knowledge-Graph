@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react"
 import AsyncFormComponent from "./async_form"
 import { router_push } from "@/utils/client_side"
-import { usePathname, useRouter, useSearchParams, } from "next/navigation"
+import { useRouter, } from "next/navigation"
 import { Stack, 
 	Typography, 
 	Card, 
@@ -16,13 +16,11 @@ import { NetworkSchema } from "@/app/api/knowledge_graph/route"
 import { useQueryState, parseAsJson } from 'next-usequerystate';
 import { makeTemplate } from "@/utils/helper"
 import { precise } from "@/utils/math"
-import { FilterSchema } from "@/utils/helper"
-import DeleteIcon from '@mui/icons-material/Delete';
 import HubIcon from '@mui/icons-material/Hub';
-import AllOutIcon from '@mui/icons-material/AllOut';
 import { UISchema } from "@/app/api/schema/route"
+import Link from "next/link"
 
-export const TooltipComponent = ({data, tooltip_templates, initial_query, schema}: {
+export const TooltipComponent = ({data, float, tooltip_templates, schema}: {
 	data: {
 		id: string,
 		label?: string,
@@ -31,18 +29,12 @@ export const TooltipComponent = ({data, tooltip_templates, initial_query, schema
 		[key: string]: string | number
 	},
 	tooltip_templates: {[key: string]: Array<{[key: string]: string}>}, 
-	initial_query: {[key: string]: string},
-	schema: UISchema
+	schema: UISchema,
+	float?: boolean
 }) => {
-	const [selected, setSelected] = useQueryState('selected',  parseAsJson<{id: string, type: 'nodes' | 'edges'}>().withDefault(null))
-	const [hovered, setHovered] = useQueryState('hovered',  parseAsJson<{id: string, type: 'nodes' | 'edges'}>().withDefault(null))
-	const pathname = usePathname()
-	const searchParams = useSearchParams()
 	const router = useRouter()
-	const query_parser = parseAsJson<FilterSchema>().withDefault(initial_query)
-    const filter: FilterSchema = query_parser.parseServerSide(searchParams.get('filter'))
 	const elements = []
-	const field = data.kind === "Relation" ? data.label : data.kind.replace("Co-expressed Gene", "Gene")
+	const field = data.kind === "Relation" ? data.label : data.kind.replace("Co-expressed Gene", "lncRNA")
 	for (const i of tooltip_templates[field] || []) {
 		if (i.type === "link") {
 			const text = makeTemplate(i.text, data)
@@ -71,8 +63,21 @@ export const TooltipComponent = ({data, tooltip_templates, initial_query, schema
 			}
 		  }
 	}
+	const extrasx = {}
+	if (float) {
+		extrasx["position"] = "absolute"
+		extrasx["top"] = 0
+		extrasx["left"] = 0
+		extrasx["zIndex"] = 100
+	}
+	const pathname = (schema.header.tabs.filter(i=>(i.component === 'KnowledgeGraph' || i.component === 'SimpleKnowledgeGraph'))[0] || {}).endpoint || '/'
+	const filter = JSON.stringify({
+		start: data.kind,
+		start_term: data.label
+		})
+	
 	return (
-		<Card sx={{marginTop: 2}}>
+		<Card sx={{marginTop: 2, ...extrasx}}>
 			<CardContent sx={{padding: 2}}>
 				{elements}
 			</CardContent>
@@ -95,18 +100,11 @@ export const TooltipComponent = ({data, tooltip_templates, initial_query, schema
           }}><DeleteIcon/></IconButton>
               </Tooltip>} */}
               <Tooltip title="Expand Node">
-                <IconButton
-                  onClick={()=>{
-                    // setSelected(null)
-					// setHovered(null)
-					const pathname = (schema.header.tabs.filter(i=>i.component === 'KnowledgeGraph')[0] || {}).endpoint || '/'
-					const filter = JSON.stringify({
-                        start: data.kind,
-                        start_term: data.label
-                      })
-					router_push(router, pathname, {filter})
-                  }}
-                ><HubIcon sx={{transform: "scaleX(-1)"}}/></IconButton>
+				<Link href={`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/${pathname}?filter=${filter}`}>
+					<IconButton>
+						<HubIcon sx={{transform: "scaleX(-1)"}}/>
+					</IconButton>
+				</Link>
               </Tooltip>
             </CardActions>
           }
@@ -115,20 +113,20 @@ export const TooltipComponent = ({data, tooltip_templates, initial_query, schema
 }
 
 const TooltipComponentGroup = ({
-    initial_query,
 	elements,
 	tooltip_templates_nodes,
     tooltip_templates_edges,
 	schema,
+	float
 }: {
-        initial_query: {[key: string]: string},
 		elements: null | NetworkSchema,
 		tooltip_templates_edges: {[key: string]: Array<{[key: string]: string}>},
         tooltip_templates_nodes: {[key: string]: Array<{[key: string]: string}>},
-		schema: UISchema
+		schema: UISchema,
+		float?: boolean
 	}) => {
 	
-
+	const [tooltip, setTooltip] = useQueryState('tooltip')
 	const [selected, setSelected] = useQueryState('selected',  parseAsJson<{id: string, type: 'nodes' | 'edges'}>().withDefault(null))
 	const [hovered, setHovered] = useQueryState('hovered',  parseAsJson<{id: string, type: 'nodes' | 'edges'}>().withDefault(null))
 	const [elementMapper, setElementMapper] = useState({nodes: {}, edges: {}})
@@ -149,13 +147,13 @@ const TooltipComponentGroup = ({
 		}
     }, [elements])
 	const user_input = selected || hovered
-	if (user_input !== null && elementMapper[user_input.type][user_input.id] !== undefined) {
+	if (tooltip && user_input !== null && elementMapper[user_input.type][user_input.id] !== undefined) {
 		return (
 			<TooltipComponent 
 					data={elementMapper[user_input.type][user_input.id]} 
 					tooltip_templates={user_input.type === 'nodes' ? tooltip_templates_nodes: tooltip_templates_edges}
-					initial_query={initial_query}
 					schema={schema}
+					float={float}
 				/>
 		)
 	}

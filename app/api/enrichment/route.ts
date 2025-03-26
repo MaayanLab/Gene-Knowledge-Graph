@@ -34,6 +34,63 @@ const get_node_color_and_type = ({node,
     }	
 }
 
+
+/**
+ * @swagger
+ * /api/knowledge_graph:
+ *   post:
+ *     description: Performs enrichment analysis
+ *     tags:
+ *       - enrichment analysis
+ *     parameters:
+ *       - name: userListId
+ *         type: string
+ *         required: true
+ *       - name: libraries
+ *         required: true
+ *         content:
+ *            application/json:
+ *              schema: 			
+ *                type: array
+ *                items:
+ *                  type: object
+ *                  properties:
+ *                      library:
+ *                         type: string
+ *                      term_limit:
+ *                         type: number
+ *       - name: gene_limit
+ *         type: number
+ *       - name: term_degree
+ *         type: number
+ *       - name: min_lib
+ *         type: number
+ *       - name: gene_degree
+ *         type: number
+ *     responses:
+ *       200:
+ *         description: Subnetwork
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 nodes:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       data:
+ *                         type: object
+ *                 edges:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       data:
+ *                         type: object
+ */
+
 // gene_limit: limits top genes
 // min_lib: Filters for genes that appear on multiple libraries
 const enrichment = async ({

@@ -38,9 +38,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 helm install cfde-gse maayanlab/docker-compose -f <(docker-compose config) -n cfde-gse --create-namespace 
 
 ## UPGRADE
-helm upgrade cfde-gse maayanlab/docker-compose -f <(docker-compose config) -n cfde-gse 
+helm upgrade enrichr-kg maayanlab/docker-compose -f <(docker-compose config) -n enrichr-kg 
 
-helm template cfde-gse maayanlab/docker-compose -f <(docker-compose config) -n cfde-gse 
+helm template enrichr-kg maayanlab/docker-compose -f <(docker-compose config) -n enrichr-kg 
 
 
 ## Legacy Version

@@ -161,7 +161,7 @@ export const EnrichmentBar = (props: {
 								}
 							},
 						]} hide/>
-						<YAxis type="category" dataKey={"library"} width={yWidth*7} axisLine={false} fontSize={12}/>
+						<YAxis type="category" dataKey={"library"} width={yWidth*(yWidth > 15 ? 10: 7)} axisLine={false} fontSize={12}/>
 					</BarChart>
 				</ResponsiveContainer>
 			</Grid>

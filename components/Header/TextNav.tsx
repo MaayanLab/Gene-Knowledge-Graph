@@ -99,7 +99,7 @@ export  function TextNav({title, path, props}:  {
 				</Link>
 				<ListItem sx={{display: {xs: "block", sm: "block", md: "none", lg: "none", xl: "none"}}}>
 					<Link href={path}>
-						<Typography variant="nav">{title}</Typography>
+						<Typography variant="nav" sx={{color: {xs: "#000", sm: "#000", md: "#FFF", lg: "#FFF", xl: "#FFF"}}}>{title}</Typography>
 					</Link>
 				</ListItem>
 			</>

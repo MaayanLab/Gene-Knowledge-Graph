@@ -9,6 +9,19 @@ import { cfde_theme } from '@/themes/cfde';
 import { enrichr_kg_theme } from '@/themes/enrichr-kg';
 import { lncRNAlyzr } from '@/themes/lncRNAlyzr';
 import { harmonizome_kg_theme } from '@/themes/harmonizome-kg';
+import { withCookie } from '@/components/ConsentCookie';
+import dynamic from 'next/dynamic';
+
+const GoogleAnalytics = dynamic(async()=>((await import('nextjs-google-analytics')).GoogleAnalytics),
+    {
+        ssr: false,
+    }
+)
+const ConsentCookie = dynamic(()=>import('@/components/ConsentCookie'),
+    {
+        ssr: false,
+    }
+)
 const themes = {
     cfde_theme: cfde_theme,
     enrichr_kg_theme: enrichr_kg_theme,
@@ -18,7 +31,7 @@ const themes = {
 
 // This implementation is from emotion-js
 // https://github.com/emotion-js/emotion/issues/2928#issuecomment-1319747902
-export default function ThemeRegistry(props:{options:any, children:any, theme: 'cfde_theme' | string}) {
+function ThemeRegistry(props:{options:any, children:any, theme: 'cfde_theme' | string, consentCookie?: string, setConsentCookie?:Function, resetCookie?:Function}) {
     const { options, children, theme: t } = props;
     const theme = themes[t]
     const [{ cache, flush }] = React.useState(() => {
@@ -60,13 +73,18 @@ export default function ThemeRegistry(props:{options:any, children:any, theme: '
         />
       );
     });
-  
+    console.log(process.env.NEXT_PUBLIC_COOKIE_NAME, "NEXT_PUBLIC_COOKIE_NAME", typeof process.env.NEXT_PUBLIC_COOKIE_NAME)
+
     return (
       <CacheProvider value={cache}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           {children}
+          <ConsentCookie consentCookie={props.consentCookie} setConsentCookie={props.setConsentCookie}/>
         </ThemeProvider>
+        {(props.consentCookie === "allow" || process.env.NEXT_PUBLIC_COOKIE_NAME === '') && <GoogleAnalytics trackPageViews />}
       </CacheProvider>
     );
   }
+
+  export default withCookie(ThemeRegistry)
