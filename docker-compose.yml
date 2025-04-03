@@ -5,11 +5,11 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/enrichr-kg:2.5.11
+    image: maayanlab/cfde-gse:2.5.12
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
-        maayanlab.cloud/ingress: https://maayanlab.cloud/enrichr-kg
+        maayanlab.cloud/ingress: https://gse.cfde.cloud
     ports:
       - 3000:3000
     environment:
@@ -40,14 +40,14 @@ services:
       - 7687:7687
       - 7474:7474
     volumes:
-      - enrichr-kg-neo4j:/data
+      - cfde-gse-neo4j:/data
 
 volumes:
-  enrichr-kg-neo4j:
+  cfde-gse-neo4j:
     x-kubernetes:
       size: 25Gi
       class: gp2
 
 x-kubernetes:
-  name: enrichr-kg
-  namespace: enrichr-kg
+  name: cfde-gse
+  namespace: cfde-gse
