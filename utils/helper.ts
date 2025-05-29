@@ -105,7 +105,7 @@ export const process_properties = (properties) => {
 	const props = {}
 	for ( const k of Object.keys(properties)) {
 		const v:string | number | {low: number, high: number} = properties[k]
-		if (typeof v === "object") {
+		if (typeof v === "object" && v["high"] !== undefined) {
 			props[k] = toNumber(v)
 		} else {
 			props[k] = v
