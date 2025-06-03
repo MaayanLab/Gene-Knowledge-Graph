@@ -43,3 +43,10 @@ data-*
 dumps
 .env.deploy
 venv
+
+legacy/
+
+legacy_components/
+
+docker-compose.*.yml
+settings.json

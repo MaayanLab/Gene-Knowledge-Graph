@@ -1,34 +1,53 @@
-version: '2'
+version: '3.9'
 services:
   kg:
-    build: .
-    image: maayanlab/dd_knowledge_graph:1.4.4
-    platform: linux/x86_64
-    env_file: .env
+    build:
+      context: .
+      dockerfile: ./Dockerfile.next
+    platform: linux/amd64
+    image: maayanlab/enrichr-kg:2.5.11
+    x-kubernetes:
+      imagePullPolicy: IfNotPresent
+      annotations:
+        maayanlab.cloud/ingress: https://maayanlab.cloud/enrichr-kg
     ports:
-      - 3002:3000
-  ingest:
-    build: scripts/ingestion
-    image: maayanlab/kg-ingest:0.1.5
-    platform: linux/x86_64
-    env_file: .env
-  neo4j:
-    image: maayanlab/neo4j:mac-arm
-    user: "${UID}:${GID}"
+      - 3000:3000
     environment:
-      NEO4JLABS_PLUGINS: '["apoc", "graph-data-science", "n10s"]'
-      NEO4J_AUTH: ${NEO4J_USER}/${NEO4J_PASSWORD}
-      NEO4J_dbms_memory_heap_max__size: ${NEO4J_dbms_memory_heap_max__size}
-      NEO4J_dbms_memory_heap_initial__size: ${NEO4J_dbms_memory_heap_initial__size}
+      - NEXT_PUBLIC_NEO4J_URL=bolt://neo4j:7687
+      - NEXT_PUBLIC_ENRICHR_URL=https://maayanlab.cloud/Enrichr
+      - NEXT_PUBLIC_GENESHOT_URL=https://maayanlab.cloud/geneshot
+      - NEXT_PUBLIC_NEO4J_USER
+      - NEXT_PUBLIC_NEO4J_NAME
+      - NEXT_PUBLIC_NEO4J_PASSWORD
+      - NEXT_PUBLIC_PREFIX
+      - NEXT_PUBLIC_GA_MEASUREMENT_ID
+      - NEXT_PUBLIC_HOST
+      - NEXT_PUBLIC_SCHEMA
+      - NEXT_PUBLIC_TURL
+      - NEXT_PUBLIC_TURL_URL
+
+  neo4j:
+    image: neo4j:4.4
+    x-kubernetes:
+      imagePullPolicy: IfNotPresent
+    environment:
+      - NEO4JLABS_PLUGINS='["apoc", "n10s"]'
+      - NEO4J_AUTH=${NEXT_PUBLIC_NEO4J_USER}/${NEXT_PUBLIC_NEO4J_PASSWORD}
+      - NEO4J_dbms_memory_heap_max__size=8G
+      - NEO4J_dbms_memory_heap_initial__size=2G
+      - NEO4J_server_config_strict__validation_enabled=false
     ports:
-      - 7474:7474
       - 7687:7687
+      - 7474:7474
     volumes:
-      - ./data-reprotox-v2/neo4j:/data
-    networks:
-      internal:
-        aliases:
-          - neo4j
-# Internal docker networks
-networks:
-  internal:
+      - enrichr-kg-neo4j:/data
+
+volumes:
+  enrichr-kg-neo4j:
+    x-kubernetes:
+      size: 25Gi
+      class: gp2
+
+x-kubernetes:
+  name: enrichr-kg
+  namespace: enrichr-kg
