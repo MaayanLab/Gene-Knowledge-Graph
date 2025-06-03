@@ -53,14 +53,13 @@ export const layouts = {
 
 export default function Cytoscape ({
 	elements,
-	schema,
-	tooltip_templates_edges,
-	tooltip_templates_nodes,
+	edge_tooltip=false,
 	search,
 }: {
 	elements: null | NetworkSchema, 
 	search?:boolean,
 	schema: UISchema,
+	edge_tooltip?: boolean,
 	tooltip_templates_edges: {[key: string]: Array<{[key: string]: string}>}, 
 	tooltip_templates_nodes: {[key: string]: Array<{[key: string]: string}>}, 
 }) {
@@ -268,6 +267,19 @@ export default function Cytoscape ({
 							}
 						});
 
+						cy.edges().on('mouseover', (evt) => {
+							if (!selected && edge_tooltip) {
+								const e = evt.target.data()
+								const sel = evt.target;
+								cy.elements().not(sel).addClass('semitransp');
+								sel.addClass('focusedColored').target().addClass('highlight')
+								sel.sources().addClass('highlight')
+								sel.target().removeClass('semitransp')
+								sel.sources().removeClass('semitransp')
+								setHovered({id: `${e.source}_${e.relation}_${e.target}`, type: "edges"})
+							}
+						});
+
 						cy.nodes().on('mouseout', (evt) => {
 							const sel = evt.target;
 							cy.elements().removeClass('semitransp');
@@ -275,6 +287,16 @@ export default function Cytoscape ({
 							sel.incomers().removeClass('colored')
 							setHovered(null)
 							
+						});
+
+						cy.edges().on('mouseout', (evt) => {
+							if (edge_tooltip) {
+								const sel = evt.target;
+								cy.elements().removeClass('semitransp');
+								sel.removeClass('focusedColored').target().removeClass('highlight')
+								sel.source().removeClass('highlight')
+								setHovered(null)
+							}
 						});
 						// cy.edges().on('mouseover', (evt) => {
 						// 	if (!selected) {

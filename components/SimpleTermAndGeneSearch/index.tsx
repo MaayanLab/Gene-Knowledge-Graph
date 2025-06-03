@@ -72,6 +72,7 @@ const SimpleTermAndGeneSearch = async ({searchParams, props}: {
             additional_link_button?: boolean,
             additional_link_relation_tags?: Array<string>,
             neighborCount?: number,
+            edge_tooltip?: boolean
         }
 }) => {
     const {
@@ -199,6 +200,7 @@ const SimpleTermAndGeneSearch = async ({searchParams, props}: {
                                     schema={schema}
                                     tooltip_templates_edges={tooltip_templates_edges}
                                     tooltip_templates_nodes={tooltip_templates_nodes}
+                                    edge_tooltip={props.edge_tooltip}
                                 /> 
                             }
                             </CardContent>

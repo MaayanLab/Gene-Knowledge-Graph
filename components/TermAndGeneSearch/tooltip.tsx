@@ -75,7 +75,6 @@ export const TooltipComponent = ({data, float, tooltip_templates, schema}: {
 		start: data.kind,
 		start_term: data.label
 		})
-	
 	return (
 		<Card sx={{marginTop: 2, ...extrasx}}>
 			<CardContent sx={{padding: 2}}>

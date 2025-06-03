@@ -63,6 +63,7 @@ export interface UISchema {
                     url_field: string,
                     query_field: string,
                 },
+                edge_tooltip?: boolean,
                 [key: string]: any
             }
         }>,

@@ -46,6 +46,7 @@ const Enrichment = async ({
     sortLibraries,
     searchParams,
     endpoint,
+    edge_tooltip,
     ...props
 }: {
     default_options?: {
@@ -77,8 +78,8 @@ const Enrichment = async ({
         collapse?: 'true'
     },
     endpoint: string,
-    additional_link_relation_tags?: Array<string>
-
+    additional_link_relation_tags?: Array<string>,
+    edge_tooltip?: boolean
 }) => {
     const query_parser = parseAsJson<EnrichmentParams>().withDefault(props.default_options)
     console.log("Getting schema...")
@@ -274,6 +275,7 @@ const Enrichment = async ({
                                             tooltip_templates_edges={tooltip_templates_edges}
                                             tooltip_templates_nodes={tooltip_templates_nodes}
                                             view={searchParams.view}
+                                            edge_tooltip={edge_tooltip}
                                         />
                                     </CardContent>
                                 </Card>

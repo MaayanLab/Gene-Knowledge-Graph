@@ -30,7 +30,10 @@ export const initialize_kg = async () => {
 	}
     for (const i of schema.edges) {
         for (const e of i.match) {
-            tooltip_templates_edges[e] = i.display
+            if (tooltip_templates_edges[e] === undefined) tooltip_templates_edges[e] = i.display
+            else {
+                tooltip_templates_edges[e] = [...i.display, ...tooltip_templates_edges[e]]
+            }
             if (!i["gene_link"]) {
                 if (edges.indexOf(e) === -1) {
                     edges.push(e)
@@ -73,6 +76,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
             additional_link_button?: boolean,
             additional_link_relation_tags?: Array<string>,
             neighborCount?: number,
+            edge_tooltip?: boolean
         }
 }) => {
     const {
@@ -206,6 +210,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                                     schema={schema}
                                     tooltip_templates_edges={tooltip_templates_edges}
                                     tooltip_templates_nodes={tooltip_templates_nodes}
+                                    edge_tooltip={props.edge_tooltip}
                                 /> 
                             }
                             </CardContent>
