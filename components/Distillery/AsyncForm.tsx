@@ -140,7 +140,7 @@ const AsyncForm = ({
     const [querySelected, setQuerySelected] = useQueryState('selected',  parseAsJson<{id: string, type: 'nodes' | 'edges'}>().withDefault(null))
 	const [hovered, setHovered] = useQueryState('hovered',  parseAsJson<{id: string, type: 'nodes' | 'edges'}>().withDefault(null))
 	const [elementMapper, setElementMapper] = useState({nodes: {}, edges: {}})
-	
+	const [tooltip, setTooltip] = useQueryState('tooltip')
     const {
         field='label',
         limit,
@@ -324,7 +324,7 @@ const AsyncForm = ({
                 if (filter) setFilter(null)
                 else setFilter(checkbox_filter)
             }}/>} label={filter_text} />}
-            {(user_input !== null && elementMapper[user_input.type][user_input.id] !== undefined) &&
+            {(tooltip && user_input !== null && elementMapper[user_input.type][user_input.id] !== undefined) &&
 				<TooltipComponent 
 					data={elementMapper[user_input.type][user_input.id]} 
 					tooltip_templates={user_input.type === 'nodes' ? tooltip_templates_nodes: tooltip_templates_edges}
