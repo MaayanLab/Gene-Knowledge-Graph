@@ -35,12 +35,12 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 # CFDE-KX
 
 ## Install
-helm install cfde-gse maayanlab/docker-compose -f <(docker-compose config) -n cfde-gse --create-namespace 
+helm install distillery maayanlab/docker-compose -f <(docker-compose config) -n distillery --create-namespace 
 
 ## UPGRADE
-helm upgrade enrichr-kg maayanlab/docker-compose -f <(docker-compose config) -n enrichr-kg 
+helm upgrade distillery maayanlab/docker-compose -f <(docker-compose config) -n distillery 
 
-helm template enrichr-kg maayanlab/docker-compose -f <(docker-compose config) -n enrichr-kg 
+helm template distillery maayanlab/docker-compose -f <(docker-compose config) -n distillery 
 
 
 ## Legacy Version
