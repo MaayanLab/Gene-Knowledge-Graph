@@ -51,7 +51,7 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 							for (const prop of display[key]) {
 								const field = prop.label
 								columnVisibilityModel[field] = !(prop.hide)
-								if (prop.type === "link") {
+								if (prop.href) {
 									header.push({
 										field,
 										headerName: field,
