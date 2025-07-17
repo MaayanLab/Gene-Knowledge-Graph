@@ -23,8 +23,8 @@ services:
       - NEXT_PUBLIC_GA_MEASUREMENT_ID
       - NEXT_PUBLIC_HOST
       - NEXT_PUBLIC_SCHEMA
-      - NEXT_PUBLIC_TURL
-      - NEXT_PUBLIC_TURL_URL
+      - TURL
+      - TURL_URL
 
   neo4j:
     image: neo4j:4.4
