@@ -10,43 +10,35 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "lncrna",
-			"text": "${lncrna}",
-			"type": "text"
+			"text": "${lncrna}"
 		  },
 		  {
 			"label": "FANTOM6 lncRNA KD DEGs ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -66,33 +58,27 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -110,43 +96,35 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "Pfam Domains 2019 ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "uri",
-			"text": "${uri}",
-			"type": "text"
+			"text": "${uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -165,64 +143,52 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "transcription_factor",
-			"text": "${transcription_factor}",
-			"type": "text"
+			"text": "${transcription_factor}"
 		  },
 		  {
 			"label": "PMID",
-			"text": "${PMID}",
-			"type": "text"
+			"text": "${PMID}"
 		  },
 		  {
 			"label": "assay",
-			"text": "${assay}",
-			"type": "text"
+			"text": "${assay}"
 		  },
 		  {
 			"label": "cell_line_or_tissue",
-			"text": "${cell_line_or_tissue}",
-			"type": "text"
+			"text": "${cell_line_or_tissue}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  },
 		  {
 			"label": "ChEA 2022 ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -243,54 +209,44 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "cell_id",
-			"text": "${cell_id}",
-			"type": "text"
+			"text": "${cell_id}"
 		  },
 		  {
 			"label": "cell_iri",
 			"text": "${cell_iri}",
-			"href": "${cell_iri}",
-			"type": "link"
+			"href": "${cell_iri}"
 		  },
 		  {
 			"label": "organ_id",
-			"text": "${organ_id}",
-			"type": "text"
+			"text": "${organ_id}"
 		  },
 		  {
 			"label": "organ_iri",
-			"text": "${organ_iri}",
-			"type": "text"
+			"text": "${organ_iri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -308,24 +264,20 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "Gene ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  }
 		],
 		"search": [
@@ -344,24 +296,20 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "Gene ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  }
 		],
 		"search": [
@@ -380,49 +328,40 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "ontology_label",
-			"text": "${ontology_label}",
-			"type": "text"
+			"text": "${ontology_label}"
 		  },
 		  {
 			"label": "GO Biological Process 2021 ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -441,54 +380,44 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "cell_line",
-			"text": "${cell_line}",
-			"type": "text"
+			"text": "${cell_line}"
 		  },
 		  {
 			"label": "CCLE Proteomics 2020 ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "primary_name",
-			"text": "${primary_name}",
-			"type": "text"
+			"text": "${primary_name}"
 		  },
 		  {
 			"label": "cellosaurus_uri",
 			"text": "${cellosaurus_uri}",
-			"href": "${cellosaurus_uri}",
-			"type": "link"
+			"href": "${cellosaurus_uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -509,49 +438,40 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "ontology_label",
-			"text": "${ontology_label}",
-			"type": "text"
+			"text": "${ontology_label}"
 		  },
 		  {
 			"label": "Human Phenotype Ontology ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -570,33 +490,27 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -614,38 +528,31 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "description",
-			"text": "${description}",
-			"type": "text"
+			"text": "${description}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -663,49 +570,40 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "ontology_label",
-			"text": "${ontology_label}",
-			"type": "text"
+			"text": "${ontology_label}"
 		  },
 		  {
 			"label": "MGI Mammalian Phenotype Level 4 2021 ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -724,44 +622,36 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "Proteomics Drug Atlas 2023 ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -780,49 +670,40 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "pathway",
-			"text": "${pathway}",
-			"type": "text"
+			"text": "${pathway}"
 		  },
 		  {
 			"label": "Reactome 2022 ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -842,44 +723,36 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "The Kinase Library 2023 ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -898,44 +771,36 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "DisGeNET ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "url",
 			"text": "${url}",
-			"href": "${url}",
-			"type": "link"
+			"href": "${url}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -954,55 +819,45 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "cell_id",
-			"text": "${cell_id}",
-			"type": "text"
+			"text": "${cell_id}"
 		  },
 		  {
 			"label": "cell_iri",
 			"text": "${cell_iri}",
-			"href": "${cell_iri}",
-			"type": "link"
+			"href": "${cell_iri}"
 		  },
 		  {
 			"label": "organ_id",
-			"text": "${organ_id}",
-			"type": "text"
+			"text": "${organ_id}"
 		  },
 		  {
 			"label": "organ_iri",
 			"text": "${organ_iri}",
-			"href": "${organ_iri}",
-			"type": "link"
+			"href": "${organ_iri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -1020,44 +875,36 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "KEGG 2021 Human ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -1076,59 +923,48 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "cell_line",
-			"text": "${cell_line}",
-			"type": "text"
+			"text": "${cell_line}"
 		  },
 		  {
 			"label": "organ",
-			"text": "${organ}",
-			"type": "text"
+			"text": "${organ}"
 		  },
 		  {
 			"label": "description",
-			"text": "${description}",
-			"type": "text"
+			"text": "${description}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  },
 		  {
 			"label": "Achilles Cell Line ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -1149,49 +985,40 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "pathway",
-			"text": "${pathway}",
-			"type": "text"
+			"text": "${pathway}"
 		  },
 		  {
 			"label": "WikiPathway 2021 Human ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -1211,48 +1038,39 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "Human Gene Atlas ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "ontology_name",
-			"text": "${ontology_name}",
-			"type": "text"
+			"text": "${ontology_name}"
 		  },
 		  {
 			"label": "uri",
-			"text": "${uri}",
-			"type": "text"
+			"text": "${uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -1271,44 +1089,36 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "LINCS L1000 CRISPR KO Consensus Sigs ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -1327,49 +1137,40 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "ontology_label",
-			"text": "${ontology_label}",
-			"type": "text"
+			"text": "${ontology_label}"
 		  },
 		  {
 			"label": "cell_id",
-			"text": "${cell_id}",
-			"type": "text"
+			"text": "${cell_id}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -1387,49 +1188,40 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "ARCHS4 TFs Coexp ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "transcription_factor",
-			"text": "${transcription_factor}",
-			"type": "text"
+			"text": "${transcription_factor}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -1449,49 +1241,40 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "TRRUST Transcription Factors 2019 ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "organism",
-			"text": "${organism}",
-			"type": "text"
+			"text": "${organism}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -1511,66 +1294,54 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "Descartes Cell Types and Tissue 2021 ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "url",
 			"text": "${url}",
-			"href": "${url}",
-			"type": "link"
+			"href": "${url}"
 		  },
 		  {
 			"label": "cell_id",
-			"text": "${cell_id}",
-			"type": "text"
+			"text": "${cell_id}"
 		  },
 		  {
 			"label": "cell_iri",
 			"text": "${cell_iri}",
-			"href": "${cell_iri}",
-			"type": "link"
+			"href": "${cell_iri}"
 		  },
 		  {
 			"label": "organ_id",
-			"text": "${organ_id}",
-			"type": "text"
+			"text": "${organ_id}"
 		  },
 		  {
 			"label": "organ_iri",
 			"text": "${organ_iri}",
-			"href": "${organ_iri}",
-			"type": "link"
+			"href": "${organ_iri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -1589,44 +1360,36 @@
 		"display": [
 		  {
 			"label": "id",
-			"text": "${id}",
-			"type": "text"
+			"text": "${id}"
 		  },
 		  {
 			"label": "label",
-			"text": "${label}",
-			"type": "text"
+			"text": "${label}"
 		  },
 		  {
 			"label": "LINCS L1000 Chem Pert Consensus Sigs ID",
-			"text": "${acc}",
-			"type": "text"
+			"text": "${acc}"
 		  },
 		  {
 			"label": "uri",
 			"text": "${uri}",
-			"href": "${uri}",
-			"type": "link"
+			"href": "${uri}"
 		  },
 		  {
 			"label": "P-Value",
-			"text": "${pval}",
-			"type": "number"
+			"text": "${pval}"
 		  },
 		  {
 			"label": "Q-Value",
-			"text": "${qval}",
-			"type": "number"
+			"text": "${qval}"
 		  },
 		  {
 			"label": "Z-Score",
-			"text": "${zscore}",
-			"type": "number"
+			"text": "${zscore}"
 		  },
 		  {
 			"label": "Combined Score",
-			"text": "${combined_score}",
-			"type": "number"
+			"text": "${combined_score}"
 		  }
 		],
 		"search": [
@@ -1649,39 +1412,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -1697,39 +1453,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -1745,39 +1494,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		],
 		"color": "#4fc3f7"
@@ -1794,44 +1536,36 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  },
 		  {
 			"label": "direction",
-			"text": "${direction}",
-			"type": "text"
+			"text": "${direction}"
 		  }
 		],
 		"color": "#4fc3f7"
@@ -1848,39 +1582,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -1896,39 +1623,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -1944,39 +1664,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -1993,44 +1706,36 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  },
 		  {
 			"label": "direction",
-			"text": "${direction}",
-			"type": "text"
+			"text": "${direction}"
 		  }
 		]
 	  },
@@ -2046,44 +1751,36 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  },
 		  {
 			"label": "direction",
-			"text": "${direction}",
-			"type": "text"
+			"text": "${direction}"
 		  }
 		],
 		"color": "#e57373"
@@ -2100,44 +1797,36 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  },
 		  {
 			"label": "direction",
-			"text": "${direction}",
-			"type": "text"
+			"text": "${direction}"
 		  }
 		],
 		"color": "#4fc3f7"
@@ -2154,44 +1843,36 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  },
 		  {
 			"label": "direction",
-			"text": "${direction}",
-			"type": "text"
+			"text": "${direction}"
 		  }
 		],
 		"color": "#e57373"
@@ -2208,39 +1889,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -2256,39 +1930,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -2304,39 +1971,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -2352,39 +2012,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -2400,39 +2053,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -2448,39 +2094,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		],
 		"color": "#e57373"
@@ -2497,39 +2136,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -2545,33 +2177,27 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "combined score",
-			"text": "${combined_score}",
-			"type": "text"
+			"text": "${combined_score}"
 		  }
 		],
 		"color": "#ffa726",
@@ -2589,39 +2215,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -2637,39 +2256,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -2685,39 +2297,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -2733,44 +2338,36 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  },
 		  {
 			"label": "direction",
-			"text": "${direction}",
-			"type": "text"
+			"text": "${direction}"
 		  }
 		],
 		"color": "#4fc3f7"
@@ -2787,39 +2384,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -2835,44 +2425,36 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  },
 		  {
 			"label": "direction",
-			"text": "${direction}",
-			"type": "text"
+			"text": "${direction}"
 		  }
 		],
 		"color": "#e57373"
@@ -2889,33 +2471,27 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "correlation score",
-			"text": "${correlation_score}",
-			"type": "text"
+			"text": "${correlation_score}"
 		  }
 		],
 		"color": "#81c784",
@@ -2933,39 +2509,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -2981,39 +2550,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -3029,39 +2591,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -3077,44 +2632,36 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  },
 		  {
 			"label": "direction",
-			"text": "${direction}",
-			"type": "text"
+			"text": "${direction}"
 		  }
 		],
 		"color": "#e57373"
@@ -3131,39 +2678,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -3179,39 +2719,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  },
@@ -3227,39 +2760,32 @@
 		"display": [
 		  {
 			"label": "source",
-			"text": "${source}",
-			"type": "text"
+			"text": "${source}"
 		  },
 		  {
 			"label": "relation",
-			"text": "${relation}",
-			"type": "text"
+			"text": "${relation}"
 		  },
 		  {
 			"label": "target",
-			"text": "${target}",
-			"type": "text"
+			"text": "${target}"
 		  },
 		  {
 			"label": "source label",
-			"text": "${source_label}",
-			"type": "text"
+			"text": "${source_label}"
 		  },
 		  {
 			"label": "target label",
-			"text": "${target_label}",
-			"type": "text"
+			"text": "${target_label}"
 		  },
 		  {
 			"label": "resource",
-			"text": "${resource}",
-			"type": "text"
+			"text": "${resource}"
 		  },
 		  {
 			"label": "link to resource",
 			"text": "${link_to_resource}",
-			"href": "${link_to_resource}",
-			"type": "link"
+			"href": "${link_to_resource}"
 		  }
 		]
 	  }
