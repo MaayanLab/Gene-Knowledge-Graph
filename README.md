@@ -25,7 +25,7 @@ npm version <major/minor/patch>
 ### Install
 helm install <name> maayanlab/docker-compose -f <(docker-compose config) -n <name> --create-namespace 
 
-## UPGRADE
+### Upgrade
 helm upgrade <name> maayanlab/docker-compose -f <(docker-compose config) -n <name> 
 
 helm template <name> maayanlab/docker-compose -f <(docker-compose config) -n <name> 
