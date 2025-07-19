@@ -3,7 +3,7 @@
 This knowledge graph UI interface serves as a front end for a Neo4j knowledge graph database. For information on setting up the user interface, see [here](https://github.com/MaayanLab/KnowledgeGraphUIDemo)
 
 * [Introduction to Cypher](https://github.com/MaayanLab/KnowledgeGraphUIDemo/blob/main/notebooks/cypher.ipynb)
-* [Creating assertions and Ingestion](https://github.com/MaayanLab/KnowledgeGraphUIDemo/blob/main/notebooks/serialization.ipynb)
+* [Creating assertions and ingesting them into Neo4j](https://github.com/MaayanLab/KnowledgeGraphUIDemo/blob/main/notebooks/serialization.ipynb)
 * [Setting up the UI](https://github.com/MaayanLab/KnowledgeGraphUIDemo/blob/main/notebooks/setting_up_ui.ipynb)
 
 To run the interface locally, run the following commands:
