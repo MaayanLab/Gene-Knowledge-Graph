@@ -42,11 +42,7 @@ For more information about customizing the user interface, see examples from thi
 ## video tutorials
 
 [![Part 1 - Knowledge Graphs](https://i9.ytimg.com/vi_webp/7DjbXfvWL9o/mqdefault.webp?v=66037e29&sqp=CICC78MG&rs=AOn4CLDUZZgZo_Dc-8po1z1HovRyLsQ7cA)](https://www.youtube.com/watch?v=7DjbXfvWL9o)
-
 [![Part 2 - Neo4j](https://i9.ytimg.com/vi/Vb3DyaauZtM/mqdefault.jpg?v=66037f5d&sqp=COii78MG&rs=AOn4CLCqwcK4ULC5VkmyZX-ghIg1R97PdQ)](https://youtu.be/Vb3DyaauZtM)
-
 [![Part 3 - Serialization](https://i9.ytimg.com/vi_webp/u8l__O6AUWo/mqdefault.webp?v=660382a3&sqp=CJSl78MG&rs=AOn4CLDei_1KFDXIkpJt8-AWRpa-MnPtEg)](https://youtu.be/u8l__O6AUWo)
-
 [![Part 4 - Cypher](https://i9.ytimg.com/vi/DhM3XepF5NI/mqdefault.jpg?v=660383aa&sqp=CJSl78MG&rs=AOn4CLDdXtAOQrmLVeTiAwpQ3johyACYIA)](https://youtu.be/DhM3XepF5NI)
-
 [![Part 5 - Setting Up UI](https://i9.ytimg.com/vi/ydPR7wgcl0U/mqdefault.jpg?v=66038670&sqp=CMCn78MG&rs=AOn4CLBROjFzSr4Antik4coSnUQklYtAgw)](https://youtu.be/ydPR7wgcl0U)
