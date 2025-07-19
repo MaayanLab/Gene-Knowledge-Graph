@@ -41,5 +41,8 @@ For more information about customizing the user interface, see examples from thi
 
 ## video tutorials
 
-[![Part 1 - Knowledge Graphs](h[https://i9.ytimg.com/vi_webp/7DjbXfvWL9o/mqdefault.webp?v=66037e29&sqp=CICC78MG&rs=AOn4CLDUZZgZo_Dc-8po1z1HovRyLsQ7cA])([[https://www.youtube.com/watch?v=7DjbXfvWL9o](https://www.youtube.com/watch?v=7DjbXfvWL9o)]
+[![Part 1 - Knowledge Graphs](https://i9.ytimg.com/vi_webp/7DjbXfvWL9o/mqdefault.webp?v=66037e29&sqp=CICC78MG&rs=AOn4CLDUZZgZo_Dc-8po1z1HovRyLsQ7cA)](https://www.youtube.com/watch?v=7DjbXfvWL9o)
+
+[![Part 2 - Neo4j](https://i9.ytimg.com/vi/Vb3DyaauZtM/mqdefault.jpg?v=66037f5d&sqp=COii78MG&rs=AOn4CLCqwcK4ULC5VkmyZX-ghIg1R97PdQ)](https://youtu.be/Vb3DyaauZtM)
+
 
