@@ -1,6 +1,6 @@
 ## Getting Started with KG-UI
 
-This knowledge graph UI interface serves as a front end for a Neo4j knowledge graph database. For information on setting up the user interface, see [here](https://github.com/MaayanLab/KnowledgeGraphUIDemo)
+KG-UI is a knowledge graph user interface that can be served as a frontend for Neo4j knowledge graph databases bioinformatics applications. For more information about setting up the user interface, see: [here](https://github.com/MaayanLab/KnowledgeGraphUIDemo). Below is a set of Jupyter notebooks to guide you through the process:
 
 * [Introduction to Cypher](https://github.com/MaayanLab/KnowledgeGraphUIDemo/blob/main/notebooks/cypher.ipynb)
 * [Creating assertions and ingesting them into Neo4j](https://github.com/MaayanLab/KnowledgeGraphUIDemo/blob/main/notebooks/serialization.ipynb)
@@ -35,3 +35,8 @@ helm template <name> maayanlab/docker-compose -f <(docker-compose config) -n <na
 ```
 docker-compose -f docker-compose-legacy.yml build
 ```
+
+## video tutorials
+
+[![Part 1 - Knowledge Graphs](h[https://i9.ytimg.com/vi_webp/7DjbXfvWL9o/mqdefault.webp?v=66037e29&sqp=CICC78MG&rs=AOn4CLDUZZgZo_Dc-8po1z1HovRyLsQ7cA])([[https://www.youtube.com/watch?v=7DjbXfvWL9o](https://www.youtube.com/watch?v=7DjbXfvWL9o)]
+
