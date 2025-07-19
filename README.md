@@ -45,4 +45,6 @@ For more information about customizing the user interface, see examples from thi
 
 [![Part 2 - Neo4j](https://i9.ytimg.com/vi/Vb3DyaauZtM/mqdefault.jpg?v=66037f5d&sqp=COii78MG&rs=AOn4CLCqwcK4ULC5VkmyZX-ghIg1R97PdQ)](https://youtu.be/Vb3DyaauZtM)
 
+[![Part 3 - Serialization](https://i9.ytimg.com/vi_webp/u8l__O6AUWo/mqdefault.webp?v=660382a3&sqp=CJSl78MG&rs=AOn4CLDei_1KFDXIkpJt8-AWRpa-MnPtEg)](https://youtu.be/u8l__O6AUWo)
 
+[![Part 4 - Cypher](https://i9.ytimg.com/vi/DhM3XepF5NI/mqdefault.jpg?v=660383aa&sqp=CJSl78MG&rs=AOn4CLDdXtAOQrmLVeTiAwpQ3johyACYIA)](https://youtu.be/DhM3XepF5NI)
