@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/enrichr-kg:2.5.11
+    image: maayanlab/enrichr-kg:2.5.12
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
