@@ -10,7 +10,6 @@ export interface UISchema {
         display: Array<{
             label: string,
             text: string,
-            type: string
         }>,
         search?: Array<string>,
         color?: string,
@@ -29,17 +28,20 @@ export interface UISchema {
         display: Array<{
             label: string,
             text: string,
-            type: string,
             href?:string,
         }>,
         hidden?: boolean,
         color?: string,
-        order?: Array<string>
+        order?: Array<string>,
+        directed?: string
     }>,
     header: {
         title: string,
         header?: string,
         divider?: boolean,
+        fullWidth?:boolean,
+        counterTop?: boolean,
+        counter?: boolean,
         icon: {
             src: string,
             favicon: string,
@@ -52,7 +54,6 @@ export interface UISchema {
         tabs: Array<{
             endpoint: string,
             label: string,
-            type: string,
             component: string,
             position?: string,
             props?: {
@@ -60,6 +61,7 @@ export interface UISchema {
                     url_field: string,
                     query_field: string,
                 },
+                edge_tooltip?: boolean,
                 [key: string]: any
             }
         }>,

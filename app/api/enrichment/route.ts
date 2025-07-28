@@ -1,4 +1,5 @@
-import { resolve_results, default_get_node_color_and_type } from "../knowledge_graph/helper";
+import { resolve_results } from "../knowledge_graph/resolver";
+import { default_get_node_color_and_type } from "../knowledge_graph/helper";
 import { compute_colors } from "@/utils/helper";
 import { NextResponse } from "next/server";
 import { NextRequest } from 'next/server'
@@ -33,6 +34,63 @@ const get_node_color_and_type = ({node,
         return props
     }	
 }
+
+
+/**
+ * @swagger
+ * /api/knowledge_graph:
+ *   post:
+ *     description: Performs enrichment analysis
+ *     tags:
+ *       - enrichment analysis
+ *     parameters:
+ *       - name: userListId
+ *         type: string
+ *         required: true
+ *       - name: libraries
+ *         required: true
+ *         content:
+ *            application/json:
+ *              schema: 			
+ *                type: array
+ *                items:
+ *                  type: object
+ *                  properties:
+ *                      library:
+ *                         type: string
+ *                      term_limit:
+ *                         type: number
+ *       - name: gene_limit
+ *         type: number
+ *       - name: term_degree
+ *         type: number
+ *       - name: min_lib
+ *         type: number
+ *       - name: gene_degree
+ *         type: number
+ *     responses:
+ *       200:
+ *         description: Subnetwork
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 nodes:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       data:
+ *                         type: object
+ *                 edges:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       data:
+ *                         type: object
+ */
 
 // gene_limit: limits top genes
 // min_lib: Filters for genes that appear on multiple libraries

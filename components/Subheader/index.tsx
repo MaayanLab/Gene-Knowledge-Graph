@@ -4,7 +4,7 @@ import { Grid, Button, Tooltip, Snackbar, Alert, Typography } from "@mui/materia
 import { UISchema } from "@/app/api/schema/route";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { router_push } from "@/utils/client_side";
-import { parseAsJson } from "next-usequerystate";
+import { parseAsJson, useQueryState } from "next-usequerystate";
 import { EnrichmentParams } from "../Enrichment";
 import { FilterSchema } from "@/utils/helper";
 import { useState } from "react";
@@ -47,7 +47,16 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 	const router = useRouter()
 	const subheader = schema.header.subheader
 	const searchParams = useSearchParams()
+	const view = searchParams.get('view')
+	const fullscreen = searchParams.get('fullscreen')
+	const collapse = searchParams.get('collapse')
+	const misc = {}
+	if (view) misc["view"] = view
+	if (fullscreen) misc["fullscreen"] = fullscreen
+	if (collapse) misc["collapse"] = view
+	
 	const [error, setError] = useState<{message: string, type:string}>(null)
+	const [userQuery, setQuery] = useQueryState('query', parseAsJson<EnrichmentParams>().withDefault({}))
 	const subpaths = (pathname.split("/")).slice(1)
 	if (typeof subheader === 'undefined') return null
 	else {
@@ -70,14 +79,14 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 				}
 				if (subheader_props === null) subheader_props = tab.props.subheader
 				if (default_options === null) {
-					default_options = tab.props.initial_query
+					default_options = tab.props.initial_query || tab.props.default_options
 				}
 				if (tab.props.disableLibraryLimit) disableLibraryLimit = true
 			}
 		}
 		if (subheader_props === null) return null
 		return (
-			<Grid container spacing={1} justifyContent={'center'} alignItems={"center"}>
+			<Grid container spacing={1} justifyContent={'center'} alignItems={"center"} columns={8} sx={{marginLeft: 2}}>
 				<Snackbar open={error!==null}
 					anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
 					autoHideDuration={4500}
@@ -101,7 +110,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 					const {url_field, query_field} = subheader_props || {}
 					const query_parser = parseAsJson<EnrichmentParams | FilterSchema>()
 					const query = query_parser.parse(searchParams.get(url_field)) || default_options || {}
-					const selected = query[query_field] || []
+					const selected = userQuery[query_field] || query[query_field] || []					
 					const active = contains(selected.map(({name})=>name), i.props[query_field])
 					const enabled = selected.length === 0
 					let style = {}
@@ -109,7 +118,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 					else if (active) style = styles.active
 					else style = styles.disabled
 					return (
-						<Grid item key={i.label}>
+						<Grid item xs={2} md={1} key={i.label}>
 							<Tooltip title={i.label} placement="top">
 								<Button
 									disabled={!subheader_props}
@@ -125,14 +134,16 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 											}
 											query[query_field] = new_selected
 											router_push(router, pathname, {
-												[url_field]: JSON.stringify(query)
+												[url_field]: JSON.stringify(query),
+												...misc
 											})
 										} else { // add
-											if (selected.length >= 5 && !disableLibraryLimit) setError({message: `A maximum of only five ${query_field} can selected`, type: "fail"})
+											if (selected.length >= 5 && !disableLibraryLimit) setError({message: `The maximum number of ${query_field} has been selected`, type: "fail"})
 											else {
 												query[query_field] = [...selected, ...i.props[query_field].map((name:string)=>({name, limit: 5}))]
 												router_push(router, pathname, {
-													[url_field]: JSON.stringify(query)
+													[url_field]: JSON.stringify(query),
+													...misc
 												})
 											}
 										}	

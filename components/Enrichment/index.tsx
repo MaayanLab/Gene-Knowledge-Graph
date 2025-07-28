@@ -15,6 +15,8 @@ import { NetworkSchema } from '@/app/api/knowledge_graph/route';
 import { parseAsJson } from 'next-usequerystate';
 import InteractiveButtons from './InteractiveButtons';
 import { fetch_kg_schema } from '@/utils/initialize';
+import TooltipComponentGroup from '../TermAndGeneSearch/tooltip';
+import { sanitize } from '../SanitizedHTML';
 
 export interface EnrichmentParams {
     libraries?: Array<{
@@ -44,6 +46,7 @@ const Enrichment = async ({
     sortLibraries,
     searchParams,
     endpoint,
+    edge_tooltip,
     ...props
 }: {
     default_options?: {
@@ -65,17 +68,18 @@ const Enrichment = async ({
     libraries?: Array<{name: string, node: string, regex?: string}>,
     sortLibraries?: boolean,
     disableLibraryLimit?: boolean,
-    disableHeader?: boolean,
+    enrichrHeader?: boolean,
     title?: string,
     description?: string,
     searchParams: {
         q?:string,
         fullscreen?: 'true'
-
+        view?: string,
+        collapse?: 'true'
     },
     endpoint: string,
-    additional_link_relation_tags?: Array<string>
-
+    additional_link_relation_tags?: Array<string>,
+    edge_tooltip?: boolean
 }) => {
     const query_parser = parseAsJson<EnrichmentParams>().withDefault(props.default_options)
     console.log("Getting schema...")
@@ -86,10 +90,10 @@ const Enrichment = async ({
      }): l
 
 
-    const tooltip_templates_node = {}
+    const tooltip_templates_nodes = {}
     const tooltip_templates_edges = {}
     for (const i of schema.nodes) {
-        tooltip_templates_node[i.node] = i.display
+        tooltip_templates_nodes[i.node] = i.display
     }
 
     for (const e of schema.edges) {
@@ -169,10 +173,10 @@ const Enrichment = async ({
         }
         const payload = {
             'url': `${process.env.NODE_ENV==="development" ? process.env.NEXT_PUBLIC_HOST_DEV : process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}${endpoint}?q=${searchParams.q}`,
-            'apikey': process.env.NEXT_PUBLIC_TURL  
+            'apikey': process.env.TURL  
         }
         console.log("Getting short url")
-        const request = await fetch(process.env.NEXT_PUBLIC_TURL_URL, {
+        const request = await fetch(process.env.TURL_URL, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -187,7 +191,7 @@ const Enrichment = async ({
             <Grid container spacing={1} alignItems={"flex-start"}>
                 <Grid item xs={12}>
                     <Typography variant={"h2"}>{props.title || 'Enrichment Analysis'}</Typography>
-                    { props.disableHeader ? <Typography variant={"subtitle1"}>Enter a set of Entrez gene below to perform enrichment analysis.</Typography>:
+                    { props.enrichrHeader ?
                         <Typography variant="subtitle1" sx={{marginBottom: 3}}>Submit your gene set for enrichment analysis with &nbsp;
                             <Link href={shortId ? `https://maayanlab.cloud/Enrichr/enrich?dataset=${shortId}` : "https://maayanlab.cloud/Enrichr/"} 
                                 target="_blank"
@@ -196,54 +200,94 @@ const Enrichment = async ({
                             >
                                 <span style={{fontSize: 20, fontWeight: 500, letterSpacing: '0.1em'}}>En</span><span style={{color: 'red', fontSize: 20, fontWeight: 500, letterSpacing: '0.1em'}}>rich</span><span style={{fontSize: 20, fontWeight: 500, letterSpacing: '0.1em'}}>r</span>
                             </Link>
-                        </Typography>
+                        </Typography>:
+                        <Typography variant={"subtitle1"} dangerouslySetInnerHTML={sanitize(props.description)}></Typography>
                     }
                 </Grid>
-                <Grid item xs={12} md={elements===null?12:3}>
-                    <Card elevation={0} sx={{borderRadius: "8px", backgroundColor: (!schema.ui_theme || schema.ui_theme === 'cfde_theme' || elements !== null) ? "tertiary.light": "#FFF"}}>
-                        <CardContent>
-                            <GeneSetForm 
-                                libraries_list={libraries_list.map(l=>l.name)}
-                                parsedParams={parsedParams}
-                                fullWidth={elements===null}
-                                elements={elements}
-                                {...props}
-                            />
-                        </CardContent>
-                    </Card>
-                </Grid>
+                {! searchParams.collapse && 
+                    <Grid item xs={12} md={elements===null?12:3}>
+                        <Card elevation={0} sx={{borderRadius: "8px", backgroundColor: (!schema.ui_theme || schema.ui_theme === 'cfde_theme' || elements !== null) ? "tertiary.light": "#FFF"}}>
+                            <CardContent>
+                                <GeneSetForm 
+                                    libraries_list={libraries_list.map(l=>l.name)}
+                                    parsedParams={parsedParams}
+                                    searchParams={searchParams}
+                                    fullWidth={elements===null}
+                                    elements={elements}
+                                    {...props}
+                                />
+                                <TooltipComponentGroup
+                                    elements={elements}
+                                    tooltip_templates_edges={tooltip_templates_edges}
+                                    tooltip_templates_nodes={tooltip_templates_nodes}
+                                    schema={schema}
+                                />
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                }
                 { elements!==null && 
-                    <Grid item xs={12} md={9}>
-                        <Stack direction={"column"} alignItems={"flex-start"} spacing={1}>
-                            <InteractiveButtons 
-                                libraries_list={libraries_list.map(l=>l.name)}
-                                disableLibraryLimit={props.disableLibraryLimit}
-                                hiddenLinksRelations={hiddenLinksRelations}
-                                shortId={shortId}
-                                parsedParams={parsedParams}
-                                // searchParams={parsedParams}
-                                fullscreen={searchParams.fullscreen}
-                                gene_count={genes.length}
-                                elements={elements}
-                                short_url={short_url}
-                                additional_link_relation_tags={props.additional_link_relation_tags}
-                            >
-                                <Summarizer elements={elements} schema={schema} augmented={parsedParams.augment}/>
-                            </InteractiveButtons>
-                            <Card sx={{borderRadius: "24px", minHeight: 450, width: "100%"}}>
-                                <CardContent>
-                                    {input_desc && 
-                                        <Typography variant='h5' sx={{textAlign: "center"}}><b>{input_desc}</b></Typography>
-                                    }
-                                    <TermViz
-                                        elements={elements} 
-                                        schema={schema}
-                                        tooltip_templates_edges={tooltip_templates_edges}
-                                        tooltip_templates_nodes={tooltip_templates_node}
-                                    />
-                                </CardContent>
-                            </Card>
-                        </Stack>
+                    <Grid item xs={12} md={searchParams.collapse ? 12: 9}>
+                        <Grid container alignItems={"flex-start"}>
+                            {searchParams.collapse && 
+                                <Grid item xs={12} md={2}>
+                                    <Card elevation={0} sx={{borderRadius: "8px", backgroundColor: "#FFF"}}>
+                                        <CardContent>
+                                            <GeneSetForm 
+                                                libraries_list={libraries_list.map(l=>l.name)}
+                                                parsedParams={parsedParams}
+                                                searchParams={searchParams}
+                                                fullWidth={elements===null}
+                                                elements={elements}
+                                                {...props}
+                                            />
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            }
+                            <Grid item xs={12} md={searchParams.collapse? 10: 12}>
+                                <InteractiveButtons 
+                                    libraries_list={libraries_list.map(l=>l.name)}
+                                    disableLibraryLimit={props.disableLibraryLimit}
+                                    hiddenLinksRelations={hiddenLinksRelations}
+                                    shortId={shortId}
+                                    parsedParams={parsedParams}
+                                    // searchParams={parsedParams}
+                                    fullscreen={searchParams.fullscreen}
+                                    gene_count={genes.length}
+                                    elements={elements}
+                                    short_url={short_url}
+                                    additional_link_relation_tags={props.additional_link_relation_tags}
+                                    searchParams={searchParams}
+                                >
+                                    <Summarizer elements={elements} schema={schema} augmented={parsedParams.augment}/>
+                                </InteractiveButtons>
+                            </Grid>
+                            <Grid item xs={12} sx={{position: "relative"}}>
+                                <Card sx={{borderRadius: "24px", minHeight: 450, width: "100%"}}>
+                                    <CardContent>
+                                        {input_desc && 
+                                            <Typography variant='h5' sx={{textAlign: "center"}}><b>{input_desc}</b></Typography>
+                                        }
+                                        <TermViz
+                                            elements={elements} 
+                                            schema={schema}
+                                            tooltip_templates_edges={tooltip_templates_edges}
+                                            tooltip_templates_nodes={tooltip_templates_nodes}
+                                            view={searchParams.view}
+                                            edge_tooltip={edge_tooltip}
+                                        />
+                                    </CardContent>
+                                </Card>
+                                {searchParams.collapse && <TooltipComponentGroup
+                                    elements={elements}
+                                    tooltip_templates_edges={tooltip_templates_edges}
+                                    tooltip_templates_nodes={tooltip_templates_nodes}
+                                    schema={schema}
+                                    float={true}
+                                />}
+                            </Grid>
+                        </Grid>
                     </Grid>
                 }
             </Grid>

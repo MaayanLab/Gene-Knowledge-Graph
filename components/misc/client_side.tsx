@@ -50,7 +50,7 @@ export const TooltipCard = ({node,
     const elements = []
     const field = node.kind === "Relation" ? node.label : node.kind.replace("Co-expressed Gene", "Gene")
     for (const i of tooltip_templates[field] || []) {
-      if (i.type === "link") {
+      if (i.href !== undefined) {
         const text = makeTemplate(i.text, node)
         const href = makeTemplate(i.href, node)
         if (text !== 'undefined') {
@@ -71,7 +71,7 @@ export const TooltipCard = ({node,
         if (e !== 'undefined') {
           elements.push(
             <Typography key={i.label} variant="subtitle2">
-              <b>{i.label}</b> {i.type === "text" ? e: precise(e)}
+              <b>{i.label}</b> {precise(e)}
             </Typography>  
           )
         }

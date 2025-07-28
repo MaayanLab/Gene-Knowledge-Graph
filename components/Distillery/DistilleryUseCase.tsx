@@ -23,7 +23,8 @@ async function DistilleryUseCase({
         default_term,
         checkbox_filter,
         filter_text,
-        options_endpoint
+        options_endpoint,
+        edge_tooltip
     } : {
         relations?: Array<{name: string, end?:string}>,
         title?: string,
@@ -35,6 +36,7 @@ async function DistilleryUseCase({
         checkbox_filter?:{[key:string]: any},
         filter_text?: string,
         options_endpoint?: string,
+        edge_tooltip?: boolean,
         searchParams: {
             term?: string,
             field?: string,
@@ -110,6 +112,9 @@ async function DistilleryUseCase({
                                     options_endpoint={options_endpoint}
                                     searchParams={searchParams}
                                     elements={elements}
+                                    schema={schema}
+                                    tooltip_templates_edges={tooltip_templates_edges}
+                                    tooltip_templates_nodes={tooltip_templates_nodes}
                                 />
                             </CardContent>
                         </Card>
@@ -129,6 +134,7 @@ async function DistilleryUseCase({
                                             schema={schema}
                                             tooltip_templates_edges={tooltip_templates_edges}
                                             tooltip_templates_nodes={tooltip_templates_nodes}
+                                            edge_tooltip={edge_tooltip}
                                         /> 
                                     }
                                 </CardContent>

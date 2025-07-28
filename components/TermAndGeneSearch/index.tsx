@@ -5,6 +5,7 @@ import { process_relation } from "@/utils/helper"
 import { Grid, Typography, CircularProgress, Card, CardContent, Stack } from "@mui/material"
 import { parseAsJson } from "next-usequerystate"
 import AsyncFormComponent from "./async_form"
+import TooltipComponentGroup from "./tooltip"
 import Form from "./form"
 import NetworkTable from "./network_table"
 import { fetch_kg_schema } from "@/utils/initialize"
@@ -29,7 +30,10 @@ export const initialize_kg = async () => {
 	}
     for (const i of schema.edges) {
         for (const e of i.match) {
-            tooltip_templates_edges[e] = i.display
+            if (tooltip_templates_edges[e] === undefined) tooltip_templates_edges[e] = i.display
+            else {
+                tooltip_templates_edges[e] = [...i.display, ...tooltip_templates_edges[e]]
+            }
             if (!i["gene_link"]) {
                 if (edges.indexOf(e) === -1) {
                     edges.push(e)
@@ -72,6 +76,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
             additional_link_button?: boolean,
             additional_link_relation_tags?: Array<string>,
             neighborCount?: number,
+            edge_tooltip?: boolean
         }
 }) => {
     const {
@@ -117,8 +122,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                 signal: controller.signal,
             }) 
             if (!res.ok) console.log(await res.text())
-            else elements = await res.json()
-        
+            else elements = await res.json()        
         
             for (const i of (elements || {}).edges || []) {
                 if (i.data.relation && selected_edges.indexOf(i.data.label) === -1) {
@@ -166,6 +170,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                                     initial_query={props.initial_query}
                                     direction={'Start'}
                                     searchParams={searchParams}
+                                    elements={elements}
                                 />
                                 {filter.end && 
                                 <AsyncFormComponent 
@@ -173,10 +178,17 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                                     nodes={nodes}
                                     direction={'End'}
                                     searchParams={searchParams}
+                                    elements={elements}
                                 />}
                             </Stack>
                         </CardContent>
                     </Card>
+                    <TooltipComponentGroup
+                            elements={elements}
+                            tooltip_templates_edges={tooltip_templates_edges}
+                            tooltip_templates_nodes={tooltip_templates_nodes}
+                            schema={schema}
+                        />
                 </Grid>
                 <Grid item xs={12} md={8} lg={9}>
                     <Stack>
@@ -200,6 +212,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                                     schema={schema}
                                     tooltip_templates_edges={tooltip_templates_edges}
                                     tooltip_templates_nodes={tooltip_templates_nodes}
+                                    edge_tooltip={props.edge_tooltip}
                                 /> 
                             }
                             </CardContent>

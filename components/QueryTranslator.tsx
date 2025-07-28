@@ -54,7 +54,7 @@ export default function QueryTranslator ({children}: {children: React.ReactNode}
 				...rest
 			} = queryParams
 			const params = {
-				libraries: libraries ? JSON.parse(libraries).map(i=>({name: i["library"] || i["name"], limit: i["term_limit"] || i["limit"] || 5})): undefined,
+				libraries: libraries ? JSON.parse(libraries).map(i=>({library: i["library"] || i["name"], term_limit: i["term_limit"] || i["limit"] || 5})): undefined,
 				userListId,
 				term_limit: term_limit ? parseInt(term_limit): undefined,
 				gene_limit: gene_limit? parseInt(gene_limit): undefined,
@@ -74,9 +74,12 @@ export default function QueryTranslator ({children}: {children: React.ReactNode}
 			}
 			const query = {
 				q: JSON.stringify(q),
-				...rest
+				...rest,
+				u: true
 			}
+			console.log(query, pathname)
 			router_push(router, pathname, query)
+			router.refresh()
 			setLoading(false)
 
 		} else if (queryParams.start !== undefined) {
@@ -119,14 +122,14 @@ export default function QueryTranslator ({children}: {children: React.ReactNode}
 			}
 			const query = {
 				filter: JSON.stringify(filter),
-				...rest
+				...rest,
 			}
 			router_push(router, pathname, query)
 			setLoading(false)
 		} else {
 			setLoading(false)
 		}
-	}, [])
+	}, [searchParams])
 	if (loading) {
 		return (
 			<Box sx={{height: '90vh'}}>

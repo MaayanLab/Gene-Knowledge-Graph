@@ -52,7 +52,6 @@ import { EnrichmentParams } from '.';
 const InteractiveButtons = ({
         hiddenLinksRelations=[], 
         shortId,
-        // searchParams,
         gene_count=0,
         elements,
         children,
@@ -62,7 +61,8 @@ const InteractiveButtons = ({
         short_url,
         fullscreen,
         additional_link_button,
-        additional_link_relation_tags
+        additional_link_relation_tags,
+        searchParams
     }: {
         short_url?: string,
         libraries_list?:Array<string>,
@@ -75,12 +75,17 @@ const InteractiveButtons = ({
         parsedParams: EnrichmentParams,
         fullscreen?: 'true',
         additional_link_button?: boolean,
-        additional_link_relation_tags?: Array<string>
+        additional_link_relation_tags?: Array<string>,
+        searchParams: {
+            q?:string,
+            fullscreen?: 'true'
+            view?: string
+        }
     }) => {
     const router = useRouter()
     const pathname = usePathname()
     const [edge_labels, setEdgeLabels] = useQueryState('edge_labels')
-    const [view, setView] = useQueryState('view')
+    // const [view, setView] = useQueryState('view')
 	const [layout, setLayout] = useQueryState('layout')
 	const [legend, setLegend] = useQueryState('legend')
     const [tooltip, setTooltip] = useQueryState('tooltip')
@@ -109,13 +114,12 @@ const InteractiveButtons = ({
 	const handleCloseMenu = (setter:Function) => {
 		setter(null);
 	};
-
+    const view = (searchParams || {}).view
 
     return (
         <Grid container>
             <Grid item xs={12}>
                 <LibraryPicker 
-                    // searchParams={searchParams}
                     parsedParams={parsedParams}
                     libraries_list={libraries_list}
                     fullWidth={false}
@@ -127,9 +131,8 @@ const InteractiveButtons = ({
                     <Tooltip title={"Network view"}>
                         <IconButton
                             onClick={()=>{
-                                // const {view, ...query} = searchParams
-                                // router_push(router, pathname, query)
-                                setView(null)
+                                const {view, ...query} = searchParams
+                                router_push(router, pathname, query)
                             }}
                             sx={{borderRadius: 5, background: (view === "network" || !view) ? "#e0e0e0": "none"}}
                         >
@@ -139,10 +142,10 @@ const InteractiveButtons = ({
                     <Tooltip title={"Table view"}>
                         <IconButton
                             onClick={()=>{
-                                // const {view, ...query} = searchParams
-                                // query["view"] = 'table'
-                                // router_push(router, pathname, query)
-                                setView('table')
+                                const {view, ...query} = searchParams
+                                query["view"] = 'table'
+                                router_push(router, pathname, query)
+                                // setView('table')
                             }}
                             sx={{borderRadius: 5, background: (view === "table") ? "#e0e0e0": "none"}}
                         >
@@ -152,10 +155,10 @@ const InteractiveButtons = ({
                     <Tooltip title={"Bar view"}>
                         <IconButton
                             onClick={()=>{
-                                // const {view, ...query} = searchParams
-                                // query["view"] = 'bar'
-                                // router_push(router, pathname, query)
-                                setView('bar')
+                                const {view, ...query} = searchParams
+                                query["view"] = 'bar'
+                                router_push(router, pathname, query)
+                                // setView('bar')
                             }}
                             sx={{borderRadius: 5, background: view === "bar" ? "#e0e0e0": "none"}}
                         >
@@ -163,147 +166,131 @@ const InteractiveButtons = ({
                         </IconButton>
                     </Tooltip>
                     <Divider sx={{backgroundColor: "secondary.main", height: 20, borderRightWidth: 1}} orientation="vertical"/>
-                    { (view === "network" || !view) &&  
-                        <>
-                            <Tooltip title={"Save subnetwork"}>
-                                <IconButton
-                                    disabled={elements===null}
-                                    onClick={()=>{
-                                        if (elements) process_tables(elements)
-                                    }}
-                                    sx={{borderRadius: 5}}
-                                >
-                                    <SaveIcon/>
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title={tooltip ? "Hide tooltip": "Show tooltip"}>
-                                <IconButton
-                                    disabled={elements===null}
-                                    onClick={()=>{
-                                        if (tooltip) setTooltip(null)
-                                        else setTooltip('true')
-                                    }}
-                                >
-                                    <Icon path={tooltip? mdiTooltipRemove: mdiTooltip} size={0.8} />
-                                </IconButton>
-                            </Tooltip>
-                            {/* <Tooltip title="Clear Graph">
-                                <IconButton 
-                                    disabled={elements===null}
-                                    onClick={()=>{
-                                        const {userListId, ...rest} = searchParams
-                                        router_push(router, pathname, {})
-                                    }}
-                                >
-                                    <HighlightOffIcon/>
-                                </IconButton>
-                            </Tooltip> */}
-                            <Tooltip title="Switch Graph Layout">
-                                <IconButton color="secondary" 
-                                    onClick={(e)=>handleClickMenu(e, setAnchorElLayout)}
-                                    aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={anchorEl!==null ? 'true' : undefined}
-                                >
-                                    <FlipCameraAndroidIcon/>
-                                </IconButton>
-                            </Tooltip>
-                            <Menu
-                                id="basic-menu"
-                                anchorEl={anchorElLayout}
-                                open={anchorElLayout!==null}
-                                onClose={()=>handleCloseMenu(setAnchorElLayout)}
-                                MenuListProps={{
-                                    'aria-labelledby': 'basic-button',
-                                }}
-                            >
-                                { Object.entries(layouts).map(([label, {icon}])=>(
-                                <MenuItem key={label} onClick={()=> {
-                                    handleCloseMenu(setAnchorElLayout)
-                                    setLayout(label)
-                                    
-                                }}>
-                                    <ListItemIcon>
-                                        {icon()}
-                                    </ListItemIcon>
-                                    <ListItemText>{label}</ListItemText>
-                                </MenuItem>
-                                ))}
-                            </Menu>
-                            <Tooltip title={edge_labels ? "Hide edge labels": "Show edge labels"}>
-                                <IconButton color="secondary"
-                                    onClick={()=>{
-                                        if (edge_labels) setEdgeLabels(null)
-                                        else setEdgeLabels('true')
-                                        // router_push(router, pathname, query)
-                                        
-                                    }}
-                                >
-                                    {edge_labels ? <VisibilityOffIcon/>: <VisibilityIcon/>}
-                                </IconButton>
-                            </Tooltip>
-                            <Divider sx={{backgroundColor: "secondary.main", height: 20, borderRightWidth: 1}} orientation="vertical"/>
-                        </>
-                    }
-                    { (view !== "table") &&  
-                        <>
-                            <Tooltip title={`Download ${(view === "network" || !view) ? "graph": "bar graph"} as an image file`}>
-                                <IconButton onClick={(e)=>handleClickMenu(e, setAnchorEl)}
-                                    aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={anchorEl!==null ? 'true' : undefined}
-                                ><CameraAltOutlinedIcon/></IconButton>
-                            </Tooltip>
-                            <Menu
-                                id="basic-menu"
-                                anchorEl={anchorEl}
-                                open={anchorEl!==null}
-                                onClose={()=>handleCloseMenu(setAnchorEl)}
-                                MenuListProps={{
-                                    'aria-labelledby': 'basic-button',
-                                }}
-                            >
-                                <MenuItem key={'png'} onClick={()=> {
-                                    handleCloseMenu(setAnchorEl)
-                                    // fileDownload(cyref.current.png({output: "blob"}), "network.png")
-                                    setDownloadImage('png')
-                                    // toPng(document.getElementById("kg-network"))
-                                    // .then(function (fileUrl) {
-                                    //     download(fileUrl, "network.png");
-                                    // });
-                                }}>PNG</MenuItem>
-                                <MenuItem key={'jpg'} onClick={()=> {
-                                    handleCloseMenu(setAnchorEl)
-                                    // fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
-                                    setDownloadImage('jpg')
-                                    // toBlob(document.getElementById("kg-network"))
-                                    // .then(function (fileUrl) {
-                                    //     fileDownload(fileUrl, "network.jpg");
-                                    // });
-                                }}>JPG</MenuItem>
-                                <MenuItem key={'svg'} onClick={()=> {
-                                    handleCloseMenu(setAnchorEl)
-                                    // fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
-                                    setDownloadImage('svg')
-                                    // toSvg(document.getElementById("kg-network"))
-                                    // .then(function (dataUrl) {
-                                    //     download(dataUrl, "network.svg")
-                                    // });
-                                }}>SVG</MenuItem>
-                            </Menu>
-                        </>
-                    }
-                    {shortId &&
-                        <Tooltip title={"View in Enrichr"}>
-                            <IconButton 
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href={`https://maayanlab.cloud/Enrichr/enrich?dataset=${shortId}`}
-                            >
-                                <LinkIcon/>
-                            </IconButton>
-                        </Tooltip>
-                    }
+                        
+                    <Tooltip title={"Save subnetwork"}>
+                        <IconButton
+                            disabled={elements===null}
+                            onClick={()=>{
+                                if (elements) process_tables(elements)
+                            }}
+                            sx={{borderRadius: 5}}
+                        >
+                            <SaveIcon/>
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title={tooltip ? "Hide tooltip": "Show tooltip"}>
+                        <IconButton
+                            disabled={elements===null && (view && view !== "network")}
+                            onClick={()=>{
+                                if (tooltip) setTooltip(null)
+                                else setTooltip('true')
+                            }}
+                        >
+                            <Icon path={tooltip? mdiTooltipRemove: mdiTooltip} size={0.8} />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Switch Graph Layout">
+                        <IconButton  
+                            onClick={(e)=>handleClickMenu(e, setAnchorElLayout)}
+                            aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={anchorEl!==null ? 'true' : undefined}
+                            disabled={view && view !== "network"}
+                        >
+                            <FlipCameraAndroidIcon/>
+                        </IconButton>
+                    </Tooltip>
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={anchorElLayout}
+                        open={anchorElLayout!==null}
+                        onClose={()=>handleCloseMenu(setAnchorElLayout)}
+                        MenuListProps={{
+                            'aria-labelledby': 'basic-button',
+                        }}
+                    >
+                        { Object.entries(layouts).map(([label, {icon}])=>(
+                        <MenuItem key={label} onClick={()=> {
+                            handleCloseMenu(setAnchorElLayout)
+                            setLayout(label)
+                            
+                        }}>
+                            <ListItemIcon>
+                                {icon()}
+                            </ListItemIcon>
+                            <ListItemText>{label}</ListItemText>
+                        </MenuItem>
+                        ))}
+                    </Menu>
+                    <Tooltip title={edge_labels ? "Hide edge labels": "Show edge labels"}>
+                        <IconButton
+                            disabled={view && view !== "network"}
+                            onClick={()=>{
+                                if (edge_labels) setEdgeLabels(null)
+                                else setEdgeLabels('true')
+                                // router_push(router, pathname, query)
+                                
+                            }}
+                        >
+                            {edge_labels ? <VisibilityOffIcon/>: <VisibilityIcon/>}
+                        </IconButton>
+                    </Tooltip>
+                    <Divider sx={{backgroundColor: "secondary.main", height: 20, borderRightWidth: 1}} orientation="vertical"/>
+                    <Tooltip title={`Download ${(view === "network" || !view) ? "graph": "bar graph"} as an image file`}>
+                        <IconButton onClick={(e)=>handleClickMenu(e, setAnchorEl)}
+                            disabled={view === 'table'}
+                            aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={anchorEl!==null ? 'true' : undefined}
+                        ><CameraAltOutlinedIcon/></IconButton>
+                    </Tooltip>
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={anchorEl!==null}
+                        onClose={()=>handleCloseMenu(setAnchorEl)}
+                        MenuListProps={{
+                            'aria-labelledby': 'basic-button',
+                        }}
+                    >
+                        <MenuItem key={'png'} onClick={()=> {
+                            handleCloseMenu(setAnchorEl)
+                            // fileDownload(cyref.current.png({output: "blob"}), "network.png")
+                            setDownloadImage('png')
+                            // toPng(document.getElementById("kg-network"))
+                            // .then(function (fileUrl) {
+                            //     download(fileUrl, "network.png");
+                            // });
+                        }}>PNG</MenuItem>
+                        <MenuItem key={'jpg'} onClick={()=> {
+                            handleCloseMenu(setAnchorEl)
+                            // fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
+                            setDownloadImage('jpg')
+                            // toBlob(document.getElementById("kg-network"))
+                            // .then(function (fileUrl) {
+                            //     fileDownload(fileUrl, "network.jpg");
+                            // });
+                        }}>JPG</MenuItem>
+                        <MenuItem key={'svg'} onClick={()=> {
+                            handleCloseMenu(setAnchorEl)
+                            // fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
+                            setDownloadImage('svg')
+                            // toSvg(document.getElementById("kg-network"))
+                            // .then(function (dataUrl) {
+                            //     download(dataUrl, "network.svg")
+                            // });
+                        }}>SVG</MenuItem>
+                    </Menu>
+                    <Tooltip title={"View in Enrichr"}>
+                        <IconButton 
+                            disabled={!shortId}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href={`https://maayanlab.cloud/Enrichr/enrich?dataset=${shortId}`}
+                        >
+                            <LinkIcon/>
+                        </IconButton>
+                    </Tooltip>
                     <Tooltip title={"Share"}>
                         <IconButton onClick={()=>setOpenShare(true)}>
                             <ShareIcon/>
@@ -371,69 +358,63 @@ const InteractiveButtons = ({
                             {fullscreen ? <FullscreenExitIcon/>: <FullscreenIcon/>}
                         </IconButton>
                     </Tooltip>
-                    {(!view || view === "network") &&
-                        <>
-                            {additional_link_button && 
-                                <Tooltip title={"Additional Links"}>
-                                    <IconButton 
-                                        onClick={()=>{
-                                            setGeneLinksOpen(!geneLinksOpen)
-                                            setAugmentOpen(false)
-                                        }}
-                                    >
-                                        <Icon path={gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
-                                    </IconButton>
-                                </Tooltip>
-                            }
-                            <Tooltip title={parsedParams.augment ? "Reset network": "Augment network using co-expressed genes"}>
-                                <IconButton
-                                    disabled={!parsedParams.augment && gene_count > 100}
-                                    onClick={()=>{
-                                        setGeneLinksOpen(false)
-                                        setAugmentOpen(!augmentOpen)
-                                    }}
-                                    sx={{borderRadius: 5, background: augmentOpen ? "#e0e0e0": "none"}}
-                                >
-                                    <Icon path={mdiDna} size={0.8} />
-                                </IconButton>
-                            </Tooltip>
-                        </>
-                    }
-                    {children}
-                    { (view === 'network' || !view) && 
-                    <>
-                        <Divider sx={{backgroundColor: "secondary.main", height: 20, borderRightWidth: 1}} orientation="vertical"/>
-                        <Tooltip title={!legend ? "Show legend": "Hide legend"}>
-                            <IconButton color="secondary"
+                    {additional_link_button && 
+                        <Tooltip title={"Additional Links"}>
+                            <IconButton 
+                                disabled={view && view !== "network"}
                                 onClick={()=>{
-                                    if (legend) {
-                                        setLegend(null)
-                                        setLegendSize(null)
-                                    }
-                                    else {
-                                        setLegend('true')
-                                        setLegendSize('0')
-                                    }
-                                    // const {legend, legend_size, ...query} = searchParams
-                                    // if (!legend) query['legend'] = 'true'
-                                    // router_push(router, pathname, query)
+                                    setGeneLinksOpen(!geneLinksOpen)
+                                    setAugmentOpen(false)
                                 }}
                             >
-                                {!legend ? <LabelIcon />: <LabelOffIcon />}
+                                <Icon path={gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
                             </IconButton>
                         </Tooltip>
-                        {legend &&
-                            <Tooltip title="Adjust legend size">
-                                <IconButton color="secondary"
-                                    onClick={()=>{
-                                        setLegendSize(`${(parseInt(legend_size) +1)%5}`)
-                                    }}
-                                >
-                                    {parseInt(legend_size) < 4 ? <ZoomInIcon/>: <ZoomOutIcon/>}
-                                </IconButton>
-                            </Tooltip>
-                        }
-                    </>
+                    }
+                    <Tooltip title={parsedParams.augment ? "Reset network": "Augment network using co-expressed genes"}>
+                        <IconButton
+                            disabled={(!parsedParams.augment && gene_count > 100)}
+                            onClick={()=>{
+                                setGeneLinksOpen(false)
+                                setAugmentOpen(!augmentOpen)
+                            }}
+                            sx={{borderRadius: 5, background: augmentOpen ? "#e0e0e0": "none"}}
+                        >
+                            <Icon path={mdiDna} size={0.8} />
+                        </IconButton>
+                    </Tooltip>
+                    {children}
+                    <Divider sx={{backgroundColor: "secondary.main", height: 20, borderRightWidth: 1}} orientation="vertical"/>
+                    <Tooltip title={!legend ? "Show legend": "Hide legend"}>
+                        <IconButton
+                            disabled={(view && view !== "network")}
+                            onClick={()=>{
+                                if (legend) {
+                                    setLegend(null)
+                                    setLegendSize(null)
+                                }
+                                else {
+                                    setLegend('true')
+                                    setLegendSize('0')
+                                }
+                                // const {legend, legend_size, ...query} = searchParams
+                                // if (!legend) query['legend'] = 'true'
+                                // router_push(router, pathname, query)
+                            }}
+                        >
+                            {!legend ? <LabelIcon />: <LabelOffIcon />}
+                        </IconButton>
+                    </Tooltip>
+                    {legend &&
+                        <Tooltip title="Adjust legend size">
+                            <IconButton
+                                onClick={()=>{
+                                    setLegendSize(`${(parseInt(legend_size) +1)%5}`)
+                                }}
+                            >
+                                {parseInt(legend_size) < 4 ? <ZoomInIcon/>: <ZoomOutIcon/>}
+                            </IconButton>
+                        </Tooltip>
                     }
                 </Stack>
         </Grid>
@@ -454,7 +435,7 @@ const InteractiveButtons = ({
                         }}/>} label={<Typography variant='subtitle2'>{i}</Typography>} />
                     ))}
                     <Tooltip title="Show gene links">
-                        <IconButton color="secondary" 
+                        <IconButton
                             disabled={geneLinks.length === 0}
                             onClick={()=>{
                                 const filter = {...parsedParams}
@@ -468,7 +449,7 @@ const InteractiveButtons = ({
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Reset network">
-                        <IconButton color="secondary"  disabled={!gene_links}
+                        <IconButton disabled={!gene_links}
                             onClick={()=>{
 
                                 const {gene_links, additional_link_tags, ...filter} = parsedParams

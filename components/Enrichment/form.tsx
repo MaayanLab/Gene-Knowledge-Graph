@@ -29,13 +29,13 @@ import { useQueryState, parseAsJson } from 'next-usequerystate';
 import { EnrichmentParams } from '.';
 
 const GeneSetForm = ({
-    default_options,
     disableLibraryLimit,  
     example,
     libraries_list,
     parsedParams,
     fullWidth,
-    elements
+    elements,
+    searchParams
 }: {
     fullWidth:boolean,
     elements: NetworkSchema,
@@ -45,7 +45,7 @@ const GeneSetForm = ({
         min_lib?: number,
         gene_degree?: number,
         term_degree?: number,
-        libraries: Array<{
+        libraries?: Array<{
             name?: string,
             limit?: number,
             library?: string,
@@ -57,7 +57,13 @@ const GeneSetForm = ({
         gene_set?: string,
     },
     libraries_list: Array<string>,
-    parsedParams: EnrichmentParams
+    parsedParams: EnrichmentParams,
+    searchParams: {
+        q?:string,
+        fullscreen?: 'true'
+        view?: string,
+        collapse?: 'true'
+    },
 }) => {
     const router = useRouter()
     const [query, setQuery] = useQueryState('query', parseAsJson<EnrichmentParams>().withDefault({}))
@@ -80,7 +86,6 @@ const GeneSetForm = ({
         gene_degree,
         term_degree,
     } = combined_query
-
     const get_controller = () => {
         if (controller) controller.abort()
         const c = new AbortController()
@@ -234,6 +239,19 @@ const GeneSetForm = ({
     //         setDescription(input.description || '')
     //     }
     // }, [input.description])
+    if (!fullWidth && searchParams.collapse) {
+        return (
+            <Button variant='outlined' color="secondary"
+                onClick={()=>{
+                    const {collapse, ...query} = searchParams
+                    if (collapse === undefined) query['collapse'] = 'true'
+                    router_push(router, pathname, query)
+                }}
+            >
+                Expand Form
+            </Button>
+        )
+    }
     return (
         <FormGroup>
             <Snackbar open={error!==null}
@@ -528,9 +546,6 @@ const GeneSetForm = ({
                 { fullWidth &&
                     <Grid item xs={12} md={6}>
                         <Grid container spacing={1} justifyContent="flex-end">
-                            {/* <Grid item xs={12}>
-                                <EnrichrTermSearch setInput={setInput}/>
-                            </Grid> */}
                             <Grid item xs={12}>
                                 <Typography variant={'subtitle2'}>
                                     Select libraries to include
@@ -541,7 +556,24 @@ const GeneSetForm = ({
                                     disableLibraryLimit={disableLibraryLimit || true}
                                 />
                             </Grid>
+                            <Grid item xs={12}>
+                                <EnrichrTermSearch setInput={setInput}/>
+                            </Grid>
+                            
                         </Grid>    
+                    </Grid>
+                }
+                { !fullWidth &&
+                    <Grid item>
+                        <Button variant='outlined' color="secondary"
+                            onClick={()=>{
+                                const {collapse, ...query} = searchParams
+                                if (collapse === undefined) query['collapse'] = 'true'
+                                router_push(router, pathname, query)
+                            }}
+                        >
+                            Collapse Form
+                        </Button>
                     </Grid>
                 }
             </Grid>

@@ -5,42 +5,34 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: nlingam05/bkg:2.4.5
+    image: maayanlab/enrichr-kg:2.5.13
     x-kubernetes:
-      strategy:
-        type: Recreate
       imagePullPolicy: IfNotPresent
       annotations:
-        maayanlab.cloud/ingress: https://bkg.dev.maayanlab.cloud/
+        maayanlab.cloud/ingress: https://maayanlab.cloud/enrichr-kg
     ports:
       - 3000:3000
     environment:
-      - NEXT_PUBLIC_NEO4J_URL=bolt://neo4j-v5:7687
+      - NEO4J_URL=bolt://neo4j:7687
       - NEXT_PUBLIC_ENRICHR_URL=https://maayanlab.cloud/Enrichr
       - NEXT_PUBLIC_GENESHOT_URL=https://maayanlab.cloud/geneshot
-      - NEXT_PUBLIC_NEO4J_USER
-      - NEXT_PUBLIC_NEO4J_NAME
-      - NEXT_PUBLIC_NEO4J_PASSWORD
+      - NEO4J_USER
+      - NEO4J_NAME
+      - NEO4J_PASSWORD
       - NEXT_PUBLIC_PREFIX
       - NEXT_PUBLIC_GA_MEASUREMENT_ID
       - NEXT_PUBLIC_HOST
       - NEXT_PUBLIC_SCHEMA
-      - NEXT_PUBLIC_TURL
-      - NEXT_PUBLIC_TURL_URL
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-        reservations:
-          memory: 1G
+      - TURL
+      - TURL_URL
 
-  neo4j-v5:
-    image: neo4j:5.19
+  neo4j:
+    image: neo4j:4.4
     x-kubernetes:
       imagePullPolicy: IfNotPresent
     environment:
-      - NEO4J_PLUGINS= ["apoc", "n10s"]
-      - NEO4J_AUTH=${NEXT_PUBLIC_NEO4J_USER}/${NEXT_PUBLIC_NEO4J_PASSWORD}
+      - NEO4JLABS_PLUGINS='["apoc", "n10s"]'
+      - NEO4J_AUTH=${NEO4J_USER}/${NEO4J_PASSWORD}
       - NEO4J_dbms_memory_heap_max__size=8G
       - NEO4J_dbms_memory_heap_initial__size=2G
       - NEO4J_server_config_strict__validation_enabled=false
@@ -48,20 +40,14 @@ services:
       - 7687:7687
       - 7474:7474
     volumes:
-      - bkg-neo4j-v5:/data
-    deploy:
-      resources:
-        limits:
-          memory: 15G
-        reservations:
-          memory: 10G
+      - enrichr-kg-neo4j:/data
 
 volumes:
-  bkg-neo4j-v5:
+  enrichr-kg-neo4j:
     x-kubernetes:
       size: 25Gi
       class: gp2
 
 x-kubernetes:
-  name: bkg
-  namespace: bkg
+  name: enrichr-kg
+  namespace: enrichr-kg

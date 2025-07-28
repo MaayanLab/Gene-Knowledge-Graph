@@ -107,7 +107,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
         view,
         fullscreen
     } = searchParams
-    const filter:FilterSchema = JSON.parse(f || '{}')
+    const filter:FilterSchema = f && f !== '{}' ? JSON.parse(f || '{}'): initial_query
     const {
         start,
         end,
@@ -202,7 +202,8 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                             sx={{padding: 0, borderRadius: "8px"}}
                                             onDelete={()=>{
                                                 const {filter: f, ...rest} = searchParams
-                                                const filter = JSON.parse(f || '{}')
+                                                let filter = JSON.parse(f || '{}')
+                                                if (Object.keys(filter).length === 0) filter = initial_query
                                                 const rels = []
                                                 for (const i of filter.relation || []) {
                                                     if (i.name !== value.name) {
@@ -247,7 +248,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                         router_push(router, pathname, query)
                                     }}
                                     min={1}
-                                    max={!end ? start === "Gene" ? 100/(relation.length || 1): neighborCount : 150}
+                                    max={!end ? start === "Gene" ? 50: neighborCount : 150}
                                     sx={{width: 150}}
                                     aria-labelledby="continuous-slider"
                                 />
@@ -307,138 +308,139 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                     <SaveIcon/>
                                 </IconButton>
                             </Tooltip>
-                            { (!view) && <>
-                                <Tooltip title={"Download graph as an image file"}>
-                                    <IconButton color="secondary"  onClick={(e)=>handleClickMenu(e, setAnchorEl)}
-                                        aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
-                                        aria-haspopup="true"
-                                        aria-expanded={anchorEl!==null ? 'true' : undefined}
-                                    ><CameraAltOutlinedIcon/></IconButton>
-                                </Tooltip>
-                                <Menu
-                                    id="basic-menu"
-                                    anchorEl={anchorEl}
-                                    open={anchorEl!==null}
-                                    onClose={()=>handleCloseMenu(setAnchorEl)}
-                                    MenuListProps={{
-                                        'aria-labelledby': 'basic-button',
-                                    }}
-                                >
-                                    <MenuItem key={'png'} onClick={()=> {
-                                        handleCloseMenu(setAnchorEl)
-                                        // fileDownload(cyref.current.png({output: "blob"}), "network.png")
-                                        // toPng(document.getElementById('kg-network'))
-                                        // .then(function (fileUrl) {
-                                        //     download(fileUrl, "network.png");
-                                        // });
-                                        setDownloadImage('png')
-                                    }}>PNG</MenuItem>
-                                    <MenuItem key={'jpg'} onClick={()=> {
-                                        handleCloseMenu(setAnchorEl)
-                                        // fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
-                                        // toBlob(document.getElementById('kg-network'))
-                                        // .then(function (blob) {
-                                        //     fileDownload(blob, "network.jpg");
-                                        // });
-                                        setDownloadImage('jpg')
-                                    }}>JPG</MenuItem>
-                                    <MenuItem key={'svg'} onClick={()=> {
-                                        handleCloseMenu(setAnchorEl)
-                                        // fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
-                                        // toSvg(document.getElementById('kg-network'))
-                                        // .then(function (dataUrl) {
-                                        //     download(dataUrl, "network.svg")
-                                        // });
-                                        setDownloadImage('svg')
-                                    }}>SVG</MenuItem>
-                                </Menu>
-                                <Divider sx={{backgroundColor: "secondary.main", height: 20, borderRightWidth: 1}} orientation="vertical"/>
-                            </>
-                        }
+                            <Tooltip title={"Download graph as an image file"}>
+                                <IconButton color="secondary"  onClick={(e)=>handleClickMenu(e, setAnchorEl)}
+                                    disabled={view && view !== "network"}
+                                    aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={anchorEl!==null ? 'true' : undefined}
+                                ><CameraAltOutlinedIcon/></IconButton>
+                            </Tooltip>
+                            <Menu
+                                id="basic-menu"
+                                anchorEl={anchorEl}
+                                open={anchorEl!==null}
+                                onClose={()=>handleCloseMenu(setAnchorEl)}
+                                MenuListProps={{
+                                    'aria-labelledby': 'basic-button',
+                                }}
+                            >
+                                <MenuItem key={'png'} onClick={()=> {
+                                    handleCloseMenu(setAnchorEl)
+                                    // fileDownload(cyref.current.png({output: "blob"}), "network.png")
+                                    // toPng(document.getElementById('kg-network'))
+                                    // .then(function (fileUrl) {
+                                    //     download(fileUrl, "network.png");
+                                    // });
+                                    setDownloadImage('png')
+                                }}>PNG</MenuItem>
+                                <MenuItem key={'jpg'} onClick={()=> {
+                                    handleCloseMenu(setAnchorEl)
+                                    // fileDownload(cyref.current.jpg({output: "blob"}), "network.jpg")
+                                    // toBlob(document.getElementById('kg-network'))
+                                    // .then(function (blob) {
+                                    //     fileDownload(blob, "network.jpg");
+                                    // });
+                                    setDownloadImage('jpg')
+                                }}>JPG</MenuItem>
+                                <MenuItem key={'svg'} onClick={()=> {
+                                    handleCloseMenu(setAnchorEl)
+                                    // fileDownload(cyref.current.svg({output: "blob"}), "network.svg")
+                                    // toSvg(document.getElementById('kg-network'))
+                                    // .then(function (dataUrl) {
+                                    //     download(dataUrl, "network.svg")
+                                    // });
+                                    setDownloadImage('svg')
+                                }}>SVG</MenuItem>
+                            </Menu>
+                            <Divider sx={{backgroundColor: "secondary.main", height: 20, borderRightWidth: 1}} orientation="vertical"/>
                             
                         </Stack>
                         
                     </Grid>
-                    {(!view) &&
-                        <React.Fragment>
-                            <Grid item>
-                                <Tooltip title={tooltip ? "Hide tooltip": "Show tooltip"}>
-                                    <IconButton color="secondary"
-                                        onClick={()=>{
-                                            if (tooltip) setTooltip(null)
-                                            else setTooltip('true')
-                                            
-                                        }}
-                                    >
-                                        {tooltip ? <Icon path={mdiTooltipRemove} size={0.8} />: <Icon path={mdiTooltip} size={0.8} />}
-                                    </IconButton>
-                                </Tooltip>
-                            </Grid>
-                            <Grid item>
-                                <Tooltip title="Switch Graph Layout">
-                                    <IconButton color="secondary" 
-                                        onClick={(e)=>handleClickMenu(e, setAnchorElLayout)}
-                                        aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
-                                        aria-haspopup="true"
-                                        aria-expanded={anchorEl!==null ? 'true' : undefined}
-                                    >
-                                        <FlipCameraAndroidIcon/>
-                                    </IconButton>
-                                </Tooltip>
-                                <Menu
-                                    id="basic-menu"
-                                    anchorEl={anchorElLayout}
-                                    open={anchorElLayout!==null}
-                                    onClose={()=>handleCloseMenu(setAnchorElLayout)}
-                                    MenuListProps={{
-                                        'aria-labelledby': 'basic-button',
+                    <React.Fragment>
+                        <Grid item>
+                            <Tooltip title={tooltip ? "Hide tooltip": "Show tooltip"}>
+                                <IconButton color="secondary"
+                                    disabled={view && view !== "network"}
+                                    onClick={()=>{
+                                        if (tooltip) setTooltip(null)
+                                        else setTooltip('true')
+                                        
                                     }}
                                 >
-                                    { Object.entries(layouts).map(([label, {icon}])=>(
-                                    <MenuItem key={label} onClick={()=> {
+                                    {tooltip ? <Icon path={mdiTooltipRemove} size={0.8} />: <Icon path={mdiTooltip} size={0.8} />}
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
+                        <Grid item>
+                            <Tooltip title="Switch Graph Layout">
+                                <IconButton color="secondary" 
+                                    disabled={view && view !== "network"}
+                                    onClick={(e)=>handleClickMenu(e, setAnchorElLayout)}
+                                    aria-controls={anchorEl!==null ? 'basic-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={anchorEl!==null ? 'true' : undefined}
+                                >
+                                    <FlipCameraAndroidIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                id="basic-menu"
+                                anchorEl={anchorElLayout}
+                                open={anchorElLayout!==null}
+                                onClose={()=>handleCloseMenu(setAnchorElLayout)}
+                                MenuListProps={{
+                                    'aria-labelledby': 'basic-button',
+                                }}
+                            >
+                                { Object.entries(layouts).map(([label, {icon}])=>(
+                                <MenuItem key={label} onClick={()=> {
 
-                                        // const {...query} = searchParams
-                                        // query.layout = label
+                                    // const {...query} = searchParams
+                                    // query.layout = label
+                                    // router_push(router, pathname, query)
+                                    // handleCloseMenu(setAnchorElLayout)
+                                    setLayout(label)
+                                    
+                                }}>
+                                    <ListItemIcon>
+                                        {icon()}
+                                    </ListItemIcon>
+                                    <ListItemText>{label}</ListItemText>
+                                </MenuItem>
+                                ))}
+                            </Menu>
+                        </Grid>
+                        <Grid item>
+                            <Tooltip title={edge_labels ? "Hide edge labels": "Show edge labels"}>
+                                <IconButton color="secondary"
+                                    disabled={view && view !== "network"}
+                                    onClick={()=>{
+                                        if (edge_labels) setEdgeLabels(null)
+                                        else setEdgeLabels('true')
                                         // router_push(router, pathname, query)
-                                        // handleCloseMenu(setAnchorElLayout)
-                                        setLayout(label)
                                         
-                                    }}>
-                                        <ListItemIcon>
-                                            {icon()}
-                                        </ListItemIcon>
-                                        <ListItemText>{label}</ListItemText>
-                                    </MenuItem>
-                                    ))}
-                                </Menu>
-                            </Grid>
+                                    }}
+                                >
+                                    {edge_labels ? <VisibilityOffIcon/>: <VisibilityIcon/>}
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>  
+                        { (additional_link_button) &&
                             <Grid item>
-                                <Tooltip title={edge_labels ? "Hide edge labels": "Show edge labels"}>
+                                <Tooltip title={"Additional Links"}>
                                     <IconButton color="secondary"
+                                        disabled={view && view !== "network"}
                                         onClick={()=>{
-                                            if (edge_labels) setEdgeLabels(null)
-                                            else setEdgeLabels('true')
-                                            // router_push(router, pathname, query)
-                                            
+                                            setGeneLinksOpen(!geneLinksOpen)
+                                            setAugmentOpen(false)
                                         }}
                                     >
-                                        {edge_labels ? <VisibilityOffIcon/>: <VisibilityIcon/>}
+                                        <Icon path={filter.gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
                                     </IconButton>
                                 </Tooltip>
-                            </Grid>  
-                            { (additional_link_button) &&
-                                <Grid item>
-                                    <Tooltip title={"Additional Links"}>
-                                        <IconButton color="secondary"
-                                            onClick={()=>{
-                                                setGeneLinksOpen(!geneLinksOpen)
-                                                setAugmentOpen(false)
-                                            }}
-                                        >
-                                            <Icon path={filter.gene_links ? mdiLinkVariantOff: mdiLinkVariant} size={0.8} />
-                                        </IconButton>
-                                    </Tooltip>
-                                </Grid>
+                            </Grid>
                             }
                             { (!end && start !== "Gene" && coexpression_prediction) && 
                                 <Grid item>
@@ -459,6 +461,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                             <Grid item>
                                 <Tooltip title={!legend ? "Show legend": "Hide legend"}>
                                     <IconButton color="secondary"
+                                        disabled={view && view !== "network"}
                                         onClick={()=>{
                                             if (legend) {
                                                 setLegend(null)
@@ -646,7 +649,6 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                 </Grid>
                             }
                         </React.Fragment>
-                    }
                 </Grid>
             </Grid>
         </Grid>

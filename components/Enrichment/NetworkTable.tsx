@@ -1,5 +1,5 @@
 'use client'
-import { Stack } from "@mui/material";
+import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, Stack, TextField, Typography } from "@mui/material";
 import { 
     DataGrid,
     GridColDef,
@@ -7,6 +7,32 @@ import {
     GridToolbarQuickFilter,
     GridToolbarExport,
 } from "@mui/x-data-grid";
+import { useState } from "react";
+
+const OverlapDialog = ({row}: {
+    row: {
+        overlapping_set: Array<string>,
+        overlap: string
+    }
+}) => {
+    const [open, setOpen] = useState(false)
+    return <><Button variant="outlined" color="secondary" onClick={()=>setOpen(!open)}><Typography>{row.overlap}</Typography></Button>
+            <Dialog
+                open={open}
+                onClose={()=>setOpen(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle><Typography variant="h4">Overlaps</Typography></DialogTitle>
+                <DialogContent>
+                    <TextField
+                    value={row.overlapping_set.join("\n")}
+                    multiline
+                    />
+                </DialogContent>
+            </Dialog>
+        </>
+}
 const header: GridColDef[] = [
     {
         field: 'enrichr_label',
@@ -41,6 +67,15 @@ const header: GridColDef[] = [
         field: 'combined_score',
         headerName: "combined score",
         align: "left"
+    },
+    {
+        field: 'overlapping_set',
+        headerName: "overlaps",
+        align: "left",
+        valueGetter: ({row})=>{
+            return row.overlapping_set.join(";")
+        },
+        renderCell: ({row})=><OverlapDialog row={row}/>
     }
 ]
 

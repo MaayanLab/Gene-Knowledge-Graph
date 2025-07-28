@@ -7,7 +7,7 @@ import CytoscapeComponent from 'react-cytoscapejs';
 import { TooltipCard } from '../misc/client_side';
 import { Legend } from '../misc';
 import { UISchema } from '@/app/api/schema/route';
-import { useQueryState, parseAsString } from 'next-usequerystate';
+import { useQueryState, parseAsString, parseAsJson } from 'next-usequerystate';
 import HubIcon from '@mui/icons-material/Hub';
 import { mdiFamilyTree,  mdiDotsCircle} from '@mdi/js';
 import Icon from '@mdi/react';
@@ -37,27 +37,35 @@ export const layouts = {
   }
 
 
-
+  export type ArrowShape =
+  | "tee"
+  | "vee"
+  | "triangle"
+  | "triangle-tee"
+  | "circle-triangle"
+  | "triangle-cross"
+  | "triangle-backcurve"
+  | "square"
+  | "circle"
+  | "diamond"
+  | "chevron"
+  | "none";
 
 export default function Cytoscape ({
 	elements,
-	schema,
-	tooltip_templates_edges,
-	tooltip_templates_nodes,
+	edge_tooltip=false,
 	search,
 }: {
 	elements: null | NetworkSchema, 
 	search?:boolean,
 	schema: UISchema,
+	edge_tooltip?: boolean,
 	tooltip_templates_edges: {[key: string]: Array<{[key: string]: string}>}, 
 	tooltip_templates_nodes: {[key: string]: Array<{[key: string]: string}>}, 
 }) {
 	const cyref = useRef(null);
 	const networkRef = useRef(null);
 	const [id, setId] = useState<number>(0)
-	const [node, setNode] = useState(null)
-    const [edge, setEdge] = useState(null)
-    const [focused, setFocused] = useState(null)
 	
 	const [edge_labels, setEdgeLabels] = useQueryState('edge_labels')
 	const [tooltip, setTooltip] = useQueryState('tooltip')
@@ -65,6 +73,8 @@ export default function Cytoscape ({
 	const [legend, setLegend] = useQueryState('legend')
 	const [legend_size, setLegendSize] = useQueryState('legend_size')
 	const [download_image, setDownloadImage] = useQueryState('download_image')
+	const [selected, setSelected] = useQueryState('selected',  parseAsJson<{id: string, type: 'nodes' | 'edges'}>().withDefault(null))
+	const [hovered, setHovered] = useQueryState('hovered',  parseAsJson<{id: string, type: 'nodes' | 'edges'}>().withDefault(null))
 	const edgeStyle = edge_labels ? {label: 'data(label)'} : {}
 
 	const { mutate } = useSWRConfig()
@@ -145,7 +155,7 @@ export default function Cytoscape ({
 								"text-margin-x": 0,
 								"text-margin-y": 0,
 								'font-size': '12px',
-								// 'target-arrow-shape': `data(directed)`,
+								'target-arrow-shape': `data(directed)` as ArrowShape,
 								'target-endpoint': 'outside-to-node',
 								'source-endpoint': 'outside-to-node',
 								'target-arrow-color': 'data(lineColor)',
@@ -217,12 +227,12 @@ export default function Cytoscape ({
 						// setAnchorEl(null)
 						const node = evt.target.data()
 
-						if (focused && node.id === focused.id) {
+						if (selected && node.id === selected.id) {
 							const sel = evt.target;
 							cy.elements().removeClass('focusedSemitransp');
 							sel.removeClass('focused').outgoers().removeClass('focusedColored')
 							sel.incomers().removeClass('focusedColored')
-							setFocused(null)
+							setSelected(null)
 						} else{
 							const sel = evt.target;
 							cy.elements().removeClass('focused');
@@ -233,30 +243,40 @@ export default function Cytoscape ({
 							sel.incomers().addClass('focusedColored')
 							sel.incomers().removeClass('focusedSemitransp')
 							sel.outgoers().removeClass('focusedSemitransp')
-							setEdge(null)
-							setNode(null)
-							setFocused(node)
+							setSelected({id: node.id, type: 'nodes'})
 							setTimeout(()=>{
 								const sel = evt.target;
 								cy.elements().removeClass('focusedSemitransp');
 								sel.removeClass('focused').outgoers().removeClass('focusedColored')
 								sel.incomers().removeClass('focusedColored')
-								setFocused(null)
+								setSelected(null)
 							}, 5000)
 						}
 						})
 
 						cy.nodes().on('mouseover', (evt) => {
-							const n = evt.target.data()
-							const sel = evt.target;
-							cy.elements().not(sel).addClass('semitransp');
-							sel.addClass('highlight').outgoers().addClass('colored')
-							sel.incomers().addClass('colored')
-							sel.incomers().removeClass('semitransp')
-							sel.outgoers().removeClass('semitransp')
-							if (focused === null && n.id !== (node || {}).id) {
-								setEdge(null)
-								setNode(n)
+							if (!selected) {
+								const n = evt.target.data()
+								const sel = evt.target;
+								cy.elements().not(sel).addClass('semitransp');
+								sel.addClass('highlight').outgoers().addClass('colored')
+								sel.incomers().addClass('colored')
+								sel.incomers().removeClass('semitransp')
+								sel.outgoers().removeClass('semitransp')
+								setHovered({id: n.id, type: "nodes"})
+							}
+						});
+
+						cy.edges().on('mouseover', (evt) => {
+							if (!selected && edge_tooltip) {
+								const e = evt.target.data()
+								const sel = evt.target;
+								cy.elements().not(sel).addClass('semitransp');
+								sel.addClass('focusedColored').target().addClass('highlight')
+								sel.sources().addClass('highlight')
+								sel.target().removeClass('semitransp')
+								sel.sources().removeClass('semitransp')
+								setHovered({id: `${e.source}_${e.relation}_${e.target}`, type: "edges"})
 							}
 						});
 
@@ -265,78 +285,43 @@ export default function Cytoscape ({
 							cy.elements().removeClass('semitransp');
 							sel.removeClass('highlight').outgoers().removeClass('colored')
 							sel.incomers().removeClass('colored')
-							// setAnchorEl(null)
-							// setNode({node: null})
-							setNode(null)
+							setHovered(null)
+							
 						});
-						cy.edges().on('mouseover', (evt) => {
-							const e = evt.target.data()
-							const sel = evt.target;
-							cy.elements().not(sel).addClass('semitransp');
-							sel.addClass('colored').connectedNodes().addClass('highlight')
-							sel.connectedNodes().removeClass('semitransp')
-							if (focused === null && e.id !== (edge || {}).id) {
-								// setAnchorEl(evt.target.popperRef())
-								// setNode({node: n})
-								setNode(null)
-								setEdge(e)
+
+						cy.edges().on('mouseout', (evt) => {
+							if (edge_tooltip) {
+								const sel = evt.target;
+								cy.elements().removeClass('semitransp');
+								sel.removeClass('focusedColored').target().removeClass('highlight')
+								sel.source().removeClass('highlight')
+								setHovered(null)
 							}
 						});
-						cy.edges().on('mouseout', (evt) => {
-							const sel = evt.target;
-							cy.elements().removeClass('semitransp');
-							sel.removeClass('colored').connectedNodes().removeClass('highlight')
-							// setAnchorEl(null)
-							// setNode({node: null})
-							setEdge(null)
-						});
+						// cy.edges().on('mouseover', (evt) => {
+						// 	if (!selected) {
+						// 		const e = evt.target.data()
+						// 		const sel = evt.target;
+						// 		cy.elements().not(sel).addClass('semitransp');
+						// 		sel.addClass('colored').connectedNodes().addClass('highlight')
+						// 		sel.connectedNodes().removeClass('semitransp')
+						// 		// setAnchorEl(evt.target.popperRef())
+						// 		// setNode({node: n})
+						// 		setHovered({id: `${e.source}_${e.relation}_${e.target}`, type: "edges"})
+						// 	}
+						// });
+						// cy.edges().on('mouseout', (evt) => {
+						// 	const sel = evt.target;
+						// 	cy.elements().removeClass('semitransp');
+						// 	sel.removeClass('colored').connectedNodes().removeClass('highlight')
+						// 	setSelected(null)
+						// });
 					}}
 				/> 
 			}
 			{ (elements && legend) &&
 				<Legend search={search} elements={elements} legendSize={parseInt(legend_size || "0")}/>
 			}
-                    { (focused === null && tooltip && node) && 
-						<TooltipCard 
-							node={node}
-							schema={schema}
-							tooltip_templates={tooltip_templates_nodes}
-							setFocused={setFocused}
-							expand={false}
-							reset={()=>{
-								setEdge(null)
-								setNode(null)
-								setFocused(null)
-							}}
-						/>
-                    }
-					{(tooltip && focused) && <TooltipCard 
-						node={focused}
-						schema={schema}
-						tooltip_templates={tooltip_templates_nodes}
-						setFocused={setFocused}
-						expand={false}
-						reset={()=>{
-							setEdge(null)
-							setNode(null)
-							setFocused(null)
-						}}
-						/>
-					}
-                    {(focused === null && tooltip && edge) && 
-						<TooltipCard 
-							node={edge}
-							schema={schema}
-							tooltip_templates={tooltip_templates_edges}
-							setFocused={setFocused}
-							expand={false}
-							reset={()=>{
-								setEdge(null)
-								setNode(null)
-								setFocused(null)
-							}}
-						/>
-                }
 		</div>
 	)
 }

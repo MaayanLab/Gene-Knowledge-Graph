@@ -70,7 +70,7 @@ export const Legend = ({
     const borders = [2, 2, 4, 6, 8]
     if (search) {
       colors["Search Term"] = <Grid item xs={12} key={"search"}>
-      <Grid container alignItems={"center"} spacing={2} key="term">
+      <Grid container alignItems={"center"} spacing={1} key="term">
         <Grid item><Avatar sx={{background: "#ff8a80", width: sizes[legendSize], height: sizes[legendSize]}}> </Avatar></Grid>
         <Grid item><Typography variant="subtitle1">Search Term</Typography></Grid>   
       </Grid></Grid>   

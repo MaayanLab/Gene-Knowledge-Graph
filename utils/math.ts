@@ -32,7 +32,11 @@ export const precise = (value: number | string) => {
     }
   } else if (value) {
     if (value.split(".").length === 1) return value
-    const val = Number.parseFloat(value)
-    return convert_float(val)
+    try {
+      const val = Number.parseFloat(value)
+      return convert_float(val)
+    } catch (error) {
+      return value
+    }
   } else return ''
 }

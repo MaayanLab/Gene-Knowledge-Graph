@@ -127,6 +127,9 @@ export const lncRNAlyzr = createTheme({
                   // Some CSS
                   background: "#FFF",
                   boxShadow: "none",
+                  paddingTop: 3, 
+                  paddingBottom: 3, 
+                  mb: 2
                 },
               },
         },

@@ -9,7 +9,7 @@ export function makeTemplate(
     templateString: string,
     templateVariables: {[key:string]: string|number|boolean},
 ) {
-  const keys = [...Object.keys(templateVariables).map((key) => key.replace(/ /g, '_')), 'PREFIX']
+  const keys = [...Object.keys(templateVariables).map((key) => key.replace(/ /g, '_').replace(/\./g, '_')), 'PREFIX']
   const values = [...Object.values(templateVariables), process.env.NEXT_PUBLIC_PREFIX]
   try {
     const templateFunction = new Function(...keys, `return \`${templateString}\`;`)
@@ -105,7 +105,7 @@ export const process_properties = (properties) => {
 	const props = {}
 	for ( const k of Object.keys(properties)) {
 		const v:string | number | {low: number, high: number} = properties[k]
-		if (typeof v === "object") {
+		if (typeof v === "object" && v["high"] !== undefined) {
 			props[k] = toNumber(v)
 		} else {
 			props[k] = v
