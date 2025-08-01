@@ -5,11 +5,11 @@ services:
       context: .
       dockerfile: ./Dockerfile.next
     platform: linux/amd64
-    image: maayanlab/enrichr-kg:2.5.15
+    image: maayanlab/enrichr-kg:2.5.16
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
-        maayanlab.cloud/ingress: hhttps://maayanlab.cloud/enrichr-kg
+        maayanlab.cloud/ingress: https://maayanlab.cloud/enrichr-kg
     ports:
       - 3000:3000
     environment:
