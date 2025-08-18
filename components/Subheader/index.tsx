@@ -118,7 +118,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 					else if (active) style = styles.active
 					else style = styles.disabled
 					return (
-						<Grid item xs={2} md={1} key={i.label}>
+						<Grid item xs={2} md={1} key={i.label} className="flex items-center justify-center relative">
 							<Tooltip title={i.label} placement="top">
 								<Button
 									disabled={!subheader_props}

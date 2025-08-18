@@ -1777,9 +1777,9 @@
             },
             {
                 "label": "LINCS",
-                "icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/LINCS.gif",
-                "width": 150,
-                "height": 100,
+                "icon": "https://s3.amazonaws.com/maayan-kg/cfde-kg/assets/LINCS-logo.png",
+                "width": 60,
+                "height": 60,
                 "url": "https://maayanlab.cloud/sigcom-lincs/",
                 "props": {
                     "libraries": [

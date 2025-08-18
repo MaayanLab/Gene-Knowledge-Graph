@@ -43,7 +43,7 @@ data-*
 dumps
 .env.deploy
 venv
-
+db/
 legacy/
 
 legacy_components/
