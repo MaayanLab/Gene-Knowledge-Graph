@@ -46,6 +46,7 @@ const Enrichment = async ({
     sortLibraries,
     searchParams,
     endpoint,
+    edge_tooltip,
     ...props
 }: {
     default_options?: {
@@ -77,8 +78,8 @@ const Enrichment = async ({
         collapse?: 'true'
     },
     endpoint: string,
-    additional_link_relation_tags?: Array<string>
-
+    additional_link_relation_tags?: Array<string>,
+    edge_tooltip?: boolean
 }) => {
     const query_parser = parseAsJson<EnrichmentParams>().withDefault(props.default_options)
     console.log("Getting schema...")
@@ -172,10 +173,10 @@ const Enrichment = async ({
         }
         const payload = {
             'url': `${process.env.NODE_ENV==="development" ? process.env.NEXT_PUBLIC_HOST_DEV : process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}${endpoint}?q=${searchParams.q}`,
-            'apikey': process.env.NEXT_PUBLIC_TURL  
+            'apikey': process.env.TURL  
         }
         console.log("Getting short url")
-        const request = await fetch(process.env.NEXT_PUBLIC_TURL_URL, {
+        const request = await fetch(process.env.TURL_URL, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -274,6 +275,7 @@ const Enrichment = async ({
                                             tooltip_templates_edges={tooltip_templates_edges}
                                             tooltip_templates_nodes={tooltip_templates_nodes}
                                             view={searchParams.view}
+                                            edge_tooltip={edge_tooltip}
                                         />
                                     </CardContent>
                                 </Card>

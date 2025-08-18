@@ -26,7 +26,7 @@ export const enrichr_query = async ({
     const genes = {}
     let max_pval = 0
     let min_pval = 1
-    for (const i of results[library].slice(0,term_limit)) {
+    for (const i of (results[library] || []).slice(0,term_limit)) {
         const enrichr_label = i[1]
         const label = regex[library] !== undefined ? regex[library].exec(enrichr_label).groups.label:enrichr_label
         const direction = regex[library] !== undefined ? regex[library].exec(enrichr_label).groups.direction:undefined

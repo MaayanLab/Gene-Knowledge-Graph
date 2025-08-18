@@ -4,7 +4,7 @@ import { z } from "zod"
 import { NextResponse } from "next/server"
 import type { NextRequest } from 'next/server'
 import { augment_gene_set, kind_mapper, get_node_color_and_type_augmented } from "@/utils/helper"
-import { resolve_results, resolve_node_types } from "./helper"
+import { resolve_results, resolve_node_types } from "./resolver"
 import { fetch_kg_schema } from "@/utils/initialize"
 import { initialize } from "../initialize/helper"
 import { ArrowShape } from "@/components/Cytoscape"
@@ -382,7 +382,7 @@ const resolve_one_term = async ({
 			AND NOT en.id in ${JSON.stringify(remove)}
 		`
 	}
-	query = query + ` RETURN p, nodes(p) as n, relationships(p) as r LIMIT TOINTEGER($limit)`
+	query = query + ` RETURN p, nodes(p) as n, relationships(p) as r, st LIMIT TOINTEGER($limit)`
 	
 	if (rels.length > 0) {
 		query = rels.join("\nUNION\n")

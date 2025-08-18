@@ -98,6 +98,7 @@ export const EnrichmentBar = (props: {
 
 	useEffect(()=>{
 		const download_fnc = async () => {
+			console.log(download_image)
 			// exportChart(download_image)
 			if (download_image === 'png') {
 				if (ref.current) {
@@ -115,7 +116,7 @@ export const EnrichmentBar = (props: {
 			} else if (download_image === 'svg') {
 				const dataUrl = await domtoimage.toSvg(ref.current)
 				const link = document.createElement('a');
-				link.download = 'bar_chart.jpg';
+				link.download = 'bar_chart.svg';
 				link.href = dataUrl;
 				link.click();
 			}

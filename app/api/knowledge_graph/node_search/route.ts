@@ -10,7 +10,7 @@ import { convert_query } from "@/utils/helper"
 const query_schema = z.object({
     type: z.string(),
     field: z.optional(z.string()),
-    term: z.optional(z.string()),
+    term: z.optional(z.string().or(z.number())),
     limit: z.optional(z.number()),
     filter: z.optional(zu.stringToJSON())
 })

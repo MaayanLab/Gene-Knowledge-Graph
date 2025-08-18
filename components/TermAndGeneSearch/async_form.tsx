@@ -3,15 +3,17 @@ import React, { ReactNode, useEffect, useState } from "react"
 import { useRouter, usePathname, useSearchParams } from "next/navigation"
 import { Selector } from "../misc"
 import Link from 'next/link'
-import { Typography, TextField, Button, Autocomplete, Grid, Stack, Switch, FormControlLabel } from "@mui/material";
+import { Typography, TextField, Button, Autocomplete, Grid, Stack, Switch, FormControlLabel, CircularProgress } from "@mui/material";
 import { router_push } from "@/utils/client_side"
 import { process_filter } from "@/utils/helper"
 import { FilterSchema } from "@/utils/helper"
+import { NetworkSchema } from "@/app/api/knowledge_graph/route"
 
 const AsyncFormComponent = ({direction,
     nodes, 
     searchParams,
-    initial_query
+    initial_query,
+    elements
 }: {
 		direction: string,
         initial_query: {[key: string]: string},
@@ -26,6 +28,7 @@ const AsyncFormComponent = ({direction,
             legend_size?: string,
             layout?: string,
         },
+        elements: NetworkSchema
 	}) => {
 	const router = useRouter()
 	const {filter: f, ...rest} = searchParams
@@ -74,6 +77,10 @@ const AsyncFormComponent = ({direction,
             if (type) setType(type)
         }
     }, [filter])
+
+    useEffect(()=>{
+        setLoading(false)
+    }, [elements])
     
     const get_controller = () => {
         if (controller) controller.abort()
@@ -118,7 +125,7 @@ const AsyncFormComponent = ({direction,
         } catch (error) {
             // console.error(error)
         } finally {
-            setLoading(false)
+            // setLoading(false)
         }
     }
 
@@ -152,6 +159,7 @@ const AsyncFormComponent = ({direction,
                     value={type} 
                     prefix={direction} 
                     onChange={(type:string)=>{
+                        setLoading(true)
                         if (direction === 'Start') {
                             setInputTerm('')
                             router_push(router, pathname,
@@ -224,6 +232,7 @@ const AsyncFormComponent = ({direction,
                     onChange={(evt, term) => {
                         if (term === null) term = ''
                         setInputTerm(term)
+                        setLoading(true)
                         if (direction === 'Start') {
 							router_push(router, pathname,
 								{
@@ -263,7 +272,7 @@ const AsyncFormComponent = ({direction,
                         onChange={(e)=> setInputTerm(e.target.value)}
                         InputProps={{
                             ...params.InputProps,
-                            endAdornment: null,
+                            endAdornment: loading ? <CircularProgress/>: null,
                             style: {
                                 fontSize: 16,
                                 height: 45,

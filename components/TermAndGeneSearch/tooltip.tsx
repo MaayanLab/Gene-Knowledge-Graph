@@ -36,7 +36,7 @@ export const TooltipComponent = ({data, float, tooltip_templates, schema}: {
 	const elements = []
 	const field = data.kind === "Relation" ? data.label : data.kind.replace("Co-expressed Gene", "lncRNA")
 	for (const i of tooltip_templates[field] || []) {
-		if (i.type === "link") {
+		if (i.href) {
 			const text = makeTemplate(i.text, data)
 			const href = makeTemplate(i.href, data)
 			if (text !== 'undefined') {
@@ -57,7 +57,7 @@ export const TooltipComponent = ({data, float, tooltip_templates, schema}: {
 			if (e !== 'undefined') {
 			  elements.push(
 				<Typography key={i.label} sx={{wordWrap: "break-word"}} variant="subtitle2">
-				  <b>{i.label}:</b> {i.type === "text" ? e: precise(e)}
+				  <b>{i.label}:</b> {precise(e)}
 				</Typography>  
 			  )
 			}
@@ -75,7 +75,6 @@ export const TooltipComponent = ({data, float, tooltip_templates, schema}: {
 		start: data.kind,
 		start_term: data.label
 		})
-	
 	return (
 		<Card sx={{marginTop: 2, ...extrasx}}>
 			<CardContent sx={{padding: 2}}>
