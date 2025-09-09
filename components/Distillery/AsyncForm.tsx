@@ -23,7 +23,6 @@ import { NetworkSchema } from "@/app/api/knowledge_graph/route";
 import { useQueryState, parseAsJson } from "next-usequerystate";
 import { makeTemplate, FilterSchema } from "@/utils/helper";
 import { UISchema } from "@/app/api/schema/route";
-import { useSearchParams } from "next/navigation";
 import { precise } from "@/utils/math";
 import HubIcon from "@mui/icons-material/Hub";
 export const TooltipComponent = ({data, tooltip_templates, schema}: {
@@ -41,7 +40,7 @@ export const TooltipComponent = ({data, tooltip_templates, schema}: {
 	const elements = []
 	const field = data.kind === "Relation" ? data.label : data.kind.replace("Co-expressed Gene", "Gene")
 	for (const i of tooltip_templates[field] || []) {
-		if (i.type === "link") {
+		if (i.href !== undefined) {
 			const text = makeTemplate(i.text, data)
 			const href = makeTemplate(i.href, data)
 			if (text !== 'undefined') {
@@ -62,7 +61,7 @@ export const TooltipComponent = ({data, tooltip_templates, schema}: {
 			if (e !== 'undefined') {
 			  elements.push(
 				<Typography key={i.label} sx={{wordWrap: "break-word"}} variant="subtitle2">
-				  <b>{i.label}:</b> {i.type === "text" ? e: precise(e)}
+				  <b>{i.label}:</b> {precise(e)}
 				</Typography>  
 			  )
 			}

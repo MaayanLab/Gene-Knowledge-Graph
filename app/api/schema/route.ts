@@ -10,7 +10,6 @@ export interface UISchema {
         display: Array<{
             label: string,
             text: string,
-            type: string
         }>,
         search?: Array<string>,
         color?: string,
@@ -29,7 +28,6 @@ export interface UISchema {
         display: Array<{
             label: string,
             text: string,
-            type: string,
             href?:string,
         }>,
         hidden?: boolean,

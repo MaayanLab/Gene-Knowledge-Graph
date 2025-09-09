@@ -4,7 +4,7 @@ import { z } from "zod"
 import { NextResponse } from "next/server"
 import type { NextRequest } from 'next/server'
 import { augment_gene_set, kind_mapper, get_node_color_and_type_augmented } from "@/utils/helper"
-import { resolve_results, resolve_node_types } from "./helper"
+import { resolve_results, resolve_node_types } from "./resolver"
 import { fetch_kg_schema } from "@/utils/initialize"
 import { initialize } from "../initialize/helper"
 import { ArrowShape } from "@/components/Cytoscape"

@@ -170,6 +170,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                                     initial_query={props.initial_query}
                                     direction={'Start'}
                                     searchParams={searchParams}
+                                    elements={elements}
                                 />
                                 {filter.end && 
                                 <AsyncFormComponent 
@@ -177,6 +178,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                                     nodes={nodes}
                                     direction={'End'}
                                     searchParams={searchParams}
+                                    elements={elements}
                                 />}
                             </Stack>
                         </CardContent>

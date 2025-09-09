@@ -1,4 +1,4 @@
-import { resolve_results } from "../../knowledge_graph/helper";
+import { resolve_results } from "../../knowledge_graph/resolver";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { z } from 'zod';

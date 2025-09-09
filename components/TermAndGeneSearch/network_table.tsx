@@ -51,7 +51,7 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 							for (const prop of display[key]) {
 								const field = prop.label
 								columnVisibilityModel[field] = !(prop.hide)
-								if (prop.type === "link") {
+								if (prop.href) {
 									header.push({
 										field,
 										headerName: field,
@@ -61,7 +61,7 @@ const NetworkTable = ({data, schema}: {data: NetworkSchema, schema: UISchema}) =
 										text: prop.text,
 										href: prop.href,
 										renderCell: ({row, field})=>{
-											return <Button href={row[field].href}>{row[field].text}</Button>
+											return <Button color="secondary" href={row[field].href}>{row[field].text}</Button>
 										},
 										count: 0
 									})
