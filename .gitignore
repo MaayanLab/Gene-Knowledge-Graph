@@ -38,6 +38,7 @@ gene_data
 
 # schema.json
 .env.genekg
+.env.gse
 
 data-*
 dumps
