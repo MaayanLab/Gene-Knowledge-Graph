@@ -28,7 +28,6 @@ helm install <name> maayanlab/docker-compose -f <(docker-compose config) -n <nam
 ### Upgrade
 helm upgrade <name> maayanlab/docker-compose -f <(docker-compose config) -n <name> 
 
-<<<<<<< HEAD
 To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
@@ -50,9 +49,6 @@ helm install distillery maayanlab/docker-compose -f <(docker-compose config) -n 
 helm upgrade distillery maayanlab/docker-compose -f <(docker-compose config) -n distillery 
 
 helm template distillery maayanlab/docker-compose -f <(docker-compose config) -n distillery 
-=======
-helm template <name> maayanlab/docker-compose -f <(docker-compose config) -n <name> 
->>>>>>> origin/next14
 
 
 ## Legacy Version
