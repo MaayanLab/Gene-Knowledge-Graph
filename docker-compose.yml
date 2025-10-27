@@ -25,6 +25,14 @@ services:
       - NEXT_PUBLIC_SCHEMA
       - TURL
       - TURL_URL
+      - NEXT_PUBLIC_HOMEPAGE
+      - NEXT_PUBLIC_CHEA3_URL
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
 
   neo4j:
     image: neo4j:4.4

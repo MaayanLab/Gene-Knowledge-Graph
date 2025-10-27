@@ -12,7 +12,43 @@ import HubIcon from '@mui/icons-material/Hub';
 import { mdiFamilyTree,  mdiDotsCircle} from '@mdi/js';
 import Icon from '@mdi/react';
 import fileDownload from 'js-file-download';
-export const layouts = {
+import { useSearchParams } from 'next/navigation';
+import { Box, CircularProgress, Paper, Popper, Typography } from '@mui/material';
+import cytoscape from 'cytoscape';
+import cytoscapePopper from 'cytoscape-popper';
+import TooltipComponentGroup from '../TermAndGeneSearch/tooltip';
+import {
+  computePosition,
+  flip,
+  shift,
+  limitShift,
+} from '@floating-ui/dom';
+
+function popperFactory(ref:any, content:any, opts:any) {
+   // see https://floating-ui.com/docs/computePosition#options
+   const popperOptions = {
+       // matching the default behaviour from Popper@2
+       // https://floating-ui.com/docs/migration#configure-middleware
+       middleware: [
+           flip(),
+           shift({limiter: limitShift()})
+       ],
+       ...opts,
+   }
+
+   function update() {
+       computePosition(ref, content, popperOptions).then(({x, y}) => {
+           Object.assign(content.style, {
+               left: `${x}px`,
+               top: `${y}px`,
+           });
+       });
+   }
+   update();
+   return { update };
+}
+
+export const default_layouts = {
     "Force-directed": {
       name: 'cose',
       quality: 'proof',
@@ -51,20 +87,45 @@ export const layouts = {
   | "chevron"
   | "none";
 
+const PopperComponent = ({anchorEl, elements}) => {
+	if (anchorEl === null) return null
+	return (
+	<Popper open={anchorEl!==null} anchorEl={anchorEl}>
+		<Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
+			The content of the Popper.
+		</Box>
+	</Popper>
+)
+}
+
 export default function Cytoscape ({
 	elements,
 	edge_tooltip=false,
 	search,
+	wide,
+	stepsize=50,
+	header_endpoint,
+	tooltip_templates_edges,
+	tooltip_templates_nodes,
+	filter_field
 }: {
 	elements: null | NetworkSchema, 
 	search?:boolean,
-	schema: UISchema,
-	edge_tooltip?: boolean,
-	tooltip_templates_edges: {[key: string]: Array<{[key: string]: string}>}, 
-	tooltip_templates_nodes: {[key: string]: Array<{[key: string]: string}>}, 
+	wide?: boolean,
+	stepsize?:number,
+	header_endpoint:string,
+	tooltip_templates_edges: {[key: string]: Array<{[key: string]: string}>},
+    tooltip_templates_nodes: {[key: string]: Array<{[key: string]: string}>},
+	filter_field: 'q' | 'filter',
 }) {
+	const layouts = wide ? layout_wide: default_layouts
 	const cyref = useRef(null);
 	const networkRef = useRef(null);
+	const [tooltipProps, setTooltipProps] = useState<{
+		anchorEl?: HTMLElement, 
+		kind: 'nodes' | 'edges',
+		id: string | number
+	} | null>(null)
 	const [id, setId] = useState<number>(0)
 	
 	const [edge_labels, setEdgeLabels] = useQueryState('edge_labels')
@@ -82,6 +143,7 @@ export default function Cytoscape ({
 		const cytoscape = require('cytoscape')
 		const svg = require('cytoscape-svg')
 		cytoscape.use(svg)
+		cytoscape.use(cytoscapePopper(popperFactory));
 	},[])
 
 	useEffect(()=>{
@@ -224,7 +286,6 @@ export default function Cytoscape ({
 					cy={(cy:cytoscape.Core):void => {
 						cyref.current = cy
 						cy.on('click', 'node', function (evt) {
-						// setAnchorEl(null)
 						const node = evt.target.data()
 
 						if (selected && node.id === selected.id) {
@@ -263,40 +324,28 @@ export default function Cytoscape ({
 								sel.incomers().addClass('colored')
 								sel.incomers().removeClass('semitransp')
 								sel.outgoers().removeClass('semitransp')
-								setHovered({id: n.id, type: "nodes"})
-							}
-						});
-
-						cy.edges().on('mouseover', (evt) => {
-							if (!selected && edge_tooltip) {
-								const e = evt.target.data()
-								const sel = evt.target;
-								cy.elements().not(sel).addClass('semitransp');
-								sel.addClass('focusedColored').target().addClass('highlight')
-								sel.sources().addClass('highlight')
-								sel.target().removeClass('semitransp')
-								sel.sources().removeClass('semitransp')
-								setHovered({id: `${e.source}_${e.relation}_${e.target}`, type: "edges"})
+								setTooltipProps({
+									anchorEl: sel.popperRef(),
+									kind: "nodes",
+									id: n.id
+								})
+								
+								// setHovered({id: n.id, type: "nodes"})
+									
 							}
 						});
 
 						cy.nodes().on('mouseout', (evt) => {
-							const sel = evt.target;
+							const sel:any = evt.target;
 							cy.elements().removeClass('semitransp');
 							sel.removeClass('highlight').outgoers().removeClass('colored')
 							sel.incomers().removeClass('colored')
-							setHovered(null)
+							setTooltipProps(null)
+							// setTimeout(()=>{
+							// 	console.log(hovered.id, sel.id)
+							// 	if (hovered.id === sel.id) setHovered(null)
+							// }, 5000)
 							
-						});
-
-						cy.edges().on('mouseout', (evt) => {
-							if (edge_tooltip) {
-								const sel = evt.target;
-								cy.elements().removeClass('semitransp');
-								sel.removeClass('focusedColored').target().removeClass('highlight')
-								sel.source().removeClass('highlight')
-								setHovered(null)
-							}
 						});
 						// cy.edges().on('mouseover', (evt) => {
 						// 	if (!selected) {
@@ -322,6 +371,14 @@ export default function Cytoscape ({
 			{ (elements && legend) &&
 				<Legend search={search} elements={elements} legendSize={parseInt(legend_size || "0")}/>
 			}
+			<TooltipComponentGroup 
+				elements={elements}
+				tooltip_templates_edges={tooltip_templates_edges}
+				tooltip_templates_nodes={tooltip_templates_nodes}
+				header_endpoint={header_endpoint}
+				filter_field={filter_field}
+				{...(tooltipProps || {})}
+			/>
 		</div>
 	)
 }

@@ -5,7 +5,6 @@ import { process_relation } from "@/utils/helper"
 import { Grid, Typography, CircularProgress, Card, CardContent, Stack } from "@mui/material"
 import { parseAsJson } from "next-usequerystate"
 import AsyncFormComponent from "./async_form"
-import TooltipComponentGroup from "./tooltip"
 import Form from "./form"
 import NetworkTable from "./network_table"
 import { fetch_kg_schema } from "@/utils/initialize"
@@ -183,12 +182,6 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                             </Stack>
                         </CardContent>
                     </Card>
-                    <TooltipComponentGroup
-                            elements={elements}
-                            tooltip_templates_edges={tooltip_templates_edges}
-                            tooltip_templates_nodes={tooltip_templates_nodes}
-                            schema={schema}
-                        />
                 </Grid>
                 <Grid item xs={12} md={8} lg={9}>
                     <Stack>
@@ -207,13 +200,21 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                             <CardContent>
                             {(searchParams.view === "table") ? 
                                 <div style={{minHeight: 700}}><NetworkTable data={elements} schema={schema}/></div>:
-                                <Cytoscape 
-                                    elements={elements}
-                                    schema={schema}
-                                    tooltip_templates_edges={tooltip_templates_edges}
-                                    tooltip_templates_nodes={tooltip_templates_nodes}
-                                    edge_tooltip={props.edge_tooltip}
-                                /> 
+                                <div style={{minHeight: 700, position: "relative"}}>
+                                    {filter.end_term ? 
+                                    <Typography variant="h5" sx={{textAlign: "center"}}><b>Connections Between {filter.start_term} and {filter.end_term}</b></Typography>:
+                                    <Typography variant="h5" sx={{textAlign: "center"}}><b>Subnetwork of TFs Connected to {filter.start_term}</b></Typography>
+                                    }
+                                    <Cytoscape 
+                                        elements={elements}
+                                        wide={true}
+                                        stepsize={100}
+                                        tooltip_templates_edges={tooltip_templates_edges}
+                                        tooltip_templates_nodes={tooltip_templates_nodes}
+                                        filter_field="filter"
+                                        header_endpoint={(schema.header.tabs.filter(i=>i.component === 'KnowledgeGraph')[0] || {}).endpoint || '/'}
+                                    />
+                                </div>
                             }
                             </CardContent>
                         </Card>

@@ -14,6 +14,7 @@
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
+    "@floating-ui/react": "^0.27.16",
     "@mdi/font": "^7.1.96",
     "@mdi/js": "^7.1.96",
     "@mdi/react": "^1.6.1",
@@ -29,6 +30,7 @@
     "cytoscape": "^3.21.0",
     "cytoscape-avsdf": "^1.0.0",
     "cytoscape-fcose": "^2.1.0",
+    "cytoscape-popper": "^4.0.1",
     "cytoscape-svg": "^0.4.0",
     "dom-to-image": "^2.6.0",
     "dotenv": "^16.4.5",
