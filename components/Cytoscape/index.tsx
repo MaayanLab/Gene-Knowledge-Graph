@@ -54,7 +54,33 @@ export const default_layouts = {
       quality: 'proof',
       randomize: 'false',
       animate: true,
-      idealEdgeLength: edge => 150,
+	//   componentSpacing: 300,
+    //   idealEdgeLength: edge => 150,
+      icon: ()=><HubIcon/>
+    },
+    "Hierarchical Layout": {
+      name: "breadthfirst",
+      animate: true,
+      spacingFactor: 1,
+      padding: 15,
+      avoidOverlap: true,
+      icon: ()=><Icon path={mdiFamilyTree} size={0.8} />
+    },
+    Geometric: {
+      name: 'circle',
+      nodeSeparation: 150,
+      icon: ()=><Icon path={mdiDotsCircle} size={0.8} />
+    },
+  }
+
+  export const layout_wide = {
+    "Force-directed": {
+      name: 'cose',
+      quality: 'proof',
+      randomize: false,
+      animate: true,
+	//   componentSpacing: 5000,
+      idealEdgeLength: edge => 200,
       icon: ()=><HubIcon/>
     },
     "Hierarchical Layout": {
