@@ -8,7 +8,6 @@ const neo4jDriverFunc = () => {
     NEO4J_URL,
     neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD)
   )
-
 }
 export const neo4jDriver = neo4jDriverFunc()
 // export const neo4jDriver = neo4j.driver(
