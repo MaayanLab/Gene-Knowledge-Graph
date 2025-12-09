@@ -1,9 +1,7 @@
 'use client'
 import { useEffect, useState } from "react"
-import AsyncFormComponent from "./async_form"
-import { router_push } from "@/utils/client_side"
-import { useRouter, } from "next/navigation"
-import { Stack, 
+import { useRouter, useSearchParams, } from "next/navigation"
+import { 
 	Typography, 
 	Card, 
 	CardContent, 
@@ -14,13 +12,15 @@ import { Stack,
 	Popper,
  } from "@mui/material"
 import { NetworkSchema } from "@/app/api/knowledge_graph/route"
-import { useQueryState, parseAsJson } from 'next-usequerystate';
 import { makeTemplate } from "@/utils/helper"
 import { precise } from "@/utils/math"
 import HubIcon from '@mui/icons-material/Hub';
-import { UISchema } from "@/app/api/schema/route"
-import Link from "next/link"
+import DeleteIcon from '@mui/icons-material/Delete';
+import SendIcon from '@mui/icons-material/Send';
 
+import Link from "next/link"
+import { FilterSchema } from "@/utils/helper"
+import { usePathname } from "next/navigation"
 export const TooltipComponent = ({data, float, tooltip_templates, header_endpoint, filter_field}: {
 	data: {
 		id: string | number,
@@ -34,11 +34,23 @@ export const TooltipComponent = ({data, float, tooltip_templates, header_endpoin
 	float?: boolean,
 	filter_field: 'q' | 'filter'
 }) => {
+	const searchParams = useSearchParams()
+	const pathname = usePathname()
+	const queryParams = {}
+	let filter:FilterSchema = {}
+	searchParams.forEach((value, key) => {
+		if (['filter', 'q', 'selected', 'hovered'].indexOf(key) === -1) queryParams[key] = value;
+		else if (['filter', 'q'].indexOf(key) > -1) {
+			filter = JSON.parse(value)
+		}
+	});
 	const router = useRouter()
 	const elements = []
-	const field = data.kind === "Relation" ? data.label : data.kind.replace("Co-expressed Gene", "lncRNA")
+	const field = data.kind === "Relation" ? data.label : data.kind.replace(/Queried TFs that are also enriched|Top Ranked TFs|Expanded TFs/g, "Transcription Factor")
+	//const [selected, setSelected] = useQueryState('selected',  parseAsJson<{id: string, type: 'nodes' | 'edges'}>().withDefault(null))
+	//const [hovered, setHovered] = useQueryState('hovered',  parseAsJson<{id: string, type: 'nodes' | 'edges'}>().withDefault(null))
 	for (const i of tooltip_templates[field] || []) {
-		if (i.href) {
+		if (i.type === "link") {
 			const text = makeTemplate(i.text, data)
 			const href = makeTemplate(i.href, data)
 			if (text !== 'undefined') {
@@ -59,7 +71,7 @@ export const TooltipComponent = ({data, float, tooltip_templates, header_endpoin
 			if (e !== 'undefined') {
 			  elements.push(
 				<Typography key={i.label} sx={{wordWrap: "break-word"}} variant="subtitle2">
-				  <b>{i.label}:</b> {precise(e)}
+				  <b>{i.label}:</b> {i.type === "text" ? e: precise(e)}
 				</Typography>  
 			  )
 			}
@@ -72,42 +84,33 @@ export const TooltipComponent = ({data, float, tooltip_templates, header_endpoin
 		extrasx["left"] = 0
 		extrasx["zIndex"] = 100
 	}
-	const pathname = (schema.header.tabs.filter(i=>(i.component === 'KnowledgeGraph' || i.component === 'SimpleKnowledgeGraph'))[0] || {}).endpoint || '/'
-	const filter = JSON.stringify({
-		start: data.kind,
-		start_term: data.label
-		})
 	return (
 		<Card sx={{marginTop: 2, zIndex: 10000, ...extrasx}}>
 			<CardContent sx={{padding: 2}}>
 				{elements}
 			</CardContent>
-			{data.kind !== "Relation" &&
-            <CardActions>
-              {/* {!filter.end_term && <Tooltip title="Delete Node">
-                <IconButton
-                  onClick={()=>{
-                    setSelected(null)
-					setHovered(null)
-                    const queryParams: {filter: string, [key:string]: string} = {filter: '{}'}
-          searchParams.forEach((value, key) => {
-						queryParams[key] = value;
-					});
-					const f = JSON.stringify({
-                        ...filter,
-                        remove: [...(filter.remove || []), data.id]
-                      })
-					router_push(router, pathname, {...queryParams, filter: f})
-          }}><DeleteIcon/></IconButton>
-              </Tooltip>} */}
-              <Tooltip title="Expand Node">
-				<Link href={`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX}/${pathname}?filter=${filter}`}>
+			<CardActions>
+				{!filter.end_term && <Tooltip title="Delete Node">
+				<Link href={`${pathname}?${filter_field}=${JSON.stringify({
+					...filter,
+					remove: [...(filter["remove"] || []), data.id]
+				})}${Object.keys(queryParams).length ? "&" + Object.entries(queryParams).map(([k,v])=>`${k}=${v}`).join("&"): ""}`}>
+					<IconButton>
+						<DeleteIcon/>
+					</IconButton> 
+				</Link>
+              </Tooltip>}
+			  <Tooltip title="Expand Node">
+				<Link href={`${pathname}?${filter_field}=${JSON.stringify({
+					...filter,
+					expand: [...(filter["expand"] || []), data.id]
+				})}${Object.keys(queryParams).length ? "&" + Object.entries(queryParams).map(([k,v])=>`${k}=${v}`).join("&"): ""}`}>
 					<IconButton>
 						<HubIcon/>
 					</IconButton> 
 				</Link>
               </Tooltip>
-              <Tooltip title="Open node in new page">
+			  <Tooltip title="Open node in new page">
 				<Link href={`${header_endpoint}?filter=${JSON.stringify({
                         start: data.kind.replace(/Queried TFs that are also enriched|Top Ranked TFs|Search TFs/g, "Transcription Factor"),
                         start_term: data.label
@@ -117,8 +120,7 @@ export const TooltipComponent = ({data, float, tooltip_templates, header_endpoin
 					</IconButton>
 				</Link>
               </Tooltip>
-            </CardActions>
-          }
+			</CardActions>
 		</Card>
 	)
 }

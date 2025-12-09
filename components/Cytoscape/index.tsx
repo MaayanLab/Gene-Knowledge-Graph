@@ -126,7 +126,6 @@ const PopperComponent = ({anchorEl, elements}) => {
 
 export default function Cytoscape ({
 	elements,
-	edge_tooltip=false,
 	search,
 	wide,
 	stepsize=50,
