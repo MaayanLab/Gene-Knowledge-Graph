@@ -8,7 +8,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { cfde_theme } from '@/themes/cfde';
 import { enrichr_kg_theme } from '@/themes/enrichr-kg';
 import { lncRNAlyzr } from '@/themes/lncRNAlyzr';
-import { harmonizome_kg_theme } from '@/themes/harmonizome-kg';
+import { biomarker_kg_theme } from '@/themes/biomarker-kg';
 import { withCookie } from '@/components/ConsentCookie';
 import dynamic from 'next/dynamic';
 
@@ -26,7 +26,7 @@ const themes = {
     cfde_theme: cfde_theme,
     enrichr_kg_theme: enrichr_kg_theme,
     lncRNAlyzr: lncRNAlyzr,
-    harmonizome_kg_theme: harmonizome_kg_theme
+    biomarker_kg_theme: biomarker_kg_theme
 }
 
 // This implementation is from emotion-js
@@ -73,7 +73,6 @@ function ThemeRegistry(props:{options:any, children:any, theme: 'cfde_theme' | s
         />
       );
     });
-    console.log(process.env.NEXT_PUBLIC_COOKIE_NAME, "NEXT_PUBLIC_COOKIE_NAME", typeof process.env.NEXT_PUBLIC_COOKIE_NAME)
 
     return (
       <CacheProvider value={cache}>
