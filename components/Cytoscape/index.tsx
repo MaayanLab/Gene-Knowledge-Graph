@@ -4,16 +4,12 @@ import { useSWRConfig } from 'swr'
 // import dynamic from 'next/dynamic';
 import { NetworkSchema } from '@/app/api/knowledge_graph/route';
 import CytoscapeComponent from 'react-cytoscapejs';
-import { TooltipCard } from '../misc/client_side';
 import { Legend } from '../misc';
-import { UISchema } from '@/app/api/schema/route';
 import { useQueryState, parseAsString, parseAsJson } from 'next-usequerystate';
 import HubIcon from '@mui/icons-material/Hub';
 import { mdiFamilyTree,  mdiDotsCircle} from '@mdi/js';
 import Icon from '@mdi/react';
 import fileDownload from 'js-file-download';
-import { useSearchParams } from 'next/navigation';
-import { Box, CircularProgress, Paper, Popper, Typography } from '@mui/material';
 import cytoscape from 'cytoscape';
 import cytoscapePopper from 'cytoscape-popper';
 import TooltipComponentGroup from '../TermAndGeneSearch/tooltip';
@@ -23,7 +19,8 @@ import {
   shift,
   limitShift,
 } from '@floating-ui/dom';
-
+import { useSearchParams } from 'next/navigation';
+useSearchParams
 function popperFactory(ref:any, content:any, opts:any) {
    // see https://floating-ui.com/docs/computePosition#options
    const popperOptions = {
@@ -113,16 +110,7 @@ export const default_layouts = {
   | "chevron"
   | "none";
 
-const PopperComponent = ({anchorEl, elements}) => {
-	if (anchorEl === null) return null
-	return (
-	<Popper open={anchorEl!==null} anchorEl={anchorEl}>
-		<Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
-			The content of the Popper.
-		</Box>
-	</Popper>
-)
-}
+
 
 export default function Cytoscape ({
 	elements,
@@ -164,6 +152,12 @@ export default function Cytoscape ({
 	const edgeStyle = edge_labels ? {label: 'data(label)'} : {}
 
 	const { mutate } = useSWRConfig()
+	const searchParams = useSearchParams()
+
+	useEffect(()=>{
+		setTooltipProps(null)
+	}, [searchParams])
+
 	useEffect(()=>{
 		const cytoscape = require('cytoscape')
 		const svg = require('cytoscape-svg')
