@@ -88,11 +88,7 @@ const TermAndGeneSearch = async ({searchParams, props}: {
     } = await initialize_kg()
     const query_parser = parseAsJson<FilterSchema>().withDefault(props.initial_query)
     const filter: FilterSchema = query_parser.parseServerSide(searchParams.filter)
-    if (filter.start === undefined) {
-        filter.start = props.initial_query.start
-        filter.start_field = props.initial_query.start_field
-        filter.start_term = props.initial_query.start_term
-    }
+    
     const controller = new AbortController()
     try {
         if (filter.relation) {
@@ -119,8 +115,8 @@ const TermAndGeneSearch = async ({searchParams, props}: {
         const selected_edges = []
         const genes = []
         if (Object.keys(filter).length > 0) {
-            console.log(`${process.env.NODE_ENV==="development" ? process.env.NEXT_PUBLIC_HOST_DEV : process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/knowledge_graph?filter=${JSON.stringify(filter)}`)
-            const res = await fetch(`${process.env.NODE_ENV==="development" ? process.env.NEXT_PUBLIC_HOST_DEV : process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/knowledge_graph?filter=${JSON.stringify(filter)}`,
+            console.log(`${process.env.NODE_ENV==="development" ? process.env.NEXT_PUBLIC_HOST_DEV : process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/knowledge_graph?filter=${JSON.stringify({...props.initial_query, ...filter})}`)
+            const res = await fetch(`${process.env.NODE_ENV==="development" ? process.env.NEXT_PUBLIC_HOST_DEV : process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/knowledge_graph?filter=${JSON.stringify({...props.initial_query, ...filter})}`,
             {
                 method: 'GET',
                 signal: controller.signal,
@@ -173,16 +169,24 @@ const TermAndGeneSearch = async ({searchParams, props}: {
                                     nodes={nodes}
                                     initial_query={props.initial_query}
                                     direction={'Start'}
-                                    searchParams={searchParams}
-                                    elements={elements}
+                                    filter={filter}
+                                    fullscreen={searchParams.fullscreen}
+                                    view={searchParams.view}
+                                    type={filter.start || props.initial_query.start}
+                                    field={filter.start_field || props.initial_query.start_field}
+                                    term={filter.start_term || props.initial_query.start_term}
                                 />
                                 {filter.end && 
                                 <AsyncFormComponent 
                                     initial_query={props.initial_query}
                                     nodes={nodes}
                                     direction={'End'}
-                                    searchParams={searchParams}
-                                    elements={elements}
+                                    filter={filter}
+                                    fullscreen={searchParams.fullscreen}
+                                    view={searchParams.view}
+                                    type={filter.end}
+                                    field={filter.end_field}
+                                    term={filter.end_term}
                                 />}
                             </Stack>
                         </CardContent>
