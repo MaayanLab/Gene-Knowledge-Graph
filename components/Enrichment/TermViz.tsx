@@ -1,25 +1,26 @@
-'use client'
 import { precise } from "@/utils/math";
-import { useQueryState } from "next-usequerystate";
 import EnrichmentBar from "./EnrichmentBar";
-import { NetworkSchema } from "@/app/api/knowledge_graph/route";
-import { UISchema } from "@/app/api/schema/route";
 import NetworkTable from "./NetworkTable";
-import { Typography, CircularProgress } from "@mui/material";
+import { Typography, CircularProgress, Box } from "@mui/material";
 import dynamic from "next/dynamic";
-import Cytoscape from "../Cytoscape";
+import { EnrichmentParams } from ".";
+import { NetworkSchema } from "@/app/api/knowledge_graph/route";
 
-const TermViz = ({elements, schema, tooltip_templates_edges, tooltip_templates_nodes, view, edge_tooltip}:
+const Cytoscape = dynamic(()=>import('../Cytoscape'),
 	{
-		elements:NetworkSchema,
-		schema: UISchema,
-		tooltip_templates_edges: {[key: string]: Array<{[key: string]: string}>}, 
-		tooltip_templates_nodes: {[key: string]: Array<{[key: string]: string}>}, 
+		ssr: false,
+		loading: ()=><CircularProgress sx={{position: "absolute", top: "50%", left: "50%"}}/>
+	}
+)
+const TermViz = ({view, elements, header_endpoint, tooltip_templates_edges, tooltip_templates_nodes}:
+	{
 		view?: string,
-		edge_tooltip?: boolean
+		elements: NetworkSchema,
+		header_endpoint: string,
+		tooltip_templates_edges: {[key: string]: Array<{[key: string]: string}>},
+        tooltip_templates_nodes: {[key: string]: Array<{[key: string]: string}>},
+		
 	}) => {
-	console.log(elements)
-	// const [view, setView] = useQueryState('view')
 	const entries:{[key:string]: {library: string, value: number, color:string, pval: number, [key: string]: number | string | boolean}} = {}
 	const columns:{[key:string]: boolean} = {}
 	for (const dt of [...elements.nodes, ...elements.edges]) {
@@ -61,25 +62,28 @@ const TermViz = ({elements, schema, tooltip_templates_edges, tooltip_templates_n
 	if (sorted_entries.length === 0) return <Typography variant="h5">No Results Found</Typography>
 	else {
 		if (view === 'network' || !view) return (
-			<Cytoscape 
-				elements={elements}
-				schema={schema}
-				tooltip_templates_edges={tooltip_templates_edges}
-				tooltip_templates_nodes={tooltip_templates_nodes}
-				search={false}
-				edge_tooltip={edge_tooltip}
-			/> 
+			<Box sx={{position: "relative", minHeight: 450}}>
+				<Cytoscape 
+					elements={elements}
+					wide={true}
+					tooltip_templates_edges={tooltip_templates_edges}
+					tooltip_templates_nodes={tooltip_templates_nodes}
+					filter_field="q"
+					header_endpoint={header_endpoint}
+				/>
+			</Box>
 		) 
 		else if (view === "table") return (
 			<NetworkTable sorted_entries={sorted_entries} columns={columns}/>
 		) 
-		else if (view === "bar") return(
-			<EnrichmentBar data={sorted_entries}
-				max={sorted_entries[0]["value"]}
-				min={sorted_entries[sorted_entries.length - 1]["value"]}
-				width={900}
-			/>
-		)
+		else if (view === "bar") {
+			return(
+				<EnrichmentBar data={sorted_entries}
+					max={sorted_entries[0]["value"] as number}
+					min={sorted_entries[sorted_entries.length - 1]["value"] as number}
+					width={900}
+				/>
+			)}
 	}
 }
 

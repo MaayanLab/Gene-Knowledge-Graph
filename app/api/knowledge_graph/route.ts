@@ -202,7 +202,7 @@ const resolve_term_and_end_type = async (
 		USING INDEX a:\`${start}\`(${start_field})
 		WHERE all(rel in relationships(p) WHERE rel.hidden IS NULL)
 	`
-	  if (relation) {
+	if (relation) {
 		const rels = []
 		for (const i of relation) {
 			if (edges.indexOf(i.name) === -1) throw {message: `Invalid relationship ${i.name}`}
@@ -213,9 +213,10 @@ const resolve_term_and_end_type = async (
 	const vars = {}
 	if ((remove || []).length) {
 		query = query + `
-			WHERE NOT a.id in ${JSON.stringify(remove)}
-			AND NOT b.id in ${JSON.stringify(remove)}
-		`
+				AND NOT a.id in ${JSON.stringify(remove)}
+				AND NOT b.id in ${JSON.stringify(remove)}
+			`
+		
 	} 
 	if (start === end) {
 		if (query.includes('WHERE')) {

@@ -53,7 +53,7 @@ import { router_push } from '@/utils/client_side';
 import { NetworkSchema } from '@/app/api/knowledge_graph/route';
 import { FilterSchema, process_relation } from '@/utils/helper';
 import { process_tables } from '@/utils/helper';
-import { layouts } from '../Cytoscape';  
+import { default_layouts as layouts } from '../Cytoscape';  
 
 
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
