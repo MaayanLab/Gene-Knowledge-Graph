@@ -364,8 +364,8 @@
         }
     ],
     "header": {
-        "header": "Biomarker-KG",
-        "title": "Biomarker-KG",
+        "header": "BiomarkerKG",
+        "title": "BiomarkerKG",
         "counter": true,
         "background": {
             "backgroundColor": "#000",
@@ -374,9 +374,9 @@
         "icon": {
             "src": "/icon/bkg.png",
             "favicon": "/icon/bkg.png",
-            "faviconTitle": "Biomarker-KG",
-            "alt": "Biomarker-KG",
-            "key": "Biomarker-KG_logo",
+            "faviconTitle": "BiomarkerKG",
+            "alt": "BiomarkerKG",
+            "key": "BiomarkerKG_logo",
             "width": 100,
             "height": 100
         },
@@ -569,7 +569,7 @@
     },
     "footer": {
         "style": {
-            "background": "#053c5b",
+            "background": "#008080",
             "color": "#FFF"
         },
         "layout": [
@@ -579,7 +579,7 @@
                     "props": {
                         "src": "/icon/bkg.png",
                         "alt": "enrichr-kg",
-                        "title": "Biomarker-KG",
+                        "title": "BiomarkerKG",
                         "color": "inherit",
                         "size": "small"
                     }

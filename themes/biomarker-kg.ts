@@ -1,7 +1,13 @@
 import { createTheme } from "@mui/material"
-import { Inter, DM_Sans, Montserrat, Hanken_Grotesk } from 'next/font/google'
+import { Roboto, Gelasio } from 'next/font/google'
 
-export const dm_sans = DM_Sans({ 
+export const roboto = Roboto({ 
+    weight: ['500', '700'],
+    subsets: ['latin'],
+    display: 'swap',
+})
+
+export const gelasio = Gelasio({ 
     weight: ['500', '700'],
     subsets: ['latin'],
     display: 'swap',
@@ -10,11 +16,12 @@ export const dm_sans = DM_Sans({
 
 export const biomarker_kg_theme = createTheme({
     typography: {
-        fontFamily: dm_sans.style.fontFamily,
+        fontFamily: roboto.style.fontFamily,
         h1: {
             fontSize: 40,
             fontStyle: "normal",
             fontWeight: 500,
+            fontFamily: gelasio.style.fontFamily
         },
         h2: {
             fontSize: 28,
@@ -37,16 +44,16 @@ export const biomarker_kg_theme = createTheme({
             fontWeight: 500,
         },
         cfde: {
+            fontFamily: gelasio.style.fontFamily,
             fontSize: "40px",
             fontStyle: "normal",
-            fontWeight: 500,
-            textTransform: "uppercase"
+            fontWeight: 700,
         },
         cfde_small: {
+            fontFamily: gelasio.style.fontFamily,
             fontSize: 24,
             fontStyle: "normal",
-            fontWeight: 500,
-            textTransform: "uppercase"
+            fontWeight: 700
         },
         subtitle1: {
             fontSize: 16,
@@ -57,12 +64,12 @@ export const biomarker_kg_theme = createTheme({
             fontWeight: 500,
         },
         body1: {
-            fontFamily: dm_sans.style.fontFamily,
+            fontFamily: roboto.style.fontFamily,
             fontSize: 16,
             fontWeight: 500,
         },
         body2: {
-            fontFamily: dm_sans.style.fontFamily,
+            fontFamily: roboto.style.fontFamily,
             fontSize: 15,
             fontWeight: 500,
         },
@@ -72,14 +79,15 @@ export const biomarker_kg_theme = createTheme({
             fontWeight: 500,
         },
         nav: {
+            fontFamily: roboto.style.fontFamily,
             fontSize: 16,
             fontStyle: "normal",
             fontWeight: 600,
             textTransform: "uppercase",
-            color: "#053c5b"
+            color: "#008080"
         },
         footer: {
-            fontFamily: dm_sans.style.fontFamily,
+            fontFamily: roboto.style.fontFamily,
             fontSize: 16,
             fontStyle: "normal",
             fontWeight: 400,
@@ -104,14 +112,14 @@ export const biomarker_kg_theme = createTheme({
             dark: "#84A9AE"
         },
         secondary: {
-            main: "#053c5b",
-            light: "#053c5b",
-            dark: "#1F3D5C"
+            main: "#008080",
+            light: "#66ffff",
+            dark: "#006d6d"
         },
         tertiary: {
-            main: "#FFFFFF",
-            light: "#EDF0F8",
-            dark: "#053c5b"
+            main: "#FFF",
+            light: "#d1d5db",
+            dark: "#d1d5db"
         },
         paperGray: {
             main: "#FAFAFA",
@@ -161,7 +169,7 @@ export const biomarker_kg_theme = createTheme({
                 root: {
                     color: "#B7C3E2",
                     '&.Mui-checked': {
-                        color: "#336699",
+                        color: "#006d6d",
                     },
                     '& .MuiSvgIcon-root': { 
                         fontSize: 20,
@@ -174,7 +182,7 @@ export const biomarker_kg_theme = createTheme({
                 root: ({ ownerState }) => ({
                     ...(ownerState.color === 'tertiary' &&
                      {
-                        color: '#7187C3',
+                        color: '#006d6d',
                       }),
                   }),
             }
@@ -189,12 +197,12 @@ export const biomarker_kg_theme = createTheme({
                     padding: "8px 16px",
                     ...(ownerState.variant === 'contained' &&
                       ownerState.color === 'primary' && {
-                        backgroundColor: '#C3E1E6',
-                        color: '#336699',
+                        color: '#008080',
+                        backgroundColor: '#d1d5db',
                       }),
                     ...(ownerState.variant === 'contained' &&
                       ownerState.color === 'tertiary' && {
-                        backgroundColor: '#7187C3',
+                        backgroundColor: '#006d6d',
                         color: '#FFFFFF',
                       }),
                   }),
@@ -210,12 +218,12 @@ export const biomarker_kg_theme = createTheme({
                     padding: "10px 16px",
                     ...(ownerState.variant === 'filled' &&
                       ownerState.color === 'primary' && {
-                        backgroundColor: '#C3E1E6',
-                        color: '#336699',
+                        color: '#008080',
+                        backgroundColor: '#d1d5db',
                       }),
                     ...(ownerState.variant === 'filled' &&
                       ownerState.color === 'tertiary' && {
-                        backgroundColor: '#7187C3',
+                        backgroundColor: '#006d6d',
                         color: '#FFFFFF',
                       }),
                   }),
