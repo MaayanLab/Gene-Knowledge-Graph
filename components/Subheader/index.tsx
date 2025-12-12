@@ -55,7 +55,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 	if (fullscreen) misc["fullscreen"] = fullscreen
 	if (collapse) misc["collapse"] = view
 	
-	const [error, setError] = useState<{message: string, type:string}>(null)
+	const [snackBarMessage, setSnackBarMessage] = useState<{message: string, type:string}>(null)
 	const [userQuery, setQuery] = useQueryState('query', parseAsJson<EnrichmentParams>().withDefault({}))
 	const subpaths = (pathname.split("/")).slice(1)
 	if (typeof subheader === 'undefined') return null
@@ -87,32 +87,44 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 		if (subheader_props === null) return null
 		return (
 			<Grid container spacing={1} justifyContent={'center'} alignItems={"center"} columns={8} sx={{marginLeft: 2}}>
-				<Snackbar open={error!==null}
+				<Snackbar open={snackBarMessage!==null}
 					anchorOrigin={{ vertical:"bottom", horizontal:"left" }}
 					autoHideDuration={4500}
 					onClose={()=>{
-                        setError(null)
+                        setSnackBarMessage(null)
                     }}
 				>
                     <Alert 
                         onClose={()=>{
-                            setError(null)
+                            setSnackBarMessage(null)
                         }}
-                        severity={(error || {} ).type === "fail" ? "error": "warning"}
+                        severity={(snackBarMessage || {} ).type === "fail" ? "error": "success"}
                         sx={{ width: '100%' }} 
                         variant="filled"
                         elevation={6}
                     >
-                        <Typography>{( error || {}).message || ""}</Typography>
+                        <Typography>{( snackBarMessage || {}).message || ""}</Typography>
                     </Alert>
                 </Snackbar>
 				{subheader.map(i=>{
-					const {url_field, query_field} = subheader_props || {}
+					const {url_field, query_field, link} = subheader_props || {}
 					const query_parser = parseAsJson<EnrichmentParams | FilterSchema>()
 					const query = query_parser.parse(searchParams.get(url_field)) || default_options || {}
-					const selected = userQuery[query_field] || query[query_field] || []					
-					const active = contains(selected.map(({name})=>name), i.props[query_field])
-					const enabled = selected.length === 0
+					let selected
+					let active
+					let enabled = true
+					console.log(query)
+					if (link) {
+						active = true
+						for (const k in Object.keys(query)) {
+							if (query[k] !== i.props.params[k])
+								active = false
+						}
+					} else {
+						selected = userQuery[query_field] || query[query_field] || []					
+						active = contains(selected.map(({name})=>name), i.props[query_field])
+						enabled = selected.length === 0
+					}
 					let style = {}
 					if (enabled) styles.enabled
 					else if (active) style = styles.active
@@ -126,8 +138,14 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 									sx={{padding: 1, ...style}}
 									onClick={()=>{
 										// delete
-
-										if (contains(selected.map(({name})=>name), i.props[query_field])) {
+										if (link) {
+											setSnackBarMessage({message: `Querying node type ${i.props.params.start} with term ${i.props.params.start_term}`, type: "success"})
+											router_push(router, pathname, {
+												[url_field]: JSON.stringify(i.props.params),
+												...misc
+											})
+										}
+										else if (contains(selected.map(({name})=>name), i.props[query_field])) {
 											const new_selected = []
 											for (const s of selected) {
 												if (i.props[query_field].indexOf(s.name) === -1) new_selected.push(s)
@@ -138,7 +156,7 @@ const Subheader = ({schema}:{schema:UISchema}) => {
 												...misc
 											})
 										} else { // add
-											if (selected.length >= 5 && !disableLibraryLimit) setError({message: `The maximum number of ${query_field} has been selected`, type: "fail"})
+											if (selected.length >= 5 && !disableLibraryLimit) setSnackBarMessage({message: `The maximum number of ${query_field} has been selected`, type: "fail"})
 											else {
 												query[query_field] = [...selected, ...i.props[query_field].map((name:string)=>({name, limit: 5}))]
 												router_push(router, pathname, {

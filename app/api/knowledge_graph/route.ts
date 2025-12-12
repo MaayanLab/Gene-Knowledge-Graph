@@ -202,7 +202,7 @@ const resolve_term_and_end_type = async (
 		USING INDEX a:\`${start}\`(${start_field})
 		WHERE all(rel in relationships(p) WHERE rel.hidden IS NULL)
 	`
-	if (relation) {
+	  if (relation) {
 		const rels = []
 		for (const i of relation) {
 			if (edges.indexOf(i.name) === -1) throw {message: `Invalid relationship ${i.name}`}
@@ -213,10 +213,9 @@ const resolve_term_and_end_type = async (
 	const vars = {}
 	if ((remove || []).length) {
 		query = query + `
-				AND NOT a.id in ${JSON.stringify(remove)}
-				AND NOT b.id in ${JSON.stringify(remove)}
-			`
-		
+			WHERE NOT a.id in ${JSON.stringify(remove)}
+			AND NOT b.id in ${JSON.stringify(remove)}
+		`
 	} 
 	if (start === end) {
 		if (query.includes('WHERE')) {
@@ -454,7 +453,7 @@ const resolve_one_term = async ({
 				UNION
 				MATCH p = (c)--(d)
 				WHERE c.id = $expand_${ind}
-				RETURN p, nodes(p) as n, relationships(p) as r
+				RETURN p, nodes(p) as n, relationships(p) as r, c as st
 				LIMIT 10
 			`   
 		}

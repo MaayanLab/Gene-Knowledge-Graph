@@ -400,7 +400,8 @@
                     },
                     "subheader": {
                         "url_field": "filter",
-                        "query_field": "relation"
+                        "query_field": "relation",
+                        "link": true
                     }
                 }
             },
@@ -488,13 +489,11 @@
                 "height": 100,
                 "width": 100,
                 "props": {
-                  "relation": [
-                    "determined_using_sample_from"
-                  ],
-                  "libraries": [
-                    "Achilles_fitness_decrease",
-                    "Achilles_fitness_increase"
-                  ]
+                  "params": {
+                    "start": "Anatomy",
+                    "start_field": "label",
+                    "start_term": "blood"
+                  }
                 },
                 "href": "https://depmap.org/portal/achilles/"
               },
@@ -504,15 +503,11 @@
                 "height": 100,
                 "width": 100,
                 "props": {
-                  "relation": [
-                    "indicated_by_above_normal_level_of",
-                    "indicated_by_below_normal_level_of",
-                    "indicated_by_presence_of"
-                  ],
-                  "libraries": [
-                    "Achilles_fitness_decrease",
-                    "Achilles_fitness_increase"
-                  ]
+                  "params": {
+                    "start": "Compound",
+                    "start_field": "label",
+                    "start_term": "Creatine"
+                  }
                 },
                 "href": "https://depmap.org/portal/achilles/"
               },
@@ -522,14 +517,11 @@
               "height": 100,
               "width": 100,
               "props": {
-                "relation": [
-                  "diagnotic_for",
-                  "indicates_risk_of_developing"
-                ],
-                "libraries": [
-                  "Achilles_fitness_decrease",
-                  "Achilles_fitness_increase"
-                ]
+                "params": {
+                    "start": "Condition",
+                    "start_field": "label",
+                    "start_term": "leukemia"
+                  }
               },
               "href": "https://depmap.org/portal/achilles/"
             },
@@ -539,13 +531,11 @@
                 "height": 100,
                 "width": 100,
                 "props": {
-                  "relation": [
-                    "has_best_classification"
-                  ],
-                  "libraries": [
-                    "Achilles_fitness_decrease",
-                    "Achilles_fitness_increase"
-                  ]
+                  "params": {
+                    "start": "Role",
+                    "start_field": "label",
+                    "start_term": "diagnostic"
+                  }
                 },
                 "href": "https://depmap.org/portal/achilles/"
               },
@@ -555,13 +545,11 @@
                 "height": 100,
                 "width": 100,
                 "props": {
-                  "relation": [
-                    "indicated_by_presence_of"
-                  ],
-                  "libraries": [
-                    "Achilles_fitness_decrease",
-                    "Achilles_fitness_increase"
-                  ]
+                  "params": {
+                    "start": "Variant",
+                    "start_field": "label",
+                    "start_term": "BRCA1"
+                  }
                 },
                 "href": "https://depmap.org/portal/achilles/"
               }
