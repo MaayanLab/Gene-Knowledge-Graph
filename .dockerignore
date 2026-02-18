@@ -2,3 +2,4 @@ data-*
 data
 dumps
 venv
+.env*
