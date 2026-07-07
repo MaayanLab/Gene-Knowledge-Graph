@@ -2589,15 +2589,8 @@
                 }
             },
             {
-                "endpoint": "https://info.cfde.cloud/",
-                "label": "CFDE Information Portal",
-                "type": "link",
-                "component": "Link",
-                "position": "top"
-            },
-            {
-                "endpoint": "https://data.cfde.cloud/",
-                "label": "CFDE Data Portal",
+                "endpoint": "https://cfde.cloud/",
+                "label": "CFDE Portal",
                 "type": "link",
                 "component": "Link",
                 "position": "top"
