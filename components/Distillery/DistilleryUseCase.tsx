@@ -131,10 +131,12 @@ async function DistilleryUseCase({
                                         <div style={{minHeight: 700}}><NetworkTable data={elements} schema={schema}/></div>:
                                         <Cytoscape 
                                             elements={elements}
-                                            schema={schema}
+                                            wide={true}
+                                            stepsize={100}
                                             tooltip_templates_edges={tooltip_templates_edges}
                                             tooltip_templates_nodes={tooltip_templates_nodes}
-                                            edge_tooltip={edge_tooltip}
+                                            filter_field="filter"
+                                            header_endpoint={(schema.header.tabs.filter(i=>i.component === 'KnowledgeGraph')[0] || {}).endpoint || '/'}
                                         /> 
                                     }
                                 </CardContent>
