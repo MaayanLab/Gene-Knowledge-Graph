@@ -197,10 +197,12 @@ const SimpleTermAndGeneSearch = async ({searchParams, props}: {
                                 <div style={{minHeight: 700}}><NetworkTable data={elements} schema={schema}/></div>:
                                 <Cytoscape 
                                     elements={elements}
-                                    schema={schema}
-                                    tooltip_templates_edges={tooltip_templates_edges}
-                                    tooltip_templates_nodes={tooltip_templates_nodes}
-                                    edge_tooltip={props.edge_tooltip}
+                                        wide={true}
+                                        stepsize={100}
+                                        tooltip_templates_edges={tooltip_templates_edges}
+                                        tooltip_templates_nodes={tooltip_templates_nodes}
+                                        filter_field="filter"
+                                        header_endpoint={(schema.header.tabs.filter(i=>i.component === 'KnowledgeGraph')[0] || {}).endpoint || '/'}
                                 /> 
                             }
                             </CardContent>
