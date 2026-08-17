@@ -13,6 +13,7 @@ import { Logo } from '../misc/logo';
 import Counter from '../Counter';
 import { TextNav } from './TextNav';
 import SmallNav from "./SmallNav";
+import Image from "next/image";
 
 export const Nav = ({tabs, ui_theme, divider, title, icon, counterTop, counter}:
 	{
@@ -54,7 +55,10 @@ export const Nav = ({tabs, ui_theme, divider, title, icon, counterTop, counter}:
 	return (
 		<Grid container justifyContent={"space-between"} alignItems={"center"}>
 			<Grid item sx={{ flexGrow: 1 }}>
-				<Logo alt={icon.alt} src={icon.favicon} title={title} avatar={icon.avatar} size='large' color="secondary"/>
+				<Stack direction={"row"}>
+					<Logo alt={icon.alt} src={'/img/logo.jpg'} title={''} avatar={icon.avatar} size='large' color="secondary"/>
+					
+				</Stack>
 			</Grid>
 			<Grid item sx={{display: {xs: "none", sm: "none", md: "block"}}}>
 					<Stack direction={"row"} alignItems={"center"} spacing={2}>
