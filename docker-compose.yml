@@ -9,7 +9,7 @@ services:
         - NEO4J_V5_URL
         - NEO4J_V4_URL
     platform: linux/amd64
-    image: maayanlab/enrichr-kg:2.5.20
+    image: maayanlab/enrichr-kg:2.6.0
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
@@ -51,7 +51,7 @@ services:
 volumes:
   enrichr-kg-neo4j:
     x-kubernetes:
-      size: 25Gi
+      size: 2Gi
       class: gp2
 
 x-kubernetes:

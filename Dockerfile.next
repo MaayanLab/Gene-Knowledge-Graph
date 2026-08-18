@@ -29,7 +29,7 @@ COPY . .
 
 ARG NEO4J_V4_URL
 ARG NEO4J_V5_URL
-
+ARG NEXT_PUBLIC_PREFIX
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
