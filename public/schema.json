@@ -3403,9 +3403,9 @@
 				{
                     "component": "logo",
                     "props": {
-                        "src": "https://minio.dev.maayanlab.cloud/enrichr-kg/enrichr-kg.png",
+                        "src": "/img/logo.jpg",
                         "alt": "enrichr-kg",
-                        "title": "Enrichr-KG",
+                        "title": "",
                         "color": "inherit",
                         "size": "small"
                     }
@@ -3424,7 +3424,7 @@
 					"props": {
 						"type": "icon",
 						"key": "lab_icon",
-						"src": "https://minio.dev.maayanlab.cloud/enrichr-kg/maayanlab.png",
+						"src": "/img/lab-logo-glow.jpg",
 						"alt": "MaayanLab",
 						"href": "https://labs.icahn.mssm.edu/maayanlab/",
 						"height": 60,
