@@ -9,7 +9,7 @@ services:
         - NEO4J_V5_URL
         - NEO4J_V4_URL
     platform: linux/amd64
-    image: maayanlab/enrichr-kg:2.5.17
+    image: maayanlab/enrichr-kg:2.5.18
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
