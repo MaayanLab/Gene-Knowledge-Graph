@@ -178,9 +178,9 @@ export default function Cytoscape ({
 
 	useEffect(()=>{
 		const update_counter = async () => {
-			await fetch(`${process.env.NODE_ENV==="development" ? process.env.NEXT_PUBLIC_HOST_DEV : process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/counter/update`)
-			mutate('/api/counter')
-		}
+			await fetch(`${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/counter/update`)
+			mutate(`${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/counter`)
+		}	
 		if (elements && elements.nodes.length > 0) update_counter()
 		setId(id+1)
 	}, [elements])

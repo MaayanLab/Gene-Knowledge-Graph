@@ -27,7 +27,7 @@ const AsyncFormComponent = ({direction,
         view?:string,
 	}) => {
 	const router = useRouter()
-    const pathname = usePathname()
+    const pathname = usePathname() 
     const {
         start,
         start_field='label',
@@ -254,7 +254,7 @@ const AsyncFormComponent = ({direction,
                 />
             </Grid>
             <Grid item xs={12}>
-                <Stack sx={{flexDirection: {xs: 'row', md: 'column', alignContent: "center"}}}>
+                <Stack sx={{flexDirection: 'column', alignItems: "flex-start"}}>
                     <Typography variant="caption">Example:</Typography>
                     {((nodes[type] || {}).example || []).map((e,i)=>{
                         let query = {}
@@ -279,14 +279,15 @@ const AsyncFormComponent = ({direction,
                             }
                         }
                         return (
-                            <Link
+                            <Button
                                 key={e}
-                                sx={{textDecoration: "none"}}
+                                // href={`${process.env}${pathname}?filter=${JSON.stringify(query)}`}
+                                sx={{textDecoration: "none", padding: 0, ml: -1}}
                                 color="secondary"
-                                href={pathname + `?filter=${JSON.stringify(query)}`}
+                                onClick={()=>router_push(router, pathname, {filter: JSON.stringify(query)})}
                             >
-                            <Typography sx={{marginLeft: {xs: 2, md: 'auto'}}} variant="caption" color="secondary">{e}</Typography>
-                        </Link> 
+                            <Typography variant="caption" color="secondary">{e}</Typography>
+                        </Button> 
                     )
                     })}
                 </Stack>

@@ -114,16 +114,17 @@ const TermAndGeneSearch = async ({searchParams, props}: {
         let elements = null
         const selected_edges = []
         const genes = []
+        console.log(filter)
         if (Object.keys(filter).length > 0) {
-            console.log(`${process.env.NODE_ENV==="development" ? process.env.NEXT_PUBLIC_HOST_DEV : process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/knowledge_graph?filter=${JSON.stringify({...props.initial_query, ...filter})}`)
-            const res = await fetch(`${process.env.NODE_ENV==="development" ? process.env.NEXT_PUBLIC_HOST_DEV : process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/knowledge_graph?filter=${JSON.stringify({...props.initial_query, ...filter})}`,
+            console.log(`${process.env.NODE_ENV==="development" ? process.env.NEXT_PUBLIC_HOST_DEV : process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/knowledge_graph?filter=${JSON.stringify({...filter})}`)
+            const res = await fetch(`${process.env.NODE_ENV==="development" ? process.env.NEXT_PUBLIC_HOST_DEV : process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/knowledge_graph?filter=${JSON.stringify({...filter})}`,
             {
                 method: 'GET',
                 signal: controller.signal,
             }) 
             if (!res.ok) console.log(await res.text())
             else elements = await res.json()        
-        
+            console.log(elements)
             for (const i of (elements || {}).edges || []) {
                 if (i.data.relation && selected_edges.indexOf(i.data.label) === -1) {
                     selected_edges.push({name: i.data.label})

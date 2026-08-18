@@ -107,7 +107,7 @@ const GeneSetForm = ({
         if (!userListId) return false
         let counter = 0
         while (counter < 5) {
-            const request = await fetch(`${process.env.NEXT_PUBLIC_HOST}${process.env.NEXT_PUBLIC_PREFIX ? process.env.NEXT_PUBLIC_PREFIX: ''}/api/enrichment/view?userListId=${userListId}`)
+            const request = await fetch(`${process.env.NEXT_PUBLIC_ENRICHR_URL}/view?userListId=${userListId}`)
             if (! request.ok && counter === 4) {
                 setError({message: "Error resolving previous input. Try again in a while.", type: "fail"})
             }
@@ -119,8 +119,8 @@ const GeneSetForm = ({
                 const results = await request.json()
                 // const results = JSON.parse(res)
                 setError(null)
-                const genes = results.set
-                const description = results.desc
+                const genes = results.genes
+                const description = results.description
                 
                 if (genes.join('\n') !== input.genes.join('\n')) return false
                 if (description !== input.description) return false
