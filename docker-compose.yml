@@ -4,8 +4,12 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile.next
+      args:
+        - NEO4J_URL=bolt://neo4j:7687
+        - NEO4J_V5_URL
+        - NEO4J_V4_URL
     platform: linux/amd64
-    image: maayanlab/enrichr-kg:2.5.16
+    image: maayanlab/enrichr-kg:2.5.17
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
@@ -14,8 +18,8 @@ services:
       - 3000:3000
     environment:
       - NEO4J_URL=bolt://neo4j:7687
-      - NEO4J_V4_URL
       - NEO4J_V5_URL
+      - NEO4J_V4_URL
       - NEXT_PUBLIC_ENRICHR_URL=https://maayanlab.cloud/Enrichr
       - NEXT_PUBLIC_GENESHOT_URL=https://maayanlab.cloud/geneshot
       - NEO4J_USER
@@ -27,14 +31,6 @@ services:
       - NEXT_PUBLIC_SCHEMA
       - TURL
       - TURL_URL
-      - NEXT_PUBLIC_HOMEPAGE
-      - NEXT_PUBLIC_CHEA3_URL
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-        reservations:
-          memory: 1G
 
   neo4j:
     image: neo4j:4.4
