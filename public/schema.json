@@ -2801,8 +2801,8 @@
 		"contrastText": "#FFF"
 	  },
 	  "icon": {
-		"src": "https://minio.dev.maayanlab.cloud/enrichr-kg/enrichr-kg.png",
-		"favicon": "https://minio.dev.maayanlab.cloud/enrichr-kg/enrichr-kg.png",
+		"src": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/enrichr-kg.png",
+		"favicon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/enrichr-kg.png",
 		"faviconTitle": "Enrichr-KG",
 		"alt": "Enrichr logo",
 		"key": "enrichr_logo",
@@ -3024,7 +3024,7 @@
 	  "subheader": [
 		{
 		  "label": "Project Achilles",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/depmap.svg",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/depmap.svg",
 		  "height": 100,
 		  "width": 90,
 		  "props": {
@@ -3041,7 +3041,7 @@
 		},
 		{
 		  "label": "HPO",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/hpo.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/hpo.png",
 		  "height": 100,
 		  "width": 80,
 		  "props": {
@@ -3056,7 +3056,7 @@
 		},
 		{
 		  "label": "Mouse Genome informatics",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/mgi.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/mgi.png",
 		  "height": 100,
 		  "width": 80,
 		  "props": {
@@ -3071,7 +3071,7 @@
 		},
 		{
 		  "label": "Gene Ontology",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/go-logo.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/go-logo.png",
 		  "height": 100,
 		  "width": 100,
 		  "props": {
@@ -3086,7 +3086,7 @@
 		},
 		{
 		  "label": "Pfam",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/Pfam_logo.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/Pfam_logo.png",
 		  "height": 100,
 		  "width": 80,
 		  "props": {
@@ -3101,7 +3101,7 @@
 		},
 		{
 		  "label": "HuBMAP",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/HuBMAP.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/HuBMAP.png",
 		  "height": 100,
 		  "width": 100,
 		  "props": {
@@ -3116,7 +3116,7 @@
 		},
 		{
 		  "label": "Human Gene Atlas",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/biogps_logo.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/biogps_logo.png",
 		  "height": 100,
 		  "width": 80,
 		  "props": {
@@ -3131,7 +3131,7 @@
 		},
 		{
 		  "label": "KEGG Pathway",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/kegg.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/kegg.png",
 		  "height": 80,
 		  "width": 60,
 		  "props": {
@@ -3146,7 +3146,7 @@
 		},
 		{
 		  "label": "WikiPathways",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/wiki.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/wiki.png",
 		  "height": 100,
 		  "width": 60,
 		  "props": {
@@ -3163,7 +3163,7 @@
 		},
 		{
 		  "label": "SigCom LINCS",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/sigcom_lincs_logo.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/sigcom_lincs_logo.png",
 		  "height": 100,
 		  "width": 60,
 		  "props": {
@@ -3182,7 +3182,7 @@
 		},
 		{
 		  "label": "ARCHS4",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/archs4.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/archs4.png",
 		  "height": 100,
 		  "width": 70,
 		  "props": {
@@ -3197,7 +3197,7 @@
 		},
 		{
 		  "label": "Reactome",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/reactome.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/reactome.png",
 		  "height": 90,
 		  "width": 90,
 		  "props": {
@@ -3212,7 +3212,7 @@
 		},
 		{
 		  "label": "GWAS Catalog",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/GWAS_Catalog.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/GWAS_Catalog.png",
 		  "height": 100,
 		  "width": 90,
 		  "props": {
@@ -3227,7 +3227,7 @@
 		},
 		{
 		  "label": "TRRUST",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/TRRUST.jpeg",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/TRRUST.jpeg",
 		  "height": 100,
 		  "width": 120,
 		  "props": {
@@ -3242,7 +3242,7 @@
 		},
 		{
 		  "label": "ChEA3",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/chea3.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/chea3.png",
 		  "height": 100,
 		  "width": 40,
 		  "props": {
@@ -3257,7 +3257,7 @@
 		},
 		{
 		  "label": "Tabula Sapiens",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/tabula_sapiens.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/tabula_sapiens.png",
 		  "height": 100,
 		  "width": 100,
 		  "props": {
@@ -3272,7 +3272,7 @@
 		},
 		{
 		  "label": "Tabula Muris",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/tabula_muris.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/tabula_muris.png",
 		  "height": 100,
 		  "width": 100,
 		  "props": {
@@ -3287,7 +3287,7 @@
 		},
 		{
 		  "label": "CCLE Proteomics",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/ccle.jpg",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/ccle.jpg",
 		  "height": 100,
 		  "width": 100,
 		  "props": {
@@ -3302,7 +3302,7 @@
 		},
 		{
 		  "label": "Descartes",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/descartes.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/descartes.png",
 		  "height": 100,
 		  "width": 80,
 		  "props": {
@@ -3317,7 +3317,7 @@
 		},
 		{
 		  "label": "DisGeNET",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/disgenet.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/disgenet.png",
 		  "height": 100,
 		  "width": 100,
 		  "props": {
@@ -3332,7 +3332,7 @@
 		},
 		{
 		  "label": "FANTOM",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/FANTOM.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/FANTOM.png",
 		  "height": 100,
 		  "width": 40,
 		  "props": {
@@ -3348,7 +3348,7 @@
 		},
 		{
 		  "label": "Jensen Diseases",
-		  "icon": "https://minio.dev.maayanlab.cloud/enrichr-kg/JENSEN_Diseases.png",
+		  "icon": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/JENSEN_Diseases.png",
 		  "height": 100,
 		  "width": 100,
 		  "props": {
@@ -3438,7 +3438,7 @@
 					"props": {
 						"type": "icon",
 						"key": "center_icon",
-						"src": "https://minio.dev.maayanlab.cloud/enrichr-kg/bioinformatics.png",
+						"src": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/bioinformatics.png",
 						"alt": "COB",
 						"href": "https://icahn.mssm.edu/research/bioinformatics",
 						"height": 60,
