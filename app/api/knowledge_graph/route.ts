@@ -465,6 +465,7 @@ const resolve_one_term = async ({
 		console.log(query)
 		return await resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field], arrow_shape})
 	} else {
+		console.log(query)
 		const initial_results = await resolve_results({query, query_params, terms: [term],  aggr_scores, colors, fields: [field], arrow_shape})
 		const gene_list = []
 		let gene_nodes = []
@@ -473,6 +474,7 @@ const resolve_one_term = async ({
 			if (i.data[field] === term && i.data.kind === start) {
 				start_node = i
 			}
+			console.log(i.data.kind)
 			if (i.data.kind === "Gene") {
 				const gene = i.data.label
 				if (gene_list.indexOf(gene) === -1) {

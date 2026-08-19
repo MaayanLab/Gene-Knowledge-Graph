@@ -618,7 +618,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
                                                 onClick={()=>{
 
                                                     const {filter: f, ...query} = searchParams
-                                                    const filter = {...initial_query, ...JSON.parse(f || '{}')}
+                                                    const filter = {...JSON.parse(f || '{}')}
                                                     filter.augment = true
                                                     filter.augment_limit = augmentLimit || 10
                                                     
