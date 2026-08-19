@@ -12,7 +12,7 @@ services:
         - NEXT_PUBLIC_ENRICHR_URL
         - NEXT_PUBLIC_COOKIE_NAME
     platform: linux/amd64
-    image: maayanlab/enrichr-kg:2.6.2
+    image: maayanlab/enrichr-kg:2.6.3
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
