@@ -9,10 +9,10 @@ services:
         - NEO4J_V5_URL
         - NEO4J_V4_URL
         - NEXT_PUBLIC_PREFIX
-        - NEXT_PUBLIC_ENRICHR_URL
         - NEXT_PUBLIC_COOKIE_NAME
+        - NEXT_PUBLIC_ENRICHR_URL
     platform: linux/amd64
-    image: maayanlab/enrichr-kg:2.6.3
+    image: maayanlab/enrichr-kg:2.6.4
     x-kubernetes:
       imagePullPolicy: IfNotPresent
       annotations:
