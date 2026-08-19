@@ -21,7 +21,7 @@ export const Logo = ({src, alt, title, color="secondary", size, avatar}: {src: s
             }
             <div>
                 <Typography variant={size==='large'?'cfde':'cfde_small'} color={color} dangerouslySetInnerHTML={sanitize(title)}></Typography>
-                <Image src={`/img/enrichr-kg.jpg`} alt="enrichr-kg-header" width={200} height={100}/>
+                <Image src={`https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/enrichr-kg.jpg`} alt="enrichr-kg-header" width={200} height={100}/>
             </div>
         </Link>
     )

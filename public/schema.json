@@ -3403,7 +3403,7 @@
 				{
                     "component": "logo",
                     "props": {
-                        "src": "/img/logo.jpg",
+                        "src": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/logo.jpg",
                         "alt": "enrichr-kg",
                         "title": "",
                         "color": "inherit",
@@ -3424,7 +3424,7 @@
 					"props": {
 						"type": "icon",
 						"key": "lab_icon",
-						"src": "/img/lab-logo-glow.jpg",
+						"src": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/lab-logo-glow.jpg",
 						"alt": "MaayanLab",
 						"href": "https://labs.icahn.mssm.edu/maayanlab/",
 						"height": 60,
