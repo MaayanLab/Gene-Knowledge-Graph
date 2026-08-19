@@ -375,7 +375,7 @@ const GeneSetForm = ({
                                         variant='outlined'
                                         value={input.description}
                                         size="small"
-                                        onChange={e=>setInput({...input, description: e.target.value})}
+                                        onChange={e=>setInput({...input, description: e.target.value || ''})}
                                         placeholder="Description"
                                         label="Description"
                                         sx={{width: "100%", backgroundColor: "#FFF"}}
