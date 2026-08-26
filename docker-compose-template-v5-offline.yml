@@ -4,6 +4,14 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile.next
+      args:
+        - NEO4J_URL=bolt://neo4j:7687
+        - NEO4J_V5_URL
+        - NEO4J_V4_URL
+        - NEXT_PUBLIC_PREFIX
+        - NEXT_PUBLIC_COOKIE_NAME
+        - NEXT_PUBLIC_ENRICHR_URL
+        - NEXT_PUBLIC_GA_MEASUREMENT_ID
     platform: linux/amd64
     image: ${DOCKERHUB_NAME}/${APP_NAME}:${VERSION}
     x-kubernetes:

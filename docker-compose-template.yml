@@ -11,6 +11,7 @@ services:
         - NEXT_PUBLIC_PREFIX
         - NEXT_PUBLIC_COOKIE_NAME
         - NEXT_PUBLIC_ENRICHR_URL
+        - NEXT_PUBLIC_GA_MEASUREMENT_ID
     platform: linux/amd64
     image: ${DOCKERHUB_NAME}/${APP_NAME}:${VERSION}
     x-kubernetes:
