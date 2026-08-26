@@ -3403,9 +3403,9 @@
 				{
                     "component": "logo",
                     "props": {
-                        "src": "https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/logo.jpg",
+                        "src": "https://minio.dev.maayanlab.cloud/enrichr-kg/enrichr-kg.png",
                         "alt": "enrichr-kg",
-                        "title": "",
+                        "title": "Enrichr-KG",
                         "color": "inherit",
                         "size": "small"
                     }

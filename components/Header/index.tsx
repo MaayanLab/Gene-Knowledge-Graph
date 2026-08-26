@@ -56,7 +56,8 @@ export const Nav = ({tabs, ui_theme, divider, title, icon, counterTop, counter}:
 		<Grid container justifyContent={"space-between"} alignItems={"center"}>
 			<Grid item sx={{ flexGrow: 1 }}>
 				<Stack direction={"row"}>
-					<Logo alt={icon.alt} src={`https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/logo.jpg`} title={''} avatar={icon.avatar} size='large' color="secondary"/>
+					{/* <Logo alt={icon.alt} src={`https://s3.amazonaws.com/maayan-kg/enrichr-kg/minio/logo.jpg`} title={''} avatar={icon.avatar} size='large' color="secondary"/> */}
+					<Logo alt={icon.alt} src={icon.favicon} title={title} avatar={icon.avatar} size='large' color="secondary"/>
 					
 				</Stack>
 			</Grid>

@@ -73,7 +73,7 @@ function ThemeRegistry(props:{options:any, children:any, theme: 'cfde_theme' | s
         />
       );
     });
-    console.log(process.env.NEXT_PUBLIC_COOKIE_NAME, "NEXT_PUBLIC_COOKIE_NAME", typeof process.env.NEXT_PUBLIC_COOKIE_NAME)
+    // console.log(process.env.NEXT_PUBLIC_COOKIE_NAME, "NEXT_PUBLIC_COOKIE_NAME", typeof process.env.NEXT_PUBLIC_COOKIE_NAME)
 
     return (
       <CacheProvider value={cache}>
