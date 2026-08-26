@@ -33,6 +33,7 @@ ARG NEXT_PUBLIC_PREFIX
 ARG NEXT_PUBLIC_ENRICHR_URL
 ARG NEXT_PUBLIC_COOKIE_NAME
 ARG NEXT_PUBLIC_GENESHOT_URL
+ARG NEXT_PUBLIC_GA_MEASUREMENT_ID
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
