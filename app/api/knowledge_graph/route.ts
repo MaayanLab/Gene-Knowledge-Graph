@@ -151,9 +151,9 @@ const resolve_two_terms = async ({
 			vars[`expand_${ind}`] = expand[ind]
 			query = query + `
 				UNION
-				MATCH p = (c)--(d)
-				WHERE c.id = $expand_${ind}
-				RETURN p, nodes(p) as n, relationships(p) as r
+				MATCH p = (st)--(d)
+				WHERE st.id = $expand_${ind}
+				RETURN p, nodes(p) as n, relationships(p) as r, st
 				LIMIT 10
 			`   
 		}
@@ -290,9 +290,9 @@ const resolve_term_and_end_type = async (
 			vars[`expand_${ind}`] = expand[ind]
 			query = query + `
 				UNION
-				MATCH p = (c)--(d)
-				WHERE c.id = $expand_${ind}
-				RETURN p, nodes(p) as n, relationships(p) as r
+				MATCH p = (st)--(d)
+				WHERE st.id = $expand_${ind}
+				RETURN p, nodes(p) as n, relationships(p) as r, st
 				LIMIT 10
 			`   
 		}
@@ -452,9 +452,9 @@ const resolve_one_term = async ({
 			vars[`expand_${ind}`] = expand[ind]
 			query = query + `
 				UNION
-				MATCH p = (c)--(d)
-				WHERE c.id = $expand_${ind}
-				RETURN p, nodes(p) as n, relationships(p) as r
+				MATCH p = (st)--(d)
+				WHERE st.id = $expand_${ind}
+				RETURN p, nodes(p) as n, relationships(p) as r, st
 				LIMIT 10
 			`   
 		}
